@@ -26,12 +26,46 @@
     <link rel="stylesheet" href="css/flaticon.css">
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
+
+    <!-- Estilos personalizados para sobrescribir el estilo del template -->
+    <style>
+      /* Aseguramos que este bloque se aplique después de style.css */
+      .navbar-brand.d-flex { display: inline-flex; align-items: center; }
+      .navbar-brand img { height: 38px; width: auto; margin-right: 10px; }
+      .navbar-brand span { font-weight: 600; font-size: 1.05rem; color: #fff; }
+
+      /* Botón Conócenos: blanco sólido (sobrescribe estilos del template) */
+      .btn.btn-white {
+        background: #ffffff !important;
+        color: #333333 !important;
+        border: none !important;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      }
+      .btn.btn-white:hover,
+      .btn.btn-white:focus {
+        background: #f2f2f2 !important;
+        color: #222 !important;
+        text-decoration: none;
+      }
+
+      /* Si el template aplica opacidad o outline, las reglas anteriores con !important la reemplazan */
+
+      /* Ajustes opcionales para responsividad: reducir logo en pantallas pequeñas */
+      @media (max-width: 575.98px) {
+        .navbar-brand img { height: 30px; margin-right: 8px; }
+        .navbar-brand span { font-size: 0.95rem; }
+      }
+    </style>
+
   </head>
   <body>
 
   <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
     <div class="container">
-      <a class="navbar-brand" href="index.html">IcTiosCusco</a>
+      <a class="navbar-brand d-flex align-items-center" href="index.html">
+        <img src="images/logo.png" alt="IcTiosCusco logo">
+        <span>IcTiosCusco</span>
+      </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="oi oi-menu"></span> Menu
       </button>
@@ -61,7 +95,8 @@
             <p class="mb-5" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">Investigación, monitoreo y educación en la cuenca del Vilcanota — Cusco.</p>
 
             <p data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
-              <a href="about.html" class="btn btn-white btn-outline-white px-4 py-3"><span class="mr-2"></span>Conócenos</a>
+              <!-- Botón Conócenos cambiado a blanco sólido -->
+              <a href="about.html" class="btn btn-white px-4 py-3"><span class="mr-2"></span>Conócenos</a>
               <a href="causes.html" class="btn btn-primary px-4 py-3 ml-2">Ver proyectos</a>
             </p>
           </div>
