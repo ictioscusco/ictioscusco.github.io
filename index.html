@@ -48,12 +48,33 @@
         text-decoration: none;
       }
 
-      /* Si el template aplica opacidad o outline, las reglas anteriores con !important la reemplazan */
+      /* Iconos como archivos externos (img) */
+      .service-icon {
+        width: 56px;
+        height: 56px;
+        display: block;
+        object-fit: contain;
+      }
+      /* Si quieres controlar color desde CSS con SVG externos, edita los SVGs para usar fill='currentColor'
+         y entonces podrías aplicar color así (si usas inline SVG o SVG in <img> via embedding):
+         .icon-monitoreo { color: #FF6D2F; } 
+      */
 
-      /* Ajustes opcionales para responsividad: reducir logo en pantallas pequeñas */
+      /* Espaciado del contenedor del icono para que quede consistente */
+      .media.block-6 .icon {
+        flex: 0 0 56px;
+        margin-right: 18px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+      }
+
+      /* Ajustes opcionales para responsividad: reducir logo e iconos en pantallas pequeñas */
       @media (max-width: 575.98px) {
         .navbar-brand img { height: 44px; margin-right: 10px; }
         .navbar-brand span { font-size: 0.95rem; }
+        .service-icon { width: 44px; height: 44px; }
+        .media.block-6 .icon { flex: 0 0 44px; margin-right: 12px; }
       }
     </style>
 
@@ -143,7 +164,10 @@
         <div class="row">
           <div class="col-md-4 d-flex align-self-stretch ftco-animate">
             <div class="media block-6 d-flex services p-3 py-4 d-block">
-              <div class="icon d-flex mb-3"><span class="flaticon-charity"></span></div>
+              <!-- Reemplazado por imagen externa: images/icon-monitoreo.svg -->
+              <div class="icon d-flex mb-3">
+                <img src="images/icon-monitoreo.svg" alt="Monitoreo" class="service-icon" />
+              </div>
               <div class="media-body pl-4">
                 <h3 class="heading">Monitoreo poblacional</h3>
                 <p>Seguimiento de abundancia, estructura de edades y distribución en lagunas altoandinas.</p>
@@ -152,7 +176,10 @@
           </div>
           <div class="col-md-4 d-flex align-self-stretch ftco-animate">
             <div class="media block-6 d-flex services p-3 py-4 d-block">
-              <div class="icon d-flex mb-3"><span class="flaticon-science"></span></div>
+              <!-- Reemplazado por imagen externa: images/icon-genetica.svg -->
+              <div class="icon d-flex mb-3">
+                <img src="images/icon-genetica.svg" alt="Genética" class="service-icon" />
+              </div>
               <div class="media-body pl-4">
                 <h3 class="heading">Genética y filogeografía</h3>
                 <p>Estudios genéticos para entender la historia evolutiva y conectividad entre poblaciones.</p>
@@ -161,7 +188,10 @@
           </div>
           <div class="col-md-4 d-flex align-self-stretch ftco-animate">
             <div class="media block-6 d-flex services p-3 py-4 d-block">
-              <div class="icon d-flex mb-3"><span class="flaticon-teacher"></span></div>
+              <!-- Reemplazado por imagen externa: images/icon-educacion.svg -->
+              <div class="icon d-flex mb-3">
+                <img src="images/icon-educacion.svg" alt="Educación" class="service-icon" />
+              </div>
               <div class="media-body pl-4">
                 <h3 class="heading">Educación ambiental</h3>
                 <p>Programas con comunidades locales y talleres para estudiantes y gestores ambientales.</p>
@@ -471,7 +501,6 @@
   <!-- loader -->
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
 
-
   <script src="js/jquery.min.js"></script>
   <script src="js/jquery-migrate-3.0.1.min.js"></script>
   <script src="js/popper.min.js"></script>
@@ -493,4 +522,3 @@
 
   </body>
 </html>
-
