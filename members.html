@@ -1,280 +1,368 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
   <head>
-    <title>Welfare - Free Bootstrap 4 Template by Colorlib</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
+    <title>IcTiosCusco — Miembros</title>
+    <meta name="description" content="Equipo de IcTiosCusco.">
+
     <link href="https://fonts.googleapis.com/css?family=Dosis:200,300,400,500,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Overpass:300,400,400i,600,700" rel="stylesheet">
 
     <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="css/animate.css">
-    
     <link rel="stylesheet" href="css/owl.carousel.min.css">
     <link rel="stylesheet" href="css/owl.theme.default.min.css">
     <link rel="stylesheet" href="css/magnific-popup.css">
-
     <link rel="stylesheet" href="css/aos.css">
-
     <link rel="stylesheet" href="css/ionicons.min.css">
-
     <link rel="stylesheet" href="css/bootstrap-datepicker.css">
     <link rel="stylesheet" href="css/jquery.timepicker.css">
-
-    
     <link rel="stylesheet" href="css/flaticon.css">
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
+
+    <style>
+      /* Ajustes de marca y navbar (coherentes con index) */
+      .navbar-brand.d-flex { display: inline-flex; align-items: center; }
+      .navbar-brand img { height: 56px; width: auto; margin-right: 12px; }
+      .navbar-brand span { font-family: 'Overpass', 'Dosis', sans-serif; font-weight: 600; font-size: 1.05rem; color: #fff; }
+
+      #ftco-navbar { background-color: transparent; transition: background-color .25s ease; }
+      #ftco-navbar.scrolled { background-color: rgba(255,255,255,0.98) !important; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+      #ftco-navbar .nav-link, #ftco-navbar .navbar-brand span { color: #fff !important; transition: color .25s ease; }
+      #ftco-navbar.scrolled .nav-link, #ftco-navbar.scrolled .navbar-brand span { color: #222 !important; }
+      #ftco-nav.collapse.show .nav-link { color: #222 !important; }
+
+      /* Miembros: tarjetas */
+      .member-card {
+        background: #fff;
+        border-radius: 10px;
+        padding: 14px;
+        box-shadow: 0 6px 18px rgba(16,24,40,0.06);
+        margin-bottom: 22px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .member-photo {
+        width: 128px;
+        height: 128px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 2px solid #f1f1f1;
+        flex: 0 0 128px;
+      }
+      .member-info h4 { margin: 0 0 6px 0; font-size: 1.05rem; }
+      .member-info p.role { margin: 0 0 8px 0; font-weight: 600; color: #333; }
+      .member-info p.desc { margin: 0 0 10px 0; color: #555; line-height: 1.4; font-size: .95rem; }
+
+      .social-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 10px;
+        border-radius: 6px;
+        border: 1px solid rgba(0,0,0,0.06);
+        text-decoration: none;
+        color: inherit;
+        font-size: .95rem;
+        margin-right: 6px;
+      }
+
+      /* Responsive layout: cards stack on small screens */
+      @media (min-width: 768px) {
+        .member-row { display:flex; gap:18px; align-items:center; }
+      }
+      @media (max-width: 767.98px) {
+        .member-card { flex-direction: row; gap: 12px; }
+        .member-photo { width: 110px; height: 110px; flex: 0 0 110px; }
+      }
+
+      /* small helper */
+      .muted-small { font-size: .88rem; color: #666; }
+    </style>
   </head>
   <body>
-    
+
   <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
     <div class="container">
-      <a class="navbar-brand" href="index.html">Welfare</a>
+      <a class="navbar-brand d-flex align-items-center" href="index.html">
+        <img src="images/logo.png" alt="IcTiosCusco logo">
+        <span>IcTiosCusco</span>
+      </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="oi oi-menu"></span> Menu
       </button>
 
       <div class="collapse navbar-collapse" id="ftco-nav">
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
-          <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
-          <li class="nav-item"><a href="causes.html" class="nav-link">Causes</a></li>
-          <li class="nav-item"><a href="donate.html" class="nav-link">Donate</a></li>
-          <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
-          <li class="nav-item"><a href="gallery.html" class="nav-link">Gallery</a></li>
-          <li class="nav-item active"><a href="event.html" class="nav-link">Events</a></li>
-          <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+          <li class="nav-item"><a href="index.html" class="nav-link">Inicio</a></li>
+          <li class="nav-item"><a href="about.html" class="nav-link">Quiénes somos</a></li>
+          <li class="nav-item"><a href="causes.html" class="nav-link">Proyectos</a></li>
+          <li class="nav-item"><a href="donate.html" class="nav-link">Donación</a></li>
+          <li class="nav-item"><a href="blog.html" class="nav-link">Noticias</a></li>
+          <li class="nav-item"><a href="gallery.html" class="nav-link">Galería</a></li>
+          <!-- Esta página actúa como "Miembros" -->
+          <li class="nav-item active"><a href="event.html" class="nav-link">Miembros</a></li>
+          <li class="nav-item"><a href="contact.html" class="nav-link">Contacto</a></li>
         </ul>
       </div>
     </div>
   </nav>
-    <!-- END nav -->
-    
-    <div class="hero-wrap" style="background-image: url('images/bg_1.jpg');" data-stellar-background-ratio="0.5">
-      <div class="overlay"></div>
-      <div class="container">
-        <div class="row no-gutters slider-text align-items-center justify-content-center" data-scrollax-parent="true">
-          <div class="col-md-7 ftco-animate text-center" data-scrollax=" properties: { translateY: '70%' }">
-             <p class="breadcrumbs" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><span class="mr-2"><a href="index.html">Home</a></span> <span>Event</span></p>
-            <h1 class="mb-3 bread" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">Events</h1>
-          </div>
+  <!-- END nav -->
+
+  <!-- Hero -->
+  <div class="hero-wrap" style="background-image: url('images/laguna_ictioscusco.jpg');" data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row no-gutters slider-text align-items-center justify-content-center">
+        <div class="col-md-8 text-center">
+          <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Inicio</a></span> <span>Miembros</span></p>
+          <h1 class="mb-4">Miembros</h1>
+          <p class="mb-4">Aquí están los integrantes de IcTiosCusco. Sube las fotos a <code>images/</code> con los nombres indicados en cada tarjeta.</p>
         </div>
       </div>
     </div>
+  </div>
 
-    
-    <section class="ftco-section">
-      <div class="container">
-        <div class="row">
-        	<div class="col-md-4 d-flex ftco-animate">
-          	<div class="blog-entry align-self-stretch">
-              <a href="blog-single.html" class="block-20" style="background-image: url('images/event-1.jpg');">
-              </a>
-              <div class="text p-4 d-block">
-              	<div class="meta mb-3">
-                  <div><a href="#">Sep. 10, 2018</a></div>
-                  <div><a href="#">Admin</a></div>
-                  <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
-                </div>
-                <h3 class="heading mb-4"><a href="#">World Wide Donation</a></h3>
-                <p class="time-loc"><span class="mr-2"><i class="icon-clock-o"></i> 10:30AM-03:30PM</span> <span><i class="icon-map-o"></i> Venue Main Campus</span></p>
-                <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
-                <p><a href="event.html">Join Event <i class="ion-ios-arrow-forward"></i></a></p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4 d-flex ftco-animate">
-          	<div class="blog-entry align-self-stretch">
-              <a href="blog-single.html" class="block-20" style="background-image: url('images/event-2.jpg');">
-              </a>
-              <div class="text p-4 d-block">
-              	<div class="meta mb-3">
-                  <div><a href="#">Sep. 10, 2018</a></div>
-                  <div><a href="#">Admin</a></div>
-                  <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
-                </div>
-                <h3 class="heading mb-4"><a href="#">World Wide Donation</a></h3>
-                <p class="time-loc"><span class="mr-2"><i class="icon-clock-o"></i> 10:30AM-03:30PM</span> <span><i class="icon-map-o"></i> Venue Main Campus</span></p>
-                <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
-                <p><a href="event.html">Join Event <i class="ion-ios-arrow-forward"></i></a></p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4 d-flex ftco-animate">
-          	<div class="blog-entry align-self-stretch">
-              <a href="blog-single.html" class="block-20" style="background-image: url('images/event-3.jpg');">
-              </a>
-              <div class="text p-4 d-block">
-              	<div class="meta mb-3">
-                  <div><a href="#">Sep. 10, 2018</a></div>
-                  <div><a href="#">Admin</a></div>
-                  <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
-                </div>
-                <h3 class="heading mb-4"><a href="#">World Wide Donation</a></h3>
-                <p class="time-loc"><span class="mr-2"><i class="icon-clock-o"></i> 10:30AM-03:30PM</span> <span><i class="icon-map-o"></i> Venue Main Campus</span></p>
-                <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
-                <p><a href="event.html">Join Event <i class="ion-ios-arrow-forward"></i></a></p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4 d-flex ftco-animate">
-          	<div class="blog-entry align-self-stretch">
-              <a href="blog-single.html" class="block-20" style="background-image: url('images/event-4.jpg');">
-              </a>
-              <div class="text p-4 d-block">
-              	<div class="meta mb-3">
-                  <div><a href="#">Sep. 10, 2018</a></div>
-                  <div><a href="#">Admin</a></div>
-                  <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
-                </div>
-                <h3 class="heading mb-4"><a href="#">World Wide Donation</a></h3>
-                <p class="time-loc"><span class="mr-2"><i class="icon-clock-o"></i> 10:30AM-03:30PM</span> <span><i class="icon-map-o"></i> Venue Main Campus</span></p>
-                <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
-                <p><a href="event.html">Join Event <i class="ion-ios-arrow-forward"></i></a></p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4 d-flex ftco-animate">
-          	<div class="blog-entry align-self-stretch">
-              <a href="blog-single.html" class="block-20" style="background-image: url('images/event-5.jpg');">
-              </a>
-              <div class="text p-4 d-block">
-              	<div class="meta mb-3">
-                  <div><a href="#">Sep. 10, 2018</a></div>
-                  <div><a href="#">Admin</a></div>
-                  <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
-                </div>
-                <h3 class="heading mb-4"><a href="#">World Wide Donation</a></h3>
-                <p class="time-loc"><span class="mr-2"><i class="icon-clock-o"></i> 10:30AM-03:30PM</span> <span><i class="icon-map-o"></i> Venue Main Campus</span></p>
-                <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
-                <p><a href="event.html">Join Event <i class="ion-ios-arrow-forward"></i></a></p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4 d-flex ftco-animate">
-          	<div class="blog-entry align-self-stretch">
-              <a href="blog-single.html" class="block-20" style="background-image: url('images/event-6.jpg');">
-              </a>
-              <div class="text p-4 d-block">
-              	<div class="meta mb-3">
-                  <div><a href="#">Sep. 10, 2018</a></div>
-                  <div><a href="#">Admin</a></div>
-                  <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
-                </div>
-                <h3 class="heading mb-4"><a href="#">World Wide Donation</a></h3>
-                <p class="time-loc"><span class="mr-2"><i class="icon-clock-o"></i> 10:30AM-03:30PM</span> <span><i class="icon-map-o"></i> Venue Main Campus</span></p>
-                <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
-                <p><a href="event.html">Join Event <i class="ion-ios-arrow-forward"></i></a></p>
+  <!-- Miembros: grid -->
+  <section class="ftco-section bg-light">
+    <div class="container">
+      <div class="row">
+
+        <!-- Member 1 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="member-card">
+            <img src="images/jack_malon.jpg" alt="Jack Malon Rodriguez Pumaccajia" class="member-photo">
+            <div class="member-info">
+              <h4>Jack Malon Rodriguez Pumaccajia</h4>
+              <p class="role">Presidente</p>
+              <p class="desc">Coordinación general, supervisión de proyectos y principal contacto institucional.</p>
+              <div>
+                <!-- REEMPLAZA href="#" por la URL real de Facebook/Instagram de Jack -->
+                <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Jack"><span class="icon icon-facebook"></span> Facebook</a>
+                <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Jack"><span class="icon icon-instagram"></span> Instagram</a>
               </div>
             </div>
           </div>
         </div>
-        <div class="row mt-5">
-          <div class="col text-center">
-            <div class="block-27">
+
+        <!-- Member 2 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="member-card">
+            <img src="images/nayely_polanco.jpg" alt="Nayely Polanco Accostupa" class="member-photo">
+            <div class="member-info">
+              <h4>Nayely Polanco Accostupa</h4>
+              <p class="role">Miembro</p>
+              <p class="desc">Participa en trabajo de campo y actividades educativas con comunidades.</p>
+              <div>
+                <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Nayely"><span class="icon icon-facebook"></span> Facebook</a>
+                <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Nayely"><span class="icon icon-instagram"></span> Instagram</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Member 3 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="member-card">
+            <img src="images/rolando_chaparrea.jpg" alt="Rolando Chaparrea Cardenas" class="member-photo">
+            <div class="member-info">
+              <h4>Rolando Chaparrea Cardenas</h4>
+              <p class="role">Miembro</p>
+              <p class="desc">Especialista en genética y análisis moleculares aplicados a poblaciones.</p>
+              <div>
+                <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Rolando"><span class="icon icon-facebook"></span> Facebook</a>
+                <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Rolando"><span class="icon icon-instagram"></span> Instagram</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Member 4 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="member-card">
+            <img src="images/edmar_soria.jpg" alt="Edmar Soria Arana" class="member-photo">
+            <div class="member-info">
+              <h4>Edmar Soria Arana</h4>
+              <p class="role">Miembro</p>
+              <p class="desc">Encargado de logística de campo, muestreos y manejo de base de datos.</p>
+              <div>
+                <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Edmar"><span class="icon icon-facebook"></span> Facebook</a>
+                <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Edmar"><span class="icon icon-instagram"></span> Instagram</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Member 5 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="member-card">
+            <img src="images/deysi_ccala.jpg" alt="Deysi Ccala" class="member-photo">
+            <div class="member-info">
+              <h4>Deysi Ccala</h4>
+              <p class="role">Miembro</p>
+              <p class="desc">Apoyo en educación ambiental y actividades con escuelas y comunidades.</p>
+              <div>
+                <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Deysi"><span class="icon icon-facebook"></span> Facebook</a>
+                <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Deysi"><span class="icon icon-instagram"></span> Instagram</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Member 6 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="member-card">
+            <img src="images/getsemanii_lopez.jpg" alt="Getsemanii Lopez" class="member-photo">
+            <div class="member-info">
+              <h4>Getsemanii Lopez</h4>
+              <p class="role">Miembro</p>
+              <p class="desc">Soporte en análisis morfométricos y control de calidad de datos.</p>
+              <div>
+                <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Getsemanii"><span class="icon icon-facebook"></span> Facebook</a>
+                <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Getsemanii"><span class="icon icon-instagram"></span> Instagram</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Member 7 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="member-card">
+            <img src="images/alex_ttito.jpg" alt="Alex Ttito" class="member-photo">
+            <div class="member-info">
+              <h4>Alex Ttito</h4>
+              <p class="role">Miembro</p>
+              <p class="desc">Responsable de cartografía, SIG y análisis espacial.</p>
+              <div>
+                <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Alex"><span class="icon icon-facebook"></span> Facebook</a>
+                <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Alex"><span class="icon icon-instagram"></span> Instagram</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Honorary 1 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="member-card">
+            <img src="images/marco_mendez.jpg" alt="Dr. Marco Mendez" class="member-photo">
+            <div class="member-info">
+              <h4>Dr. Marco Mendez</h4>
+              <p class="role">Miembro Honorario</p>
+              <p class="desc">Colaborador en coordinación de campo y formación de equipos.</p>
+              <div>
+                <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Marco"><span class="icon icon-facebook"></span> Facebook</a>
+                <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Marco"><span class="icon icon-instagram"></span> Instagram</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Honorary 2 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="member-card">
+            <img src="images/aldemar_acevedo.jpg" alt="Dr. Aldemar Acevedo" class="member-photo">
+            <div class="member-info">
+              <h4>Dr. Aldemar Acevedo</h4>
+              <p class="role">Miembro Honorario</p>
+              <p class="desc">Especialista en hidrología y análisis espacial.</p>
+              <div>
+                <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Aldemar"><span class="icon icon-facebook"></span> Facebook</a>
+                <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Aldemar"><span class="icon icon-instagram"></span> Instagram</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div> <!-- row -->
+    </div> <!-- container -->
+  </section>
+
+  <!-- Footer con FB e IG (links del footer actualizados con los tuyos) -->
+  <footer class="ftco-footer ftco-section img">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row mb-5">
+        <div class="col-md-3">
+          <div class="ftco-footer-widget mb-4">
+            <h2 class="ftco-heading-2">Sobre IcTiosCusco</h2>
+            <p>Grupo de investigación dedicado a la conservación y estudio de peces andinos (Orestias) en la región de Cusco.</p>
+            <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
+              <li class="ftco-animate">
+                <a href="https://www.facebook.com/ConGeniusRockie" target="_blank" rel="noopener" aria-label="Facebook IcTiosCusco"><span class="icon-facebook"></span></a>
+              </li>
+              <li class="ftco-animate">
+                <a href="https://www.instagram.com/ictioscusco?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener" aria-label="Instagram IcTiosCusco"><span class="icon-instagram"></span></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="ftco-footer-widget mb-4">
+            <h2 class="ftco-heading-2">Publicaciones recientes</h2>
+            <div class="block-21 mb-4 d-flex">
+              <a class="blog-img mr-4" style="background-image: url(images/noticia_1.jpg);"></a>
+              <div class="text">
+                <h3 class="heading"><a href="#">Resultados preliminares de Huaypo</a></h3>
+                <div class="meta">
+                  <div><a href="#"><span class="icon-calendar"></span> Sept 10, 2024</a></div>
+                  <div><a href="#"><span class="icon-person"></span> IcTiosCusco</a></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-2">
+           <div class="ftco-footer-widget mb-4 ml-md-4">
+            <h2 class="ftco-heading-2">Enlaces</h2>
+            <ul class="list-unstyled">
+              <li><a href="index.html" class="py-2 d-block">Inicio</a></li>
+              <li><a href="about.html" class="py-2 d-block">Quiénes somos</a></li>
+              <li><a href="donate.html" class="py-2 d-block">Donación</a></li>
+              <li><a href="causes.html" class="py-2 d-block">Proyectos</a></li>
+              <li><a href="event.html" class="py-2 d-block">Miembros</a></li>
+              <li><a href="blog.html" class="py-2 d-block">Noticias</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="ftco-footer-widget mb-4">
+          	<h2 class="ftco-heading-2">¿Tienes preguntas?</h2>
+          	<div class="block-23 mb-3">
               <ul>
-                <li><a href="#">&lt;</a></li>
-                <li class="active"><span>1</span></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
-                <li><a href="#">&gt;</a></li>
+                <li><span class="icon icon-map-marker"></span><span class="text">Cusco, Perú</span></li>
+                <li><a href="tel:+51969392189"><span class="icon icon-phone"></span><span class="text">+51 969 392 189</span></a></li>
+                <li><a href="mailto:ictioscusco@gmail.com"><span class="icon icon-envelope"></span><span class="text">ictioscusco@gmail.com</span></a></li>
               </ul>
             </div>
           </div>
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <p>Copyright &copy;<script>document.write(new Date().getFullYear());</script> IcTiosCusco. Todos los derechos reservados.</p>
         </div>
       </div>
-    </section>
-		
-
-    <footer class="ftco-footer ftco-section img">
-    	<div class="overlay"></div>
-      <div class="container">
-        <div class="row mb-5">
-          <div class="col-md-3">
-            <div class="ftco-footer-widget mb-4">
-              <h2 class="ftco-heading-2">About Us</h2>
-              <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-              <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
-                <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
-                <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
-                <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="ftco-footer-widget mb-4">
-              <h2 class="ftco-heading-2">Recent Blog</h2>
-              <div class="block-21 mb-4 d-flex">
-                <a class="blog-img mr-4" style="background-image: url(images/image_1.jpg);"></a>
-                <div class="text">
-                  <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control about</a></h3>
-                  <div class="meta">
-                    <div><a href="#"><span class="icon-calendar"></span> July 12, 2018</a></div>
-                    <div><a href="#"><span class="icon-person"></span> Admin</a></div>
-                    <div><a href="#"><span class="icon-chat"></span> 19</a></div>
-                  </div>
-                </div>
-              </div>
-              <div class="block-21 mb-4 d-flex">
-                <a class="blog-img mr-4" style="background-image: url(images/image_2.jpg);"></a>
-                <div class="text">
-                  <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control about</a></h3>
-                  <div class="meta">
-                    <div><a href="#"><span class="icon-calendar"></span> July 12, 2018</a></div>
-                    <div><a href="#"><span class="icon-person"></span> Admin</a></div>
-                    <div><a href="#"><span class="icon-chat"></span> 19</a></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-2">
-             <div class="ftco-footer-widget mb-4 ml-md-4">
-              <h2 class="ftco-heading-2">Site Links</h2>
-              <ul class="list-unstyled">
-                <li><a href="#" class="py-2 d-block">Home</a></li>
-                <li><a href="#" class="py-2 d-block">About</a></li>
-                <li><a href="#" class="py-2 d-block">Donate</a></li>
-                <li><a href="#" class="py-2 d-block">Causes</a></li>
-                <li><a href="#" class="py-2 d-block">Event</a></li>
-                <li><a href="#" class="py-2 d-block">Blog</a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="ftco-footer-widget mb-4">
-            	<h2 class="ftco-heading-2">Have a Questions?</h2>
-            	<div class="block-23 mb-3">
-	              <ul>
-	                <li><span class="icon icon-map-marker"></span><span class="text">203 Fake St. Mountain View, San Francisco, California, USA</span></li>
-	                <li><a href="#"><span class="icon icon-phone"></span><span class="text">+2 392 3929 210</span></a></li>
-	                <li><a href="#"><span class="icon icon-envelope"></span><span class="text">info@yourdomain.com</span></a></li>
-	              </ul>
-	            </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12 text-center">
-
-            <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
-          </div>
-        </div>
-      </div>
-    </footer>
-    
-  
+    </div>
+  </footer>
 
   <!-- loader -->
-  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+  <div id="ftco-loader" class="show fullscreen">
+    <svg class="circular" width="48px" height="48px">
+      <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/>
+      <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/>
+    </svg>
+  </div>
 
-
+  <!-- Scripts -->
   <script src="js/jquery.min.js"></script>
   <script src="js/jquery-migrate-3.0.1.min.js"></script>
   <script src="js/popper.min.js"></script>
@@ -289,9 +377,36 @@
   <script src="js/bootstrap-datepicker.js"></script>
   <script src="js/jquery.timepicker.min.js"></script>
   <script src="js/scrollax.min.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+  <!-- Maps: si usas, añade tu key restringida en producción -->
+  <!-- <script src="https://maps.googleapis.com/maps/api/js?key=TU_API_KEY&sensor=false"></script> -->
   <script src="js/google-map.js"></script>
   <script src="js/main.js"></script>
-    
+
+  <script>
+    // Igual comportamiento del navbar que en tu index (clase .scrolled)
+    document.addEventListener('DOMContentLoaded', function () {
+      var navbar = document.getElementById('ftco-navbar');
+      var navCollapse = $('#ftco-nav');
+
+      function checkScroll() {
+        if (window.scrollY > 50) {
+          navbar.classList.add('scrolled');
+        } else {
+          navbar.classList.remove('scrolled');
+        }
+      }
+
+      checkScroll();
+      window.addEventListener('scroll', checkScroll, { passive: true });
+
+      if (navCollapse.length) {
+        navCollapse.on('shown.bs.collapse', function () { navbar.classList.add('scrolled'); });
+        navCollapse.on('hidden.bs.collapse', function () {
+          if (window.scrollY <= 50) navbar.classList.remove('scrolled');
+        });
+      }
+    });
+  </script>
+
   </body>
 </html>
