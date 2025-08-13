@@ -1,263 +1,277 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
   <head>
-    <title>Welfare - Free Bootstrap 4 Template by Colorlib</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
+    <title>Noticias — IcTiosCusco</title>
+    <meta name="description" content="Noticias y comunicados de IcTiosCusco: investigación, conservación y monitoreo del género Orestias en Cusco.">
+
+    <!-- Open Graph básicos (para la página principal de noticias). Cada artículo debe tener sus propios OG en blog-single.html -->
+    <meta property="og:site_name" content="IcTiosCusco">
+    <meta property="og:title" content="Noticias — IcTiosCusco">
+    <meta property="og:description" content="Últimas noticias, resultados y comunicados del grupo IcTiosCusco.">
+    <meta property="og:image" content="/images/og_news.jpg">
+    <meta property="og:type" content="website">
+
     <link href="https://fonts.googleapis.com/css?family=Dosis:200,300,400,500,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Overpass:300,400,400i,600,700" rel="stylesheet">
 
     <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="css/animate.css">
-    
     <link rel="stylesheet" href="css/owl.carousel.min.css">
     <link rel="stylesheet" href="css/owl.theme.default.min.css">
     <link rel="stylesheet" href="css/magnific-popup.css">
-
     <link rel="stylesheet" href="css/aos.css">
-
     <link rel="stylesheet" href="css/ionicons.min.css">
-
     <link rel="stylesheet" href="css/bootstrap-datepicker.css">
     <link rel="stylesheet" href="css/jquery.timepicker.css">
-
-    
     <link rel="stylesheet" href="css/flaticon.css">
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
+
+    <style>
+      /* Reset básico */
+      html, body { margin:0; padding:0; }
+
+      /* Navbar (IcTiosCusco) */
+      .navbar-brand.d-flex { display:inline-flex; align-items:center; }
+      .navbar-brand img { height:56px; width:auto; margin-right:12px; }
+      .navbar-brand span { font-family:'Overpass','Dosis',sans-serif; font-weight:600; font-size:1.05rem; color:#fff; }
+
+      #ftco-navbar {
+        position: absolute; top:0; left:0; right:0; z-index:1050;
+        background-color: transparent; transition: background-color .25s ease;
+      }
+      #ftco-navbar.scrolled { position:fixed; background-color: rgba(255,255,255,0.98) !important; box-shadow:0 2px 8px rgba(0,0,0,0.06); }
+      #ftco-navbar .nav-link, #ftco-navbar .navbar-brand span { color:#fff !important; }
+      #ftco-navbar.scrolled .nav-link, #ftco-navbar.scrolled .navbar-brand span { color:#222 !important; }
+
+      /* HERO: background full-screen on mobile (uses --vh variable) */
+      .hero-wrap {
+        position:relative; width:100%; overflow:hidden; margin:0;
+        background-image: url('images/news_hero.jpg'); background-size:cover; background-position:center center; background-repeat:no-repeat;
+        height: calc(var(--vh, 1vh) * 100); min-height: 320px; display:block;
+      }
+      .hero-wrap .overlay { position:absolute; inset:0; background: linear-gradient(180deg, rgba(0,0,0,0.22) 0%, rgba(0,0,0,0.36) 60%); z-index:2; }
+      .hero-wrap .hero-content { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:3; color:#fff; text-align:center; padding:0 18px; }
+      .hero-wrap .hero-content h1{ font-size:3rem; margin:0 0 8px; }
+
+      /* Grid de noticias */
+      section.ftco-section { padding: 48px 0; }
+      .members-grid, .posts-grid { display:grid; gap:24px; grid-template-columns: repeat(3, 1fr); }
+
+      .blog-entry { background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 8px 22px rgba(10,25,35,0.06); display:flex; flex-direction:column; }
+      .block-20 { display:block; height:220px; background-size:cover; background-position:center; }
+      .text { padding:16px; flex:1 1 auto; display:flex; flex-direction:column; }
+      .meta { color:#9aa6ad; font-size:0.9rem; display:flex; gap:10px; align-items:center; }
+      .heading { margin:10px 0 12px; font-size:1.05rem; color:#0e2a39; }
+      .excerpt { color:#4b5560; flex:1 1 auto; }
+
+      /* Share toolbar */
+      .share-row { display:flex; gap:8px; align-items:center; margin-top:12px; }
+      .share-btn { display:inline-flex; align-items:center; gap:8px; padding:8px 10px; border-radius:8px; border:1px solid rgba(6,50,58,0.08); background:#f3fafb; color:#06323a; font-weight:600; text-decoration:none; cursor:pointer; }
+      .share-btn:hover { transform:translateY(-2px); box-shadow:0 8px 18px rgba(6,50,58,0.06); }
+
+      /* Footer small fix */
+      .ftco-footer { position:relative; z-index:1; }
+
+      @media (max-width: 991.98px) {
+        .posts-grid { grid-template-columns: repeat(2,1fr); }
+        .hero-wrap .hero-content h1{ font-size:2.2rem; }
+      }
+      @media (max-width: 575.98px) {
+        .posts-grid { grid-template-columns: 1fr; }
+        .block-20 { height: 260px; }
+      }
+    </style>
   </head>
   <body>
-    
-  <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+
+  <nav class="navbar navbar-expand-lg ftco_navbar ftco-navbar-light" id="ftco-navbar" role="navigation" aria-label="Menú principal">
     <div class="container">
-      <a class="navbar-brand" href="index.html">Welfare</a>
+      <a class="navbar-brand d-flex align-items-center" href="index.html">
+        <img src="images/logo.png" alt="IcTiosCusco logo">
+        <span>IcTiosCusco</span>
+      </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="oi oi-menu"></span> Menu
       </button>
 
       <div class="collapse navbar-collapse" id="ftco-nav">
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
-          <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
-          <li class="nav-item"><a href="causes.html" class="nav-link">Causes</a></li>
-          <li class="nav-item"><a href="donate.html" class="nav-link">Donate</a></li>
-          <li class="nav-item active"><a href="blog.html" class="nav-link">Blog</a></li>
-          <li class="nav-item"><a href="gallery.html" class="nav-link">Gallery</a></li>
-          <li class="nav-item"><a href="event.html" class="nav-link">Events</a></li>
-          <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+          <li class="nav-item"><a href="index.html" class="nav-link">Inicio</a></li>
+          <li class="nav-item"><a href="about.html" class="nav-link">Quiénes somos</a></li>
+          <li class="nav-item"><a href="causes.html" class="nav-link">Proyectos</a></li>
+          <li class="nav-item"><a href="donate.html" class="nav-link">Donación</a></li>
+          <li class="nav-item active"><a href="blog.html" class="nav-link">Noticias</a></li>
+          <li class="nav-item"><a href="gallery.html" class="nav-link">Galería</a></li>
+          <li class="nav-item"><a href="event.html" class="nav-link">Miembros</a></li>
+          <li class="nav-item"><a href="contact.html" class="nav-link">Contacto</a></li>
         </ul>
       </div>
     </div>
   </nav>
-    <!-- END nav -->
-    
-    <div class="hero-wrap" style="background-image: url('images/bg_2.jpg');" data-stellar-background-ratio="0.5">
-      <div class="overlay"></div>
-      <div class="container">
-        <div class="row no-gutters slider-text align-items-center justify-content-center" data-scrollax-parent="true">
-          <div class="col-md-7 ftco-animate text-center" data-scrollax=" properties: { translateY: '70%' }">
-             <p class="breadcrumbs" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><span class="mr-2"><a href="index.html">Home</a></span> <span>Blog</span></p>
-            <h1 class="mb-3 bread" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">Blog</h1>
-          </div>
+
+  <!-- HERO -->
+  <div class="hero-wrap" role="img" aria-label="Noticias IcTiosCusco">
+    <div class="overlay"></div>
+    <div class="hero-content container">
+      <div class="row justify-content-center">
+        <div class="col-md-10 text-center">
+          <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Inicio</a></span> <span>Noticias</span></p>
+          <h1>Noticias</h1>
+          <p>Resultados, comunicados y actividades del equipo IcTiosCusco.</p>
         </div>
       </div>
     </div>
+  </div>
 
-    
-    <section class="ftco-section">
-      <div class="container">
-        <div class="row d-flex">
-          <div class="col-md-4 d-flex ftco-animate">
-          	<div class="blog-entry align-self-stretch">
-              <a href="blog-single.html" class="block-20" style="background-image: url('images/image_1.jpg');">
-              </a>
-              <div class="text p-4 d-block">
-              	<div class="meta mb-3">
-                  <div><a href="#">Sept 10, 2018</a></div>
-                  <div><a href="#">Admin</a></div>
-                  <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
-                </div>
-                <h3 class="heading mt-3"><a href="#">Hurricane Irma has devastated Florida</a></h3>
-                <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
-              </div>
+  <!-- POSTS -->
+  <section class="ftco-section">
+    <div class="container">
+      <div class="posts-grid" role="list">
+
+        <!-- Post 1 (ejemplo) -->
+        <article class="blog-entry" role="listitem" aria-label="Noticia: Resultados preliminares de Huaypo" data-url="/noticias/resultados-preliminares-huaypo" data-title="Resultados preliminares de Huaypo" data-excerpt="Resumen breve de los hallazgos en la laguna Huaypo" data-image="/images/noticia_1.jpg">
+          <a class="block-20" href="blog-single.html" style="background-image: url('images/noticia_1.jpg');" aria-label="Imagen noticia"></a>
+          <div class="text">
+            <div class="meta">
+              <div><a href="#">Sept 10, 2024</a></div>
+              <div><a href="#">IcTiosCusco</a></div>
+            </div>
+            <h3 class="heading"><a href="blog-single.html">Resultados preliminares de Huaypo</a></h3>
+            <p class="excerpt">Presentamos resultados preliminares sobre la abundancia y estructura de la comunidad de Orestias en la laguna Huaypo.</p>
+
+            <div class="share-row" aria-hidden="false">
+              <button class="share-btn" data-share="web" aria-label="Compartir (web)">Compartir</button>
+              <a class="share-btn" data-share="facebook" aria-label="Compartir en Facebook">Facebook</a>
+              <a class="share-btn" data-share="whatsapp" aria-label="Compartir en WhatsApp">WhatsApp</a>
+              <button class="share-btn" data-share="copy" aria-label="Copiar enlace">Copiar enlace</button>
             </div>
           </div>
-          <div class="col-md-4 d-flex ftco-animate">
-          	<div class="blog-entry align-self-stretch">
-              <a href="blog-single.html" class="block-20" style="background-image: url('images/image_2.jpg');">
-              </a>
-              <div class="text p-4 d-block">
-              	<div class="meta mb-3">
-                  <div><a href="#">Sept 10, 2018</a></div>
-                  <div><a href="#">Admin</a></div>
-                  <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
-                </div>
-                <h3 class="heading mt-3"><a href="#">Hurricane Irma has devastated Florida</a></h3>
-                <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
-              </div>
+        </article>
+
+        <!-- Post 2 -->
+        <article class="blog-entry" role="listitem" aria-label="Noticia: Campaña de monitoreo 2024" data-url="/noticias/campana-monitoreo-2024" data-title="Campaña de monitoreo 2024" data-excerpt="Descripción de las actividades de monitoreo realizadas durante 2024" data-image="/images/noticia_2.jpg">
+          <a class="block-20" href="blog-single.html" style="background-image: url('images/noticia_2.jpg');" aria-label="Imagen noticia"></a>
+          <div class="text">
+            <div class="meta">
+              <div><a href="#">Ago 21, 2024</a></div>
+              <div><a href="#">IcTiosCusco</a></div>
+            </div>
+            <h3 class="heading"><a href="blog-single.html">Campaña de monitoreo 2024</a></h3>
+            <p class="excerpt">Resumen de la campaña de muestreo realizada en lagunas altoandinas con participación comunitaria.</p>
+
+            <div class="share-row">
+              <button class="share-btn" data-share="web">Compartir</button>
+              <a class="share-btn" data-share="facebook">Facebook</a>
+              <a class="share-btn" data-share="whatsapp">WhatsApp</a>
+              <button class="share-btn" data-share="copy">Copiar enlace</button>
             </div>
           </div>
-          <div class="col-md-4 d-flex ftco-animate">
-          	<div class="blog-entry align-self-stretch">
-              <a href="blog-single.html" class="block-20" style="background-image: url('images/image_3.jpg');">
-              </a>
-              <div class="text p-4 d-block">
-              	<div class="meta mb-3">
-                  <div><a href="#">Sept 10, 2018</a></div>
-                  <div><a href="#">Admin</a></div>
-                  <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
-                </div>
-                <h3 class="heading mt-3"><a href="#">Hurricane Irma has devastated Florida</a></h3>
-                <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
-              </div>
+        </article>
+
+        <!-- Post 3 -->
+        <article class="blog-entry" role="listitem" aria-label="Noticia: Taller comunitario" data-url="/noticias/taller-comunitario" data-title="Taller comunitario" data-excerpt="Talleres de educación ambiental con escuelas locales" data-image="/images/noticia_3.jpg">
+          <a class="block-20" href="blog-single.html" style="background-image: url('images/noticia_3.jpg');" aria-label="Imagen noticia"></a>
+          <div class="text">
+            <div class="meta">
+              <div><a href="#">Jul 05, 2024</a></div>
+              <div><a href="#">IcTiosCusco</a></div>
+            </div>
+            <h3 class="heading"><a href="blog-single.html">Taller comunitario</a></h3>
+            <p class="excerpt">Actividades educativas y participación de estudiantes en proyectos de conservación.</p>
+
+            <div class="share-row">
+              <button class="share-btn" data-share="web">Compartir</button>
+              <a class="share-btn" data-share="facebook">Facebook</a>
+              <a class="share-btn" data-share="whatsapp">WhatsApp</a>
+              <button class="share-btn" data-share="copy">Copiar enlace</button>
             </div>
           </div>
-          <div class="col-md-4 d-flex ftco-animate">
-          	<div class="blog-entry align-self-stretch">
-              <a href="blog-single.html" class="block-20" style="background-image: url('images/image_4.jpg');">
-              </a>
-              <div class="text p-4 d-block">
-              	<div class="meta mb-3">
-                  <div><a href="#">Sept 10, 2018</a></div>
-                  <div><a href="#">Admin</a></div>
-                  <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
-                </div>
-                <h3 class="heading mt-3"><a href="#">Hurricane Irma has devastated Florida</a></h3>
-                <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
-              </div>
-            </div>
+        </article>
+
+      </div>
+
+      <!-- Pagination -->
+      <div class="row mt-5">
+        <div class="col text-center">
+          <div class="block-27">
+            <ul>
+              <li><a href="#">&lt;</a></li>
+              <li class="active"><span>1</span></li>
+              <li><a href="#">2</a></li>
+              <li><a href="#">3</a></li>
+              <li><a href="#">&gt;</a></li>
+            </ul>
           </div>
-          <div class="col-md-4 d-flex ftco-animate">
-          	<div class="blog-entry align-self-stretch">
-              <a href="blog-single.html" class="block-20" style="background-image: url('images/image_5.jpg');">
-              </a>
-              <div class="text p-4 d-block">
-              	<div class="meta mb-3">
-                  <div><a href="#">Sept 10, 2018</a></div>
-                  <div><a href="#">Admin</a></div>
-                  <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
-                </div>
-                <h3 class="heading mt-3"><a href="#">Hurricane Irma has devastated Florida</a></h3>
-                <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
-              </div>
-            </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="ftco-footer ftco-section img">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row mb-5">
+        <div class="col-md-3">
+          <div class="ftco-footer-widget mb-4">
+            <h2 class="ftco-heading-2">Sobre IcTiosCusco</h2>
+            <p>Grupo de investigación dedicado a la conservación y estudio de peces andinos (Orestias) en la región de Cusco.</p>
+            <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
+              <li class="ftco-animate"><a href="https://www.facebook.com/ConGeniusRockie" target="_blank" rel="noopener noreferrer" aria-label="Facebook IcTiosCusco"><span class="icon-facebook"></span></a></li>
+              <li class="ftco-animate"><a href="https://www.instagram.com/ictioscusco" target="_blank" rel="noopener noreferrer" aria-label="Instagram IcTiosCusco"><span class="icon-instagram"></span></a></li>
+            </ul>
           </div>
-          <div class="col-md-4 d-flex ftco-animate">
-          	<div class="blog-entry align-self-stretch">
-              <a href="blog-single.html" class="block-20" style="background-image: url('images/image_6.jpg');">
-              </a>
-              <div class="text p-4 d-block">
-              	<div class="meta mb-3">
-                  <div><a href="#">Sept 10, 2018</a></div>
-                  <div><a href="#">Admin</a></div>
-                  <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
+        </div>
+        <div class="col-md-4">
+          <div class="ftco-footer-widget mb-4">
+            <h2 class="ftco-heading-2">Publicaciones recientes</h2>
+            <div class="block-21 mb-4 d-flex">
+              <a class="blog-img mr-4" style="background-image: url(images/noticia_1.jpg);"></a>
+              <div class="text">
+                <h3 class="heading"><a href="#">Resultados preliminares de Huaypo</a></h3>
+                <div class="meta">
+                  <div><a href="#"><span class="icon-calendar"></span> Sept 10, 2024</a></div>
+                  <div><a href="#"><span class="icon-person"></span> IcTiosCusco</a></div>
                 </div>
-                <h3 class="heading mt-3"><a href="#">Hurricane Irma has devastated Florida</a></h3>
-                <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
               </div>
             </div>
           </div>
         </div>
-        <div class="row mt-5">
-          <div class="col text-center">
-            <div class="block-27">
+        <div class="col-md-2">
+          <div class="ftco-footer-widget mb-4 ml-md-4">
+            <h2 class="ftco-heading-2">Enlaces</h2>
+            <ul class="list-unstyled">
+              <li><a href="index.html" class="py-2 d-block">Inicio</a></li>
+              <li><a href="about.html" class="py-2 d-block">Quiénes somos</a></li>
+              <li><a href="donate.html" class="py-2 d-block">Donación</a></li>
+              <li><a href="causes.html" class="py-2 d-block">Proyectos</a></li>
+              <li><a href="event.html" class="py-2 d-block">Miembros</a></li>
+              <li><a href="blog.html" class="py-2 d-block">Noticias</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="ftco-footer-widget mb-4">
+            <h2 class="ftco-heading-2">¿Tienes preguntas?</h2>
+            <div class="block-23 mb-3">
               <ul>
-                <li><a href="#">&lt;</a></li>
-                <li class="active"><span>1</span></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
-                <li><a href="#">&gt;</a></li>
+                <li><span class="icon icon-map-marker"></span><span class="text">Cusco, Perú</span></li>
+                <li><a href="tel:+51969392189"><span class="icon icon-phone"></span><span class="text">+51 969 392 189</span></a></li>
+                <li><a href="mailto:ictioscusco@gmail.com"><span class="icon icon-envelope"></span><span class="text">ictioscusco@gmail.com</span></a></li>
               </ul>
             </div>
           </div>
         </div>
       </div>
-    </section>
-		
 
-    <footer class="ftco-footer ftco-section img">
-    	<div class="overlay"></div>
-      <div class="container">
-        <div class="row mb-5">
-          <div class="col-md-3">
-            <div class="ftco-footer-widget mb-4">
-              <h2 class="ftco-heading-2">About Us</h2>
-              <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-              <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
-                <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
-                <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
-                <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="ftco-footer-widget mb-4">
-              <h2 class="ftco-heading-2">Recent Blog</h2>
-              <div class="block-21 mb-4 d-flex">
-                <a class="blog-img mr-4" style="background-image: url(images/image_1.jpg);"></a>
-                <div class="text">
-                  <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control about</a></h3>
-                  <div class="meta">
-                    <div><a href="#"><span class="icon-calendar"></span> July 12, 2018</a></div>
-                    <div><a href="#"><span class="icon-person"></span> Admin</a></div>
-                    <div><a href="#"><span class="icon-chat"></span> 19</a></div>
-                  </div>
-                </div>
-              </div>
-              <div class="block-21 mb-4 d-flex">
-                <a class="blog-img mr-4" style="background-image: url(images/image_2.jpg);"></a>
-                <div class="text">
-                  <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control about</a></h3>
-                  <div class="meta">
-                    <div><a href="#"><span class="icon-calendar"></span> July 12, 2018</a></div>
-                    <div><a href="#"><span class="icon-person"></span> Admin</a></div>
-                    <div><a href="#"><span class="icon-chat"></span> 19</a></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-2">
-             <div class="ftco-footer-widget mb-4 ml-md-4">
-              <h2 class="ftco-heading-2">Site Links</h2>
-              <ul class="list-unstyled">
-                <li><a href="#" class="py-2 d-block">Home</a></li>
-                <li><a href="#" class="py-2 d-block">About</a></li>
-                <li><a href="#" class="py-2 d-block">Donate</a></li>
-                <li><a href="#" class="py-2 d-block">Causes</a></li>
-                <li><a href="#" class="py-2 d-block">Event</a></li>
-                <li><a href="#" class="py-2 d-block">Blog</a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-md-3">
-            <div class="ftco-footer-widget mb-4">
-            	<h2 class="ftco-heading-2">Have a Questions?</h2>
-            	<div class="block-23 mb-3">
-	              <ul>
-	                <li><span class="icon icon-map-marker"></span><span class="text">203 Fake St. Mountain View, San Francisco, California, USA</span></li>
-	                <li><a href="#"><span class="icon icon-phone"></span><span class="text">+2 392 3929 210</span></a></li>
-	                <li><a href="#"><span class="icon icon-envelope"></span><span class="text">info@yourdomain.com</span></a></li>
-	              </ul>
-	            </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12 text-center">
+      <div class="row"><div class="col-md-12 text-center"><p>Copyright &copy;<script>document.write(new Date().getFullYear());</script> IcTiosCusco. Todos los derechos reservados.</p></div></div>
+    </div>
+  </footer>
 
-            <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
-          </div>
-        </div>
-      </div>
-    </footer>
-    
-  
 
   <!-- loader -->
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
@@ -277,9 +291,79 @@
   <script src="js/bootstrap-datepicker.js"></script>
   <script src="js/jquery.timepicker.min.js"></script>
   <script src="js/scrollax.min.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
   <script src="js/google-map.js"></script>
   <script src="js/main.js"></script>
-    
+
+  <script>
+    // --vh fix para móviles
+    (function(){
+      function setVhVar(){ var vh = window.innerHeight * 0.01; document.documentElement.style.setProperty('--vh', vh + 'px'); }
+      window.addEventListener('resize', setVhVar); window.addEventListener('orientationchange', setVhVar); setVhVar();
+    })();
+
+    // Navbar behaviour
+    document.addEventListener('DOMContentLoaded', function () {
+      var navbar = document.getElementById('ftco-navbar');
+      var navCollapse = $('#ftco-nav');
+      function checkScroll(){ if(window.scrollY>60) navbar.classList.add('scrolled'); else navbar.classList.remove('scrolled'); }
+      checkScroll(); window.addEventListener('scroll', checkScroll, {passive:true});
+      if(navCollapse.length){ navCollapse.on('shown.bs.collapse', function(){ navbar.classList.add('scrolled'); }); navCollapse.on('hidden.bs.collapse', function(){ if(window.scrollY<=60) navbar.classList.remove('scrolled'); }); }
+
+      // Compartir: maneja clicks en botones .share-btn
+      document.querySelectorAll('.share-btn').forEach(function(btn){
+        btn.addEventListener('click', function(e){
+          var article = e.target.closest('.blog-entry');
+          if(!article) return;
+          var url = new URL(article.getAttribute('data-url') || window.location.pathname, window.location.origin).href;
+          var title = article.getAttribute('data-title') || document.title;
+          var excerpt = article.getAttribute('data-excerpt') || '';
+          var image = article.getAttribute('data-image') || '';
+          var action = btn.getAttribute('data-share');
+
+          // Web Share API (móvil / soportado)
+          if(action === 'web'){
+            if(navigator.share){
+              navigator.share({ title: title, text: excerpt, url: url }).catch(function(err){});
+            } else {
+              // Fallback: abrir diálogo de Facebook + Twitter
+              alert('Tu navegador no soporta el menú nativo de compartir. Usa los botones de Facebook/WhatsApp o copia el enlace.');
+            }
+            return;
+          }
+
+          if(action === 'facebook'){
+            var fb = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
+            window.open(fb, '_blank', 'noopener');
+            return;
+          }
+
+          if(action === 'twitter'){
+            var tw = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(title + ' - ' + excerpt) + '&url=' + encodeURIComponent(url);
+            window.open(tw, '_blank', 'noopener');
+            return;
+          }
+
+          if(action === 'whatsapp'){
+            var text = title + '\n' + excerpt + '\n' + url;
+            var wa = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(text);
+            window.open(wa, '_blank', 'noopener');
+            return;
+          }
+
+          if(action === 'copy'){
+            if(navigator.clipboard && window.isSecureContext){
+              navigator.clipboard.writeText(url).then(function(){ alert('Enlace copiado al portapapeles'); });
+            } else {
+              // fallback simple
+              var ta = document.createElement('textarea'); ta.value = url; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); alert('Enlace copiado al portapapeles'); }catch(e){ prompt('Copia este enlace:', url); } ta.remove();
+            }
+            return;
+          }
+
+        });
+      });
+
+    });
+  </script>
   </body>
 </html>
