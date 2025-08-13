@@ -59,7 +59,7 @@
       #ftco-navbar .nav-link, #ftco-navbar .navbar-brand span { color: #ffffff !important; transition: color 0.25s ease; }
       #ftco-navbar.scrolled .nav-link, #ftco-navbar.scrolled .navbar-brand span { color: #222222 !important; }
       #ftco-nav.collapse.show .nav-link { color: #222222 !important; }
-
+      
       /* Soporte safe-area (notch) en iOS/Android: evita barras en top por notch */
       @supports(padding: env(safe-area-inset-top)) {
         #ftco-navbar { padding-top: env(safe-area-inset-top); }
@@ -67,21 +67,30 @@
       }
 
       /* ========== HERO ========== */
+      /* 1) HERO actualizado: ocupar toda la pantalla en móviles y pantallas pequeñas */
       .hero-wrap {
         position: relative;
         width: 100%;
         overflow: hidden;
         background: transparent;
         margin: 0; /* asegurar que vaya pegado al top */
+        /* fallback para navegadores sin soporte dynamic viewport */
+        min-height: 100vh;
+        /* preferimos dynamic viewport cuando esté disponible; si no, el min-height 100vh actúa como fallback */
+        height: 100dvh;
+        display: block;
       }
+
       .hero-wrap .hero-img {
         display: block;
         width: 100%;
-        height: auto;
-        max-height: 780px; /* controla altura máxima en pantallas grandes */
-        object-fit: cover;
+        /* ocupa toda la altura del hero */
+        height: 100%;
+        object-fit: cover;     /* recorta sin deformar y llena el área */
+        object-position: center center;
         margin: 0;
       }
+
       .hero-wrap .overlay {
         position: absolute;
         inset: 0;
@@ -103,8 +112,20 @@
       .hero-wrap .hero-content h1 { font-size: 3.2rem; margin: 0 0 8px; font-weight: 500; }
       .hero-wrap .hero-content p { margin: 0; opacity: 0.95; }
 
+      /* En pantallas grandes mantenemos el max-height antiguo para que no sea gigantesco */
+      @media (min-width: 992px) {
+        .hero-wrap {
+          max-height: 780px;
+          height: auto;
+          min-height: 420px;
+        }
+        .hero-wrap .hero-img {
+          max-height: 780px;
+          height: auto;
+        }
+      }
+
       @media (max-width: 767.98px) {
-        .hero-wrap .hero-img { max-height: 420px; }
         .hero-wrap .hero-content { top: 46%; }
         .hero-wrap .hero-content h1 { font-size: 2.2rem; }
       }
