@@ -59,8 +59,37 @@
         background: #000;
       }
 
+      /* Foto del grupo y descripción */
+      .group-block {
+        display: flex;
+        gap: 24px;
+        align-items: flex-start;
+        margin-top: 28px;
+        margin-bottom: 36px;
+      }
+      .group-photo {
+        width: 320px;
+        max-width: 40%;
+        border-radius: 8px;
+        object-fit: cover;
+        box-shadow: 0 8px 20px rgba(16,24,40,0.06);
+        border: 2px solid #f3f3f3;
+      }
+      .group-text {
+        flex: 1 1 auto;
+        color: #333;
+        line-height: 1.6;
+        font-size: 1rem;
+      }
+
       /* Texto principal */
       .lead-desc { font-size: 1.05rem; color: #333; line-height: 1.6; }
+
+      @media (max-width: 991.98px) {
+        .group-block { flex-direction: column; align-items: center; text-align: center; }
+        .group-photo { max-width: 90%; width: 420px; }
+        .group-text { width: 100%; }
+      }
 
       @media (max-width: 575.98px) {
         .navbar-brand img { height: 44px; margin-right: 10px; }
@@ -97,8 +126,8 @@
   </nav>
   <!-- END nav -->
 
-  <!-- Hero sencillo -->
-  <div class="hero-wrap" style="background-image: url('images/laguna_ictioscusco.jpg');" data-stellar-background-ratio="0.5">
+  <!-- Hero sencillo (NUEVA IMAGEN: about_hero.jpg) -->
+  <div class="hero-wrap" style="background-image: url('images/about_hero.jpg');" data-stellar-background-ratio="0.5" role="img" aria-label="Portada Quiénes somos — IcTiosCusco">
     <div class="overlay"></div>
     <div class="container">
       <div class="row no-gutters slider-text align-items-center justify-content-center">
@@ -111,23 +140,38 @@
     </div>
   </div>
 
-  <!-- Contenido: descripción y video -->
+  <!-- Contenido: descripción, foto del grupo y video -->
   <section class="ftco-section">
     <div class="container">
+
       <div class="row justify-content-center mb-4">
         <div class="col-md-10">
           <p class="lead-desc">
             IcTiosCusco es un equipo interdisciplinario que trabaja en investigación, monitoreo poblacional, genética y educación ambiental en lagunas altoandinas del Cusco. Buscamos generar conocimiento científico que nutra medidas de conservación colaborativas con comunidades locales y autoridades ambientales.
           </p>
-
-          <p class="lead-desc">
-            En este video presentamos una breve introducción de nuestro trabajo de campo, objetivos y algunos resultados recientes.
-          </p>
         </div>
       </div>
 
-      <!-- Video embebido: ID reemplazado por 11Rc5EgMzEg -->
+      <!-- Bloque: foto del grupo + descripción ampliada -->
       <div class="row justify-content-center">
+        <div class="col-md-10">
+          <div class="group-block" aria-labelledby="group-title">
+            <img src="images/group_photo.jpg" alt="Foto del equipo IcTiosCusco" class="group-photo">
+            <div class="group-text">
+              <h3 id="group-title">Nuestro equipo</h3>
+              <p>
+                Contamos con investigadores y colaboradores locales y nacionales especializados en biología, genética, hidrología y educación ambiental. Realizamos muestreos de campo, análisis genéticos y actividades de educación con comunidades escolares y gestores locales.
+              </p>
+              <p>
+                Si quieres colaborar o coordinar actividades con nosotros, escríbenos a <a href="mailto:ictioscusco@gmail.com">ictioscusco@gmail.com</a> o usa la sección de contacto.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Video embebido (tu video ya está integrado si lo deseas) -->
+      <div class="row justify-content-center mt-3">
         <div class="col-md-10 video-container">
           <div class="video-box" role="region" aria-label="Video IcTiosCusco">
             <div style="position:relative;padding-top:56.25%;"> 
@@ -144,12 +188,13 @@
         </div>
       </div>
 
-      <!-- Texto debajo del video (opcional) -->
+      <!-- Texto debajo del video -->
       <div class="row justify-content-center mt-4">
         <div class="col-md-8 text-center">
-          <small>Si quieres que el video se abra en una ventana modal, tenga autoplay silenciado o se cargue como miniatura primero, dime y lo ajusto.</small>
+          <small>Este video es una presentación breve de nuestras actividades de campo y objetivos.</small>
         </div>
       </div>
+
     </div>
   </section>
 
@@ -285,3 +330,4 @@
 
   </body>
 </html>
+
