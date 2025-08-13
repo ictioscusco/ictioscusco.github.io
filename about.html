@@ -11,27 +11,22 @@
 
     <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="css/animate.css">
-
     <link rel="stylesheet" href="css/owl.carousel.min.css">
     <link rel="stylesheet" href="css/owl.theme.default.min.css">
     <link rel="stylesheet" href="css/magnific-popup.css">
-
     <link rel="stylesheet" href="css/aos.css">
-
     <link rel="stylesheet" href="css/ionicons.min.css">
-
     <link rel="stylesheet" href="css/bootstrap-datepicker.css">
     <link rel="stylesheet" href="css/jquery.timepicker.css">
-
     <link rel="stylesheet" href="css/flaticon.css">
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
 
-    <!-- Estilos personalizados para la sección de miembros -->
     <style>
+      /* Mantener look coherente con index */
       .navbar-brand.d-flex { display: inline-flex; align-items: center; }
       .navbar-brand img { height: 56px; width: auto; margin-right: 12px; }
-      .navbar-brand span { font-family: 'Overpass', 'Dosis', sans-serif !important; font-weight: 600; font-size: 1.05rem; color: #fff; line-height: 1; letter-spacing: 0.2px; }
+      .navbar-brand span { font-family: 'Overpass', 'Dosis', sans-serif !important; font-weight: 600; font-size: 1.05rem; color: #fff; }
 
       /* Botón blanco coherente */
       .btn.btn-white {
@@ -40,77 +35,37 @@
         border: none !important;
         box-shadow: 0 2px 6px rgba(0,0,0,0.08);
       }
-      .btn.btn-white:hover,
-      .btn.btn-white:focus {
-        background: #f2f2f2 !important;
-        color: #222 !important;
-        text-decoration: none;
-      }
 
-      /* Navbar scroll behavior */
-      #ftco-navbar {
-        background-color: transparent;
-        transition: background-color 0.25s ease;
-      }
-      #ftco-navbar.scrolled {
-        background-color: rgba(255,255,255,0.98) !important;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-      }
-      #ftco-navbar .nav-link,
-      #ftco-navbar .navbar-brand span {
-        color: #ffffff !important;
-        transition: color 0.25s ease;
-      }
-      #ftco-navbar.scrolled .nav-link,
-      #ftco-navbar.scrolled .navbar-brand span {
-        color: #222222 !important;
-      }
-      #ftco-navbar .navbar-toggler { color: #ffffff !important; border-color: rgba(255,255,255,0.18) !important; }
-      #ftco-navbar.scrolled .navbar-toggler { color: #222222 !important; border-color: rgba(0,0,0,0.12) !important; }
+      /* Navbar scroll behaviour */
+      #ftco-navbar { background-color: transparent; transition: background-color 0.25s ease; }
+      #ftco-navbar.scrolled { background-color: rgba(255,255,255,0.98) !important; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+      #ftco-navbar .nav-link, #ftco-navbar .navbar-brand span { color: #ffffff !important; transition: color 0.25s ease; }
+      #ftco-navbar.scrolled .nav-link, #ftco-navbar.scrolled .navbar-brand span { color: #222222 !important; }
       #ftco-nav.collapse.show .nav-link { color: #222222 !important; }
 
-      /* Miembros: tarjetas y fotos */
-      .member-card {
-        border: none;
-        background: #ffffff;
+      /* Contenedor del video: centrado y con tamaño máximo */
+      .video-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 18px;
+        margin-bottom: 28px;
+      }
+      .video-box {
+        width: 100%;
+        max-width: 720px; /* ancho máximo del recuadro */
         border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(16,24,40,0.06);
-        padding: 14px;
-        margin-bottom: 20px;
-      }
-      .member-photo {
-        width: 140px;
-        height: 140px;
-        object-fit: cover;
-        border-radius: 8px;
-        border: 2px solid #f1f1f1;
-      }
-      .member-info h4 { margin-bottom: 4px; font-size: 1.05rem; }
-      .member-info p { margin-bottom: 8px; color: #555; }
-
-      .social-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px 12px;
-        border-radius: 6px;
-        border: 1px solid rgba(0,0,0,0.06);
-        text-decoration: none;
-        color: inherit;
-        font-size: 0.95rem;
-        margin-right: 6px;
-      }
-      .social-btn .icon { font-size: 1.05rem; }
-
-      /* Layout: image left, info right on medium+ screens */
-      @media (min-width: 768px) {
-        .member-row { display: flex; gap: 18px; align-items: center; }
-        .member-photo-wrap { flex: 0 0 140px; }
-        .member-info-wrap { flex: 1 1 auto; }
+        overflow: hidden;
+        box-shadow: 0 8px 24px rgba(16,24,40,0.08);
+        background: #000;
       }
 
-      @media (max-width: 767.98px) {
-        .member-photo { width: 120px; height: 120px; }
+      /* Texto principal */
+      .lead-desc { font-size: 1.05rem; color: #333; line-height: 1.6; }
+
+      @media (max-width: 575.98px) {
+        .navbar-brand img { height: 44px; margin-right: 10px; }
+        .navbar-brand span { font-size: 0.95rem; }
+        .video-box { max-width: 100%; }
       }
     </style>
   </head>
@@ -129,13 +84,12 @@
       <div class="collapse navbar-collapse" id="ftco-nav">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item"><a href="index.html" class="nav-link">Inicio</a></li>
-          <!-- "Quiénes somos" seguirá conectando al index (según pediste) -->
-          <li class="nav-item active"><a href="index.html" class="nav-link">Quiénes somos</a></li>
+          <li class="nav-item active"><a href="about.html" class="nav-link">Quiénes somos</a></li>
           <li class="nav-item"><a href="causes.html" class="nav-link">Proyectos</a></li>
           <li class="nav-item"><a href="donate.html" class="nav-link">Donación</a></li>
           <li class="nav-item"><a href="blog.html" class="nav-link">Noticias</a></li>
           <li class="nav-item"><a href="gallery.html" class="nav-link">Galería</a></li>
-          <li class="nav-item"><a href="event.html" class="nav-link">Miembros</a></li>
+          <li class="nav-item"><a href="members.html" class="nav-link">Miembros</a></li>
           <li class="nav-item"><a href="contact.html" class="nav-link">Contacto</a></li>
         </ul>
       </div>
@@ -143,255 +97,60 @@
   </nav>
   <!-- END nav -->
 
-  <!-- Hero -->
+  <!-- Hero sencillo -->
   <div class="hero-wrap" style="background-image: url('images/laguna_ictioscusco.jpg');" data-stellar-background-ratio="0.5">
     <div class="overlay"></div>
     <div class="container">
-      <div class="row no-gutters slider-text align-items-center justify-content-center" data-scrollax-parent="true">
-        <div class="col-md-8 ftco-animate text-center">
+      <div class="row no-gutters slider-text align-items-center justify-content-center">
+        <div class="col-md-8 text-center">
           <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Inicio</a></span> <span>Quiénes somos</span></p>
           <h1 class="mb-4">Quiénes somos</h1>
-          <p class="mb-5">Grupo de investigación dedicado a la conservación y monitoreo del género <em>Orestias</em> y sus ecosistemas altoandinos.</p>
+          <p class="mb-4">Grupo de investigación dedicado a la conservación y estudio del género <em>Orestias</em> y sus ecosistemas altoandinos.</p>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Contenido principal -->
+  <!-- Contenido: descripción y video -->
   <section class="ftco-section">
     <div class="container">
-      <div class="row">
-        <!-- Texto introductorio -->
-        <div class="col-md-6 d-flex ftco-animate">
-          <div class="img img-about align-self-stretch" style="background-image: url('images/bg_4.jpg'); width: 100%;"></div>
+      <div class="row justify-content-center mb-4">
+        <div class="col-md-10">
+          <p class="lead-desc">
+            IcTiosCusco es un equipo interdisciplinario que trabaja en investigación, monitoreo poblacional, genética y educación ambiental en lagunas altoandinas del Cusco. Buscamos generar conocimiento científico que nutra medidas de conservación colaborativas con comunidades locales y autoridades ambientales.
+          </p>
+
+          <p class="lead-desc">
+            En este video presentamos una breve introducción de nuestro trabajo de campo, objetivos y algunos resultados recientes.
+          </p>
         </div>
-        <div class="col-md-6 pl-md-5 ftco-animate">
-          <h2 class="mb-4">IcTiosCusco — Conservación desde la ciencia</h2>
-          <p>Somos un equipo interdisciplinario (biología, hidrología, genética y manejo de recursos) que trabaja en la cuenca altoandina para entender la distribución, variación genética y amenazas que afectan a las poblaciones de <em>Orestias</em>.</p>
-          <p>Nuestros objetivos incluyen: monitoreo poblacional, análisis filogeográfico, educación ambiental y estrategias de conservación participativa con comunidades locales.</p>
-          <p><a href="contact.html" class="btn btn-white px-4 py-3">Contáctanos</a></p>
+      </div>
+
+      <!-- Video embebido: ID reemplazado por 11Rc5EgMzEg -->
+      <div class="row justify-content-center">
+        <div class="col-md-10 video-container">
+          <div class="video-box" role="region" aria-label="Video IcTiosCusco">
+            <div style="position:relative;padding-top:56.25%;"> 
+              <iframe
+                src="https://www.youtube.com/embed/11Rc5EgMzEg"
+                title="Video IcTiosCusco"
+                style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+                loading="lazy"></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Texto debajo del video (opcional) -->
+      <div class="row justify-content-center mt-4">
+        <div class="col-md-8 text-center">
+          <small>Si quieres que el video se abra en una ventana modal, tenga autoplay silenciado o se cargue como miniatura primero, dime y lo ajusto.</small>
         </div>
       </div>
     </div>
-  </section>
-
-  <!-- Sección MIEMBROS: 9 fotos/miembros -->
-  <section class="ftco-section bg-light">
-    <div class="container">
-      <div class="row justify-content-center mb-4">
-        <div class="col-md-8 text-center heading-section ftco-animate">
-          <h2 class="mb-3">Nuestro equipo</h2>
-          <p>Sube las fotos a <code>images/</code> con los nombres indicados; cada tarjeta tiene botones para Facebook e Instagram (reemplaza los <code>href="#"</code> por las URLs reales).</p>
-        </div>
-      </div>
-
-      <!-- Grid de miembros: 3 columnas -->
-      <div class="row">
-        <!-- Miembro 1 -->
-        <div class="col-md-6 col-lg-4 ftco-animate">
-          <div class="member-card">
-            <div class="member-row">
-              <div class="member-photo-wrap">
-                <img src="images/jack_malon.jpg" alt="Jack Malon Rodriguez" class="member-photo">
-              </div>
-              <div class="member-info-wrap">
-                <div class="member-info">
-                  <h4>Jack Malon Rodriguez Pumaccajia</h4>
-                  <p><strong>Presidente</strong></p>
-                  <p>Responsable de coordinación general, muestreos y supervisión de proyectos.</p>
-                  <div>
-                    <!-- Reemplaza href="#" con el enlace real -->
-                    <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Jack">
-                      <span class="icon icon-facebook"></span> Facebook
-                    </a>
-                    <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Jack">
-                      <span class="icon icon-instagram"></span> Instagram
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Miembro 2 -->
-        <div class="col-md-6 col-lg-4 ftco-animate">
-          <div class="member-card">
-            <div class="member-row">
-              <div class="member-photo-wrap">
-                <img src="images/nayely_polanco.jpg" alt="Nayely Polanco Accostupa" class="member-photo">
-              </div>
-              <div class="member-info-wrap">
-                <div class="member-info">
-                  <h4>Nayely Polanco Accostupa</h4>
-                  <p>Miembro</p>
-                  <p>Participa en campo y actividades de educación ambiental.</p>
-                  <div>
-                    <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Nayely"><span class="icon icon-facebook"></span> Facebook</a>
-                    <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Nayely"><span class="icon icon-instagram"></span> Instagram</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Miembro 3 -->
-        <div class="col-md-6 col-lg-4 ftco-animate">
-          <div class="member-card">
-            <div class="member-row">
-              <div class="member-photo-wrap">
-                <img src="images/rolando_chaparrea.jpg" alt="Rolando Chaparrea Cardenas" class="member-photo">
-              </div>
-              <div class="member-info-wrap">
-                <div class="member-info">
-                  <h4>Rolando Chaparrea Cardenas</h4>
-                  <p>Miembro</p>
-                  <p>Especialista en genética y análisis moleculares.</p>
-                  <div>
-                    <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Rolando"><span class="icon icon-facebook"></span> Facebook</a>
-                    <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Rolando"><span class="icon icon-instagram"></span> Instagram</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Miembro 4 -->
-        <div class="col-md-6 col-lg-4 ftco-animate">
-          <div class="member-card">
-            <div class="member-row">
-              <div class="member-photo-wrap">
-                <img src="images/edmar_soria.jpg" alt="Edmar Soria Arana" class="member-photo">
-              </div>
-              <div class="member-info-wrap">
-                <div class="member-info">
-                  <h4>Edmar Soria Arana</h4>
-                  <p>Miembro</p>
-                  <p>Encargado de logística de campo y base de datos.</p>
-                  <div>
-                    <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Edmar"><span class="icon icon-facebook"></span> Facebook</a>
-                    <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Edmar"><span class="icon icon-instagram"></span> Instagram</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Miembro 5 -->
-        <div class="col-md-6 col-lg-4 ftco-animate">
-          <div class="member-card">
-            <div class="member-row">
-              <div class="member-photo-wrap">
-                <img src="images/deysi_ccala.jpg" alt="Deysi Ccala" class="member-photo">
-              </div>
-              <div class="member-info-wrap">
-                <div class="member-info">
-                  <h4>Deysi Ccala</h4>
-                  <p>Miembro</p>
-                  <p>Apoya en educación ambiental y trabajo con comunidades.</p>
-                  <div>
-                    <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Deysi"><span class="icon icon-facebook"></span> Facebook</a>
-                    <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Deysi"><span class="icon icon-instagram"></span> Instagram</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Miembro 6 -->
-        <div class="col-md-6 col-lg-4 ftco-animate">
-          <div class="member-card">
-            <div class="member-row">
-              <div class="member-photo-wrap">
-                <img src="images/getsemanii_lopez.jpg" alt="Getsemanii Lopez" class="member-photo">
-              </div>
-              <div class="member-info-wrap">
-                <div class="member-info">
-                  <h4>Getsemanii Lopez</h4>
-                  <p>Miembro</p>
-                  <p>Apoyo en análisis morfométricos y control de calidad de datos.</p>
-                  <div>
-                    <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Getsemanii"><span class="icon icon-facebook"></span> Facebook</a>
-                    <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Getsemanii"><span class="icon icon-instagram"></span> Instagram</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Miembro 7 -->
-        <div class="col-md-6 col-lg-4 ftco-animate">
-          <div class="member-card">
-            <div class="member-row">
-              <div class="member-photo-wrap">
-                <img src="images/alex_ttito.jpg" alt="Alex Ttito" class="member-photo">
-              </div>
-              <div class="member-info-wrap">
-                <div class="member-info">
-                  <h4>Alex Ttito</h4>
-                  <p>Miembro</p>
-                  <p>Responsable de cartografía y SIG.</p>
-                  <div>
-                    <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Alex"><span class="icon icon-facebook"></span> Facebook</a>
-                    <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Alex"><span class="icon icon-instagram"></span> Instagram</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Miembro Honorario 1 -->
-        <div class="col-md-6 col-lg-4 ftco-animate">
-          <div class="member-card">
-            <div class="member-row">
-              <div class="member-photo-wrap">
-                <img src="images/marco_mendez.jpg" alt="Dr. Marco Mendez" class="member-photo">
-              </div>
-              <div class="member-info-wrap">
-                <div class="member-info">
-                  <h4>Dr. Marco Mendez</h4>
-                  <p><em>Miembro Honorario</em></p>
-                  <p>Colaborador en coordinación de campo y formación de equipos.</p>
-                  <div>
-                    <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Marco"><span class="icon icon-facebook"></span> Facebook</a>
-                    <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Marco"><span class="icon icon-instagram"></span> Instagram</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Miembro Honorario 2 -->
-        <div class="col-md-6 col-lg-4 ftco-animate">
-          <div class="member-card">
-            <div class="member-row">
-              <div class="member-photo-wrap">
-                <img src="images/aldemar_acevedo.jpg" alt="Dr. Aldemar Acevedo" class="member-photo">
-              </div>
-              <div class="member-info-wrap">
-                <div class="member-info">
-                  <h4>Dr. Aldemar Acevedo</h4>
-                  <p><em>Miembro Honorario</em></p>
-                  <p>Especialista en hidrología y análisis espacial.</p>
-                  <div>
-                    <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Aldemar"><span class="icon icon-facebook"></span> Facebook</a>
-                    <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Aldemar"><span class="icon icon-instagram"></span> Instagram</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div> <!-- row -->
-    </div> <!-- container -->
   </section>
 
   <!-- Footer (coherente con index): FB e IG -->
@@ -439,10 +198,10 @@
             <h2 class="ftco-heading-2">Enlaces</h2>
             <ul class="list-unstyled">
               <li><a href="index.html" class="py-2 d-block">Inicio</a></li>
-              <li><a href="index.html" class="py-2 d-block">Quiénes somos</a></li>
+              <li><a href="about.html" class="py-2 d-block">Quiénes somos</a></li>
               <li><a href="donate.html" class="py-2 d-block">Donación</a></li>
               <li><a href="causes.html" class="py-2 d-block">Proyectos</a></li>
-              <li><a href="event.html" class="py-2 d-block">Miembros</a></li>
+              <li><a href="members.html" class="py-2 d-block">Miembros</a></li>
               <li><a href="blog.html" class="py-2 d-block">Noticias</a></li>
             </ul>
           </div>
@@ -474,12 +233,7 @@
   </footer>
 
   <!-- loader -->
-  <div id="ftco-loader" class="show fullscreen">
-    <svg class="circular" width="48px" height="48px">
-      <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/>
-      <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/>
-    </svg>
-  </div>
+  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
 
   <!-- Scripts -->
   <script src="js/jquery.min.js"></script>
@@ -496,13 +250,11 @@
   <script src="js/bootstrap-datepicker.js"></script>
   <script src="js/jquery.timepicker.min.js"></script>
   <script src="js/scrollax.min.js"></script>
-  <!-- Maps: si usas, añade tu key restringida en producción -->
-  <!-- <script src="https://maps.googleapis.com/maps/api/js?key=TU_API_KEY&sensor=false"></script> -->
   <script src="js/google-map.js"></script>
   <script src="js/main.js"></script>
 
   <script>
-    // Mantener mismo comportamiento del navbar que en index.html
+    // Navbar behavior (igual que en index)
     document.addEventListener('DOMContentLoaded', function () {
       var navbar = document.getElementById('ftco-navbar');
       var navCollapse = $('#ftco-nav');
@@ -533,4 +285,3 @@
 
   </body>
 </html>
-
