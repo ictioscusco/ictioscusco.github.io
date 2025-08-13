@@ -11,7 +11,7 @@
 
     <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="css/animate.css">
-    
+
     <link rel="stylesheet" href="css/owl.carousel.min.css">
     <link rel="stylesheet" href="css/owl.theme.default.min.css">
     <link rel="stylesheet" href="css/magnific-popup.css">
@@ -27,13 +27,13 @@
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
 
-    <!-- Estilos personalizados (mantener consistencia con index.html) -->
+    <!-- Estilos personalizados para la sección de miembros -->
     <style>
       .navbar-brand.d-flex { display: inline-flex; align-items: center; }
       .navbar-brand img { height: 56px; width: auto; margin-right: 12px; }
       .navbar-brand span { font-family: 'Overpass', 'Dosis', sans-serif !important; font-weight: 600; font-size: 1.05rem; color: #fff; line-height: 1; letter-spacing: 0.2px; }
 
-      /* Botón blanco coherente con index */
+      /* Botón blanco coherente */
       .btn.btn-white {
         background: #ffffff !important;
         color: #333333 !important;
@@ -47,7 +47,7 @@
         text-decoration: none;
       }
 
-      /* Forzar transición del navbar (igual que index) */
+      /* Navbar scroll behavior */
       #ftco-navbar {
         background-color: transparent;
         transition: background-color 0.25s ease;
@@ -69,28 +69,48 @@
       #ftco-navbar.scrolled .navbar-toggler { color: #222222 !important; border-color: rgba(0,0,0,0.12) !important; }
       #ftco-nav.collapse.show .nav-link { color: #222222 !important; }
 
-      /* Mensaje formulario (si decides incluir uno en el futuro) */
-      #form-response {
-        display: none;
-        margin-top: 12px;
-        font-weight: 500;
-        border-radius: 6px;
-        padding: 10px 12px;
-      }
-
-      /* Botón WhatsApp */
-      .btn-whatsapp {
-        background-color: #25D366;
+      /* Miembros: tarjetas y fotos */
+      .member-card {
         border: none;
-        color: #fff;
+        background: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(16,24,40,0.06);
+        padding: 14px;
+        margin-bottom: 20px;
+      }
+      .member-photo {
+        width: 140px;
+        height: 140px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 2px solid #f1f1f1;
+      }
+      .member-info h4 { margin-bottom: 4px; font-size: 1.05rem; }
+      .member-info p { margin-bottom: 8px; color: #555; }
+
+      .social-btn {
         display: inline-flex;
         align-items: center;
         gap: 8px;
+        padding: 8px 12px;
+        border-radius: 6px;
+        border: 1px solid rgba(0,0,0,0.06);
+        text-decoration: none;
+        color: inherit;
+        font-size: 0.95rem;
+        margin-right: 6px;
+      }
+      .social-btn .icon { font-size: 1.05rem; }
+
+      /* Layout: image left, info right on medium+ screens */
+      @media (min-width: 768px) {
+        .member-row { display: flex; gap: 18px; align-items: center; }
+        .member-photo-wrap { flex: 0 0 140px; }
+        .member-info-wrap { flex: 1 1 auto; }
       }
 
-      @media (max-width: 575.98px) {
-        .navbar-brand img { height: 44px; margin-right: 10px; }
-        .navbar-brand span { font-size: 0.95rem; }
+      @media (max-width: 767.98px) {
+        .member-photo { width: 120px; height: 120px; }
       }
     </style>
   </head>
@@ -109,7 +129,7 @@
       <div class="collapse navbar-collapse" id="ftco-nav">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item"><a href="index.html" class="nav-link">Inicio</a></li>
-          <!-- Aquí "Quiénes somos" apunta a index.html según tu petición -->
+          <!-- "Quiénes somos" seguirá conectando al index (según pediste) -->
           <li class="nav-item active"><a href="index.html" class="nav-link">Quiénes somos</a></li>
           <li class="nav-item"><a href="causes.html" class="nav-link">Proyectos</a></li>
           <li class="nav-item"><a href="donate.html" class="nav-link">Donación</a></li>
@@ -123,7 +143,7 @@
   </nav>
   <!-- END nav -->
 
-  <!-- Hero (misma estructura visual que index) -->
+  <!-- Hero -->
   <div class="hero-wrap" style="background-image: url('images/laguna_ictioscusco.jpg');" data-stellar-background-ratio="0.5">
     <div class="overlay"></div>
     <div class="container">
@@ -137,60 +157,244 @@
     </div>
   </div>
 
-  <!-- Contenido principal: versión adaptada del about original, en español -->
+  <!-- Contenido principal -->
   <section class="ftco-section">
     <div class="container">
-      <div class="row d-flex">
+      <div class="row">
+        <!-- Texto introductorio -->
         <div class="col-md-6 d-flex ftco-animate">
-          <div class="img img-about align-self-stretch" style="background-image: url(images/bg_4.jpg); width: 100%;"></div>
+          <div class="img img-about align-self-stretch" style="background-image: url('images/bg_4.jpg'); width: 100%;"></div>
         </div>
         <div class="col-md-6 pl-md-5 ftco-animate">
           <h2 class="mb-4">IcTiosCusco — Conservación desde la ciencia</h2>
           <p>Somos un equipo interdisciplinario (biología, hidrología, genética y manejo de recursos) que trabaja en la cuenca altoandina para entender la distribución, variación genética y amenazas que afectan a las poblaciones de <em>Orestias</em>.</p>
-          <p>Nuestros objetivos incluyen: monitoreo poblacional, análisis filogeográfico, educación ambiental y desarrollo de estrategias de conservación participativas con comunidades locales. Realizamos muestreos de campo, análisis de datos morfométricos y genéticos, y actividades de sensibilización.</p>
-          <p>Si quieres colaborar, participar en muestreos o coordinar un taller, contáctanos a través de la sección de contacto o por WhatsApp.</p>
+          <p>Nuestros objetivos incluyen: monitoreo poblacional, análisis filogeográfico, educación ambiental y estrategias de conservación participativa con comunidades locales.</p>
           <p><a href="contact.html" class="btn btn-white px-4 py-3">Contáctanos</a></p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Sección tipo 'counter' (mantener estilo de index) -->
-  <section class="ftco-counter ftco-intro" id="section-counter">
+  <!-- Sección MIEMBROS: 9 fotos/miembros -->
+  <section class="ftco-section bg-light">
     <div class="container">
-      <div class="row no-gutters">
-        <div class="col-md-5 d-flex justify-content-center counter-wrap ftco-animate">
-          <div class="block-18 color-1 align-items-stretch">
-            <div class="text">
-              <span>N° de especies de peces válidas</span>
-              <strong class="number" data-number="37140">0</strong>
-              <span>La próxima especie está ahí afuera… ¿la encontramos juntos?</span>
-            </div>
-          </div>
-        </div>
-        <div class="col-md d-flex justify-content-center counter-wrap ftco-animate">
-          <div class="block-18 color-2 align-items-stretch">
-            <div class="text">
-              <h3 class="mb-4">Apoya investigación</h3>
-              <p>Contribuye a conservar especies endémicas y formar capacidades locales.</p>
-              <p><a href="donate.html" class="btn btn-white px-3 py-2 mt-2">Donar ahora</a></p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md d-flex justify-content-center counter-wrap ftco-animate">
-          <div class="block-18 color-3 align-items-stretch">
-            <div class="text">
-              <h3 class="mb-4">Únete al equipo</h3>
-              <p>Participa en muestreos, talleres o análisis de datos.</p>
-              <p><a href="#contactanos" class="btn btn-white px-3 py-2 mt-2">Contáctanos</a></p>
-            </div>
-          </div>
+      <div class="row justify-content-center mb-4">
+        <div class="col-md-8 text-center heading-section ftco-animate">
+          <h2 class="mb-3">Nuestro equipo</h2>
+          <p>Sube las fotos a <code>images/</code> con los nombres indicados; cada tarjeta tiene botones para Facebook e Instagram (reemplaza los <code>href="#"</code> por las URLs reales).</p>
         </div>
       </div>
-    </div>
+
+      <!-- Grid de miembros: 3 columnas -->
+      <div class="row">
+        <!-- Miembro 1 -->
+        <div class="col-md-6 col-lg-4 ftco-animate">
+          <div class="member-card">
+            <div class="member-row">
+              <div class="member-photo-wrap">
+                <img src="images/jack_malon.jpg" alt="Jack Malon Rodriguez" class="member-photo">
+              </div>
+              <div class="member-info-wrap">
+                <div class="member-info">
+                  <h4>Jack Malon Rodriguez Pumaccajia</h4>
+                  <p><strong>Presidente</strong></p>
+                  <p>Responsable de coordinación general, muestreos y supervisión de proyectos.</p>
+                  <div>
+                    <!-- Reemplaza href="#" con el enlace real -->
+                    <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Jack">
+                      <span class="icon icon-facebook"></span> Facebook
+                    </a>
+                    <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Jack">
+                      <span class="icon icon-instagram"></span> Instagram
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Miembro 2 -->
+        <div class="col-md-6 col-lg-4 ftco-animate">
+          <div class="member-card">
+            <div class="member-row">
+              <div class="member-photo-wrap">
+                <img src="images/nayely_polanco.jpg" alt="Nayely Polanco Accostupa" class="member-photo">
+              </div>
+              <div class="member-info-wrap">
+                <div class="member-info">
+                  <h4>Nayely Polanco Accostupa</h4>
+                  <p>Miembro</p>
+                  <p>Participa en campo y actividades de educación ambiental.</p>
+                  <div>
+                    <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Nayely"><span class="icon icon-facebook"></span> Facebook</a>
+                    <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Nayely"><span class="icon icon-instagram"></span> Instagram</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Miembro 3 -->
+        <div class="col-md-6 col-lg-4 ftco-animate">
+          <div class="member-card">
+            <div class="member-row">
+              <div class="member-photo-wrap">
+                <img src="images/rolando_chaparrea.jpg" alt="Rolando Chaparrea Cardenas" class="member-photo">
+              </div>
+              <div class="member-info-wrap">
+                <div class="member-info">
+                  <h4>Rolando Chaparrea Cardenas</h4>
+                  <p>Miembro</p>
+                  <p>Especialista en genética y análisis moleculares.</p>
+                  <div>
+                    <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Rolando"><span class="icon icon-facebook"></span> Facebook</a>
+                    <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Rolando"><span class="icon icon-instagram"></span> Instagram</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Miembro 4 -->
+        <div class="col-md-6 col-lg-4 ftco-animate">
+          <div class="member-card">
+            <div class="member-row">
+              <div class="member-photo-wrap">
+                <img src="images/edmar_soria.jpg" alt="Edmar Soria Arana" class="member-photo">
+              </div>
+              <div class="member-info-wrap">
+                <div class="member-info">
+                  <h4>Edmar Soria Arana</h4>
+                  <p>Miembro</p>
+                  <p>Encargado de logística de campo y base de datos.</p>
+                  <div>
+                    <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Edmar"><span class="icon icon-facebook"></span> Facebook</a>
+                    <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Edmar"><span class="icon icon-instagram"></span> Instagram</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Miembro 5 -->
+        <div class="col-md-6 col-lg-4 ftco-animate">
+          <div class="member-card">
+            <div class="member-row">
+              <div class="member-photo-wrap">
+                <img src="images/deysi_ccala.jpg" alt="Deysi Ccala" class="member-photo">
+              </div>
+              <div class="member-info-wrap">
+                <div class="member-info">
+                  <h4>Deysi Ccala</h4>
+                  <p>Miembro</p>
+                  <p>Apoya en educación ambiental y trabajo con comunidades.</p>
+                  <div>
+                    <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Deysi"><span class="icon icon-facebook"></span> Facebook</a>
+                    <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Deysi"><span class="icon icon-instagram"></span> Instagram</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Miembro 6 -->
+        <div class="col-md-6 col-lg-4 ftco-animate">
+          <div class="member-card">
+            <div class="member-row">
+              <div class="member-photo-wrap">
+                <img src="images/getsemanii_lopez.jpg" alt="Getsemanii Lopez" class="member-photo">
+              </div>
+              <div class="member-info-wrap">
+                <div class="member-info">
+                  <h4>Getsemanii Lopez</h4>
+                  <p>Miembro</p>
+                  <p>Apoyo en análisis morfométricos y control de calidad de datos.</p>
+                  <div>
+                    <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Getsemanii"><span class="icon icon-facebook"></span> Facebook</a>
+                    <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Getsemanii"><span class="icon icon-instagram"></span> Instagram</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Miembro 7 -->
+        <div class="col-md-6 col-lg-4 ftco-animate">
+          <div class="member-card">
+            <div class="member-row">
+              <div class="member-photo-wrap">
+                <img src="images/alex_ttito.jpg" alt="Alex Ttito" class="member-photo">
+              </div>
+              <div class="member-info-wrap">
+                <div class="member-info">
+                  <h4>Alex Ttito</h4>
+                  <p>Miembro</p>
+                  <p>Responsable de cartografía y SIG.</p>
+                  <div>
+                    <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Alex"><span class="icon icon-facebook"></span> Facebook</a>
+                    <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Alex"><span class="icon icon-instagram"></span> Instagram</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Miembro Honorario 1 -->
+        <div class="col-md-6 col-lg-4 ftco-animate">
+          <div class="member-card">
+            <div class="member-row">
+              <div class="member-photo-wrap">
+                <img src="images/marco_mendez.jpg" alt="Dr. Marco Mendez" class="member-photo">
+              </div>
+              <div class="member-info-wrap">
+                <div class="member-info">
+                  <h4>Dr. Marco Mendez</h4>
+                  <p><em>Miembro Honorario</em></p>
+                  <p>Colaborador en coordinación de campo y formación de equipos.</p>
+                  <div>
+                    <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Marco"><span class="icon icon-facebook"></span> Facebook</a>
+                    <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Marco"><span class="icon icon-instagram"></span> Instagram</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Miembro Honorario 2 -->
+        <div class="col-md-6 col-lg-4 ftco-animate">
+          <div class="member-card">
+            <div class="member-row">
+              <div class="member-photo-wrap">
+                <img src="images/aldemar_acevedo.jpg" alt="Dr. Aldemar Acevedo" class="member-photo">
+              </div>
+              <div class="member-info-wrap">
+                <div class="member-info">
+                  <h4>Dr. Aldemar Acevedo</h4>
+                  <p><em>Miembro Honorario</em></p>
+                  <p>Especialista en hidrología y análisis espacial.</p>
+                  <div>
+                    <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Aldemar"><span class="icon icon-facebook"></span> Facebook</a>
+                    <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Aldemar"><span class="icon icon-instagram"></span> Instagram</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div> <!-- row -->
+    </div> <!-- container -->
   </section>
 
-  <!-- Footer (coherente con index): social links actualizados, Twitter eliminado -->
+  <!-- Footer (coherente con index): FB e IG -->
   <footer class="ftco-footer ftco-section img">
     <div class="overlay"></div>
     <div class="container">
@@ -277,7 +481,7 @@
     </svg>
   </div>
 
-  <!-- Scripts (mismos que en index para consistencia) -->
+  <!-- Scripts -->
   <script src="js/jquery.min.js"></script>
   <script src="js/jquery-migrate-3.0.1.min.js"></script>
   <script src="js/popper.min.js"></script>
@@ -329,3 +533,4 @@
 
   </body>
 </html>
+
