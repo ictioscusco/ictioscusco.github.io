@@ -76,7 +76,38 @@
         .service-icon { width: 44px; height: 44px; }
         .media.block-6 .icon { flex: 0 0 44px; margin-right: 12px; }
       }
-    </style>
+    
+/* Ajustes para mantener links de la navbar en blanco al hacer scroll / al colapsar */
+#ftco-navbar {
+  background-color: rgba(0,0,0,0.65) !important; /* navbar ligeramente translúcida */
+  transition: background-color 0.25s ease;
+}
+#ftco-navbar.scrolled {
+  background-color: rgba(0,0,0,0.85) !important; /* navbar más oscura al bajar */
+}
+#ftco-navbar .nav-link,
+#ftco-navbar .navbar-brand span {
+  color: #ffffff !important; /* fuerza color blanco */
+}
+#ftco-navbar .nav-link:hover,
+#ftco-navbar .nav-link:focus,
+#ftco-navbar .nav-item.active .nav-link {
+  color: #ffffff !important;
+  background: transparent !important;
+}
+#ftco-navbar .collapse.show .nav-link { color: #ffffff !important; }
+#ftco-navbar .navbar-toggler { color: #ffffff !important; border-color: rgba(255,255,255,0.18) !important; }
+
+/* Si el template añade clases .navbar-light o .bg-white, sobreescribimos para preservar contraste */
+#ftco-navbar.navbar-light .nav-link,
+#ftco-navbar.bg-white .nav-link {
+  color: #ffffff !important;
+}
+
+/* Evitar que la selección de texto convierta el color a negro (opcional) */
+#ftco-navbar ::selection { background: rgba(255,255,255,0.12); color: #ffffff; }
+
+</style>
 
   </head>
   <body>
@@ -579,4 +610,3 @@
 
   </body>
 </html>
-
