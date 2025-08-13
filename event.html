@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="css/style.css">
 
     <style>
-      /* ---------- NAVBAR / HERO (contraste) ---------- */
+      /* ---------- NAVBAR / HERO (contraste y ajuste de imagen) ---------- */
       .navbar-brand.d-flex { display: inline-flex; align-items: center; }
       .navbar-brand img { height: 56px; width: auto; margin-right: 12px; }
       .navbar-brand span { font-family: 'Overpass', 'Dosis', sans-serif; font-weight: 600; font-size: 1.05rem; color: #fff; }
@@ -37,12 +37,14 @@
       .hero-wrap {
         position: relative;
         background-size: cover;
-        background-position: center center;
-        min-height: 320px;
+        /* Ajuste: mostrar más de la parte superior de la imagen para que no parezca cortada */
+        background-position: center top;
+        min-height: 420px; /* aumentado para que la laguna no se corte */
         display: flex;
         align-items: center;
       }
-      .hero-wrap .overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.50) 0%, rgba(0,0,0,0.30) 60%); }
+      /* overlay menos oscuro en el top para que la foto se vea bien */
+      .hero-wrap .overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.22) 0%, rgba(0,0,0,0.36) 60%); }
       .hero-wrap .container { position: relative; z-index: 2; }
       .hero-wrap h1, .hero-wrap p.breadcrumbs { color: #fff; text-shadow: 0 6px 18px rgba(0,0,0,0.5); }
 
@@ -52,7 +54,11 @@
         display: grid;
         gap: 20px;
         grid-template-columns: repeat(2, 1fr); /* DOS columnas en desktop */
+        align-items: start; /* que se alineen al inicio para tarjetas con distinto contenido */
       }
+
+      /* Forzar que cada tarjeta ocupe toda la altura de su celda para mejor uniformidad */
+      .members-grid > .member-card { height: 100%; display: flex; }
 
       /* ---------- TARJETA: foto al costado (desktop) ---------- */
       .member-card {
@@ -61,7 +67,7 @@
         padding: 18px;
         box-shadow: 0 8px 22px rgba(10,25,35,0.06);
         display: flex;
-        align-items: center;
+        align-items: flex-start; /* foto al costado y contenido alineado al inicio */
         gap: 18px;
         min-height: 160px;
       }
@@ -75,10 +81,13 @@
         border: 3px solid #fff;
         box-shadow: 0 10px 24px rgba(6,20,30,0.08);
         flex: 0 0 220px;
+        background-color: #f0f2f3;
       }
 
       .member-info {
         flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
       }
       .member-info h4 {
         margin: 0 0 6px 0;
@@ -93,16 +102,20 @@
         color: #333;
         font-size: 0.95rem;
       }
+      /* DESCRIPCIÓN: JUSTIFICADA y con buena lectura */
       .member-info p.desc {
         margin: 0;
         color: #4b5560;
         line-height: 1.6;
         font-size: 0.95rem;
+        text-align: justify; /* <-- justificado */
+        margin-bottom: 12px;
+        hyphens: auto;
       }
 
-      /* Socials discretos al final (alineados a la izquierda) */
+      /* Socials más notorios: fondo ligeramente más oscuro y texto más fuerte */
       .socials {
-        margin-top: 12px;
+        margin-top: auto; /* empuja los botones al fondo de la tarjeta para alineación */
         display:flex;
         gap:8px;
         flex-wrap:wrap;
@@ -113,11 +126,19 @@
         gap:8px;
         padding:8px 12px;
         border-radius:999px;
-        background:#f7fafb;
-        color:#23303a;
+        background:#e6f2f4;            /* más visible */
+        color:#08323a;                 /* texto más oscuro */
         text-decoration:none;
-        border:1px solid rgba(35,48,58,0.06);
-        font-size:0.9rem;
+        border:1px solid rgba(8,50,58,0.12);
+        font-size:0.92rem;
+        font-weight:600;
+        transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+      }
+      .social-btn .icon { font-size:16px; opacity:0.95; }
+      .social-btn:hover{
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(8,50,58,0.10);
+        background:#d1e9ec;
       }
 
       /* ---------- RESPONSIVE: 1 columna en móvil, foto encima ---------- */
@@ -133,10 +154,12 @@
           width: 180px;
           height: 180px;
           flex: 0 0 180px;
-          margin-bottom: 10px;
+          margin-bottom: 12px;
         }
+        .member-info { align-items: center; text-align: center; }
         .member-info p.role { text-align: center; }
-        .socials { justify-content:center; }
+        .member-info p.desc { text-align: justify; /* mantiene justificado en móviles */ }
+        .socials { justify-content:center; margin-top: 12px; }
       }
 
       @media (max-width: 575.98px) {
@@ -149,7 +172,7 @@
       .ftco-footer-social a { display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:50%; background:rgba(255,255,255,0.06); margin-right:6px; color:#fff; }
 
       /* pequeño padding superior para evitar corte de hero */
-      .ftco-section.container-padding-top { padding-top: 80px; }
+      .ftco-section.container-padding-top { padding-top: 28px; } /* menos para que hero y sección queden bien */
     </style>
   </head>
   <body>
@@ -186,7 +209,7 @@
     <div class="overlay"></div>
     <div class="container">
       <div class="row no-gutters slider-text align-items-center justify-content-center">
-        <div class="col-md-8 text-center">
+        <div class="col-md-10 text-center">
           <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Inicio</a></span> <span>Miembros</span></p>
           <h1 class="mb-4">Miembros</h1>
           <p class="mb-4">Aquí están los integrantes de IcTiosCusco</p>
