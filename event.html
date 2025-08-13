@@ -81,7 +81,7 @@
         .hero-wrap .hero-img { max-height: 420px; }
         .hero-wrap .hero-content { top: 46%; }
         .hero-wrap .hero-content h1 { font-size: 2.2rem; }
-        body { padding-top: 64px; }
+        /* Eliminado padding-top en body (provocaba la barra blanca en móviles) */
       }
 
       /* ========== MIEMBROS: grid DOS COLUMNAS ========== */
@@ -221,8 +221,8 @@
               <p class="role">Presidente</p>
               <p class="desc">Coordinación general, supervisión de proyectos y principal contacto institucional - Biólogo por la Universidad Nacional de San Antonio Abad del Cusco, con experiencia en la formulación de instrumentos de gestión ambiental y estudios en hidrobiología. Actualmente desarrolla investigaciones sobre el género Orestias en cuerpos acuáticos altoandinos de la región Cusco, con un enfoque en su ecología, distribución y conservación.</p>
               <div class="socials">
-                <a class="social-btn" href="https://www.facebook.com/profile.php?id=100005330809486" target="_blank" rel="noopener" aria-label="Facebook Jack"><span class="icon icon-facebook" aria-hidden="true"></span> Facebook</a>
-                <a class="social-btn" href="https://www.instagram.com/jackmalonrp/" target="_blank" rel="noopener" aria-label="Instagram Jack"><span class="icon icon-instagram" aria-hidden="true"></span> Instagram</a>
+                <a class="social-btn" href="https://www.facebook.com/profile.php?id=100005330809486" target="_blank" rel="noopener noreferrer" aria-label="Facebook Jack"><span class="icon icon-facebook" aria-hidden="true"></span> Facebook</a>
+                <a class="social-btn" href="https://www.instagram.com/jackmalonrp/" target="_blank" rel="noopener noreferrer" aria-label="Instagram Jack"><span class="icon icon-instagram" aria-hidden="true"></span> Instagram</a>
               </div>
             </div>
           </div>
@@ -249,8 +249,8 @@
               <p class="role">Miembro</p>
               <p class="desc">Bachiller en Ciencias Biológicas por la UNSAAC, con amplia experiencia en consultorías y proyectos avifaunísticos desarrollados en ecosistemas de costa, sierra y selva del Perú. Ha trabajado como especialista biológico en la elaboración de instrumentos de gestión ambiental, y su labor se enfoca en la diversidad, biogeografía y ecología de las aves.</p>
               <div class="socials">
-                <a class="social-btn" href="https://www.facebook.com/rolando.chaparrea" aria-label="Facebook Rolando"><span class="icon icon-facebook" aria-hidden="true"></span> Facebook</a>
-                <a class="social-btn" href="https://www.instagram.com/rolandochaparrea/" aria-label="Instagram Rolando"><span class="icon icon-instagram" aria-hidden="true"></span> Instagram</a>
+                <a class="social-btn" href="https://www.facebook.com/rolando.chaparrea" target="_blank" rel="noopener noreferrer" aria-label="Facebook Rolando"><span class="icon icon-facebook" aria-hidden="true"></span> Facebook</a>
+                <a class="social-btn" href="https://www.instagram.com/rolandochaparrea/" target="_blank" rel="noopener noreferrer" aria-label="Instagram Rolando"><span class="icon icon-instagram" aria-hidden="true"></span> Instagram</a>
               </div>
             </div>
           </div>
@@ -353,8 +353,8 @@
               <h2 class="ftco-heading-2">Sobre IcTiosCusco</h2>
               <p>Grupo de investigación dedicado a la conservación y estudio de peces andinos (Orestias) en la región de Cusco.</p>
               <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
-                <li class="ftco-animate"><a href="https://www.facebook.com/ConGeniusRockie" target="_blank" rel="noopener" aria-label="Facebook IcTiosCusco"><span class="icon-facebook"></span></a></li>
-                <li class="ftco-animate"><a href="https://www.instagram.com/ictioscusco?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener" aria-label="Instagram IcTiosCusco"><span class="icon-instagram"></span></a></li>
+                <li class="ftco-animate"><a href="https://www.facebook.com/ConGeniusRockie" target="_blank" rel="noopener noreferrer" aria-label="Facebook IcTiosCusco"><span class="icon-facebook"></span></a></li>
+                <li class="ftco-animate"><a href="https://www.instagram.com/ictioscusco?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener noreferrer" aria-label="Instagram IcTiosCusco"><span class="icon-instagram"></span></a></li>
               </ul>
             </div>
           </div>
@@ -388,8 +388,8 @@
           </div>
           <div class="col-md-3">
             <div class="ftco-footer-widget mb-4">
-            	<h2 class="ftco-heading-2">¿Tienes preguntas?</h2>
-            	<div class="block-23 mb-3">
+              	<h2 class="ftco-heading-2">¿Tienes preguntas?</h2>
+              	<div class="block-23 mb-3">
                 <ul>
                   <li><span class="icon icon-map-marker"></span><span class="text">Cusco, Perú</span></li>
                   <li><a href="tel:+51969392189"><span class="icon icon-phone"></span><span class="text">+51 969 392 189</span></a></li>
@@ -431,32 +431,34 @@
     <script src="js/main.js"></script>
 
     <script>
-      // Lógica navbar: inicial = transparente con LETRAS BLANCAS; al bajar -> sólido oscuro con letras blancas.
       document.addEventListener('DOMContentLoaded', function () {
         var navbar = document.getElementById('ftco-navbar');
         var navCollapse = $('#ftco-nav');
         var hero = document.querySelector('.hero-wrap');
 
-        // Si no hay hero usamos un umbral simple
+        // Aseguramos que el navbar esté por encima del hero y no empuje el contenido.
+        // Por defecto será transparente (no scrolled). Cuando tenga la clase 'scrolled' se verá sólido.
+        navbar.style.position = 'absolute';
+        navbar.style.top = '0';
+        navbar.style.left = '0';
+        navbar.style.right = '0';
+        navbar.style.zIndex = '1050';
+
         var heroHeight = hero ? hero.offsetHeight : 320;
-        // buffer para que el cambio ocurra unos px antes de que el blanco cubra del todo
         var offsetBuffer = 24;
         var offsetSwitch = Math.max(60, Math.floor(heroHeight - offsetBuffer));
-
-        // Inicial: forzamos estado transparente (ahora con letras blancas)
-        navbar.classList.add('nav-transparent');
-        navbar.classList.remove('nav-solid');
 
         function updateNavbarState() {
           var y = window.scrollY || window.pageYOffset;
           if (y > offsetSwitch) {
-            // Sólido (oscuro) cuando ya bajamos lo suficiente
-            navbar.classList.add('nav-solid');
-            navbar.classList.remove('nav-transparent');
+            // Al hacer scroll: navbar sólido (css: #ftco-navbar.scrolled)
+            navbar.classList.add('scrolled');
+            // fijarlo para que no afecte al flujo
+            navbar.style.position = 'fixed';
           } else {
-            // Transparente con letras blancas
-            navbar.classList.add('nav-transparent');
-            navbar.classList.remove('nav-solid');
+            // Transparente sobre la imagen
+            navbar.classList.remove('scrolled');
+            navbar.style.position = 'absolute';
           }
         }
 
@@ -469,19 +471,18 @@
           updateNavbarState();
         });
 
-        // Si se abre el menú en móvil forzamos sólido (mejor legibilidad)
+        // Si se abre el menú en móvil forzamos estado sólido (para legibilidad)
         if (navCollapse.length) {
           navCollapse.on('shown.bs.collapse', function () {
-            navbar.classList.add('nav-solid');
-            navbar.classList.remove('nav-transparent');
+            navbar.classList.add('scrolled');
+            navbar.style.position = 'fixed';
           });
           navCollapse.on('hidden.bs.collapse', function () {
-            // volver al estado según scroll
             updateNavbarState();
           });
         }
 
-        // Cerrar menú móvil al clicar un enlace y permitir navegación normal
+        // Cerrar menú móvil al clicar un enlace
         var links = document.querySelectorAll('#ftco-nav .nav-link');
         links.forEach(function (link) {
           link.addEventListener('click', function () {
@@ -490,6 +491,17 @@
             }
           });
         });
+
+        // --- Forzar que los botones de .socials se abran en nueva pestaña ---
+        document.querySelectorAll('.socials a, .ftco-footer-social a').forEach(function (a) {
+          var href = a.getAttribute('href');
+          // solo aplicar a enlaces no vacíos y no a '#'
+          if (href && href.trim() !== '#' && !a.target) {
+            a.setAttribute('target', '_blank');
+            a.setAttribute('rel', 'noopener noreferrer');
+          }
+        });
+
       });
     </script>
   </body>
