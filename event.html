@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="css/style.css">
 
     <style>
-      /* ---------------- NAVBAR / HERO (contraste) ---------------- */
+      /* ---------- NAVBAR / HERO (contraste) ---------- */
       .navbar-brand.d-flex { display: inline-flex; align-items: center; }
       .navbar-brand img { height: 56px; width: auto; margin-right: 12px; }
       .navbar-brand span { font-family: 'Overpass', 'Dosis', sans-serif; font-weight: 600; font-size: 1.05rem; color: #fff; }
@@ -46,126 +46,110 @@
       .hero-wrap .container { position: relative; z-index: 2; }
       .hero-wrap h1, .hero-wrap p.breadcrumbs { color: #fff; text-shadow: 0 6px 18px rgba(0,0,0,0.5); }
 
-      /* ---------------- SECCIÓN MIEMBROS - GRID ---------------- */
-      section.ftco-section.bg-light { padding: 64px 0; }
+      /* ---------- SECCIÓN MIEMBROS - DOS COLUMNAS ---------- */
+      section.ftco-section.bg-light { padding: 60px 0; }
       .members-grid {
         display: grid;
-        gap: 24px;
-        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 20px;
+        grid-template-columns: repeat(2, 1fr); /* DOS columnas en desktop */
       }
 
-      /* ---------------- TARJETA (diseño adaptable) ---------------- */
+      /* ---------- TARJETA: foto al costado (desktop) ---------- */
       .member-card {
-        background: linear-gradient(180deg, #ffffff 0%, #fbfcfd 100%);
-        border-radius: 12px;
+        background: #fff;
+        border-radius: 10px;
         padding: 18px;
-        box-shadow: 0 8px 20px rgba(10,25,35,0.06);
-        height: 100%;
+        box-shadow: 0 8px 22px rgba(10,25,35,0.06);
         display: flex;
-        flex-direction: column;          /* mobile: stack */
         align-items: center;
-        text-align: center;
-        gap: 12px;
-        transition: transform .20s ease, box-shadow .20s ease;
-      }
-      .member-card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 18px 44px rgba(10,25,35,0.12);
-      }
-
-      /* Estructura interna que permitirá foto al costado en desktop */
-      .member-inner {
-        display: flex;
-        width: 100%;
         gap: 18px;
-        align-items: center;
-        flex-direction: column; /* mobile default */
+        min-height: 160px;
       }
 
-      /* FOTO - estilo profesional y tamaño generoso */
+      /* Estructura interna: foto + contenido */
       .member-photo {
-        width: 160px;
-        height: 160px;
+        width: 220px;               /* FOTO AGRANDADA */
+        height: 220px;
         object-fit: cover;
-        border-radius: 12px;
+        border-radius: 8px;         /* si prefieres circular, cambia a 50% */
         border: 3px solid #fff;
-        box-shadow: 0 8px 18px rgba(6,20,30,0.08);
-        background-color: #e9eef0;
-        flex: 0 0 160px;
+        box-shadow: 0 10px 24px rgba(6,20,30,0.08);
+        flex: 0 0 220px;
       }
 
-      /* CONTENIDO */
       .member-info {
-        width: 100%;
+        flex: 1 1 auto;
       }
       .member-info h4 {
         margin: 0 0 6px 0;
         font-size: 1.08rem;
         font-weight: 700;
-        color: #0f2a3a;
+        color: #0e2a39;
       }
+      /* ROL: simple como antes (sin badge) */
       .member-info p.role {
-        margin: 0 0 10px 0;
-        display: inline-block;
-        font-weight: 700;
-        font-size: 0.90rem;
-        padding: 6px 10px;
-        border-radius: 999px;
-        background: linear-gradient(90deg,#0b87a6,#05677f);
-        color: #fff;
-        box-shadow: 0 6px 14px rgba(6,103,127,0.10);
+        margin: 0 0 8px 0;
+        font-weight: 600;
+        color: #333;
+        font-size: 0.95rem;
       }
       .member-info p.desc {
-        margin: 6px 0 12px 0;
-        color: #3e4a52;
-        line-height: 1.5;
+        margin: 0;
+        color: #4b5560;
+        line-height: 1.6;
         font-size: 0.95rem;
-        /* Allow full description; no truncation — cards will align by height on desktop */
       }
 
-      /* Botones sociales discretos */
-      .member-info .socials { display:flex; gap:8px; flex-wrap:wrap; }
-      .social-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 7px 12px;
-        border-radius: 999px;
-        text-decoration: none;
-        color: #23303a;
-        font-size: 0.90rem;
-        background: #f7fafb;
-        border: 1px solid rgba(35,48,58,0.06);
-        transition: transform .12s ease, box-shadow .12s ease;
+      /* Socials discretos al final (alineados a la izquierda) */
+      .socials {
+        margin-top: 12px;
+        display:flex;
+        gap:8px;
+        flex-wrap:wrap;
       }
-      .social-btn .icon { font-size: 15px; opacity: 0.92; }
-      .social-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 18px rgba(17,34,47,0.08); background: #fff; }
-
-      /* ----- LAYOUT: en pantallas anchas ponemos la foto al costado ----- */
-      @media (min-width: 768px) {
-        .member-card { padding: 18px 18px 18px 18px; }
-        .member-inner { flex-direction: row; align-items: flex-start; }
-        .member-card { text-align: left; }
+      .social-btn{
+        display:inline-flex;
+        align-items:center;
+        gap:8px;
+        padding:8px 12px;
+        border-radius:999px;
+        background:#f7fafb;
+        color:#23303a;
+        text-decoration:none;
+        border:1px solid rgba(35,48,58,0.06);
+        font-size:0.9rem;
       }
 
-      /* En pantallas muy grandes damos más espacio a la descripción */
-      @media (min-width: 1200px) {
-        .member-photo { width: 180px; height: 180px; flex: 0 0 180px; }
-        .member-info p.desc { font-size: 0.97rem; }
+      /* ---------- RESPONSIVE: 1 columna en móvil, foto encima ---------- */
+      @media (max-width: 991.98px) {
+        .members-grid { grid-template-columns: 1fr; }
+        .member-card {
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          padding: 16px;
+        }
+        .member-photo {
+          width: 180px;
+          height: 180px;
+          flex: 0 0 180px;
+          margin-bottom: 10px;
+        }
+        .member-info p.role { text-align: center; }
+        .socials { justify-content:center; }
       }
 
-      /* Pequeños ajustes móviles */
       @media (max-width: 575.98px) {
-        .member-photo { width: 126px; height: 126px; flex: 0 0 126px; }
-        .member-info h4 { font-size: 1.01rem; }
-        .member-info p.desc { font-size: 0.93rem; }
+        .member-photo { width: 150px; height: 150px; flex: 0 0 150px; }
+        .member-info h4 { font-size: 1.03rem; }
+        .member-info p.desc { font-size: 0.92rem; }
       }
 
-      /* Footer social icons */
+      /* Footer minor */
       .ftco-footer-social a { display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:50%; background:rgba(255,255,255,0.06); margin-right:6px; color:#fff; }
 
-      /* Espacio superior para que las tarjetas con foto no queden cortadas */
-      .ftco-section.container-padding-top { padding-top: 86px; }
+      /* pequeño padding superior para evitar corte de hero */
+      .ftco-section.container-padding-top { padding-top: 80px; }
     </style>
   </head>
   <body>
@@ -217,148 +201,130 @@
       <div class="members-grid">
 
         <!-- Member 1 -->
-        <article class="member-card" aria-label="Miembro Jack Malon Rodriguez Pumaccajia">
-          <div class="member-inner">
-            <img src="images/jack_malon.jpg" alt="Jack Malon Rodriguez Pumaccajia" class="member-photo">
-            <div class="member-info">
-              <h4>Jack Malon Rodriguez Pumaccajia</h4>
-              <p class="role">Presidente</p>
-              <p class="desc">Coordinación general, supervisión de proyectos y principal contacto institucional.</p>
-              <div class="socials">
-                <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Jack"><span class="icon icon-facebook"></span> Facebook</a>
-                <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Jack"><span class="icon icon-instagram"></span> Instagram</a>
-              </div>
+        <div class="member-card" aria-label="Miembro Jack Malon Rodriguez Pumaccajia">
+          <img src="images/jack_malon.jpg" alt="Jack Malon Rodriguez Pumaccajia" class="member-photo">
+          <div class="member-info">
+            <h4>Jack Malon Rodriguez Pumaccajia</h4>
+            <p class="role">Presidente</p>
+            <p class="desc">Coordinación general, supervisión de proyectos y principal contacto institucional.</p>
+            <div class="socials">
+              <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Jack"><span class="icon icon-facebook"></span> Facebook</a>
+              <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Jack"><span class="icon icon-instagram"></span> Instagram</a>
             </div>
           </div>
-        </article>
+        </div>
 
         <!-- Member 2 -->
-        <article class="member-card" aria-label="Miembro Nayely Polanco Accostupa">
-          <div class="member-inner">
-            <img src="images/nayely_polanco.jpg" alt="Nayely Polanco Accostupa" class="member-photo">
-            <div class="member-info">
-              <h4>Nayely Polanco Accostupa</h4>
-              <p class="role">Miembro</p>
-              <p class="desc">Participa en trabajo de campo y actividades educativas con comunidades.</p>
-              <div class="socials">
-                <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Nayely"><span class="icon icon-facebook"></span> Facebook</a>
-                <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Nayely"><span class="icon icon-instagram"></span> Instagram</a>
-              </div>
+        <div class="member-card" aria-label="Miembro Nayely Polanco Accostupa">
+          <img src="images/nayely_polanco.jpg" alt="Nayely Polanco Accostupa" class="member-photo">
+          <div class="member-info">
+            <h4>Nayely Polanco Accostupa</h4>
+            <p class="role">Miembro</p>
+            <p class="desc">Participa en trabajo de campo y actividades educativas con comunidades.</p>
+            <div class="socials">
+              <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Nayely"><span class="icon icon-facebook"></span> Facebook</a>
+              <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Nayely"><span class="icon icon-instagram"></span> Instagram</a>
             </div>
           </div>
-        </article>
+        </div>
 
-        <!-- Member 3 (Rolando) - descripción completa proporcionada -->
-        <article class="member-card" aria-label="Miembro Rolando Chaparrea Cardenas">
-          <div class="member-inner">
-            <img src="images/rolando_chaparrea.jpg" alt="Rolando Chaparrea Cardenas" class="member-photo">
-            <div class="member-info">
-              <h4>Rolando Chaparrea Cardenas</h4>
-              <p class="role">Miembro</p>
-              <p class="desc">Bachiller en Ciencias Biológicas por la UNSAAC, con amplia experiencia en consultorías y proyectos avifaunísticos desarrollados en ecosistemas de costa, sierra y selva del Perú. Ha trabajado como especialista biológico en la elaboración de instrumentos de gestión ambiental, y su labor se enfoca en la diversidad, biogeografía y ecología de las aves.</p>
-              <div class="socials">
-                <a class="social-btn" href="https://www.facebook.com/rolando.chaparrea" target="_blank" rel="noopener" aria-label="Facebook Rolando"><span class="icon icon-facebook"></span> Facebook</a>
-                <a class="social-btn" href="https://www.instagram.com/rolandochaparrea/" target="_blank" rel="noopener" aria-label="Instagram Rolando"><span class="icon icon-instagram"></span> Instagram</a>
-              </div>
+        <!-- Member 3 (Rolando) -->
+        <div class="member-card" aria-label="Miembro Rolando Chaparrea Cardenas">
+          <img src="images/rolando_chaparrea.jpg" alt="Rolando Chaparrea Cardenas" class="member-photo">
+          <div class="member-info">
+            <h4>Rolando Chaparrea Cardenas</h4>
+            <p class="role">Miembro</p>
+            <p class="desc">Bachiller en Ciencias Biológicas por la UNSAAC, con amplia experiencia en consultorías y proyectos avifaunísticos desarrollados en ecosistemas de costa, sierra y selva del Perú. Ha trabajado como especialista biológico en la elaboración de instrumentos de gestión ambiental, y su labor se enfoca en la diversidad, biogeografía y ecología de las aves.</p>
+            <div class="socials">
+              <a class="social-btn" href="https://www.facebook.com/rolando.chaparrea" target="_blank" rel="noopener" aria-label="Facebook Rolando"><span class="icon icon-facebook"></span> Facebook</a>
+              <a class="social-btn" href="https://www.instagram.com/rolandochaparrea/" target="_blank" rel="noopener" aria-label="Instagram Rolando"><span class="icon icon-instagram"></span> Instagram</a>
             </div>
           </div>
-        </article>
+        </div>
 
         <!-- Member 4 -->
-        <article class="member-card" aria-label="Miembro Edmar Soria Arana">
-          <div class="member-inner">
-            <img src="images/edmar_soria.jpg" alt="Edmar Soria Arana" class="member-photo">
-            <div class="member-info">
-              <h4>Edmar Soria Arana</h4>
-              <p class="role">Miembro</p>
-              <p class="desc">Encargado de logística de campo, muestreos y manejo de base de datos.</p>
-              <div class="socials">
-                <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Edmar"><span class="icon icon-facebook"></span> Facebook</a>
-                <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Edmar"><span class="icon icon-instagram"></span> Instagram</a>
-              </div>
+        <div class="member-card" aria-label="Miembro Edmar Soria Arana">
+          <img src="images/edmar_soria.jpg" alt="Edmar Soria Arana" class="member-photo">
+          <div class="member-info">
+            <h4>Edmar Soria Arana</h4>
+            <p class="role">Miembro</p>
+            <p class="desc">Encargado de logística de campo, muestreos y manejo de base de datos.</p>
+            <div class="socials">
+              <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Edmar"><span class="icon icon-facebook"></span> Facebook</a>
+              <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Edmar"><span class="icon icon-instagram"></span> Instagram</a>
             </div>
           </div>
-        </article>
+        </div>
 
         <!-- Member 5 -->
-        <article class="member-card" aria-label="Miembro Deysi Ccala">
-          <div class="member-inner">
-            <img src="images/deysi_ccala.jpg" alt="Deysi Ccala" class="member-photo">
-            <div class="member-info">
-              <h4>Deysi Ccala</h4>
-              <p class="role">Miembro</p>
-              <p class="desc">Apoyo en educación ambiental y actividades con escuelas y comunidades.</p>
-              <div class="socials">
-                <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Deysi"><span class="icon icon-facebook"></span> Facebook</a>
-                <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Deysi"><span class="icon icon-instagram"></span> Instagram</a>
-              </div>
+        <div class="member-card" aria-label="Miembro Deysi Ccala">
+          <img src="images/deysi_ccala.jpg" alt="Deysi Ccala" class="member-photo">
+          <div class="member-info">
+            <h4>Deysi Ccala</h4>
+            <p class="role">Miembro</p>
+            <p class="desc">Apoyo en educación ambiental y actividades con escuelas y comunidades.</p>
+            <div class="socials">
+              <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Deysi"><span class="icon icon-facebook"></span> Facebook</a>
+              <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Deysi"><span class="icon icon-instagram"></span> Instagram</a>
             </div>
           </div>
-        </article>
+        </div>
 
         <!-- Member 6 -->
-        <article class="member-card" aria-label="Miembro Getsemanii Lopez">
-          <div class="member-inner">
-            <img src="images/getsemanii_lopez.jpg" alt="Getsemanii Lopez" class="member-photo">
-            <div class="member-info">
-              <h4>Getsemanii Lopez</h4>
-              <p class="role">Miembro</p>
-              <p class="desc">Soporte en análisis morfométricos y control de calidad de datos.</p>
-              <div class="socials">
-                <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Getsemanii"><span class="icon icon-facebook"></span> Facebook</a>
-                <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Getsemanii"><span class="icon icon-instagram"></span> Instagram</a>
-              </div>
+        <div class="member-card" aria-label="Miembro Getsemanii Lopez">
+          <img src="images/getsemanii_lopez.jpg" alt="Getsemanii Lopez" class="member-photo">
+          <div class="member-info">
+            <h4>Getsemanii Lopez</h4>
+            <p class="role">Miembro</p>
+            <p class="desc">Soporte en análisis morfométricos y control de calidad de datos.</p>
+            <div class="socials">
+              <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Getsemanii"><span class="icon icon-facebook"></span> Facebook</a>
+              <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Getsemanii"><span class="icon icon-instagram"></span> Instagram</a>
             </div>
           </div>
-        </article>
+        </div>
 
         <!-- Member 7 -->
-        <article class="member-card" aria-label="Miembro Alex Ttito">
-          <div class="member-inner">
-            <img src="images/alex_ttito.jpg" alt="Alex Ttito" class="member-photo">
-            <div class="member-info">
-              <h4>Alex Ttito</h4>
-              <p class="role">Miembro</p>
-              <p class="desc">Responsable de cartografía, SIG y análisis espacial.</p>
-              <div class="socials">
-                <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Alex"><span class="icon icon-facebook"></span> Facebook</a>
-                <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Alex"><span class="icon icon-instagram"></span> Instagram</a>
-              </div>
+        <div class="member-card" aria-label="Miembro Alex Ttito">
+          <img src="images/alex_ttito.jpg" alt="Alex Ttito" class="member-photo">
+          <div class="member-info">
+            <h4>Alex Ttito</h4>
+            <p class="role">Miembro</p>
+            <p class="desc">Responsable de cartografía, SIG y análisis espacial.</p>
+            <div class="socials">
+              <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Alex"><span class="icon icon-facebook"></span> Facebook</a>
+              <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Alex"><span class="icon icon-instagram"></span> Instagram</a>
             </div>
           </div>
-        </article>
+        </div>
 
         <!-- Honorary 1 -->
-        <article class="member-card" aria-label="Miembro Honorario Dr. Marco Mendez">
-          <div class="member-inner">
-            <img src="images/marco_mendez.jpg" alt="Dr. Marco Mendez" class="member-photo">
-            <div class="member-info">
-              <h4>Dr. Marco Mendez</h4>
-              <p class="role">Miembro Honorario</p>
-              <p class="desc">Colaborador en coordinación de campo y formación de equipos.</p>
-              <div class="socials">
-                <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Marco"><span class="icon icon-facebook"></span> Facebook</a>
-                <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Marco"><span class="icon icon-instagram"></span> Instagram</a>
-              </div>
+        <div class="member-card" aria-label="Miembro Honorario Dr. Marco Mendez">
+          <img src="images/marco_mendez.jpg" alt="Dr. Marco Mendez" class="member-photo">
+          <div class="member-info">
+            <h4>Dr. Marco Mendez</h4>
+            <p class="role">Miembro Honorario</p>
+            <p class="desc">Colaborador en coordinación de campo y formación de equipos.</p>
+            <div class="socials">
+              <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Marco"><span class="icon icon-facebook"></span> Facebook</a>
+              <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Marco"><span class="icon icon-instagram"></span> Instagram</a>
             </div>
           </div>
-        </article>
+        </div>
 
         <!-- Honorary 2 -->
-        <article class="member-card" aria-label="Miembro Honorario Dr. Aldemar Acevedo">
-          <div class="member-inner">
-            <img src="images/aldemar_acevedo.jpg" alt="Dr. Aldemar Acevedo" class="member-photo">
-            <div class="member-info">
-              <h4>Dr. Aldemar Acevedo</h4>
-              <p class="role">Miembro Honorario</p>
-              <p class="desc">Especialista en hidrología y análisis espacial.</p>
-              <div class="socials">
-                <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Aldemar"><span class="icon icon-facebook"></span> Facebook</a>
-                <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Aldemar"><span class="icon icon-instagram"></span> Instagram</a>
-              </div>
+        <div class="member-card" aria-label="Miembro Honorario Dr. Aldemar Acevedo">
+          <img src="images/aldemar_acevedo.jpg" alt="Dr. Aldemar Acevedo" class="member-photo">
+          <div class="member-info">
+            <h4>Dr. Aldemar Acevedo</h4>
+            <p class="role">Miembro Honorario</p>
+            <p class="desc">Especialista en hidrología y análisis espacial.</p>
+            <div class="socials">
+              <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook Aldemar"><span class="icon icon-facebook"></span> Facebook</a>
+              <a class="social-btn" href="#" target="_blank" rel="noopener" aria-label="Instagram Aldemar"><span class="icon icon-instagram"></span> Instagram</a>
             </div>
           </div>
-        </article>
+        </div>
 
       </div> <!-- members-grid -->
     </div> <!-- container -->
@@ -465,7 +431,7 @@
   <script src="js/main.js"></script>
 
   <script>
-    // Mantener comportamiento del navbar igual que en index
+    // Igual comportamiento del navbar que en tu index (clase .scrolled)
     document.addEventListener('DOMContentLoaded', function () {
       var navbar = document.getElementById('ftco-navbar');
       var navCollapse = $('#ftco-nav');
@@ -492,4 +458,3 @@
 
   </body>
 </html>
-
