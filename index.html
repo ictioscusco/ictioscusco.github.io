@@ -151,7 +151,7 @@
               <div class="text">
                 <h3 class="mb-4">Únete al equipo</h3>
                 <p>Participa como voluntario en muestreos, taller o análisis de datos.</p>
-                <p><a href="#volunteer" class="btn btn-white px-3 py-2 mt-2">Ser voluntario</a></p>
+                <p><a href="#contactanos" class="btn btn-white px-3 py-2 mt-2">Contáctanos</a></p>
               </div>
             </div>
           </div>
@@ -316,7 +316,7 @@
       </div>
     </section>
 
-    <section id="volunteer" class="ftco-section-3 img" style="background-image: url(images/bg_3.jpg);">
+    <section id="contactanos" class="ftco-section-3 img" style="background-image: url(images/bg_3.jpg);">
       <div class="overlay"></div>
       <div class="container">
         <div class="row d-md-flex">
@@ -324,21 +324,32 @@
             <div class="img img-2 align-self-stretch" style="background-image: url(images/bg_4.jpg);"></div>
           </div>
           <div class="col-md-6 volunteer pl-md-5 ftco-animate">
-            <h3 class="mb-3">Sé voluntario</h3>
-            <form action="#" class="volunter-form">
+            <h3 class="mb-3">Contáctanos</h3>
+            <p>Para colaboraciones, consultas o cualquier otra cosa. Escríbenos y te responderemos pronto.</p>
+            <form action="https://formspree.io/f/xqalnaaj" method="POST" class="volunter-form">
               <div class="form-group">
-                <input name="name" type="text" class="form-control" placeholder="Tu nombre">
+                <input name="name" type="text" class="form-control" placeholder="Tu nombre" required>
               </div>
               <div class="form-group">
-                <input name="email" type="email" class="form-control" placeholder="Tu correo">
+                <input name="email" type="email" class="form-control" placeholder="Tu correo" required>
               </div>
               <div class="form-group">
-                <textarea name="message" cols="30" rows="3" class="form-control" placeholder="Mensaje"></textarea>
+                <input name="subject" type="text" class="form-control" placeholder="Asunto (p. ej. Colaboración)">
               </div>
               <div class="form-group">
-                <input type="submit" value="Enviar" class="btn btn-white py-3 px-5">
+                <textarea name="message" cols="30" rows="3" class="form-control" placeholder="Mensaje" required></textarea>
+              </div>
+              <div class="form-group">
+                <input type="submit" value="Enviar mensaje" class="btn btn-white py-3 px-5">
               </div>
             </form>
+
+            <!-- Botón de WhatsApp -->
+            <div style="margin-top: 18px;">
+              <a href="https://wa.me/51969392189" target="_blank" class="btn btn-success px-4 py-3" style="background-color:#25D366; border:none; color:#fff;">
+                <span style="margin-right:8px;">📱</span> Contáctanos por WhatsApp
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -522,3 +533,4 @@
 
   </body>
 </html>
+
