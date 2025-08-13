@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="css/style.css">
 
     <style>
-      /* ---------- NAVBAR / HERO (contraste y ajuste de imagen) ---------- */
+      /* ---------- NAVBAR ---------- */
       .navbar-brand.d-flex { display: inline-flex; align-items: center; }
       .navbar-brand img { height: 56px; width: auto; margin-right: 12px; }
       .navbar-brand span { font-family: 'Overpass', 'Dosis', sans-serif; font-weight: 600; font-size: 1.05rem; color: #fff; }
@@ -34,31 +34,59 @@
       #ftco-navbar.scrolled .nav-link, #ftco-navbar.scrolled .navbar-brand span { color: #222 !important; }
       #ftco-nav.collapse.show .nav-link { color: #222 !important; }
 
+      /* ---------- HERO: usamos <img> para evitar recorte ---------- */
       .hero-wrap {
         position: relative;
-        background-size: cover;
-        /* Ajuste: mostrar más de la parte superior de la imagen para que no parezca cortada */
-        background-position: center top;
-        min-height: 420px; /* aumentado para que la laguna no se corte */
-        display: flex;
-        align-items: center;
+        display: block;
+        width: 100%;
+        overflow: hidden;
+        background: transparent;
       }
-      /* overlay menos oscuro en el top para que la foto se vea bien */
-      .hero-wrap .overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.22) 0%, rgba(0,0,0,0.36) 60%); }
-      .hero-wrap .container { position: relative; z-index: 2; }
-      .hero-wrap h1, .hero-wrap p.breadcrumbs { color: #fff; text-shadow: 0 6px 18px rgba(0,0,0,0.5); }
+      .hero-wrap .hero-img {
+        display: block;
+        width: 100%;
+        height: auto;
+        max-height: 720px; /* controla altura máxima en pantallas grandes */
+        object-fit: cover;
+      }
+      .hero-wrap .overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(0,0,0,0.22) 0%, rgba(0,0,0,0.36) 60%);
+        pointer-events: none;
+        z-index: 2;
+      }
+      .hero-wrap .hero-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        z-index: 3;
+        text-align: center;
+        padding: 0 15px;
+        color: #fff;
+      }
+      .hero-wrap .hero-content h1 { font-size: 3.2rem; margin: 0 0 8px; font-weight: 500; }
+      .hero-wrap .hero-content p { margin: 0; opacity: 0.95; }
+
+      @media (max-width: 767.98px) {
+        .hero-wrap .hero-img { max-height: 420px; }
+        .hero-wrap .hero-content { top: 46%; }
+        .hero-wrap .hero-content h1 { font-size: 2.2rem; }
+      }
 
       /* ---------- SECCIÓN MIEMBROS - DOS COLUMNAS ---------- */
-      section.ftco-section.bg-light { padding: 60px 0; }
+      section.ftco-section.bg-light { padding: 48px 0 64px; background: #f6f7f8; }
       .members-grid {
         display: grid;
         gap: 20px;
-        grid-template-columns: repeat(2, 1fr); /* DOS columnas en desktop */
-        align-items: start; /* que se alineen al inicio para tarjetas con distinto contenido */
+        grid-template-columns: repeat(2, 1fr); /* dos columnas en desktop */
+        align-items: start;
+        margin-top: 28px; /* separa las tarjetas del final del hero */
       }
-
-      /* Forzar que cada tarjeta ocupe toda la altura de su celda para mejor uniformidad */
-      .members-grid > .member-card { height: 100%; display: flex; }
+      /* asegurar que cada tarjeta ocupe toda la altura de su celda */
+      .members-grid > .member-card { height: 100%; }
 
       /* ---------- TARJETA: foto al costado (desktop) ---------- */
       .member-card {
@@ -67,17 +95,17 @@
         padding: 18px;
         box-shadow: 0 8px 22px rgba(10,25,35,0.06);
         display: flex;
-        align-items: flex-start; /* foto al costado y contenido alineado al inicio */
+        align-items: flex-start;
         gap: 18px;
         min-height: 160px;
       }
 
-      /* Estructura interna: foto + contenido */
+      /* Foto agrandada */
       .member-photo {
-        width: 220px;               /* FOTO AGRANDADA */
+        width: 220px;
         height: 220px;
         object-fit: cover;
-        border-radius: 8px;         /* si prefieres circular, cambia a 50% */
+        border-radius: 8px;
         border: 3px solid #fff;
         box-shadow: 0 10px 24px rgba(6,20,30,0.08);
         flex: 0 0 220px;
@@ -95,41 +123,40 @@
         font-weight: 700;
         color: #0e2a39;
       }
-      /* ROL: simple como antes (sin badge) */
       .member-info p.role {
         margin: 0 0 8px 0;
         font-weight: 600;
         color: #333;
         font-size: 0.95rem;
       }
-      /* DESCRIPCIÓN: JUSTIFICADA y con buena lectura */
+      /* DESCRIPCIÓN JUSTIFICADA */
       .member-info p.desc {
         margin: 0;
         color: #4b5560;
         line-height: 1.6;
         font-size: 0.95rem;
-        text-align: justify; /* <-- justificado */
+        text-align: justify;
         margin-bottom: 12px;
         hyphens: auto;
       }
 
-      /* Socials más notorios: fondo ligeramente más oscuro y texto más fuerte */
+      /* Socials un poco más oscuros y notorios */
       .socials {
-        margin-top: auto; /* empuja los botones al fondo de la tarjeta para alineación */
+        margin-top: auto; /* empuja los botones al fondo de la tarjeta */
         display:flex;
         gap:8px;
         flex-wrap:wrap;
       }
-      .social-btn{
+      .social-btn {
         display:inline-flex;
         align-items:center;
         gap:8px;
-        padding:8px 12px;
+        padding:9px 14px;
         border-radius:999px;
-        background:#e6f2f4;            /* más visible */
-        color:#08323a;                 /* texto más oscuro */
+        background:#d6eef1;            /* un poco más oscuro/visible */
+        color:#06323a;                 /* texto más oscuro */
         text-decoration:none;
-        border:1px solid rgba(8,50,58,0.12);
+        border:1px solid rgba(6,50,58,0.14);
         font-size:0.92rem;
         font-weight:600;
         transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
@@ -137,8 +164,8 @@
       .social-btn .icon { font-size:16px; opacity:0.95; }
       .social-btn:hover{
         transform: translateY(-3px);
-        box-shadow: 0 10px 20px rgba(8,50,58,0.10);
-        background:#d1e9ec;
+        box-shadow: 0 10px 20px rgba(6,50,58,0.10);
+        background:#c0e2e6;
       }
 
       /* ---------- RESPONSIVE: 1 columna en móvil, foto encima ---------- */
@@ -157,8 +184,7 @@
           margin-bottom: 12px;
         }
         .member-info { align-items: center; text-align: center; }
-        .member-info p.role { text-align: center; }
-        .member-info p.desc { text-align: justify; /* mantiene justificado en móviles */ }
+        .member-info p.desc { text-align: justify; } /* mantiene justificación en móvil */
         .socials { justify-content:center; margin-top: 12px; }
       }
 
@@ -168,11 +194,9 @@
         .member-info p.desc { font-size: 0.92rem; }
       }
 
-      /* Footer minor */
+      /* Footer social */
       .ftco-footer-social a { display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:50%; background:rgba(255,255,255,0.06); margin-right:6px; color:#fff; }
 
-      /* pequeño padding superior para evitar corte de hero */
-      .ftco-section.container-padding-top { padding-top: 28px; } /* menos para que hero y sección queden bien */
     </style>
   </head>
   <body>
@@ -195,7 +219,6 @@
           <li class="nav-item"><a href="donate.html" class="nav-link">Donación</a></li>
           <li class="nav-item"><a href="blog.html" class="nav-link">Noticias</a></li>
           <li class="nav-item"><a href="gallery.html" class="nav-link">Galería</a></li>
-          <!-- Esta página actúa como "Miembros" -->
           <li class="nav-item active"><a href="event.html" class="nav-link">Miembros</a></li>
           <li class="nav-item"><a href="contact.html" class="nav-link">Contacto</a></li>
         </ul>
@@ -204,10 +227,12 @@
   </nav>
   <!-- END nav -->
 
-  <!-- Hero -->
-  <div class="hero-wrap" style="background-image: url('images/lagunaa_ictioscusco.jpg');" data-stellar-background-ratio="0.5">
+  <!-- HERO: imagen como <img> para no recortar la laguna -->
+  <div class="hero-wrap">
+    <img class="hero-img" src="images/lagunaa_ictioscusco.jpg" alt="Laguna IcTiosCusco">
     <div class="overlay"></div>
-    <div class="container">
+
+    <div class="container hero-content">
       <div class="row no-gutters slider-text align-items-center justify-content-center">
         <div class="col-md-10 text-center">
           <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Inicio</a></span> <span>Miembros</span></p>
@@ -219,7 +244,7 @@
   </div>
 
   <!-- Miembros: grid -->
-  <section class="ftco-section bg-light container-padding-top">
+  <section class="ftco-section bg-light">
     <div class="container">
       <div class="members-grid">
 
