@@ -55,10 +55,6 @@
         display: block;
         object-fit: contain;
       }
-      /* Si quieres controlar color desde CSS con SVG externos, edita los SVGs para usar fill='currentColor'
-         y entonces podrías aplicar color así (si usas inline SVG o SVG in <img> via embedding):
-         .icon-monitoreo { color: #FF6D2F; } 
-      */
 
       /* Espaciado del contenedor del icono para que quede consistente */
       .media.block-6 .icon {
@@ -76,38 +72,59 @@
         .service-icon { width: 44px; height: 44px; }
         .media.block-6 .icon { flex: 0 0 44px; margin-right: 12px; }
       }
-    
-/* Ajustes para mantener links de la navbar en blanco al hacer scroll / al colapsar */
-#ftco-navbar {
-  background-color: rgba(0,0,0,0.65) !important; /* navbar ligeramente translúcida */
-  transition: background-color 0.25s ease;
-}
-#ftco-navbar.scrolled {
-  background-color: rgba(0,0,0,0.85) !important; /* navbar más oscura al bajar */
-}
-#ftco-navbar .nav-link,
-#ftco-navbar .navbar-brand span {
-  color: #ffffff !important; /* fuerza color blanco */
-}
-#ftco-navbar .nav-link:hover,
-#ftco-navbar .nav-link:focus,
-#ftco-navbar .nav-item.active .nav-link {
-  color: #ffffff !important;
-  background: transparent !important;
-}
-#ftco-navbar .collapse.show .nav-link { color: #ffffff !important; }
-#ftco-navbar .navbar-toggler { color: #ffffff !important; border-color: rgba(255,255,255,0.18) !important; }
 
-/* Si el template añade clases .navbar-light o .bg-white, sobreescribimos para preservar contraste */
-#ftco-navbar.navbar-light .nav-link,
-#ftco-navbar.bg-white .nav-link {
-  color: #ffffff !important;
-}
+      /* --- Forzar colores iniciales y la transición para que la marca cambie con el scroll --- */
+      #ftco-navbar {
+        background-color: transparent;
+        transition: background-color 0.25s ease;
+      }
+      #ftco-navbar.scrolled {
+        background-color: rgba(255,255,255,0.98) !important; /* fondo claro al bajar */
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      }
 
-/* Evitar que la selección de texto convierta el color a negro (opcional) */
-#ftco-navbar ::selection { background: rgba(255,255,255,0.12); color: #ffffff; }
+      /* Inicial: enlaces y marca en blanco (sobre hero image) */
+      #ftco-navbar .nav-link,
+      #ftco-navbar .navbar-brand span {
+        color: #ffffff !important;
+        transition: color 0.25s ease;
+      }
 
-</style>
+      /* Al scrollear o cuando se fuerza la clase scrolled: color oscuro para legibilidad */
+      #ftco-navbar.scrolled .nav-link,
+      #ftco-navbar.scrolled .navbar-brand span {
+        color: #222222 !important;
+      }
+
+      /* Aseguramos contraste en el toggler y collapse (móvil) */
+      #ftco-navbar .navbar-toggler { color: #ffffff !important; border-color: rgba(255,255,255,0.18) !important; }
+      #ftco-navbar.scrolled .navbar-toggler { color: #222222 !important; border-color: rgba(0,0,0,0.12) !important; }
+
+      /* Cuando el collapse (menú móvil) está abierto, forzamos links oscuros para legibilidad sobre fondo claro */
+      #ftco-nav.collapse.show .nav-link { color: #222222 !important; }
+
+      /* Selección dentro del navbar (opcional) */
+      #ftco-navbar ::selection { background: rgba(0,0,0,0.12); color: #ffffff; }
+
+      /* Estilos para el mensaje de respuesta del formulario */
+      #form-response {
+        display: none;
+        margin-top: 12px;
+        font-weight: 500;
+        border-radius: 6px;
+        padding: 10px 12px;
+      }
+
+      /* Ajustes visuales para el botón de WhatsApp (si quieres usar btn-success existente) */
+      .btn-whatsapp {
+        background-color: #25D366;
+        border: none;
+        color: #fff;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+    </style>
 
   </head>
   <body>
@@ -132,6 +149,8 @@
           <li class="nav-item"><a href="gallery.html" class="nav-link">Galería</a></li>
           <li class="nav-item"><a href="event.html" class="nav-link">Miembros</a></li>
           <li class="nav-item"><a href="contact.html" class="nav-link">Contacto</a></li>
+          <!-- Opcional: añadir WhatsApp en el menú -->
+          <li class="nav-item"><a class="nav-link" href="https://wa.me/51969392189" target="_blank">WhatsApp</a></li>
         </ul>
       </div>
     </div>
@@ -181,7 +200,7 @@
             <div class="block-18 color-3 align-items-stretch">
               <div class="text">
                 <h3 class="mb-4">Únete al equipo</h3>
-                <p>Participa como voluntario en muestreos, taller o análisis de datos.</p>
+                <p>Participa en muestreos, talleres o análisis de datos.</p>
                 <p><a href="#contactanos" class="btn btn-white px-3 py-2 mt-2">Contáctanos</a></p>
               </div>
             </div>
@@ -195,7 +214,6 @@
         <div class="row">
           <div class="col-md-4 d-flex align-self-stretch ftco-animate">
             <div class="media block-6 d-flex services p-3 py-4 d-block">
-              <!-- Reemplazado por imagen externa: images/icon-monitoreo.svg -->
               <div class="icon d-flex mb-3">
                 <img src="images/icon-monitoreo.svg" alt="Monitoreo" class="service-icon" />
               </div>
@@ -207,7 +225,6 @@
           </div>
           <div class="col-md-4 d-flex align-self-stretch ftco-animate">
             <div class="media block-6 d-flex services p-3 py-4 d-block">
-              <!-- Reemplazado por imagen externa: images/icon-genetica.svg -->
               <div class="icon d-flex mb-3">
                 <img src="images/icon-genetica.svg" alt="Genética" class="service-icon" />
               </div>
@@ -219,7 +236,6 @@
           </div>
           <div class="col-md-4 d-flex align-self-stretch ftco-animate">
             <div class="media block-6 d-flex services p-3 py-4 d-block">
-              <!-- Reemplazado por imagen externa: images/icon-educacion.svg -->
               <div class="icon d-flex mb-3">
                 <img src="images/icon-educacion.svg" alt="Educación" class="service-icon" />
               </div>
@@ -280,8 +296,6 @@
                   </div>
                 </div>
               </div>
-
-              <!-- Puedes duplicar/editar más items aquí -->
 
             </div>
           </div>
@@ -356,7 +370,10 @@
           </div>
           <div class="col-md-6 volunteer pl-md-5 ftco-animate">
             <h3 class="mb-3">Contáctanos</h3>
-            <p class="text-white" style="color:#ffffff;">Para consultas, propuestas de colaboración y otras solicitudes profesionales. Envíanos un mensaje detallando tu interés y nos pondremos en contacto contigo a la brevedad.</p>
+            <p class="text-white" style="color:#ffffff;">
+              Para consultas, propuestas de colaboración y otras solicitudes profesionales. Envíanos un mensaje detallando tu interés y nos pondremos en contacto contigo a la brevedad.
+            </p>
+
             <form id="contact-form" class="volunter-form">
               <div class="form-group">
                 <input name="name" type="text" class="form-control" placeholder="Tu nombre" required>
@@ -374,59 +391,15 @@
                 <button type="submit" class="btn btn-white py-3 px-5">Enviar mensaje</button>
               </div>
 
-              <div id="form-response" aria-live="polite" style="display:none; margin-top:12px; font-weight:500;"></div>
+              <div id="form-response" aria-live="polite"></div>
             </form>
 
             <!-- Botón de WhatsApp -->
             <div style="margin-top: 18px;">
-              <a href="https://wa.me/51969392189" target="_blank" class="btn btn-success px-4 py-3" style="background-color:#25D366; border:none; color:#fff;">
-                <span style="margin-right:8px;">📱</span> Contáctanos por WhatsApp
+              <a href="https://wa.me/51969392189" target="_blank" class="btn btn-whatsapp px-4 py-3">
+                <span>📱</span> Contáctanos por WhatsApp
               </a>
             </div>
-
-            <script>
-            document.addEventListener('DOMContentLoaded', function(){
-              const form = document.getElementById('contact-form');
-              const responseDiv = document.getElementById('form-response');
-
-              function showMessage(text, success=true){
-                responseDiv.style.display = 'block';
-                responseDiv.style.color = success ? '#155724' : '#721c24';
-                responseDiv.style.background = success ? 'rgba(40,167,69,0.08)' : 'rgba(220,53,69,0.06)';
-                responseDiv.style.padding = '10px 12px';
-                responseDiv.style.borderRadius = '6px';
-                responseDiv.innerText = text;
-              }
-
-              form.addEventListener('submit', function(e){
-                e.preventDefault();
-                const data = new FormData(form);
-
-                fetch('https://formspree.io/f/xqalnaaj', {
-                  method: 'POST',
-                  headers: {
-                    'Accept': 'application/json'
-                  },
-                  body: data
-                }).then(function(resp){
-                  if (resp.ok) {
-                    showMessage('Su mensaje fue enviado. Gracias por contactarnos.', true);
-                    form.reset();
-                    setTimeout(function(){ responseDiv.style.display = 'none'; }, 6000);
-                  } else {
-                    resp.json().then(function(data){
-                      let msg = (data && data.error) ? data.error : 'Ocurrió un error. Intenta nuevamente.';
-                      showMessage(msg, false);
-                    }).catch(function(){
-                      showMessage('Ocurrió un error. Intenta nuevamente.', false);
-                    });
-                  }
-                }).catch(function(){
-                  showMessage('No se pudo enviar. Verifica tu conexión a Internet.', false);
-                });
-              });
-            });
-            </script>
           </div>
         </div>
       </div>
@@ -607,6 +580,85 @@
   <!-- <script src="https://maps.googleapis.com/maps/api/js?key=TU_API_KEY&sensor=false"></script> -->
   <script src="js/google-map.js"></script>
   <script src="js/main.js"></script>
+
+  <!-- Script personalizado: manejo de formulario (fetch a Formspree) y comportamiento navbar -->
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // --- FORMULARIO: envio a Formspree sin redirección ---
+    const form = document.getElementById('contact-form');
+    const responseDiv = document.getElementById('form-response');
+    const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xqalnaaj';
+
+    function showMessage(text, success = true) {
+      responseDiv.style.display = 'block';
+      responseDiv.style.color = success ? '#155724' : '#721c24';
+      responseDiv.style.background = success ? 'rgba(40,167,69,0.08)' : 'rgba(220,53,69,0.06)';
+      responseDiv.style.border = success ? '1px solid rgba(40,167,69,0.12)' : '1px solid rgba(220,53,69,0.12)';
+      responseDiv.innerText = text;
+      // desaparecer después si es éxito
+      if (success) {
+        setTimeout(function(){ responseDiv.style.display = 'none'; }, 6000);
+      }
+    }
+
+    if (form) {
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const data = new FormData(form);
+
+        fetch(FORMSPREE_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json'
+          },
+          body: data
+        }).then(function (resp) {
+          if (resp.ok) {
+            showMessage('Su mensaje fue enviado. Gracias por contactarnos.', true);
+            form.reset();
+          } else {
+            resp.json().then(function (data) {
+              let msg = (data && data.error) ? data.error : 'Ocurrió un error. Intenta nuevamente.';
+              showMessage(msg, false);
+            }).catch(function () {
+              showMessage('Ocurrió un error. Intenta nuevamente.', false);
+            });
+          }
+        }).catch(function () {
+          showMessage('No se pudo enviar. Verifica tu conexión a Internet.', false);
+        });
+      });
+    }
+
+    // --- NAVBAR: alternar clase .scrolled según scroll y cuando se abre el menú en móvil ---
+    var navbar = document.getElementById('ftco-navbar');
+    var navCollapse = $('#ftco-nav');
+
+    function checkScroll() {
+      if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    }
+
+    // Ejecutar al cargar y al hacer scroll
+    checkScroll();
+    window.addEventListener('scroll', checkScroll, { passive: true });
+
+    // Forzar apariencia scrolled cuando el collapse está abierto (móvil)
+    if (navCollapse.length) {
+      navCollapse.on('shown.bs.collapse', function () {
+        navbar.classList.add('scrolled');
+      });
+      navCollapse.on('hidden.bs.collapse', function () {
+        if (window.scrollY <= 50) {
+          navbar.classList.remove('scrolled');
+        }
+      });
+    }
+  });
+  </script>
 
   </body>
 </html>
