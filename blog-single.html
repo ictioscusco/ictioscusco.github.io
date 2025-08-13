@@ -1,14 +1,386 @@
-<article>
-  <h1>Campaña de monitoreo 2024</h1>
-  <p class="post-meta">21 Agosto, 2024 | IcTiosCusco</p>
-  <figure><img src="/images/noticia_2.jpg" alt="Monitoreo" style="width:100%;border-radius:8px;"></figure>
-  <p>Resumen de la campaña de muestreo realizada en lagunas altoandinas con participación comunitaria. Se trabajó junto a las juntas de agua locales en protocolos de muestreo estandarizados.</p>
-  <p>Más detalles y próximos pasos en la comunidad.</p>
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Noticia — IcTiosCusco</title>
+    <meta name="description" content="Noticias de IcTiosCusco: investigación y conservación del género Orestias.">
 
-  <div class="share-toolbar" role="region" aria-label="Compartir" data-url="https://USERNAME.github.io/REPO/blog-single.html?slug=campana-monitoreo-2024" data-title="Campaña de monitoreo 2024" data-excerpt="Resumen de la campaña de muestreo realizada en lagunas altoandinas con participación comunitaria.">
-    <button class="share-btn" data-share="web">Compartir</button>
-    <a class="share-btn" data-share="facebook">Facebook</a>
-    <a class="share-btn" data-share="whatsapp">WhatsApp</a>
-    <button class="share-btn" data-share="copy">Copiar enlace</button>
-  </div>
-</article>
+    <!-- Open Graph genérico (si generas versiones estáticas por artículo, cambia estas metas por las específicas) -->
+    <meta property="og:site_name" content="IcTiosCusco">
+    <meta property="og:title" content="IcTiosCusco — Noticias">
+    <meta property="og:description" content="Noticias de IcTiosCusco">
+    <meta property="og:image" content="/images/og_news.jpg">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link href="https://fonts.googleapis.com/css?family=Dosis:200,300,400,500,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Overpass:300,400,400i,600,700" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+    <link rel="stylesheet" href="css/aos.css">
+    <link rel="stylesheet" href="css/ionicons.min.css">
+    <link rel="stylesheet" href="css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="css/jquery.timepicker.css">
+    <link rel="stylesheet" href="css/flaticon.css">
+    <link rel="stylesheet" href="css/icomoon.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+      /* Ajustes propios para coherencia con el resto del sitio */
+      html,body{margin:0;padding:0}
+      .navbar-brand.d-flex{display:inline-flex;align-items:center}
+      .navbar-brand img{height:56px;width:auto;margin-right:12px}
+      .navbar-brand span{font-family:'Overpass','Dosis',sans-serif;font-weight:600;font-size:1.05rem;color:#fff}
+      #ftco-navbar{position:absolute;top:0;left:0;right:0;z-index:1050;background-color:transparent;transition:background-color .25s ease}
+      #ftco-navbar.scrolled{position:fixed;background-color:rgba(255,255,255,0.98) !important;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+      #ftco-navbar .nav-link,#ftco-navbar .navbar-brand span{color:#fff !important}
+      #ftco-navbar.scrolled .nav-link,#ftco-navbar.scrolled .navbar-brand span{color:#222 !important}
+
+      /* Hero dinámico */
+      .hero-wrap{position:relative;width:100%;min-height:320px;height:calc(var(--vh,1vh) * 50);background-size:cover;background-position:center center;background-repeat:no-repeat;display:block}
+      .hero-wrap .overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.36) 60%);z-index:2}
+      .hero-content{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:3;color:#fff;text-align:center;padding:0 12px}
+      .hero-content h1{font-size:2.4rem;margin:0 0 8px;font-weight:600}
+
+      /* Contenido */
+      section.ftco-section{padding:48px 0}
+      .content{max-width:920px;margin:0 auto}
+      .post-meta{color:#9aa6ad;font-size:.95rem;margin-bottom:12px}
+      .post-title{font-size:2rem;color:#0e2a39;margin:6px 0 18px}
+      .post-img{width:100%;border-radius:8px;box-shadow:0 8px 20px rgba(6,30,40,0.06);display:block;margin:12px 0}
+      .share-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+      .share-btn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;background:#f3fafb;border:1px solid rgba(6,50,58,0.08);color:#06323a;font-weight:600;text-decoration:none;cursor:pointer}
+      .share-btn:hover{transform:translateY(-3px);box-shadow:0 10px 20px rgba(6,50,58,0.06)}
+      .about-author{display:flex;gap:16px;align-items:center;padding:18px;background:#fbfbfb;border-radius:8px;margin-top:22px}
+      .about-author img{width:96px;border-radius:6px}
+      .comment-list .comment{margin-bottom:18px}
+      .sidebar{padding-left:24px}
+
+      @media (max-width:991.98px){ .hero-content h1{font-size:1.8rem} .sidebar{padding-left:0;margin-top:28px} }
+      @media (max-width:575.98px){ .hero-wrap{height:calc(var(--vh,1vh) * 45)} }
+    </style>
+  </head>
+
+  <body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg ftco_navbar ftco-navbar-light" id="ftco-navbar" role="navigation" aria-label="Menú principal">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="index.html">
+          <img src="images/logo.png" alt="IcTiosCusco logo">
+          <span>IcTiosCusco</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="oi oi-menu"></span> Menu
+        </button>
+
+        <div class="collapse navbar-collapse" id="ftco-nav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a href="index.html" class="nav-link">Inicio</a></li>
+            <li class="nav-item"><a href="about.html" class="nav-link">Quiénes somos</a></li>
+            <li class="nav-item"><a href="causes.html" class="nav-link">Proyectos</a></li>
+            <li class="nav-item"><a href="donate.html" class="nav-link">Donación</a></li>
+            <li class="nav-item active"><a href="blog.html" class="nav-link">Noticias</a></li>
+            <li class="nav-item"><a href="gallery.html" class="nav-link">Galería</a></li>
+            <li class="nav-item"><a href="event.html" class="nav-link">Miembros</a></li>
+            <li class="nav-item"><a href="contact.html" class="nav-link">Contacto</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- END nav -->
+
+    <!-- HERO (la imagen se actualizará vía JS si el artículo incluye una imagen) -->
+    <div class="hero-wrap" id="hero" role="img" aria-label="Imagen de la noticia" style="background-image: url('/images/news_hero.jpg');">
+      <div class="overlay"></div>
+      <div class="container hero-content">
+        <div class="row justify-content-center">
+          <div class="col-md-10 text-center">
+            <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Inicio</a></span> <span class="mr-2"><a href="blog.html">Noticias</a></span> <span id="crumb">Noticia</span></p>
+            <h1 id="hero-title">Cargando noticia…</h1>
+            <p id="hero-sub">Detalles de la noticia</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTENIDO -->
+    <section class="ftco-section ftco-degree-bg">
+      <div class="container">
+        <div class="row">
+          <!-- Columna principal: artículo inyectado -->
+          <div class="col-md-8 ftco-animate">
+            <div class="content" id="article-content" aria-live="polite">
+              <p>Cargando artículo…</p>
+            </div>
+          </div>
+
+          <!-- Sidebar -->
+          <div class="col-md-4 sidebar ftco-animate" id="sidebar">
+            <div class="sidebar-box">
+              <form action="#" class="search-form" onsubmit="event.preventDefault();">
+                <div class="form-group">
+                  <span class="icon fa fa-search" aria-hidden="true"></span>
+                  <input type="text" id="search-input" class="form-control" placeholder="Buscar..." aria-label="Buscar noticias">
+                </div>
+              </form>
+            </div>
+
+            <div class="sidebar-box">
+              <h3>Publicaciones recientes</h3>
+              <div id="recent-list">
+                <!-- Se puede poblar dinámicamente con /data/articles.json si lo desea más adelante -->
+                <div class="block-21 mb-4 d-flex">
+                  <a class="blog-img mr-4" style="background-image: url(images/noticia_1.jpg);"></a>
+                  <div class="text"><h3 class="heading"><a href="blog-single.html?slug=resultados-preliminares-huaypo">Resultados preliminares de Huaypo</a></h3>
+                    <div class="meta"><div><a href="#"><span class="icon-calendar"></span> Sept 10, 2024</a></div></div>
+                  </div>
+                </div>
+                <div class="block-21 mb-4 d-flex">
+                  <a class="blog-img mr-4" style="background-image: url(images/noticia_2.jpg);"></a>
+                  <div class="text"><h3 class="heading"><a href="blog-single.html?slug=campana-monitoreo-2024">Campaña de monitoreo 2024</a></h3>
+                    <div class="meta"><div><a href="#"><span class="icon-calendar"></span> Ago 21, 2024</a></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="sidebar-box">
+              <h3>Categorías</h3>
+              <ul class="categories">
+                <li><a href="#">Investigación <span>(12)</span></a></li>
+                <li><a href="#">Conservación <span>(7)</span></a></li>
+                <li><a href="#">Educación <span>(5)</span></a></li>
+                <li><a href="#">Eventos <span>(3)</span></a></li>
+              </ul>
+            </div>
+
+            <div class="sidebar-box">
+              <h3>Etiquetas</h3>
+              <div class="tagcloud">
+                <a href="#" class="tag-cloud-link">Orestias</a>
+                <a href="#" class="tag-cloud-link">laguna</a>
+                <a href="#" class="tag-cloud-link">monitoreo</a>
+                <a href="#" class="tag-cloud-link">comunidad</a>
+              </div>
+            </div>
+
+          </div><!-- .sidebar -->
+        </div>
+      </div>
+    </section> <!-- .section -->
+
+    <!-- FOOTER (mantén el tuyo; este es coherente) -->
+    <footer class="ftco-footer ftco-section img" role="contentinfo">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row mb-5">
+          <div class="col-md-3">
+            <div class="ftco-footer-widget mb-4">
+              <h2 class="ftco-heading-2">Sobre IcTiosCusco</h2>
+              <p>Grupo de investigación dedicado a la conservación y estudio de peces andinos (Orestias) en la región de Cusco.</p>
+              <ul class="ftco-footer-social list-unstyled mt-4">
+                <li><a href="https://www.facebook.com/ConGeniusRockie" target="_blank" rel="noopener noreferrer" aria-label="Facebook IcTiosCusco"><span class="icon-facebook"></span></a></li>
+                <li><a href="https://www.instagram.com/ictioscusco" target="_blank" rel="noopener noreferrer" aria-label="Instagram IcTiosCusco"><span class="icon-instagram"></span></a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="ftco-footer-widget mb-4">
+              <h2 class="ftco-heading-2">Publicaciones recientes</h2>
+              <div class="block-21 mb-4 d-flex">
+                <a class="blog-img mr-4" style="background-image: url(images/noticia_1.jpg);"></a>
+                <div class="text">
+                  <h3 class="heading"><a href="#">Resultados preliminares de Huaypo</a></h3>
+                  <div class="meta"><div><a href="#"><span class="icon-calendar"></span> Sept 10, 2024</a></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="ftco-footer-widget mb-4 ml-md-4">
+              <h2 class="ftco-heading-2">Enlaces</h2>
+              <ul class="list-unstyled">
+                <li><a href="index.html" class="py-2 d-block">Inicio</a></li>
+                <li><a href="about.html" class="py-2 d-block">Quiénes somos</a></li>
+                <li><a href="donate.html" class="py-2 d-block">Donación</a></li>
+                <li><a href="causes.html" class="py-2 d-block">Proyectos</a></li>
+                <li><a href="event.html" class="py-2 d-block">Miembros</a></li>
+                <li><a href="blog.html" class="py-2 d-block">Noticias</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="ftco-footer-widget mb-4">
+              <h2 class="ftco-heading-2">¿Tienes preguntas?</h2>
+              <div class="block-23 mb-3">
+                <ul>
+                  <li><span class="icon icon-map-marker"></span><span class="text">Cusco, Perú</span></li>
+                  <li><a href="tel:+51969392189"><span class="icon icon-phone"></span><span class="text">+51 969 392 189</span></a></li>
+                  <li><a href="mailto:ictioscusco@gmail.com"><span class="icon icon-envelope"></span><span class="text">ictioscusco@gmail.com</span></a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row"><div class="col-md-12 text-center"><p>Copyright &copy;<script>document.write(new Date().getFullYear());</script> IcTiosCusco. Todos los derechos reservados.</p></div></div>
+      </div>
+    </footer>
+
+    <!-- loader -->
+    <div id="ftco-loader" class="show fullscreen" aria-hidden="true">
+      <svg class="circular" width="48px" height="48px" role="img" aria-label="Cargando"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery-migrate-3.0.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.easing.1.3.js"></script>
+    <script src="js/jquery.waypoints.min.js"></script>
+    <script src="js/jquery.stellar.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/jquery.magnific-popup.min.js"></script>
+    <script src="js/aos.js"></script>
+    <script src="js/jquery.animateNumber.min.js"></script>
+    <script src="js/bootstrap-datepicker.js"></script>
+    <script src="js/jquery.timepicker.min.js"></script>
+    <script src="js/scrollax.min.js"></script>
+    <script src="js/google-map.js"></script>
+    <script src="js/main.js"></script>
+
+    <script>
+      // --vh fix para móviles
+      (function(){
+        function setVhVar(){ var vh = window.innerHeight * 0.01; document.documentElement.style.setProperty('--vh', vh + 'px'); }
+        window.addEventListener('resize', setVhVar);
+        window.addEventListener('orientationchange', setVhVar);
+        setVhVar();
+      })();
+
+      // Navbar behavior
+      document.addEventListener('DOMContentLoaded', function () {
+        var navbar = document.getElementById('ftco-navbar');
+        var navCollapse = $('#ftco-nav');
+        function checkScroll(){ if(window.scrollY>60) navbar.classList.add('scrolled'); else navbar.classList.remove('scrolled'); }
+        checkScroll(); window.addEventListener('scroll', checkScroll, {passive:true});
+        if(navCollapse.length){
+          navCollapse.on('shown.bs.collapse', function(){ navbar.classList.add('scrolled'); });
+          navCollapse.on('hidden.bs.collapse', function(){ if(window.scrollY<=60) navbar.classList.remove('scrolled'); });
+        }
+
+        // Load article by ?slug=...
+        function getParam(name){
+          var url = new URL(window.location.href);
+          return url.searchParams.get(name);
+        }
+
+        var slug = getParam('slug');
+        var container = document.getElementById('article-content');
+        var hero = document.getElementById('hero');
+        var heroTitle = document.getElementById('hero-title');
+        var crumb = document.getElementById('crumb');
+        var heroSub = document.getElementById('hero-sub');
+
+        if(!slug){
+          container.innerHTML = '<p>Artículo no especificado. <a href="blog.html">Volver a noticias</a>.</p>';
+          heroTitle.textContent = 'Noticia no encontrada';
+          return;
+        }
+
+        var articlePath = '/articles/' + slug + '.html';
+
+        fetch(articlePath).then(function(res){
+          if(!res.ok) throw new Error('Not found');
+          return res.text();
+        }).then(function(html){
+          // Insert article HTML (should be a fragment: <article>...</article>)
+          container.innerHTML = html;
+
+          // Update hero title/crumb from first <h1> inside article if present
+          var articleH1 = container.querySelector('h1');
+          if(articleH1){
+            heroTitle.textContent = articleH1.textContent.trim();
+            crumb.textContent = articleH1.textContent.trim();
+          } else {
+            // optional: set heroTitle from filename slug (replace - with space)
+            heroTitle.textContent = heroTitle.textContent || slug.replace(/-/g,' ');
+            crumb.textContent = crumb.textContent || slug.replace(/-/g,' ');
+          }
+
+          // If article has a main <img>, use it as hero background (first visible image)
+          var img = container.querySelector('img');
+          if(img && img.getAttribute('src')){
+            hero.style.backgroundImage = 'url(' + img.getAttribute('src') + ')';
+          }
+
+          // If article includes a share-toolbar, ensure its data-url is set to current full URL
+          var toolbar = container.querySelector('.share-toolbar') || container.querySelector('.share-row') || document.querySelector('.share-toolbar');
+          if(toolbar){
+            var absoluteUrl = window.location.origin + window.location.pathname + '?slug=' + encodeURIComponent(slug);
+            toolbar.setAttribute('data-url', absoluteUrl);
+            // if toolbar has data-title/excerpt, leave them; otherwise set title
+            if(!toolbar.getAttribute('data-title')){
+              toolbar.setAttribute('data-title', (articleH1 ? articleH1.textContent.trim() : heroTitle.textContent.trim()));
+            }
+          }
+
+        }).catch(function(err){
+          console.error(err);
+          container.innerHTML = '<p>No se encontró el artículo. Comprueba que /articles/' + slug + '.html existe.</p>';
+          heroTitle.textContent = 'Noticia no encontrada';
+        });
+
+        // Delegated share button handler (works for share buttons inside the injected article or for toolbar outside)
+        document.addEventListener('click', function(e){
+          var btn = e.target.closest('.share-btn');
+          if(!btn) return;
+          var toolbarEl = btn.closest('.share-toolbar') || btn.closest('.share-row') || document.querySelector('.share-toolbar');
+          var url = toolbarEl ? (toolbarEl.getAttribute('data-url') || window.location.href) : window.location.href;
+          var title = toolbarEl ? (toolbarEl.getAttribute('data-title') || document.title) : document.title;
+          var excerpt = toolbarEl ? (toolbarEl.getAttribute('data-excerpt') || '') : '';
+          var action = btn.getAttribute('data-share');
+
+          if(action === 'web'){
+            if(navigator.share){
+              navigator.share({ title: title, text: excerpt, url: url }).catch(function(){});
+            } else {
+              alert('Tu navegador no soporta el compartir nativo. Usa los botones de Facebook o WhatsApp o copia el enlace.');
+            }
+            return;
+          }
+          if(action === 'facebook'){
+            window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url), '_blank', 'noopener');
+            return;
+          }
+          if(action === 'twitter'){
+            window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(title + ' - ' + excerpt) + '&url=' + encodeURIComponent(url), '_blank', 'noopener');
+            return;
+          }
+          if(action === 'whatsapp'){
+            var text = title + '\n' + excerpt + '\n' + url;
+            window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(text), '_blank', 'noopener');
+            return;
+          }
+          if(action === 'copy'){
+            if(navigator.clipboard && window.isSecureContext){
+              navigator.clipboard.writeText(url).then(function(){ alert('Enlace copiado al portapapeles'); });
+            } else {
+              var ta = document.createElement('textarea'); ta.value = url; document.body.appendChild(ta); ta.select();
+              try{ document.execCommand('copy'); alert('Enlace copiado al portapapeles'); } catch (e){ prompt('Copia este enlace:', url); }
+              ta.remove();
+            }
+            return;
+          }
+        }, false);
+
+      }); // DOMContentLoaded
+    </script>
+  </body>
+</html>
