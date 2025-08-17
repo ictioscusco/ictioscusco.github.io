@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
   <head>
-    <title>Welfare - Free Bootstrap 4 Template by Colorlib</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
+    <title>IcTiosCusco — Proyectos</title>
+    <meta name="description" content="Proyectos de IcTiosCusco: monitoreo, genética y educación en ecosistemas altoandinos.">
+
     <link href="https://fonts.googleapis.com/css?family=Dosis:200,300,400,500,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Overpass:300,400,400i,600,700" rel="stylesheet">
 
@@ -22,137 +23,242 @@
     <link rel="stylesheet" href="css/bootstrap-datepicker.css">
     <link rel="stylesheet" href="css/jquery.timepicker.css">
 
-    
     <link rel="stylesheet" href="css/flaticon.css">
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
+
+    <style>
+      /* Pequeñas adaptaciones para que la página caiga visualmente en la misma familia del index */
+      .navbar-brand.d-flex { display: inline-flex; align-items: center; }
+      .navbar-brand img { height: 56px; width: auto; margin-right: 12px; }
+      .navbar-brand span { font-family: 'Overpass', 'Dosis', sans-serif !important; font-weight: 600; font-size: 1.05rem; color: #fff; }
+
+      /* Tarjetas de proyecto */
+      .project-entry {
+        background: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(16,24,40,0.06);
+        margin-bottom: 24px;
+        display:flex;
+        flex-direction:column;
+        height:100%;
+      }
+      .project-entry .img {
+        background-size: cover;
+        background-position: center;
+        height: 190px;
+      }
+      .project-entry .text {
+        padding: 18px;
+        flex:1 1 auto;
+        display:flex;
+        flex-direction:column;
+        justify-content: space-between;
+      }
+      .project-entry h3 { margin-top: 0; margin-bottom: 8px; font-size:1.15rem; }
+      .project-entry p { margin-bottom: 10px; color: #555; line-height:1.5; }
+
+      .project-meta { font-size: .95rem; color: #666; margin-bottom: 10px; }
+
+      .project-actions {
+        display:flex;
+        gap:8px;
+        align-items:center;
+        margin-top: 8px;
+      }
+      .btn-outline-primary {
+        background: transparent;
+        border: 1px solid rgba(15,76,129,0.12);
+        color: #0f4c81;
+      }
+
+      /* Hero sombra de texto */
+      .hero-wrap h1 { text-shadow: 0 6px 18px rgba(0,0,0,0.18); }
+
+      /* Voluntariado: adaptar apariencia del mensaje de respuesta */
+      #vol-form-response { display:none; margin-top:12px; font-weight:500; border-radius:6px; padding:10px 12px; }
+
+      .btn-whatsapp {
+        background-color: #25D366;
+        border: none;
+        color: #fff;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      @media (max-width: 575.98px) {
+        .navbar-brand img { height: 44px; margin-right: 10px; }
+        .navbar-brand span { font-size: 0.95rem; }
+        .project-entry .img { height: 160px; }
+      }
+    </style>
   </head>
   <body>
-    
+
   <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
     <div class="container">
-      <a class="navbar-brand" href="index.html">Welfare</a>
+      <a class="navbar-brand d-flex align-items-center" href="index.html">
+        <img src="images/logo.png" alt="IcTiosCusco logo">
+        <span>IcTiosCusco</span>
+      </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="oi oi-menu"></span> Menu
       </button>
 
       <div class="collapse navbar-collapse" id="ftco-nav">
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
-          <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
-          <li class="nav-item active"><a href="causes.html" class="nav-link">Causes</a></li>
-          <li class="nav-item"><a href="donate.html" class="nav-link">Donate</a></li>
-          <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
-          <li class="nav-item"><a href="gallery.html" class="nav-link">Gallery</a></li>
-          <li class="nav-item"><a href="event.html" class="nav-link">Events</a></li>
-          <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+          <li class="nav-item"><a href="index.html" class="nav-link">Inicio</a></li>
+          <li class="nav-item"><a href="about.html" class="nav-link">Quiénes somos</a></li>
+          <li class="nav-item active"><a href="causes.html" class="nav-link">Proyectos</a></li>
+          <li class="nav-item"><a href="donate.html" class="nav-link">Donación</a></li>
+          <li class="nav-item"><a href="blog.html" class="nav-link">Noticias</a></li>
+          <li class="nav-item"><a href="gallery.html" class="nav-link">Galería</a></li>
+          <li class="nav-item"><a href="event.html" class="nav-link">Miembros</a></li>
+          <li class="nav-item"><a href="contact.html" class="nav-link">Contacto</a></li>
         </ul>
       </div>
     </div>
   </nav>
     <!-- END nav -->
-    
-    <div class="hero-wrap" style="background-image: url('images/bg_5.jpg');" data-stellar-background-ratio="0.5">
+
+    <!-- Hero (imagen de portada diferenciada) -->
+    <div class="hero-wrap" style="background-image: url('images/proyectos_hero.jpg');" data-stellar-background-ratio="0.5">
       <div class="overlay"></div>
       <div class="container">
         <div class="row no-gutters slider-text align-items-center justify-content-center" data-scrollax-parent="true">
-          <div class="col-md-7 ftco-animate text-center" data-scrollax=" properties: { translateY: '70%' }">
-             <p class="breadcrumbs" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><span class="mr-2"><a href="index.html">Home</a></span> <span>Causes</span></p>
-            <h1 class="mb-3 bread" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">Causes</h1>
+          <div class="col-md-8 ftco-animate text-center">
+            <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Inicio</a></span> <span>Proyectos</span></p>
+            <h1 class="mb-4">Proyectos activos</h1>
+            <p class="mb-5">Líneas de trabajo en investigación, monitoreo y educación en la cuenca del Urubamba — Cusco.</p>
           </div>
         </div>
       </div>
     </div>
 
-    
+    <!-- Sección Proyectos -->
     <section class="ftco-section">
       <div class="container">
-      	<div class="row">
-      		<div class="col-md-4 ftco-animate">
-      			<div class="cause-entry">
-    					<a href="#" class="img" style="background-image: url(images/cause-1.jpg);"></a>
-    					<div class="text p-3 p-md-4">
-    						<h3><a href="#">Clean water for the urban area</a></h3>
-    						<p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life</p>
-    						<span class="donation-time mb-3 d-block">Last donation 1w ago</span>
-                <div class="progress custom-progress-success">
-                  <div class="progress-bar bg-primary" role="progressbar" style="width: 28%" aria-valuenow="28" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-                <span class="fund-raised d-block">$12,000 raised of $30,000</span>
-    					</div>
-    				</div>
-      		</div>
-      		<div class="col-md-4 ftco-animate">
-      			<div class="cause-entry">
-    					<a href="#" class="img" style="background-image: url(images/cause-2.jpg);"></a>
-    					<div class="text p-3 p-md-4">
-    						<h3><a href="#">Clean water for the urban area</a></h3>
-    						<p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life</p>
-    						<span class="donation-time mb-3 d-block">Last donation 1w ago</span>
-                <div class="progress custom-progress-success">
-                  <div class="progress-bar bg-primary" role="progressbar" style="width: 28%" aria-valuenow="28" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-                <span class="fund-raised d-block">$12,000 raised of $30,000</span>
-    					</div>
-    				</div>
-      		</div>
-      		<div class="col-md-4 ftco-animate">
-      			<div class="cause-entry">
-    					<a href="#" class="img" style="background-image: url(images/cause-3.jpg);"></a>
-    					<div class="text p-3 p-md-4">
-    						<h3><a href="#">Clean water for the urban area</a></h3>
-    						<p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life</p>
-    						<span class="donation-time mb-3 d-block">Last donation 1w ago</span>
-                <div class="progress custom-progress-success">
-                  <div class="progress-bar bg-primary" role="progressbar" style="width: 28%" aria-valuenow="28" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-                <span class="fund-raised d-block">$12,000 raised of $30,000</span>
-    					</div>
-    				</div>
-      		</div>
-      		<div class="col-md-4 ftco-animate">
-      			<div class="cause-entry">
-    					<a href="#" class="img" style="background-image: url(images/cause-4.jpg);"></a>
-    					<div class="text p-3 p-md-4">
-    						<h3><a href="#">Clean water for the urban area</a></h3>
-    						<p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life</p>
-    						<span class="donation-time mb-3 d-block">Last donation 1w ago</span>
-                <div class="progress custom-progress-success">
-                  <div class="progress-bar bg-primary" role="progressbar" style="width: 28%" aria-valuenow="28" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-                <span class="fund-raised d-block">$12,000 raised of $30,000</span>
-    					</div>
-    				</div>
-      		</div>
-      		<div class="col-md-4 ftco-animate">
-      			<div class="cause-entry">
-    					<a href="#" class="img" style="background-image: url(images/cause-5.jpg);"></a>
-    					<div class="text p-3 p-md-4">
-    						<h3><a href="#">Clean water for the urban area</a></h3>
-    						<p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life</p>
-    						<span class="donation-time mb-3 d-block">Last donation 1w ago</span>
-                <div class="progress custom-progress-success">
-                  <div class="progress-bar bg-primary" role="progressbar" style="width: 28%" aria-valuenow="28" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-                <span class="fund-raised d-block">$12,000 raised of $30,000</span>
-    					</div>
-    				</div>
-      		</div>
-      		<div class="col-md-4 ftco-animate">
-      			<div class="cause-entry">
-    					<a href="#" class="img" style="background-image: url(images/cause-6.jpg);"></a>
-    					<div class="text p-3 p-md-4">
-    						<h3><a href="#">Clean water for the urban area</a></h3>
-    						<p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life</p>
-    						<span class="donation-time mb-3 d-block">Last donation 1w ago</span>
-                <div class="progress custom-progress-success">
-                  <div class="progress-bar bg-primary" role="progressbar" style="width: 28%" aria-valuenow="28" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-                <span class="fund-raised d-block">$12,000 raised of $30,000</span>
-    					</div>
-    				</div>
-      		</div>
+        <div class="row justify-content-center mb-5 pb-3">
+          <div class="col-md-7 heading-section text-center ftco-animate">
+            <h2 class="mb-4">Nuestros proyectos</h2>
+            <p>A continuación encontrarás las líneas principales que estamos desarrollando actualmente, sus objetivos y estado.</p>
+          </div>
         </div>
+
+        <div class="row">
+          <!-- Proyecto 1: Monitoreo poblacional -->
+          <div class="col-md-6 col-lg-4 ftco-animate">
+            <div class="project-entry">
+              <a class="img" style="background-image: url('images/proyecto-monitoreo.jpg');" href="#"></a>
+              <div class="text">
+                <div>
+                  <h3><a href="#">Monitoreo poblacional de <em>Orestias</em></a></h3>
+                  <p>Seguimiento de abundancia, estructura de tallas y distribución en lagunas altoandinas para detectar tendencias poblacionales.</p>
+                  <div class="project-meta">Lugar: Cuenca del Urubamba — Estado: Activo</div>
+                </div>
+                <div class="project-actions">
+                  <a href="causes.html#monitoreo" class="btn btn-outline-primary btn-sm">Ver detalles</a>
+                  <a href="contact.html" class="btn btn-primary btn-sm">Participar</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Proyecto 2: Genética y filogeografía -->
+          <div class="col-md-6 col-lg-4 ftco-animate">
+            <div class="project-entry">
+              <a class="img" style="background-image: url('images/proyecto-genetica.jpg');" href="#"></a>
+              <div class="text">
+                <div>
+                  <h3><a href="#">Genética y filogeografía de <em>Orestias</em></a></h3>
+                  <p>Análisis de diversidad genética y conectividad entre poblaciones para identificar unidades de conservación prioritarias.</p>
+                  <div class="project-meta">Colaboradores: Univ. de Chile — Estado: Publicación 2024</div>
+                </div>
+                <div class="project-actions">
+                  <a href="causes.html#genetica" class="btn btn-outline-primary btn-sm">Ver detalles</a>
+                  <a href="blog.html" class="btn btn-primary btn-sm">Leer publicación</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Proyecto 3: Educación ambiental -->
+          <div class="col-md-6 col-lg-4 ftco-animate">
+            <div class="project-entry">
+              <a class="img" style="background-image: url('images/proyecto-educacion.jpg');" href="#"></a>
+              <div class="text">
+                <div>
+                  <h3><a href="#">Educación ambiental y comunidades</a></h3>
+                  <p>Talleres con escuelas y líderes locales sobre la importancia de las lagunas altoandinas y prácticas de conservación comunitaria.</p>
+                  <div class="project-meta">Próximo taller: mayo 2025 — Beneficiarios: 4 comunidades</div>
+                </div>
+                <div class="project-actions">
+                  <a href="causes.html#educacion" class="btn btn-outline-primary btn-sm">Ver detalles</a>
+                  <a href="contact.html" class="btn btn-primary btn-sm">Coordinar taller</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Proyecto 4: Restauración de hábitat (ejemplo adicional) -->
+          <div class="col-md-6 col-lg-4 ftco-animate">
+            <div class="project-entry">
+              <a class="img" style="background-image: url('images/proyecto-restauracion.jpg');" href="#"></a>
+              <div class="text">
+                <div>
+                  <h3><a href="#">Restauración de hábitat y control de especies invasoras</a></h3>
+                  <p>Acciones piloto para recuperar macrófitas nativas y controlar especies introducidas que compiten con <em>Orestias</em>.</p>
+                  <div class="project-meta">Estado: Diseño de intervención</div>
+                </div>
+                <div class="project-actions">
+                  <a href="causes.html#restauracion" class="btn btn-outline-primary btn-sm">Ver detalles</a>
+                  <a href="contact.html" class="btn btn-primary btn-sm">Apoyar</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Proyecto 5: Monitoreo ambiental -->
+          <div class="col-md-6 col-lg-4 ftco-animate">
+            <div class="project-entry">
+              <a class="img" style="background-image: url('images/proyecto-medioambiental.jpg');" href="#"></a>
+              <div class="text">
+                <div>
+                  <h3><a href="#">Monitoreo ambiental y calidad del agua</a></h3>
+                  <p>Mediciones periódicas de parámetros fisicoquímicos y su relación con la salud de poblaciones de peces.</p>
+                  <div class="project-meta">Estado: Establecido — Instrumentación: sensores en sitio</div>
+                </div>
+                <div class="project-actions">
+                  <a href="causes.html#calidad" class="btn btn-outline-primary btn-sm">Ver detalles</a>
+                  <a href="contact.html" class="btn btn-primary btn-sm">Colaborar</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Proyecto 6: Base de datos y análisis -->
+          <div class="col-md-6 col-lg-4 ftco-animate">
+            <div class="project-entry">
+              <a class="img" style="background-image: url('images/proyecto-datos.jpg');" href="#"></a>
+              <div class="text">
+                <div>
+                  <h3><a href="#">Base de datos y análisis espacial</a></h3>
+                  <p>Centralización de registros de muestreo, georreferenciación y análisis GIS para apoyar la toma de decisiones.</p>
+                  <div class="project-meta">Estado: Desarrollo — Plataforma interna</div>
+                </div>
+                <div class="project-actions">
+                  <a href="causes.html#datos" class="btn btn-outline-primary btn-sm">Ver detalles</a>
+                  <a href="contact.html" class="btn btn-primary btn-sm">Contribuir datos</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div> <!-- /row proyectos -->
+
+        <!-- Paginación (si la necesitas) -->
         <div class="row mt-5">
           <div class="col text-center">
             <div class="block-27">
@@ -168,122 +274,135 @@
             </div>
           </div>
         </div>
+      </div> <!-- /container -->
+    </section>
+
+    <!-- Sección voluntariado / contacto adaptada: usa Formspree + WhatsApp -->
+    <section class="ftco-section-3 img" style="background-image: url(images/bg_3.jpg);">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row d-md-flex">
+          <div class="col-md-6 d-flex ftco-animate">
+            <div class="img img-2 align-self-stretch" style="background-image: url(images/bg_4.jpg);"></div>
+          </div>
+
+          <div class="col-md-6 volunteer pl-md-5 ftco-animate">
+            <h3 class="mb-3">Únete como voluntario</h3>
+            <p class="text-white" style="color:#ffffff;">
+              Participa en muestreos de campo, talleres o en la colecta y procesamiento de datos. Déjanos tus datos y te contactaremos para próximas actividades.
+            </p>
+
+            <!-- Formulario: envío a Formspree (igual que en contactanos) -->
+            <form id="volunteer-form" class="volunter-form">
+              <div class="form-group">
+                <input name="name" type="text" class="form-control" placeholder="Tu nombre" required>
+              </div>
+              <div class="form-group">
+                <input name="email" type="email" class="form-control" placeholder="Tu correo" required>
+              </div>
+              <div class="form-group">
+                <input name="subject" type="text" class="form-control" placeholder="Asunto (p. ej. Voluntariado en campo)">
+              </div>
+              <div class="form-group">
+                <textarea name="message" cols="30" rows="4" class="form-control" placeholder="¿En qué te gustaría ayudar?" required></textarea>
+              </div>
+              <div class="form-group">
+                <button type="submit" class="btn btn-white py-3 px-5">Enviar</button>
+              </div>
+
+              <div id="vol-form-response" aria-live="polite"></div>
+            </form>
+
+            <!-- Botón de WhatsApp -->
+            <div style="margin-top: 14px;">
+              <a href="https://wa.me/51969392189" target="_blank" rel="noopener" class="btn btn-whatsapp px-4 py-3">
+                <span>📱</span> Contáctanos por WhatsApp
+              </a>
+            </div>
+
+          </div>
+        </div>
       </div>
     </section>
 
-    <section class="ftco-section-3 img" style="background-image: url(images/bg_3.jpg);">
-    	<div class="overlay"></div>
-    	<div class="container">
-    		<div class="row d-md-flex">
-    		<div class="col-md-6 d-flex ftco-animate">
-    			<div class="img img-2 align-self-stretch" style="background-image: url(images/bg_4.jpg);"></div>
-    		</div>
-    		<div class="col-md-6 volunteer pl-md-5 ftco-animate">
-    			<h3 class="mb-3">Be a volunteer</h3>
-    			<form action="#" class="volunter-form">
-            <div class="form-group">
-              <input type="text" class="form-control" placeholder="Your Name">
-            </div>
-            <div class="form-group">
-              <input type="text" class="form-control" placeholder="Your Email">
-            </div>
-            <div class="form-group">
-              <textarea name="" id="" cols="30" rows="3" class="form-control" placeholder="Message"></textarea>
-            </div>
-            <div class="form-group">
-              <input type="submit" value="Send Message" class="btn btn-white py-3 px-5">
-            </div>
-          </form>
-    		</div>    			
-    		</div>
-    	</div>
-    </section>
-		
-
+    <!-- Footer (coherente con index): FB e IG -->
     <footer class="ftco-footer ftco-section img">
-    	<div class="overlay"></div>
+      <div class="overlay"></div>
       <div class="container">
         <div class="row mb-5">
           <div class="col-md-3">
             <div class="ftco-footer-widget mb-4">
-              <h2 class="ftco-heading-2">About Us</h2>
-              <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+              <h2 class="ftco-heading-2">Sobre IcTiosCusco</h2>
+              <p>Grupo de investigación dedicado a la conservación y estudio de peces andinos (Orestias) en la región de Cusco.</p>
               <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
-                <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
-                <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
-                <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
+                <li class="ftco-animate">
+                  <a href="https://www.facebook.com/ConGeniusRockie" target="_blank" rel="noopener" aria-label="Facebook">
+                    <span class="icon-facebook"></span>
+                  </a>
+                </li>
+                <li class="ftco-animate">
+                  <a href="https://www.instagram.com/ictioscusco?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener" aria-label="Instagram">
+                    <span class="icon-instagram"></span>
+                  </a>
+                </li>
               </ul>
             </div>
           </div>
+
           <div class="col-md-4">
             <div class="ftco-footer-widget mb-4">
-              <h2 class="ftco-heading-2">Recent Blog</h2>
+              <h2 class="ftco-heading-2">Publicaciones recientes</h2>
               <div class="block-21 mb-4 d-flex">
-                <a class="blog-img mr-4" style="background-image: url(images/image_1.jpg);"></a>
+                <a class="blog-img mr-4" style="background-image: url(images/noticia_1.jpg);"></a>
                 <div class="text">
-                  <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control about</a></h3>
+                  <h3 class="heading"><a href="#">Resultados preliminares de Huaypo</a></h3>
                   <div class="meta">
-                    <div><a href="#"><span class="icon-calendar"></span> July 12, 2018</a></div>
-                    <div><a href="#"><span class="icon-person"></span> Admin</a></div>
-                    <div><a href="#"><span class="icon-chat"></span> 19</a></div>
-                  </div>
-                </div>
-              </div>
-              <div class="block-21 mb-4 d-flex">
-                <a class="blog-img mr-4" style="background-image: url(images/image_2.jpg);"></a>
-                <div class="text">
-                  <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control about</a></h3>
-                  <div class="meta">
-                    <div><a href="#"><span class="icon-calendar"></span> July 12, 2018</a></div>
-                    <div><a href="#"><span class="icon-person"></span> Admin</a></div>
-                    <div><a href="#"><span class="icon-chat"></span> 19</a></div>
+                    <div><a href="#"><span class="icon-calendar"></span> Sept 10, 2024</a></div>
+                    <div><a href="#"><span class="icon-person"></span> IcTiosCusco</a></div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+
           <div class="col-md-2">
-             <div class="ftco-footer-widget mb-4 ml-md-4">
-              <h2 class="ftco-heading-2">Site Links</h2>
+            <div class="ftco-footer-widget mb-4 ml-md-4">
+              <h2 class="ftco-heading-2">Enlaces</h2>
               <ul class="list-unstyled">
-                <li><a href="#" class="py-2 d-block">Home</a></li>
-                <li><a href="#" class="py-2 d-block">About</a></li>
-                <li><a href="#" class="py-2 d-block">Donate</a></li>
-                <li><a href="#" class="py-2 d-block">Causes</a></li>
-                <li><a href="#" class="py-2 d-block">Event</a></li>
-                <li><a href="#" class="py-2 d-block">Blog</a></li>
+                <li><a href="index.html" class="py-2 d-block">Inicio</a></li>
+                <li><a href="about.html" class="py-2 d-block">Quiénes somos</a></li>
+                <li><a href="donate.html" class="py-2 d-block">Donación</a></li>
+                <li><a href="causes.html" class="py-2 d-block">Proyectos</a></li>
+                <li><a href="event.html" class="py-2 d-block">Miembros</a></li>
+                <li><a href="blog.html" class="py-2 d-block">Noticias</a></li>
               </ul>
             </div>
           </div>
+
           <div class="col-md-3">
             <div class="ftco-footer-widget mb-4">
-            	<h2 class="ftco-heading-2">Have a Questions?</h2>
-            	<div class="block-23 mb-3">
-	              <ul>
-	                <li><span class="icon icon-map-marker"></span><span class="text">203 Fake St. Mountain View, San Francisco, California, USA</span></li>
-	                <li><a href="#"><span class="icon icon-phone"></span><span class="text">+2 392 3929 210</span></a></li>
-	                <li><a href="#"><span class="icon icon-envelope"></span><span class="text">info@yourdomain.com</span></a></li>
-	              </ul>
-	            </div>
+              <h2 class="ftco-heading-2">¿Tienes preguntas?</h2>
+              <div class="block-23 mb-3">
+                <ul>
+                  <li><span class="icon icon-map-marker"></span><span class="text">Cusco, Perú</span></li>
+                  <li><a href="tel:+51969392189"><span class="icon icon-phone"></span><span class="text">+51 969 392 189</span></a></li>
+                  <li><a href="mailto:ictioscusco@gmail.com"><span class="icon icon-envelope"></span><span class="text">ictioscusco@gmail.com</span></a></li>
+                </ul>
+              </div>
             </div>
           </div>
+
         </div>
         <div class="row">
           <div class="col-md-12 text-center">
-
-            <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+            <p>Copyright &copy;<script>document.write(new Date().getFullYear());</script> IcTiosCusco. Todos los derechos reservados.</p>
           </div>
         </div>
       </div>
     </footer>
-    
-  
 
   <!-- loader -->
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
-
 
   <script src="js/jquery.min.js"></script>
   <script src="js/jquery-migrate-3.0.1.min.js"></script>
@@ -299,9 +418,84 @@
   <script src="js/bootstrap-datepicker.js"></script>
   <script src="js/jquery.timepicker.min.js"></script>
   <script src="js/scrollax.min.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
   <script src="js/google-map.js"></script>
   <script src="js/main.js"></script>
-    
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Navbar behavior (igual que en index)
+      var navbar = document.getElementById('ftco-navbar');
+      var navCollapse = $('#ftco-nav');
+
+      function checkScroll() {
+        if (window.scrollY > 50) {
+          navbar.classList.add('scrolled');
+        } else {
+          navbar.classList.remove('scrolled');
+        }
+      }
+
+      checkScroll();
+      window.addEventListener('scroll', checkScroll, { passive: true });
+
+      if (navCollapse.length) {
+        navCollapse.on('shown.bs.collapse', function () {
+          navbar.classList.add('scrolled');
+        });
+        navCollapse.on('hidden.bs.collapse', function () {
+          if (window.scrollY <= 50) {
+            navbar.classList.remove('scrolled');
+          }
+        });
+      }
+
+      // --- Voluntariado: envio a Formspree sin redirección ---
+      const volForm = document.getElementById('volunteer-form');
+      const volResp = document.getElementById('vol-form-response');
+      const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xqalnaaj'; // usa tu endpoint
+
+      function showVolMessage(text, success = true) {
+        volResp.style.display = 'block';
+        volResp.style.color = success ? '#155724' : '#721c24';
+        volResp.style.background = success ? 'rgba(40,167,69,0.08)' : 'rgba(220,53,69,0.06)';
+        volResp.style.border = success ? '1px solid rgba(40,167,69,0.12)' : '1px solid rgba(220,53,69,0.12)';
+        volResp.innerText = text;
+        // desaparecer después si es éxito
+        if (success) {
+          setTimeout(function(){ volResp.style.display = 'none'; }, 6000);
+        }
+      }
+
+      if (volForm) {
+        volForm.addEventListener('submit', function (e) {
+          e.preventDefault();
+          const data = new FormData(volForm);
+
+          fetch(FORMSPREE_ENDPOINT, {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json'
+            },
+            body: data
+          }).then(function (resp) {
+            if (resp.ok) {
+              showVolMessage('Tu solicitud fue enviada. Gracias por ofrecerte como voluntario.', true);
+              volForm.reset();
+            } else {
+              resp.json().then(function (data) {
+                let msg = (data && data.error) ? data.error : 'Ocurrió un error. Intenta nuevamente.';
+                showVolMessage(msg, false);
+              }).catch(function () {
+                showVolMessage('Ocurrió un error. Intenta nuevamente.', false);
+              });
+            }
+          }).catch(function () {
+            showVolMessage('No se pudo enviar. Verifica tu conexión a Internet.', false);
+          });
+        });
+      }
+    });
+  </script>
+
   </body>
 </html>
