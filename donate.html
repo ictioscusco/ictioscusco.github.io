@@ -71,6 +71,9 @@
       /* Bank details */
       .bank-box { background:rgba(2,62,138,0.03); padding:12px; border-radius:8px; color:#053069; margin-bottom:12px; }
 
+      /* Sandbox banner */
+      .sandbox-banner { background:#fff3cd; color:#856404; border:1px solid #ffeeba; padding:10px; border-radius:6px; margin-bottom:12px; }
+
       @media (max-width: 575.98px) {
         .merch-card img { height:180px; }
       }
@@ -128,8 +131,13 @@
           <!-- Left: Donación directa + merch -->
           <div class="col-lg-8">
             <!-- Donación rápida -->
-            <div class="donate-panel">
+            <div class="donate-panel" id="donate-panel">
               <h3>Donar ahora</h3>
+
+              <div id="sandbox-note" class="sandbox-banner" style="display:none;">
+                Modo sandbox activo — los pagos son de prueba. No se moverá dinero real.
+              </div>
+
               <p>Elige un monto rápido o ingresa el monto que desees. Donación segura vía PayPal. También puedes transferir directamente vía bancaria.</p>
 
               <div class="donate-quick">
@@ -313,7 +321,6 @@
               </ul>
             </div>
           </div>
-
           <div class="col-md-4">
             <div class="ftco-footer-widget mb-4">
               <h2 class="ftco-heading-2">Publicaciones recientes</h2>
@@ -407,28 +414,45 @@
         }
 
         /* ---------------------------
-           PAYPAL QUICK DONATION
-           ---------------------------
-           Replace REPLACE_WITH_PAYPAL_EMAIL with your PayPal Business email.
-           This will open PayPal in a new tab with the specified amount (Peruvian soles S/).
-           If you want USD, change the currency_code and amounts accordingly.
-        */
-        const PAYPAL_BUSINESS = 'ictioscusco@gmail.com'; // <-- REEMPLAZAR con tu correo de PayPal Business (ej: info@midominio.org)
-        const PAYPAL_CURRENCY = 'PEN'; // Cambia a 'USD' si prefieres dólares
+           PAYPAL CONFIG (Sandbox / Live switch)
+           --------------------------- */
+        // MODO PRUEBAS: setea true para usar el correo sandbox (no dinero real)
+        const USE_SANDBOX = true;
+
+        // Correo sandbox (proporcionado por ti); NO pongas contraseñas/secretos aquí
+        const PAYPAL_SANDBOX_EMAIL = 'sb-ao5ns45348107@business.example.com';
+        // Correo live (tu cuenta real): sustituye si deseas usar producción
+        const PAYPAL_LIVE_EMAIL = 'ictioscusco@gmail.com';
+
+        const PAYPAL_BUSINESS = USE_SANDBOX ? PAYPAL_SANDBOX_EMAIL : PAYPAL_LIVE_EMAIL;
+        const PAYPAL_CURRENCY = 'PEN'; // usa 'USD' si prefieres
+        const PAYPAL_ENDPOINT = USE_SANDBOX ? 'https://www.sandbox.paypal.com/cgi-bin/webscr' : 'https://www.paypal.com/cgi-bin/webscr';
+
+        // Mostrar banner sandbox si está activo
+        if (USE_SANDBOX) {
+          document.getElementById('sandbox-note').style.display = 'block';
+        }
+
+        function createHidden(name, value) {
+          const inp = document.createElement('input');
+          inp.type = 'hidden';
+          inp.name = name;
+          inp.value = value;
+          return inp;
+        }
 
         function openPaypalSingle(amount) {
-          // Create a simple form that posts to PayPal
-          if (!PAYPAL_BUSINESS || PAYPAL_BUSINESS.indexOf('REPLACE') !== -1) {
-            alert('Por favor reemplaza la variable PAYPAL_BUSINESS en el código con tu correo de negocio PayPal para habilitar pagos.');
+          if (!PAYPAL_BUSINESS) {
+            alert('No está configurado el correo de PayPal. Revisa el código.');
             return;
           }
           const form = document.createElement('form');
           form.method = 'post';
-          form.action = 'https://www.paypal.com/cgi-bin/webscr';
+          form.action = PAYPAL_ENDPOINT;
           form.target = '_blank';
           form.style.display = 'none';
 
-          // Standard Buy Now (single payment)
+          // Para donaciones es recomendable usar cmd _donations, pero dejamos _xclick para "compra" rápida
           form.appendChild(createHidden('cmd', '_xclick'));
           form.appendChild(createHidden('business', PAYPAL_BUSINESS));
           form.appendChild(createHidden('item_name', 'Donación a IcTiosCusco'));
@@ -439,14 +463,6 @@
           document.body.appendChild(form);
           form.submit();
           form.remove();
-        }
-
-        function createHidden(name, value) {
-          const inp = document.createElement('input');
-          inp.type = 'hidden';
-          inp.name = name;
-          inp.value = value;
-          return inp;
         }
 
         // quick amount buttons
@@ -464,10 +480,7 @@
 
         /* ---------------------------
            MERCH CART (cliente)
-           ---------------------------
-           Items defined by data-* attributes in the markup.
-           Checkout: build a PayPal cart (cmd=_cart & upload=1) and POST.
-        */
+           --------------------------- */
         const cart = {}; // { id: {id,name,price,qty} }
 
         function addToCart(id, name, price, qty) {
@@ -521,7 +534,7 @@
 
         // escape helper
         function escapeHtml(text) {
-          return text.replace(/[&<>"']/g, function (m) { return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#039;"})[m]; });
+          return (''+text).replace(/[&<>"']/g, function (m) { return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#039;"})[m]; });
         }
 
         // add-to-cart handlers
@@ -540,13 +553,13 @@
         // Checkout to PayPal (cart upload)
         document.getElementById('checkout-paypal').addEventListener('click', function () {
           if (!Object.keys(cart).length) { alert('El carrito está vacío. Agrega productos antes de pagar.'); return; }
-          if (!PAYPAL_BUSINESS || PAYPAL_BUSINESS.indexOf('REPLACE') !== -1) {
-            alert('Por favor reemplaza PAYPAL_BUSINESS en el código con tu correo PayPal para habilitar checkout.');
+          if (!PAYPAL_BUSINESS) {
+            alert('Por favor configura PAYPAL_BUSINESS en el código para habilitar checkout.');
             return;
           }
           const form = document.createElement('form');
           form.method = 'post';
-          form.action = 'https://www.paypal.com/cgi-bin/webscr';
+          form.action = PAYPAL_ENDPOINT;
           form.target = '_blank';
           form.style.display = 'none';
 
@@ -564,7 +577,6 @@
             i++;
           });
 
-          // optionally pass return / cancel urls
           form.appendChild(createHidden('return', window.location.href));
           form.appendChild(createHidden('cancel_return', window.location.href));
 
@@ -574,8 +586,7 @@
         });
 
         // Order by email (Formspree) — fallback for customers without PayPal
-        // Uses your Formspree endpoint (same as contact). Replace endpoint if needed.
-        const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xqalnaaj'; // ya lo usas en contact
+        const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xqalnaaj';
         document.getElementById('order-mail').addEventListener('click', function () {
           if (!Object.keys(cart).length) { alert('El carrito está vacío. Agrega productos antes de enviar pedido.'); return; }
           const name = prompt('Nombre para el pedido (obligatorio):');
