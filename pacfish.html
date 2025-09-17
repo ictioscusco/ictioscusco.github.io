@@ -50,33 +50,35 @@
       text-shadow: 1px 1px 2px black;
     }
     .btn {
-      padding: 10px 20px;
+      padding: 12px 24px;
       margin: 10px 5px;
-      font-size: 1rem;
+      font-size: 1.1rem;
       border: none;
       border-radius: 50px;
-      background: #2ecc71;
+      background: #e74c3c;
       color: white;
       cursor: pointer;
       font-weight: bold;
       box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: all 0.2s;
     }
-    .btn:hover { background: #27ae60; }
+    .btn:hover { background: #c0392b; transform: scale(1.05); }
     .btn:active { transform: scale(0.98); }
     .message {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: rgba(0,0,0,0.8);
+      background: rgba(0,0,0,0.85);
       color: white;
       padding: 20px;
       border-radius: 16px;
       text-align: center;
       font-size: 1.2rem;
-      max-width: 80%;
+      max-width: 85%;
       z-index: 100;
       display: none;
+      line-height: 1.5;
     }
     .hide-badge {
       background: #27ae60;
@@ -88,6 +90,7 @@
     @media (max-width: 600px) {
       h1 { font-size: 1.4rem; }
       .hud { flex-direction: column; gap: 8px; }
+      .btn { padding: 10px 20px; font-size: 1rem; }
     }
   </style>
 </head>
@@ -103,7 +106,7 @@
     <div>Puntos: <span id="score">0</span></div>
     <div><span id="hide-indicator" class="hide-badge">¡Escondido!</span></div>
   </div>
-  <button id="startBtn" class="btn">▶️ Iniciar Juego</button>
+  <button id="startBtn" class="btn">🎣 ¡A JUGAR! 🎣</button>
   <button id="pauseBtn" class="btn">⏸️ Pausa</button>
 
   <script>
@@ -184,7 +187,8 @@
       state.score = 0;
       state.gameOver = false;
       startLevel(state.level);
-      gameLoop(0);
+      state.lastTime = performance.now(); // ✅ CORRECCIÓN: Inicializar tiempo
+      requestAnimationFrame(gameLoop);    // ✅ CORRECCIÓN: Iniciar loop correctamente
     }
 
     function togglePause() {
@@ -416,7 +420,7 @@
     function loseLife() {
       state.lives--;
       updateHUD();
-      showMessage("¡AY! Una trucha me atrapó 😢", 1200);
+      showMessage("¡AY! 😢 Una trucha me atrapó... ¡Pero puedo intentarlo de nuevo!", 1500);
       if (state.lives <= 0) {
         gameOver();
       } else {
@@ -432,16 +436,16 @@
     function gameOver() {
       state.running = false;
       state.gameOver = true;
-      showMessage("¡JUEGO TERMINADO! 😔\nLas truchas invasoras ganaron...\nPero puedes intentarlo de nuevo. ¡Los peces nativos te necesitan!", 5000);
+      showMessage("¡JUEGO TERMINADO! 😔<br>Las truchas invasoras ganaron...<br>¡Pero puedes volver a intentarlo!<br>Los peces nativos te necesitan 🐠💙", 6000);
     }
 
     function nextLevel() {
       state.level++;
       if (state.level > CONFIG.maxLevel) {
         state.running = false;
-        showMessage("🎉 ¡FELICIDADES! 🎉\nSalvaste a los peces nativos de todas las truchas.\n¡Comparte este logro y ayuda a proteger los ríos reales!", 6000);
+        showMessage("🎉 ¡FELICIDADES, CAMPEÓN! 🎉<br>¡Salvaste a todos los peces nativos!<br>Gracias por proteger los ríos.<br>¡Comparte este juego y ayuda a más peces!", 8000);
       } else {
-        showMessage(`¡Nivel ${state.level} completado! ⭐\n¡Sigue salvando a los peces nativos!`, 2000);
+        showMessage(`🌟 ¡Nivel ${state.level} completado! 🌟<br>¡Sigue nadando, sigue salvando!`, 2000);
         setTimeout(() => startLevel(state.level), 2100);
       }
     }
@@ -506,4 +510,118 @@
       ctx.fill();
 
       // Ojo
-     
+      ctx.fillStyle = 'white';
+      ctx.beginPath();
+      ctx.arc(-tile * 0.1, -tile * 0.05, tile * 0.08, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = 'black';
+      ctx.beginPath();
+      ctx.arc(-tile * 0.1, -tile * 0.05, tile * 0.04, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Cola
+      ctx.fillStyle = '#FF6B6B';
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(-tile * 0.4, -tile * 0.2);
+      ctx.lineTo(-tile * 0.4, tile * 0.2);
+      ctx.closePath();
+      ctx.fill();
+
+      // Efecto de escondite
+      if (state.hideActive) {
+        ctx.strokeStyle = 'rgba(46,204,113,0.6)';
+        ctx.lineWidth = 3;
+        ctx.setLineDash([5, 5]);
+        ctx.beginPath();
+        ctx.arc(0, 0, tile * 0.5, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      ctx.restore();
+
+      // Dibujar truchas
+      state.truchas.forEach(trucha => {
+        const tx = trucha.x * tile;
+        const ty = trucha.y * tile;
+        ctx.save();
+        ctx.translate(tx + tile/2, ty + tile/2);
+
+        // Cuerpo grande
+        ctx.fillStyle = '#5D6D7E';
+        ctx.beginPath();
+        ctx.ellipse(0, 0, tile * 0.45, tile * 0.3, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Boca grande (¡son las malas!)
+        ctx.fillStyle = '#E74C3C';
+        ctx.beginPath();
+        ctx.arc(tile * 0.2, 0, tile * 0.15, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Ojo frío
+        ctx.fillStyle = 'white';
+        ctx.beginPath();
+        ctx.arc(-tile * 0.15, -tile * 0.1, tile * 0.08, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = 'black';
+        ctx.beginPath();
+        ctx.arc(-tile * 0.15, -tile * 0.1, tile * 0.04, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Cola agresiva
+        ctx.fillStyle = '#5D6D7E';
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(-tile * 0.5, -tile * 0.25);
+        ctx.lineTo(-tile * 0.5, tile * 0.25);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.restore();
+      });
+    }
+
+    function updateHUD() {
+      document.getElementById('level').textContent = state.level;
+      document.getElementById('lives').textContent = state.lives;
+      document.getElementById('score').textContent = state.score;
+    }
+
+    function showMessage(text, duration) {
+      const msg = document.getElementById('message');
+      msg.innerHTML = text.replace(/\n/g, '<br>');
+      msg.style.display = 'block';
+      setTimeout(() => { msg.style.display = 'none'; }, duration);
+    }
+
+    function showStartMessage() {
+      showMessage(`
+        🐠 ¡BIENVENIDO, GUARDIÁN DE LOS RÍOS! 🐠<br><br>
+        Tú eres un pececito nativo. ¡Las truchas grandes no pertenecen aquí y te persiguen!<br><br>
+        ➡️ Usa <b>las flechas</b> o <b>WASD</b> para moverte.<br>
+        🌿 Pasa por las <b>plantas verdes</b> para esconderte.<br>
+        🐌 Recoge los <b>caracoles dorados</b> para nadar más rápido.<br>
+        🍽️ Come todas las <b>semillas amarillas</b> para completar el nivel.<br><br>
+        ¡Tienes 3 vidas! ¿Listo para salvar a tus amigos peces?<br>
+        <b>¡Presiona "¡A JUGAR!" y comienza la aventura!</b>
+      `, 10000);
+    }
+
+    function gameLoop(timestamp) {
+      if (!state.running && !state.gameOver) return;
+
+      const delta = timestamp - state.lastTime;
+      state.lastTime = timestamp;
+
+      update(delta);
+      draw();
+
+      if (state.running) {
+        requestAnimationFrame(gameLoop);
+      }
+    }
+  </script>
+</body>
+</html>
