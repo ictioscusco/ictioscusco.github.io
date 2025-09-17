@@ -27,6 +27,10 @@
     <!-- model-viewer (para mostrar modelos 3D) -->
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 
+    <!-- librerías para generar imagen/PDF en cliente -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNa5mYqv0zQpV+gYvZqzQ3rF6e7i1QqG0r6H1x8fZ4k2q6s2q3mZ6JxZk1n2w7VYp+o4k1yq3v1K1Z8g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-qc5xDq2Z9kYbq8e0c1k9Yw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <style>
       /* Pequeñas adaptaciones locales */
       .hero-wrap { background-image: url('images/laguna_ictioscusco.jpg'); background-size:cover; }
@@ -36,6 +40,10 @@
       .resource-sub { font-size: 0.9rem; color: #6c757d; margin-bottom: .5rem }
       .resource-actions { display:flex; gap:.5rem; }
       model-viewer { width:100%; height:100%; }
+
+      /* Área de resumen que capturaremos para imagen/PDF */
+      #quizSummaryCard { background:#fff; padding:16px; border-radius:8px; box-shadow:0 6px 18px rgba(0,0,0,0.08); text-align:left; max-width:520px; margin:0 auto; }
+
       @media (max-width:576px) { .resource-card .card-media { height: 160px; } }
     </style>
   </head>
@@ -54,7 +62,7 @@
       <div class="collapse navbar-collapse" id="ftco-nav">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item"><a href="index.html" class="nav-link">Inicio</a></li>
-          <li class="nav-item"><a href="about.html" class="nav-link">Nosotros</a></li>
+          <li class="nav-item"><a href="about.html" class="nav-link">Quiénes somos</a></li>
           <li class="nav-item"><a href="causes.html" class="nav-link">Proyectos</a></li>
           <li class="nav-item"><a href="donate.html" class="nav-link">Donación</a></li>
           <li class="nav-item"><a href="blog.html" class="nav-link">Noticias</a></li>
@@ -179,7 +187,7 @@
     </div>
   </div>
 
-  <!-- Modal quiz -->
+  <!-- Modal quiz (mejorado: al finalizar permite generar imagen/PDF y abrir WhatsApp con texto) -->
   <div class="modal fade" id="quizModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-md modal-dialog-centered">
       <div class="modal-content">
@@ -191,6 +199,21 @@
           <div id="quizQuestion" class="mt-3 mb-2 font-weight-bold"></div>
           <div id="quizOptions" class="d-flex flex-column"></div>
           <div id="quizResult" class="mt-3 font-weight-bold"></div>
+
+          <!-- Resumen que capturamos para crear imagen/PDF -->
+          <div id="quizSummary" style="display:none; margin-top:16px;">
+            <div id="quizSummaryCard">
+              <h4 id="summaryTitle">Resultado del Quiz</h4>
+              <p id="summaryText">Has obtenido X de Y aciertos.</p>
+              <p id="summaryDetails"></p>
+            </div>
+            <div style="margin-top:12px; display:flex; gap:8px; justify-content:center;">
+              <button id="download-image" class="btn btn-outline-secondary btn-sm">Generar imagen</button>
+              <button id="download-pdf" class="btn btn-outline-secondary btn-sm">Generar PDF</button>
+              <button id="share-whatsapp" class="btn btn-success btn-sm">Abrir WhatsApp</button>
+            </div>
+          </div>
+
         </div>
         <div class="modal-footer">
           <button id="quizNext" class="btn btn-primary">Siguiente</button>
@@ -312,20 +335,90 @@
         }
       });
 
-      // Quiz
-      $('#open-quiz').on('click', function(){ $('#quizModal').modal('show'); });
-
+      // QUIZ: preguntas y flujo
       const QUIZ = [
-        {q:'¿Cuál de estas especies es propia de lagunas altoandinas?', choices:['Orestias','Tilapia','Trucha Arcoíris'], answer:0 },
-        {q:'¿Dónde viven principalmente los Orestias?', choices:['Ríos estuarinos','Lagunas altoandinas','Océano'], answer:1 }
+        {q:'¿Cuál de estas especies es propia de lagunas altoandinas?', choices:['Orestias','Tilapia','Trucha Arcoíris'], answer:0, image:'images/quiz_1.jpg' },
+        {q:'¿Dónde viven principalmente los Orestias?', choices:['Ríos estuarinos','Lagunas altoandinas','Océano'], answer:1, image:'images/quiz_2.jpg' }
       ];
       let qi = 0;
-      function showQ(){ const Q = QUIZ[qi]; $('#quizQuestion').text(Q.q); $('#quizOptions').html(''); Q.choices.forEach((c,i)=>{ const b = $('<button>').addClass('btn btn-outline-primary btn-block mb-2').text(c).click(()=>{ $('#quizResult').text(i===Q.answer? '¡Correcto!':'Incorrecto — intenta el siguiente.'); }); $('#quizOptions').append(b); }); }
-      $('#quizModal').on('shown.bs.modal', function(){ qi=0; $('#quizResult').text(''); showQ(); });
-      $('#quizNext').on('click', function(){ qi++; if (qi>=QUIZ.length) { $('#quizModal').modal('hide'); } else { $('#quizResult').text(''); showQ(); } });
+      let score = 0;
+
+      function showQ(){
+        const Q = QUIZ[qi];
+        $('#quizMedia').html('');
+        const img = $('<div>').css({ 'background-image':'url('+Q.image+')', 'background-size':'cover', 'background-position':'center', width:'100%', height:'180px' });
+        $('#quizMedia').append(img);
+        $('#quizQuestion').text(Q.q);
+        $('#quizOptions').html('');
+        Q.choices.forEach((c,i)=>{ 
+          const b = $('<button>').addClass('btn btn-outline-primary btn-block mb-2').text(c).click(()=>{ 
+            if (i===Q.answer){ $('#quizResult').text('¡Correcto!'); score++; }
+            else { $('#quizResult').text('Incorrecto — intenta el siguiente.'); }
+          });
+          $('#quizOptions').append(b);
+        });
+      }
+
+      $('#open-quiz').on('click', function(){ qi=0; score=0; $('#quizResult').text(''); $('#quizSummary').hide(); $('#quizModal').modal('show'); });
+
+      $('#quizModal').on('shown.bs.modal', function(){ showQ(); });
+
+      $('#quizNext').on('click', function(){
+        qi++;
+        if (qi >= QUIZ.length) {
+          // fin
+          $('#quizQuestion').text('¡Has terminado el quiz!');
+          $('#quizOptions').html('');
+          $('#quizResult').text('Aciertos: ' + score + ' de ' + QUIZ.length);
+          $('#quizSummary').show();
+          $('#summaryTitle').text('Resultado del Quiz');
+          $('#summaryText').text('Has obtenido ' + score + ' de ' + QUIZ.length + ' aciertos.');
+          $('#summaryDetails').html('<strong>Fecha:</strong> ' + new Date().toLocaleString() + '<br><strong>Puntuación:</strong> ' + score + '/' + QUIZ.length);
+        } else {
+          $('#quizResult').text(''); showQ();
+        }
+      });
+
+      // Generar imagen con html2canvas
+      $('#download-image').on('click', function(){
+        const node = document.getElementById('quizSummaryCard');
+        html2canvas(node, { scale: 2 }).then(canvas => {
+          canvas.toBlob(function(blob){
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'resultado_quiz_' + Date.now() + '.png';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+            // mostrar imagen en nueva pestaña para facilitar compartir
+            window.open(URL.createObjectURL(blob));
+          }, 'image/png');
+        });
+      });
+
+      // Generar PDF con jsPDF
+      $('#download-pdf').on('click', async function(){
+        const { jsPDF } = window.jspdf;
+        const node = document.getElementById('quizSummaryCard');
+        const canvas = await html2canvas(node, { scale: 2 });
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: [canvas.width, canvas.height] });
+        pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+        pdf.save('resultado_quiz_' + Date.now() + '.pdf');
+      });
+
+      // Abrir WhatsApp Web con texto (el usuario deberá adjuntar la imagen/PDF descargado manualmente)
+      $('#share-whatsapp').on('click', function(){
+        const text = 'He completado el quiz de IcTiosCusco. Aciertos: ' + score + ' de ' + QUIZ.length + '.
+Descargué el resumen y lo compartiré aquí.';
+        const url = 'https://wa.me/?text=' + encodeURIComponent(text);
+        window.open(url, '_blank');
+      });
+
     });
   </script>
 
   </body>
 </html>
-
