@@ -27,10 +27,6 @@
     <!-- model-viewer (para mostrar modelos 3D) -->
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 
-    <!-- librerías para generar imagen/PDF en cliente -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNa5mYqv0zQpV+gYvZqzQ3rF6e7i1QqG0r6H1x8fZ4k2q6s2q3mZ6JxZk1n2w7VYp+o4k1yq3v1K1Z8g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-qc5xDq2Z9kYbq8e0c1k9Yw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
     <style>
       /* Pequeñas adaptaciones locales */
       .hero-wrap { background-image: url('images/laguna_ictioscusco.jpg'); background-size:cover; }
@@ -41,8 +37,8 @@
       .resource-actions { display:flex; gap:.5rem; }
       model-viewer { width:100%; height:100%; }
 
-      /* Área de resumen que capturaremos para imagen/PDF */
-      #quizSummaryCard { background:#fff; padding:16px; border-radius:8px; box-shadow:0 6px 18px rgba(0,0,0,0.08); text-align:left; max-width:520px; margin:0 auto; }
+      /* pequeños botones de file input */
+      .file-label { cursor: pointer; }
 
       @media (max-width:576px) { .resource-card .card-media { height: 160px; } }
     </style>
@@ -62,7 +58,7 @@
       <div class="collapse navbar-collapse" id="ftco-nav">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item"><a href="index.html" class="nav-link">Inicio</a></li>
-          <li class="nav-item"><a href="about.html" class="nav-link">Quiénes somos</a></li>
+          <li class="nav-item"><a href="about.html" class="nav-link">Nosotros</a></li>
           <li class="nav-item"><a href="causes.html" class="nav-link">Proyectos</a></li>
           <li class="nav-item"><a href="donate.html" class="nav-link">Donación</a></li>
           <li class="nav-item"><a href="blog.html" class="nav-link">Noticias</a></li>
@@ -95,7 +91,7 @@
       <div class="row justify-content-center mb-4">
         <div class="col-md-8 text-center">
           <h2 class="mb-3">Fichas y modelos 3D</h2>
-          <p>Haz click en "Ver ficha" para abrir la información detallada. Los modelos 3D se pueden rotar y hacer zoom.</p>
+          <p>Haz click en "Ver ficha" para abrir la información detallada. Puedes subir tus propios modelos 3D (.glb/.gltf) desde cada tarjeta — se mostrarán aquí con rotación y controles.</p>
         </div>
       </div>
 
@@ -105,8 +101,8 @@
         <div class="col-md-4 d-flex mb-4 ftco-animate">
           <div class="resource-card w-100">
             <div class="card-media">
-              <!-- Si tienes modelo, reemplaza el src por models/orestias1.glb -->
-              <model-viewer src="models/orestias1.glb" alt="Orestias sp. Huaypo" camera-controls auto-rotate shadow-intensity="0"></model-viewer>
+              <!-- model-viewer con id para reemplazar src vía file input -->
+              <model-viewer id="mv-orestias1" src="models/orestias1.glb" alt="Orestias sp. Huaypo" camera-controls auto-rotate ar shadow-intensity="0"></model-viewer>
             </div>
             <div class="p-3">
               <div class="resource-title">Orestias sp. Huaypo</div>
@@ -115,6 +111,11 @@
               <div class="resource-actions mt-2">
                 <button class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#fichaModal" data-id="orestias-1">Ver ficha</button>
                 <a class="btn btn-outline-secondary btn-sm" href="models/orestias1.glb" download>Descargar 3D</a>
+                <label class="btn btn-outline-info btn-sm file-label" title="Cargar un .glb local">
+                  Cargar 3D
+                  <input type="file" accept=".glb,.gltf" data-target="#mv-orestias1" style="display:none">
+                </label>
+                <button class="btn btn-outline-light btn-sm" data-reset="#mv-orestias1">Restaurar</button>
               </div>
             </div>
           </div>
@@ -124,7 +125,7 @@
         <div class="col-md-4 d-flex mb-4 ftco-animate">
           <div class="resource-card w-100">
             <div class="card-media">
-              <model-viewer src="models/orestias2.glb" alt="Orestias sp. Piuray" camera-controls auto-rotate shadow-intensity="0"></model-viewer>
+              <model-viewer id="mv-orestias2" src="models/orestias2.glb" alt="Orestias sp. Piuray" camera-controls auto-rotate ar shadow-intensity="0"></model-viewer>
             </div>
             <div class="p-3">
               <div class="resource-title">Orestias sp. Piuray</div>
@@ -133,21 +134,26 @@
               <div class="resource-actions mt-2">
                 <button class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#fichaModal" data-id="orestias-2">Ver ficha</button>
                 <a class="btn btn-outline-secondary btn-sm" href="models/orestias2.glb" download>Descargar 3D</a>
+                <label class="btn btn-outline-info btn-sm file-label" title="Cargar un .glb local">
+                  Cargar 3D
+                  <input type="file" accept=".glb,.gltf" data-target="#mv-orestias2" style="display:none">
+                </label>
+                <button class="btn btn-outline-light btn-sm" data-reset="#mv-orestias2">Restaurar</button>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Tarjeta 3: juego -->
+        <!-- Tarjeta 3: JUGAR (abre pacfish.html) -->
         <div class="col-md-4 d-flex mb-4 ftco-animate">
           <div class="resource-card w-100">
             <div class="card-media" style="background-image: url('images/rec_juego.jpg'); background-size:cover; background-position:center;"></div>
             <div class="p-3">
-              <div class="resource-title">Juego educativo</div>
-              <div class="resource-sub">Quiz interactivo</div>
-              <div class="resource-sub">Identifica especies</div>
+              <div class="resource-title">Juego PAC-Fish</div>
+              <div class="resource-sub">Versión completa (se abre en nueva página)</div>
+              <div class="resource-sub">Elige Orestia, Sardina o Bagre</div>
               <div class="resource-actions mt-2">
-                <button class="btn btn-success btn-sm" id="open-quiz">Jugar</button>
+                <a class="btn btn-success btn-sm" href="pacfish.html">Jugar</a>
               </div>
             </div>
           </div>
@@ -182,42 +188,6 @@
               <p><a id="fichaModalPdf" href="#" class="btn btn-outline-primary btn-sm" target="_blank">Descargar ficha (PDF)</a></p>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal quiz (mejorado: al finalizar permite generar imagen/PDF y abrir WhatsApp con texto) -->
-  <div class="modal fade" id="quizModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-md modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header"><h5 class="modal-title">Juego: ¿Qué especie es?</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
-        </div>
-        <div class="modal-body text-center">
-          <div id="quizMedia" style="height:220px; display:flex; align-items:center; justify-content:center;"></div>
-          <div id="quizQuestion" class="mt-3 mb-2 font-weight-bold"></div>
-          <div id="quizOptions" class="d-flex flex-column"></div>
-          <div id="quizResult" class="mt-3 font-weight-bold"></div>
-
-          <!-- Resumen que capturamos para crear imagen/PDF -->
-          <div id="quizSummary" style="display:none; margin-top:16px;">
-            <div id="quizSummaryCard">
-              <h4 id="summaryTitle">Resultado del Quiz</h4>
-              <p id="summaryText">Has obtenido X de Y aciertos.</p>
-              <p id="summaryDetails"></p>
-            </div>
-            <div style="margin-top:12px; display:flex; gap:8px; justify-content:center;">
-              <button id="download-image" class="btn btn-outline-secondary btn-sm">Generar imagen</button>
-              <button id="download-pdf" class="btn btn-outline-secondary btn-sm">Generar PDF</button>
-              <button id="share-whatsapp" class="btn btn-success btn-sm">Abrir WhatsApp</button>
-            </div>
-          </div>
-
-        </div>
-        <div class="modal-footer">
-          <button id="quizNext" class="btn btn-primary">Siguiente</button>
-          <button class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
         </div>
       </div>
     </div>
@@ -303,7 +273,7 @@
   <script src="js/main.js"></script>
 
   <script>
-    // Datos sencillos para el modal y el quiz (puedes ampliarlos desde un archivo JS aparte)
+    // Datos sencillos para el modal (sin quiz)
     const RESOURCE_DATA = {
       'orestias-1': {
         title: 'Orestias sp. Huaypo', scientific: 'Orestias cf. agassii', habitat: 'Laguna Huaypo', description: 'Ficha breve con características morfométricas, distribución y amenazas.', pdf: 'docs/ficha_orestias_huaypo.pdf', media: 'models/orestias1.glb'
@@ -327,7 +297,7 @@
         if (data.pdf) { $('#fichaModalPdf').attr('href', data.pdf).show(); } else { $('#fichaModalPdf').hide(); }
         const mediaDiv = $('#fichaModalMedia');
         mediaDiv.html('');
-        if (data.media && data.media.endsWith('.glb')) {
+        if (data.media && (data.media.endsWith('.glb') || data.media.endsWith('.gltf'))) {
           const mv = $('<model-viewer>', { src: data.media, alt: data.title, 'camera-controls': '', 'auto-rotate': '', style: 'width:100%; height:320px;' });
           mediaDiv.append(mv);
         } else if (data.media) {
@@ -335,86 +305,36 @@
         }
       });
 
-      // QUIZ: preguntas y flujo
-      const QUIZ = [
-        {q:'¿Cuál de estas especies es propia de lagunas altoandinas?', choices:['Orestias','Tilapia','Trucha Arcoíris'], answer:0, image:'images/quiz_1.jpg' },
-        {q:'¿Dónde viven principalmente los Orestias?', choices:['Ríos estuarinos','Lagunas altoandinas','Océano'], answer:1, image:'images/quiz_2.jpg' }
-      ];
-      let qi = 0;
-      let score = 0;
-
-      function showQ(){
-        const Q = QUIZ[qi];
-        $('#quizMedia').html('');
-        const img = $('<div>').css({ 'background-image':'url('+Q.image+')', 'background-size':'cover', 'background-position':'center', width:'100%', height:'180px' });
-        $('#quizMedia').append(img);
-        $('#quizQuestion').text(Q.q);
-        $('#quizOptions').html('');
-        Q.choices.forEach((c,i)=>{ 
-          const b = $('<button>').addClass('btn btn-outline-primary btn-block mb-2').text(c).click(()=>{ 
-            if (i===Q.answer){ $('#quizResult').text('¡Correcto!'); score++; }
-            else { $('#quizResult').text('Incorrecto — intenta el siguiente.'); }
-          });
-          $('#quizOptions').append(b);
-        });
-      }
-
-      $('#open-quiz').on('click', function(){ qi=0; score=0; $('#quizResult').text(''); $('#quizSummary').hide(); $('#quizModal').modal('show'); });
-
-      $('#quizModal').on('shown.bs.modal', function(){ showQ(); });
-
-      $('#quizNext').on('click', function(){
-        qi++;
-        if (qi >= QUIZ.length) {
-          // fin
-          $('#quizQuestion').text('¡Has terminado el quiz!');
-          $('#quizOptions').html('');
-          $('#quizResult').text('Aciertos: ' + score + ' de ' + QUIZ.length);
-          $('#quizSummary').show();
-          $('#summaryTitle').text('Resultado del Quiz');
-          $('#summaryText').text('Has obtenido ' + score + ' de ' + QUIZ.length + ' aciertos.');
-          $('#summaryDetails').html('<strong>Fecha:</strong> ' + new Date().toLocaleString() + '<br><strong>Puntuación:</strong> ' + score + '/' + QUIZ.length);
-        } else {
-          $('#quizResult').text(''); showQ();
-        }
+      // File inputs: permitir al usuario cargar .glb locales y verlos en el model-viewer
+      $('input[type="file"]').on('change', function(e){
+        const file = this.files[0];
+        if (!file) return;
+        const target = $(this).data('target');
+        const mv = document.querySelector(target);
+        if (!mv) return;
+        // Revocar URL anterior si existiera
+        if (mv.dataset.objectUrl) { URL.revokeObjectURL(mv.dataset.objectUrl); }
+        const objUrl = URL.createObjectURL(file);
+        mv.setAttribute('src', objUrl);
+        mv.dataset.objectUrl = objUrl;
       });
 
-      // Generar imagen con html2canvas
-      $('#download-image').on('click', function(){
-        const node = document.getElementById('quizSummaryCard');
-        html2canvas(node, { scale: 2 }).then(canvas => {
-          canvas.toBlob(function(blob){
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'resultado_quiz_' + Date.now() + '.png';
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            URL.revokeObjectURL(url);
-            // mostrar imagen en nueva pestaña para facilitar compartir
-            window.open(URL.createObjectURL(blob));
-          }, 'image/png');
-        });
+      // Restaurar a src original
+      $('[data-reset]').on('click', function(){
+        const selector = $(this).data('reset');
+        const mv = document.querySelector(selector);
+        if (!mv) return;
+        // si hay objectURL guardada, revocarla
+        if (mv.dataset.objectUrl) { URL.revokeObjectURL(mv.dataset.objectUrl); delete mv.dataset.objectUrl; }
+        // restaurar al atributo data-original-src si existe, sino recargar sin src
+        const orig = mv.getAttribute('data-original-src') || mv.getAttribute('src');
+        // force reload
+        mv.setAttribute('src', orig);
       });
 
-      // Generar PDF con jsPDF
-      $('#download-pdf').on('click', async function(){
-        const { jsPDF } = window.jspdf;
-        const node = document.getElementById('quizSummaryCard');
-        const canvas = await html2canvas(node, { scale: 2 });
-        const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: [canvas.width, canvas.height] });
-        pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
-        pdf.save('resultado_quiz_' + Date.now() + '.pdf');
-      });
-
-      // Abrir WhatsApp Web con texto (el usuario deberá adjuntar la imagen/PDF descargado manualmente)
-      $('#share-whatsapp').on('click', function(){
-        const text = 'He completado el quiz de IcTiosCusco. Aciertos: ' + score + ' de ' + QUIZ.length + '.
-Descargué el resumen y lo compartiré aquí.';
-        const url = 'https://wa.me/?text=' + encodeURIComponent(text);
-        window.open(url, '_blank');
+      // Guardar src original en data-original-src para permitir restaurar
+      document.querySelectorAll('model-viewer').forEach(mv => {
+        if (!mv.getAttribute('data-original-src')) mv.setAttribute('data-original-src', mv.getAttribute('src') || '');
       });
 
     });
