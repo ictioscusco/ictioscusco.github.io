@@ -1,627 +1,535 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PAC-FISH — Salva a los Peces Nativos</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(135deg, #89f7fe, #66a6ff);
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      color: #2c3e50;
-    }
-    h1 {
-      font-size: 1.8rem;
-      text-align: center;
-      margin: 10px 0;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-    }
-    #game-container {
-      position: relative;
-      margin: 10px auto;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-      border-radius: 16px;
-      overflow: hidden;
-      background: #001f3f;
-    }
-    canvas {
-      display: block;
-      background: #001f3f;
-      image-rendering: pixelated;
-    }
-    .hud {
-      display: flex;
-      justify-content: space-around;
-      width: 100%;
-      max-width: 600px;
-      padding: 12px;
-      background: rgba(0,31,63,0.8);
-      border-radius: 12px;
-      margin-top: 10px;
-      color: white;
-      font-weight: bold;
-      text-shadow: 1px 1px 2px black;
-    }
-    .btn {
-      padding: 12px 24px;
-      margin: 10px 5px;
-      font-size: 1.1rem;
-      border: none;
-      border-radius: 50px;
-      background: #e74c3c;
-      color: white;
-      cursor: pointer;
-      font-weight: bold;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      transition: all 0.2s;
-    }
-    .btn:hover { background: #c0392b; transform: scale(1.05); }
-    .btn:active { transform: scale(0.98); }
-    .message {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(0,0,0,0.85);
-      color: white;
-      padding: 20px;
-      border-radius: 16px;
-      text-align: center;
-      font-size: 1.2rem;
-      max-width: 85%;
-      z-index: 100;
-      display: none;
-      line-height: 1.5;
-    }
-    .hide-badge {
-      background: #27ae60;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 0.9rem;
-      display: none;
-    }
-    @media (max-width: 600px) {
-      h1 { font-size: 1.4rem; }
-      .hud { flex-direction: column; gap: 8px; }
-      .btn { padding: 10px 20px; font-size: 1rem; }
-    }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>PAC-Swim — Slither-style peces</title>
+<style>
+  :root { --ui-bg: rgba(255,255,255,0.95); --accent: #2f8f66; --muted:#666; }
+  html,body{ height:100%; margin:0; }
+  body{ font-family: Inter, Arial, Helvetica, sans-serif; background: linear-gradient(#e8fbf3,#dff6f0); overflow:hidden; display:flex; flex-direction:column; }
+  #topbar { background:var(--ui-bg); padding:10px 14px; display:flex; gap:12px; align-items:center; box-shadow:0 6px 18px rgba(0,0,0,0.06); z-index:10; }
+  #title { font-weight:700; color:#083; margin-right:6px; }
+  #controls { margin-left:auto; display:flex; gap:8px; align-items:center; }
+  .btn { padding:8px 12px; border-radius:8px; border:1px solid rgba(0,0,0,0.06); background:white; cursor:pointer; }
+  .btn.primary { background:var(--accent); color:white; border:none; }
+  #info { font-size:0.95rem; color:var(--muted); margin-left:8px; }
+  #gamewrap { position:relative; flex:1 1 auto; display:flex; }
+  canvas { display:block; background: linear-gradient(#022,#013); width:100%; height:100%; }
+  #overlay { position:absolute; left:12px; top:14px; color:white; text-shadow:0 2px 6px rgba(0,0,0,0.6); z-index:5; }
+  #hud { position:absolute; right:12px; top:14px; color:white; z-index:5; text-align:right; }
+  #chooser { display:flex; gap:8px; align-items:center; }
+  select { padding:6px 8px; border-radius:8px; }
+  #message { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:20; pointer-events:none; }
+  .panel { background: rgba(0,0,0,0.5); color:white; padding:18px 22px; border-radius:12px; text-align:center; pointer-events:all; }
+  small{ color:#ccc; display:block; margin-top:8px; font-size:0.9rem; }
+  @media (max-width:640px){ #topbar { padding:8px; } .btn { padding:6px 8px; } }
+</style>
 </head>
 <body>
-  <h1>🐠 PAC-FISH: ¡Salva a los Peces Nativos!</h1>
-  <div id="game-container">
-    <canvas id="gameCanvas"></canvas>
-    <div id="message" class="message"></div>
+  <div id="topbar">
+    <div id="title">PAC-SWIM</div>
+
+    <div id="chooser">
+      <label for="fishType">Elegir pez:</label>
+      <select id="fishType">
+        <option value="orestia">Orestia (equilibrado)</option>
+        <option value="sardina">Sardina (rápida, pequeño inicio)</option>
+        <option value="bagre">Bagre (lento, gran inicio)</option>
+      </select>
+    </div>
+
+    <div id="info">Objetivo: come pellets y peces más pequeños; evita truchas más grandes</div>
+
+    <div id="controls">
+      <button id="btnStart" class="btn primary">Iniciar</button>
+      <button id="btnPause" class="btn">Pausa</button>
+      <button id="btnReset" class="btn">Reiniciar</button>
+    </div>
   </div>
-  <div class="hud">
-    <div>Nivel: <span id="level">1</span></div>
-    <div>Vidas: <span id="lives">3</span></div>
-    <div>Puntos: <span id="score">0</span></div>
-    <div><span id="hide-indicator" class="hide-badge">¡Escondido!</span></div>
+
+  <div id="gamewrap">
+    <canvas id="c"></canvas>
+
+    <div id="overlay">
+      <div id="statusText">Mov: ratón / tacto. Comer pellets para crecer.</div>
+    </div>
+
+    <div id="hud">
+      <div>Score: <span id="score">0</span></div>
+      <div>Tamaño: <span id="size">0</span></div>
+      <div>Truchas: <span id="ghostsCount">0</span></div>
+    </div>
+
+    <div id="message" style="display:none">
+      <div class="panel">
+        <h2 id="msgTitle">Game Over</h2>
+        <div id="msgBody"></div>
+        <div style="margin-top:12px;">
+          <button id="respawn" class="btn primary">Volver a jugar</button>
+        </div>
+      </div>
+    </div>
   </div>
-  <button id="startBtn" class="btn">🎣 ¡A JUGAR! 🎣</button>
-  <button id="pauseBtn" class="btn">⏸️ Pausa</button>
 
-  <script>
-    // Configuración del juego
-    const CONFIG = {
-      cols: 19,
-      rows: 19,
-      tileSize: 28,
-      initialLives: 3,
-      maxLevel: 5,
-      truchasBase: 2,
-      nativeSpeed: 3.5,
-      truchaSpeedBase: 2.8
-    };
+<script>
+/*
+  PAC-SWIM: slither-style en 2D con peces y truchas
+  - Un sólo archivo HTML + JS
+  - Ajusta las constantes en SETTINGS para cambiar la experiencia
+*/
 
-    // Estado del juego
-    const state = {
-      canvas: null,
-      ctx: null,
-      map: [],
-      player: null,
-      truchas: [],
-      level: 1,
-      lives: CONFIG.initialLives,
-      score: 0,
-      pellets: 0,
-      running: false,
-      paused: false,
-      lastTime: 0,
-      hideActive: false,
-      hideTimer: 0,
-      speedBoost: false,
-      speedBoostTimer: 0,
-      gameOver: false
-    };
+// ---------- SETTINGS (ajusta a gusto) ----------
+const SETTINGS = {
+  worldW: 2400, // tamaño del mundo en píxeles (mapa cuadrado)
+  worldH: 1600,
+  pelletCount: 900,          // pellets visibles iniciales
+  pelletMass: 1.0,          // masa individual de un pellet
+  nativeCount: 10,          // peces nativos que deambulan
+  troutCount: 8,            // truchas/enemigos
+  safeSpawnRadius: 260,     // spawn seguro alrededor del player (pix)
+  playerStartMass: 18,      // masa inicial (área proporcional)
+  sardinaStartMass: 12,
+  bagreStartMass: 28,
+  massToRadius: (m)=> Math.sqrt(m) * 3, // función masa -> radio (tuneable)
+  eatFactor: 0.65,          // cuanto de la masa del comido se suma al comedor
+  troutAggroRange: 240,     // distancia a la que trout se vuelve más agresiva
+  troutSpeedBase: 120,      // px/s base trucha (se divide por tamaño)
+  nativeSpeedBase: 160,
+  playerSpeedBase: 220,
+  friction: 0.98,
+  pelletRespawn: true
+};
 
-    // Inicializar
-    window.onload = function() {
-      state.canvas = document.getElementById('gameCanvas');
-      state.ctx = state.canvas.getContext('2d');
-      resizeCanvas();
-      window.addEventListener('resize', resizeCanvas);
-      setupControls();
-      showStartMessage();
-    };
+// ---------- Utilities ----------
+function rand(min,max){ return min + Math.random()*(max-min); }
+function dist(a,b){ const dx=a.x-b.x, dy=a.y-b.y; return Math.hypot(dx,dy); }
+function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
 
-    function resizeCanvas() {
-      const margin = 80;
-      const availWidth = window.innerWidth - margin;
-      const availHeight = window.innerHeight - margin - 200;
-      const maxSize = Math.min(availWidth, availHeight);
-      CONFIG.tileSize = Math.floor(maxSize / Math.max(CONFIG.cols, CONFIG.rows));
-      if (CONFIG.tileSize < 14) CONFIG.tileSize = 14;
-      state.canvas.width = CONFIG.cols * CONFIG.tileSize;
-      state.canvas.height = CONFIG.rows * CONFIG.tileSize;
-    }
+// ---------- World & Canvas ----------
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+let W = window.innerWidth, H = window.innerHeight - document.getElementById('topbar').offsetHeight;
+canvas.width = W; canvas.height = H;
+window.addEventListener('resize', ()=>{ W = window.innerWidth; H = window.innerHeight - document.getElementById('topbar').offsetHeight; canvas.width = W; canvas.height = H; });
 
-    function setupControls() {
-      document.getElementById('startBtn').addEventListener('click', startGame);
-      document.getElementById('pauseBtn').addEventListener('click', togglePause);
+const world = { w: SETTINGS.worldW, h: SETTINGS.worldH };
 
-      window.addEventListener('keydown', (e) => {
-        if (!state.player) return;
-        const key = e.key.toLowerCase();
-        if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright', 'w', 'a', 's', 'd'].includes(key)) {
-          e.preventDefault();
-          if (key === 'arrowup' || key === 'w') state.player.nextDir = { x: 0, y: -1 };
-          if (key === 'arrowdown' || key === 's') state.player.nextDir = { x: 0, y: 1 };
-          if (key === 'arrowleft' || key === 'a') state.player.nextDir = { x: -1, y: 0 };
-          if (key === 'arrowright' || key === 'd') state.player.nextDir = { x: 1, y: 0 };
-        }
-      });
-    }
+// Camera (center on player)
+const camera = { x: world.w/2, y: world.h/2, zoom: 1 };
 
-    function startGame() {
-      state.level = 1;
-      state.lives = CONFIG.initialLives;
-      state.score = 0;
-      state.gameOver = false;
-      startLevel(state.level);
-      state.lastTime = performance.now(); // ✅ CORRECCIÓN: Inicializar tiempo
-      requestAnimationFrame(gameLoop);    // ✅ CORRECCIÓN: Iniciar loop correctamente
-    }
+// ---------- Game state ----------
+let player = null;
+let pellets = [];
+let natives = [];
+let trouts = [];
+let running = false;
+let paused = false;
+let lastTime = performance.now();
+let mouse = { x:0, y:0, worldX:0, worldY:0, down:false };
+let score = 0;
 
-    function togglePause() {
-      state.paused = !state.paused;
-      document.getElementById('pauseBtn').textContent = state.paused ? '▶️ Reanudar' : '⏸️ Pausa';
-    }
+// ---------- Input (mouse/touch + keyboard) ----------
+canvas.addEventListener('mousemove', (e)=>{
+  const rect = canvas.getBoundingClientRect();
+  mouse.x = e.clientX - rect.left;
+  mouse.y = e.clientY - rect.top;
+  mouse.worldX = camera.x - W/2/camera.zoom + mouse.x/camera.zoom;
+  mouse.worldY = camera.y - H/2/camera.zoom + mouse.y/camera.zoom;
+});
+canvas.addEventListener('mousedown', ()=> mouse.down=true);
+canvas.addEventListener('mouseup', ()=> mouse.down=false);
+canvas.addEventListener('touchstart', (e)=> { mouse.down=true; e.preventDefault(); mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; mouse.worldX = camera.x - W/2/camera.zoom + mouse.x/camera.zoom; mouse.worldY = camera.y - H/2/camera.zoom + mouse.y/camera.zoom; }, {passive:false});
+canvas.addEventListener('touchmove', (e)=> { e.preventDefault(); mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; mouse.worldX = camera.x - W/2/camera.zoom + mouse.x/camera.zoom; mouse.worldY = camera.y - H/2/camera.zoom + mouse.y/camera.zoom; }, {passive:false});
+canvas.addEventListener('touchend', ()=> mouse.down=false);
 
-    function startLevel(level) {
-      generateMap();
-      state.player = {
-        x: Math.floor(CONFIG.cols / 2) + 0.5,
-        y: Math.floor(CONFIG.rows / 2) + 0.5,
-        dir: { x: 0, y: 0 },
-        nextDir: { x: 0, y: 0 }
-      };
+// evitar scroll con flechas/WASD
+window.addEventListener('keydown', (e)=>{
+  const keys = ['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' ','w','a','s','d','W','A','S','D'];
+  if (keys.includes(e.key)) e.preventDefault();
+});
 
-      // Generar truchas
-      state.truchas = [];
-      const truchaCount = Math.min(6, CONFIG.truchasBase + Math.floor(level / 2));
-      for (let i = 0; i < truchaCount; i++) {
-        let x, y;
-        do {
-          x = Math.floor(Math.random() * (CONFIG.cols - 4)) + 2 + 0.5;
-          y = Math.floor(Math.random() * (CONFIG.rows - 4)) + 2 + 0.5;
-        } while (isColliding(x, y) || distance(x, y, state.player.x, state.player.y) < 5);
-        state.truchas.push({
-          x,
-          y,
-          dir: { x: 0, y: 0 },
-          speed: CONFIG.truchaSpeedBase + level * 0.2
-        });
-      }
+// ---------- Entities: base class ----------
+class Fish {
+  constructor(x,y,mass,color,type='native'){
+    this.x = x; this.y = y; this.vx = 0; this.vy = 0;
+    this.mass = mass; this.r = SETTINGS.massToRadius(this.mass);
+    this.color = color || '#fff';
+    this.type = type; // 'player','native','trout'
+    this.target = null;
+    this.dead = false;
+    this.lastEat = 0;
+  }
+  updateRadius(){ this.r = SETTINGS.massToRadius(this.mass); }
+  getSpeedBase(){
+    if (this.type==='player') return SETTINGS.playerSpeedBase;
+    if (this.type==='native') return SETTINGS.nativeSpeedBase;
+    if (this.type==='trout') return SETTINGS.troutSpeedBase;
+    return 120;
+  }
+  getSpeed(){
+    // speed reduces with mass: base / (1 + sqrt(mass)*k)
+    const base = this.getSpeedBase();
+    return base / (1 + Math.sqrt(this.mass)*0.05);
+  }
+  applyMovement(dx,dy,dt){
+    const s = this.getSpeed();
+    // accelerate toward (dx,dy) normalized
+    const len = Math.hypot(dx,dy) || 1;
+    const nx = dx/len, ny = dy/len;
+    // set velocity directly for crisp control
+    this.vx = nx * s;
+    this.vy = ny * s;
+    this.x += this.vx * dt;
+    this.y += this.vy * dt;
+    // clamp in world
+    this.x = clamp(this.x, this.r+4, world.w - (this.r+4));
+    this.y = clamp(this.y, this.r+4, world.h - (this.r+4));
+  }
+}
 
-      state.pellets = countPellets();
-      state.hideActive = false;
-      state.speedBoost = false;
-      state.running = true;
-      updateHUD();
-    }
+// ---------- Spawning ----------
+function spawnPellets(n){
+  for (let i=0;i<n;i++){
+    pellets.push({
+      x: rand(20, world.w-20),
+      y: rand(20, world.h-20),
+      mass: SETTINGS.pelletMass,
+      r: SETTINGS.massToRadius(SETTINGS.pelletMass),
+      color: '#ffd54f'
+    });
+  }
+}
 
-    function generateMap() {
-      state.map = Array(CONFIG.rows).fill().map(() => Array(CONFIG.cols).fill(2)); // 2 = pellet
+function spawnNatives(n){
+  for (let i=0;i<n;i++){
+    const x = rand(60, world.w-60);
+    const y = rand(60, world.h-60);
+    const mass = rand(6, 26); // tamaños variados
+    natives.push(new Fish(x,y,mass, '#9ae0ff','native'));
+  }
+}
 
-      // Bordes
-      for (let r = 0; r < CONFIG.rows; r++) {
-        for (let c = 0; c < CONFIG.cols; c++) {
-          if (r === 0 || c === 0 || r === CONFIG.rows - 1 || c === CONFIG.cols - 1) {
-            state.map[r][c] = 1; // 1 = pared
-          }
-        }
-      }
-
-      // Obstáculos internos
-      const blocks = [
-        { r: 3, c: 3, h: 3, w: 3 },
-        { r: 3, c: CONFIG.cols - 6, h: 3, w: 3 },
-        { r: CONFIG.rows - 6, c: 3, h: 3, w: 3 },
-        { r: CONFIG.rows - 6, c: CONFIG.cols - 6, h: 3, w: 3 },
-        { r: Math.floor(CONFIG.rows / 2) - 1, c: Math.floor(CONFIG.cols / 2) - 2, h: 3, w: 4 }
-      ];
-
-      blocks.forEach(block => {
-        for (let dr = 0; dr < block.h; dr++) {
-          for (let dc = 0; dc < block.w; dc++) {
-            const r = block.r + dr;
-            const c = block.c + dc;
-            if (r > 0 && c > 0 && r < CONFIG.rows - 1 && c < CONFIG.cols - 1) {
-              state.map[r][c] = 1;
-            }
-          }
-        }
-      });
-
-      // Escondites (plantas)
-      state.map.__hides = [
-        { r: 1, c: 1 }, { r: 1, c: CONFIG.cols - 3 },
-        { r: CONFIG.rows - 3, c: 1 }, { r: CONFIG.rows - 3, c: CONFIG.cols - 3 }
-      ];
-      state.map.__hides.forEach(h => {
-        for (let dr = 0; dr < 2; dr++) {
-          for (let dc = 0; dc < 2; dc++) {
-            const r = h.r + dr;
-            const c = h.c + dc;
-            if (r > 0 && c > 0 && r < CONFIG.rows - 1 && c < CONFIG.cols - 1) {
-              state.map[r][c] = 3; // 3 = escondite
-            }
-          }
-        }
-      });
-
-      // Power-ups (caracoles)
-      let powerups = 0;
-      while (powerups < 3 && powerups < state.pellets / 5) {
-        const r = Math.floor(Math.random() * (CONFIG.rows - 4)) + 2;
-        const c = Math.floor(Math.random() * (CONFIG.cols - 4)) + 2;
-        if (state.map[r][c] === 2) {
-          state.map[r][c] = 4; // 4 = power-up
-          powerups++;
-        }
+function spawnTrouts(n, safeZone){
+  for (let i=0;i<n;i++){
+    // spawn ensuring min distance from safeZone {x,y,r}
+    let tries=0;
+    while(tries<500){
+      tries++;
+      const x = rand(60, world.w-60);
+      const y = rand(60, world.h-60);
+      const dd = Math.hypot(x - safeZone.x, y - safeZone.y);
+      if (dd > safeZone.r + 80) {
+        // trucha tamaño: algunas grandes (predadoras) otras medianas
+        const mass = Math.random() < 0.3 ? rand(40, 110) : rand(18, 45);
+        const t = new Fish(x,y,mass, '#ff7b7b','trout');
+        // random wandering
+        t.vx = rand(-20,20); t.vy = rand(-20,20);
+        trouts.push(t);
+        break;
       }
     }
+  }
+}
 
-    function countPellets() {
-      let count = 0;
-      for (let r = 0; r < CONFIG.rows; r++) {
-        for (let c = 0; c < CONFIG.cols; c++) {
-          if (state.map[r][c] === 2) count++;
-        }
-      }
-      return count;
+// ---------- Player setup ----------
+function createPlayer(type){
+  const centerX = world.w/2, centerY = world.h/2;
+  let mass = SETTINGS.playerStartMass;
+  if (type === 'sardina') mass = SETTINGS.sardinaStartMass;
+  if (type === 'bagre') mass = SETTINGS.bagreStartMass;
+  player = new Fish(centerX, centerY, mass, '#ffd54f','player');
+  player.updateRadius();
+}
+
+// ---------- Init game ----------
+function initGame(){
+  pellets = []; natives = []; trouts = []; score = 0;
+  const chosen = document.getElementById('fishType').value;
+  createPlayer(chosen);
+  spawnPellets(SETTINGS.pelletCount);
+  spawnNatives(SETTINGS.nativeCount);
+  // spawn trouts away from player
+  spawnTrouts(SETTINGS.troutCount, {x: player.x, y: player.y, r: SETTINGS.safeSpawnRadius});
+  running = true; paused = false;
+  document.getElementById('message').style.display = 'none';
+  updateHUD();
+}
+
+// ---------- Collision / Eating rules ----------
+function tryEat(pred, prey){
+  // pred eats prey if pred.radius > prey.radius * 1.08 (slight advantage)
+  if (prey.dead) return false;
+  if (pred.r > prey.r * 1.08 && dist(pred,prey) < pred.r - prey.r*0.25) {
+    prey.dead = true;
+    // transfer mass (a fraction)
+    pred.mass += prey.mass * SETTINGS.eatFactor;
+    pred.updateRadius();
+    if (pred.type === 'player') score += Math.round(prey.mass*2);
+    return true;
+  }
+  return false;
+}
+
+// pellets consumption
+function tryEatPellet(f, pelletIndex){
+  const p = pellets[pelletIndex];
+  const d = Math.hypot(f.x - p.x, f.y - p.y);
+  if (d < f.r - p.r*0.2) {
+    f.mass += p.mass * SETTINGS.eatFactor;
+    f.updateRadius();
+    // remove pellet
+    pellets.splice(pelletIndex,1);
+    if (f.type === 'player') score += 1;
+    return true;
+  }
+  return false;
+}
+
+// ---------- AI behavior ----------
+function updateNatives(dt){
+  natives.forEach(n => {
+    // simple behavior: seek nearest pellet in small radius else wander
+    let found = null; let best = 99999;
+    for (let i=0;i<pellets.length;i++){
+      const p = pellets[i]; const d = Math.hypot(p.x - n.x, p.y - n.y);
+      if (d < best && d < 320) { best = d; found = p; }
     }
-
-    function isColliding(x, y) {
-      const radius = 0.45;
-      const minR = Math.floor(y - radius);
-      const maxR = Math.floor(y + radius);
-      const minC = Math.floor(x - radius);
-      const maxC = Math.floor(x + radius);
-
-      for (let r = minR; r <= maxR; r++) {
-        for (let c = minC; c <= maxC; c++) {
-          if (r < 0 || c < 0 || r >= CONFIG.rows || c >= CONFIG.cols) return true;
-          if (state.map[r][c] === 1) return true;
-        }
+    if (found){
+      n.applyMovement(found.x - n.x, found.y - n.y, dt);
+    } else {
+      // wander: random small target occasionally
+      if (!n.target || Math.random() < 0.01) {
+        n.target = { x: n.x + rand(-220,220), y: n.y + rand(-220,220) };
       }
-      return false;
+      n.applyMovement(n.target.x - n.x, n.target.y - n.y, dt);
     }
+    // avoid trouts if much larger
+    trouts.forEach(t=>{
+      const d = Math.hypot(t.x - n.x, t.y - n.y);
+      if (t.mass > n.mass * 1.2 && d < 260) {
+        // flee
+        n.applyMovement(n.x - t.x, n.y - t.y, dt);
+      }
+    });
 
-    function distance(x1, y1, x2, y2) {
-      return Math.hypot(x2 - x1, y2 - y1);
+    // eat pellets if overlapping
+    for (let i=pellets.length-1;i>=0;i--){
+      tryEatPellet(n, i);
     }
+  });
+}
 
-    function tryMove(entity, dirX, dirY, speed, delta) {
-      const nx = entity.x + dirX * speed * (delta / 1000);
-      const ny = entity.y + dirY * speed * (delta / 1000);
-      if (!isColliding(nx, ny)) {
-        entity.x = nx;
-        entity.y = ny;
-        return true;
+function updateTrouts(dt){
+  trouts.forEach(t => {
+    // behavior: if trout is much larger than player, hunt the player; else wander and eat pellets/natives
+    const dPlayer = Math.hypot(player.x - t.x, player.y - t.y);
+    if (t.mass > player.mass * 1.06 && dPlayer < SETTINGS.troutAggroRange) {
+      // hunt player
+      t.applyMovement(player.x - t.x, player.y - t.y, dt);
+    } else {
+      // hunt nearest native or pellet
+      let target = null; let best = 99999;
+      natives.forEach(n=>{ const d = Math.hypot(n.x - t.x, n.y - t.y); if (d < best) { best = d; target = n; }});
+      if (!target) {
+        for (let p of pellets) { const d = Math.hypot(p.x - t.x, p.y - t.y); if (d < best) { best=d; target=p; } }
       }
-      if (dirX !== 0 && !isColliding(entity.x + dirX * speed * (delta / 1000), entity.y)) {
-        entity.x += dirX * speed * (delta / 1000);
-        return true;
-      }
-      if (dirY !== 0 && !isColliding(entity.x, entity.y + dirY * speed * (delta / 1000))) {
-        entity.y += dirY * speed * (delta / 1000);
-        return true;
-      }
-      return false;
-    }
-
-    function update(delta) {
-      if (!state.running || state.paused || state.gameOver) return;
-
-      const now = performance.now();
-
-      // Temporizadores
-      if (state.hideActive && now > state.hideTimer) {
-        state.hideActive = false;
-        document.getElementById('hide-indicator').style.display = 'none';
-      }
-      if (state.speedBoost && now > state.speedBoostTimer) {
-        state.speedBoost = false;
-      }
-
-      // Movimiento del jugador
-      if (state.player.nextDir.x !== 0 || state.player.nextDir.y !== 0) {
-        const testX = state.player.x + state.player.nextDir.x * 0.3;
-        const testY = state.player.y + state.player.nextDir.y * 0.3;
-        if (!isColliding(testX, testY)) {
-          state.player.dir = { ...state.player.nextDir };
-        }
-      }
-
-      const playerSpeed = state.speedBoost ? CONFIG.nativeSpeed * 1.8 : CONFIG.nativeSpeed;
-      tryMove(state.player, state.player.dir.x, state.player.dir.y, playerSpeed, delta);
-
-      // Limites
-      state.player.x = Math.max(0.6, Math.min(CONFIG.cols - 0.6, state.player.x));
-      state.player.y = Math.max(0.6, Math.min(CONFIG.rows - 0.6, state.player.y));
-
-      // Interacción con el mapa
-      const pr = Math.floor(state.player.y);
-      const pc = Math.floor(state.player.x);
-
-      if (state.map[pr][pc] === 2) {
-        state.map[pr][pc] = 0;
-        state.score += 10;
-        state.pellets--;
-        updateHUD();
-        if (state.pellets <= 0) nextLevel();
-      } else if (state.map[pr][pc] === 3 && !state.hideActive) {
-        state.hideActive = true;
-        state.hideTimer = now + 5000;
-        document.getElementById('hide-indicator').style.display = 'inline';
-      } else if (state.map[pr][pc] === 4) {
-        state.map[pr][pc] = 0;
-        state.speedBoost = true;
-        state.speedBoostTimer = now + 6000;
-        state.score += 30;
-        updateHUD();
-      }
-
-      // IA de truchas
-      state.truchas.forEach(trucha => {
-        const dx = state.player.x - trucha.x;
-        const dy = state.player.y - trucha.y;
-        const dist = distance(state.player.x, state.player.y, trucha.x, trucha.y);
-
-        if (dist < 8) {
-          trucha.dir.x = Math.abs(dx) > Math.abs(dy) ? Math.sign(dx) : 0;
-          trucha.dir.y = Math.abs(dx) > Math.abs(dy) ? 0 : Math.sign(dy);
-        } else {
-          if (Math.random() < 0.02) {
-            const dirs = [{x:1,y:0}, {x:-1,y:0}, {x:0,y:1}, {x:0,y:-1}];
-            trucha.dir = dirs[Math.floor(Math.random() * 4)];
-          }
-        }
-
-        tryMove(trucha, trucha.dir.x, trucha.dir.y, trucha.speed, delta);
-
-        // Colisión con jugador
-        if (!state.hideActive && distance(trucha.x, trucha.y, state.player.x, state.player.y) < 0.7) {
-          loseLife();
-        }
-      });
-    }
-
-    function loseLife() {
-      state.lives--;
-      updateHUD();
-      showMessage("¡AY! 😢 Una trucha me atrapó... ¡Pero puedo intentarlo de nuevo!", 1500);
-      if (state.lives <= 0) {
-        gameOver();
-      } else {
-        // Reiniciar posición
-        state.player.x = Math.floor(CONFIG.cols / 2) + 0.5;
-        state.player.y = Math.floor(CONFIG.rows / 2) + 0.5;
-        state.player.dir = { x: 0, y: 0 };
-        state.hideActive = false;
-        document.getElementById('hide-indicator').style.display = 'none';
+      if (target) t.applyMovement(target.x - t.x, target.y - t.y, dt);
+      else {
+        // wander
+        if (!t.target || Math.random() < 0.005) t.target = { x: t.x + rand(-240,240), y: t.y + rand(-240,240) };
+        t.applyMovement(t.target.x - t.x, t.target.y - t.y, dt);
       }
     }
 
-    function gameOver() {
-      state.running = false;
-      state.gameOver = true;
-      showMessage("¡JUEGO TERMINADO! 😔<br>Las truchas invasoras ganaron...<br>¡Pero puedes volver a intentarlo!<br>Los peces nativos te necesitan 🐠💙", 6000);
+    // eat pellets
+    for (let i=pellets.length-1;i>=0;i--){
+      const eaten = tryEatPellet(t,i);
+      if (eaten && SETTINGS.pelletRespawn) spawnPellets(1);
     }
 
-    function nextLevel() {
-      state.level++;
-      if (state.level > CONFIG.maxLevel) {
-        state.running = false;
-        showMessage("🎉 ¡FELICIDADES, CAMPEÓN! 🎉<br>¡Salvaste a todos los peces nativos!<br>Gracias por proteger los ríos.<br>¡Comparte este juego y ayuda a más peces!", 8000);
-      } else {
-        showMessage(`🌟 ¡Nivel ${state.level} completado! 🌟<br>¡Sigue nadando, sigue salvando!`, 2000);
-        setTimeout(() => startLevel(state.level), 2100);
+    // eat natives
+    for (let i=natives.length-1;i>=0;i--){
+      const nat = natives[i];
+      if (!nat.dead && tryEat(t, nat)){
+        natives.splice(i,1);
       }
     }
+  });
+}
 
-    function draw() {
-      const ctx = state.ctx;
-      const tile = CONFIG.tileSize;
-
-      // Fondo
-      ctx.fillStyle = '#001f3f';
-      ctx.fillRect(0, 0, state.canvas.width, state.canvas.height);
-
-      // Dibujar mapa
-      for (let r = 0; r < CONFIG.rows; r++) {
-        for (let c = 0; c < CONFIG.cols; c++) {
-          const x = c * tile;
-          const y = r * tile;
-
-          if (state.map[r][c] === 1) {
-            ctx.fillStyle = '#2c3e50';
-            ctx.fillRect(x, y, tile, tile);
-          } else if (state.map[r][c] === 2) {
-            ctx.fillStyle = '#FFD700';
-            ctx.beginPath();
-            ctx.arc(x + tile/2, y + tile/2, tile * 0.15, 0, Math.PI * 2);
-            ctx.fill();
-          } else if (state.map[r][c] === 3) {
-            ctx.fillStyle = '#27ae60';
-            ctx.fillRect(x + 2, y + 2, tile - 4, tile - 4);
-            // Dibujar hojitas
-            ctx.fillStyle = '#2ecc71';
-            ctx.beginPath();
-            ctx.arc(x + tile/3, y + tile/4, tile * 0.1, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.beginPath();
-            ctx.arc(x + tile*2/3, y + tile*3/4, tile * 0.1, 0, Math.PI * 2);
-            ctx.fill();
-          } else if (state.map[r][c] === 4) {
-            // Caracol power-up
-            ctx.fillStyle = '#F39C12';
-            ctx.beginPath();
-            ctx.arc(x + tile/2, y + tile/2, tile * 0.2, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.fillStyle = '#8B4513';
-            ctx.beginPath();
-            ctx.arc(x + tile/2 + 2, y + tile/2 - 2, tile * 0.06, 0, Math.PI * 2);
-            ctx.fill();
-          }
-        }
-      }
-
-      // Dibujar jugador (pez nativo)
-      const px = state.player.x * tile;
-      const py = state.player.y * tile;
-      ctx.save();
-      ctx.translate(px + tile/2, py + tile/2);
-
-      // Cuerpo
-      ctx.fillStyle = '#FF6B6B';
-      ctx.beginPath();
-      ctx.ellipse(0, 0, tile * 0.35, tile * 0.25, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Ojo
-      ctx.fillStyle = 'white';
-      ctx.beginPath();
-      ctx.arc(-tile * 0.1, -tile * 0.05, tile * 0.08, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = 'black';
-      ctx.beginPath();
-      ctx.arc(-tile * 0.1, -tile * 0.05, tile * 0.04, 0, Math.PI * 2);
-      ctx.fill();
-
-      // Cola
-      ctx.fillStyle = '#FF6B6B';
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.lineTo(-tile * 0.4, -tile * 0.2);
-      ctx.lineTo(-tile * 0.4, tile * 0.2);
-      ctx.closePath();
-      ctx.fill();
-
-      // Efecto de escondite
-      if (state.hideActive) {
-        ctx.strokeStyle = 'rgba(46,204,113,0.6)';
-        ctx.lineWidth = 3;
-        ctx.setLineDash([5, 5]);
-        ctx.beginPath();
-        ctx.arc(0, 0, tile * 0.5, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.setLineDash([]);
-      }
-
-      ctx.restore();
-
-      // Dibujar truchas
-      state.truchas.forEach(trucha => {
-        const tx = trucha.x * tile;
-        const ty = trucha.y * tile;
-        ctx.save();
-        ctx.translate(tx + tile/2, ty + tile/2);
-
-        // Cuerpo grande
-        ctx.fillStyle = '#5D6D7E';
-        ctx.beginPath();
-        ctx.ellipse(0, 0, tile * 0.45, tile * 0.3, 0, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Boca grande (¡son las malas!)
-        ctx.fillStyle = '#E74C3C';
-        ctx.beginPath();
-        ctx.arc(tile * 0.2, 0, tile * 0.15, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Ojo frío
-        ctx.fillStyle = 'white';
-        ctx.beginPath();
-        ctx.arc(-tile * 0.15, -tile * 0.1, tile * 0.08, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.fillStyle = 'black';
-        ctx.beginPath();
-        ctx.arc(-tile * 0.15, -tile * 0.1, tile * 0.04, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Cola agresiva
-        ctx.fillStyle = '#5D6D7E';
-        ctx.beginPath();
-        ctx.moveTo(0, 0);
-        ctx.lineTo(-tile * 0.5, -tile * 0.25);
-        ctx.lineTo(-tile * 0.5, tile * 0.25);
-        ctx.closePath();
-        ctx.fill();
-
-        ctx.restore();
-      });
+// ---------- Player update ----------
+function updatePlayer(dt){
+  // direction toward mouse.worldX/worldY
+  const tx = mouse.worldX || player.x, ty = mouse.worldY || player.y;
+  if (mouse.down || true) {
+    player.applyMovement(tx - player.x, ty - player.y, dt);
+  } else {
+    // slight friction: if mouse not moved, continue small inertia
+    player.x += player.vx * dt; player.y += player.vy * dt;
+  }
+  // eat pellets
+  for (let i=pellets.length-1;i>=0;i--){
+    tryEatPellet(player,i);
+  }
+  // eat natives if player bigger
+  for (let i=natives.length-1;i>=0;i--){
+    const nat = natives[i];
+    if (!nat.dead && tryEat(player, nat)){
+      natives.splice(i,1);
     }
-
-    function updateHUD() {
-      document.getElementById('level').textContent = state.level;
-      document.getElementById('lives').textContent = state.lives;
-      document.getElementById('score').textContent = state.score;
+  }
+  // collide with trouts: if trout larger -> die; if player larger and close -> eat trout
+  for (let i=trouts.length-1;i>=0;i--){
+    const t = trouts[i];
+    if (tryEat(player, t)){
+      // player ate trout
+      trouts.splice(i,1);
+      // spawn a replacement trout after some time
+      setTimeout(()=> spawnTrouts(1, {x: player.x, y: player.y, r: SETTINGS.safeSpawnRadius}), 3000);
+    } else if (tryEat(t, player)){
+      // trout ate player -> game over
+      gameOver('Te comió una trucha más grande');
+      return;
     }
+  }
+}
 
-    function showMessage(text, duration) {
-      const msg = document.getElementById('message');
-      msg.innerHTML = text.replace(/\n/g, '<br>');
-      msg.style.display = 'block';
-      setTimeout(() => { msg.style.display = 'none'; }, duration);
-    }
+// ---------- Core loop ----------
+function update(dt){
+  if (!running || paused) return;
+  // update camera to center on player
+  camera.x = player.x;
+  camera.y = player.y;
+  // update natives & trouts
+  updateNatives(dt);
+  updateTrouts(dt);
+  updatePlayer(dt);
+  // keep pellet count
+  if (pellets.length < SETTINGS.pelletCount && SETTINGS.pelletRespawn) spawnPellets(SETTINGSpelletCount - pellets.length);
+  updateHUD();
+}
 
-    function showStartMessage() {
-      showMessage(`
-        🐠 ¡BIENVENIDO, GUARDIÁN DE LOS RÍOS! 🐠<br><br>
-        Tú eres un pececito nativo. ¡Las truchas grandes no pertenecen aquí y te persiguen!<br><br>
-        ➡️ Usa <b>las flechas</b> o <b>WASD</b> para moverte.<br>
-        🌿 Pasa por las <b>plantas verdes</b> para esconderte.<br>
-        🐌 Recoge los <b>caracoles dorados</b> para nadar más rápido.<br>
-        🍽️ Come todas las <b>semillas amarillas</b> para completar el nivel.<br><br>
-        ¡Tienes 3 vidas! ¿Listo para salvar a tus amigos peces?<br>
-        <b>¡Presiona "¡A JUGAR!" y comienza la aventura!</b>
-      `, 10000);
-    }
+// ---------- Rendering ----------
+function worldToScreen(x,y){
+  const sx = (x - camera.x) * camera.zoom + W/2;
+  const sy = (y - camera.y) * camera.zoom + H/2;
+  return { x: sx, y: sy };
+}
 
-    function gameLoop(timestamp) {
-      if (!state.running && !state.gameOver) return;
+function draw(){
+  // clear
+  ctx.clearRect(0,0,W,H);
+  // background grid or gradient
+  const g = ctx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,'#012'); g.addColorStop(1,'#00121a');
+  ctx.fillStyle = g;
+  ctx.fillRect(0,0,W,H);
 
-      const delta = timestamp - state.lastTime;
-      state.lastTime = timestamp;
+  // draw pellets
+  for (let p of pellets){
+    const s = worldToScreen(p.x,p.y);
+    ctx.beginPath();
+    ctx.fillStyle = p.color;
+    ctx.arc(s.x, s.y, p.r * camera.zoom, 0, Math.PI*2);
+    ctx.fill();
+  }
 
-      update(delta);
-      draw();
+  // draw natives
+  for (let n of natives){
+    const s = worldToScreen(n.x,n.y);
+    ctx.beginPath();
+    ctx.fillStyle = n.color;
+    ctx.ellipse(s.x, s.y, n.r*1.2*camera.zoom, n.r*0.8*camera.zoom, 0, 0, Math.PI*2);
+    ctx.fill();
+  }
 
-      if (state.running) {
-        requestAnimationFrame(gameLoop);
-      }
-    }
-  </script>
+  // draw trouts (enemies)
+  for (let t of trouts){
+    const s = worldToScreen(t.x,t.y);
+    ctx.beginPath();
+    ctx.fillStyle = t.color;
+    ctx.ellipse(s.x, s.y, t.r*1.3*camera.zoom, t.r*0.9*camera.zoom, 0, 0, Math.PI*2);
+    ctx.fill();
+    // eye
+    ctx.fillStyle = '#fff';
+    ctx.beginPath(); ctx.arc(s.x - t.r*0.2*camera.zoom, s.y - t.r*0.25*camera.zoom, Math.max(2, t.r*0.12*camera.zoom), 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#000';
+    ctx.beginPath(); ctx.arc(s.x - t.r*0.2*camera.zoom, s.y - t.r*0.25*camera.zoom, Math.max(1, t.r*0.05*camera.zoom), 0, Math.PI*2); ctx.fill();
+  }
+
+  // draw player on top
+  const sp = worldToScreen(player.x, player.y);
+  ctx.beginPath();
+  ctx.fillStyle = player.color;
+  ctx.ellipse(sp.x, sp.y, player.r*1.2*camera.zoom, player.r*0.9*camera.zoom, 0, 0, Math.PI*2);
+  ctx.fill();
+  // player eye
+  ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(sp.x - player.r*0.18*camera.zoom, sp.y - player.r*0.22*camera.zoom, Math.max(2, player.r*0.1*camera.zoom), 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = '#000'; ctx.beginPath(); ctx.arc(sp.x - player.r*0.18*camera.zoom, sp.y - player.r*0.22*camera.zoom, Math.max(1, player.r*0.05*camera.zoom), 0, Math.PI*2); ctx.fill();
+
+  // mini-map or bounds? (optional)
+}
+
+// ---------- HUD & UI ----------
+function updateHUD(){
+  document.getElementById('score').innerText = score;
+  document.getElementById('size').innerText = Math.round(player.mass);
+  document.getElementById('ghostsCount').innerText = trouts.length;
+}
+
+// ---------- Game Over ----------
+function gameOver(reason){
+  running = false;
+  document.getElementById('msgTitle').innerText = 'Has muerto';
+  document.getElementById('msgBody').innerText = reason + '. Puntaje: ' + score;
+  document.getElementById('message').style.display = 'flex';
+}
+
+// ---------- Main loop & timing ----------
+function frameLoop(now){
+  const dt = Math.min(0.06, (now - lastTime)/1000); // cap dt
+  lastTime = now;
+  update(dt);
+  draw();
+  requestAnimationFrame(frameLoop);
+}
+
+// ---------- Controls buttons ----------
+document.getElementById('btnStart').addEventListener('click', ()=>{
+  initGame();
+  lastTime = performance.now();
+  requestAnimationFrame(frameLoop);
+});
+document.getElementById('btnPause').addEventListener('click', ()=>{
+  paused = !paused;
+  document.getElementById('btnPause').innerText = paused ? 'Reanudar' : 'Pausa';
+});
+document.getElementById('btnReset').addEventListener('click', ()=>{
+  initGame();
+});
+document.getElementById('respawn').addEventListener('click', ()=>{
+  document.getElementById('message').style.display = 'none';
+  initGame();
+});
+
+// Prevent keys from scrolling the page (arrow keys, space)
+window.addEventListener('keydown', e => {
+  if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key)) e.preventDefault();
+});
+
+// initialize defaults
+(function start(){
+  // center camera scale
+  camera.zoom = Math.min(1, W / 800);
+  // place initial UI defaults
+  document.getElementById('message').style.display = 'none';
+  // Pre-spawn minimal world so the ui shows counts
+  initGame();
+  running = false;
+  // but not auto-start until user clicks Iniciar (to avoid accidental mobile taps)
+})();
+</script>
 </body>
 </html>
+
