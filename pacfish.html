@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>IcTiosCusco — Juego PAC-Fish</title>
+  <meta name="description" content="PAC-Fish: juego educativo inspirado en Pac-Man con peces y truchas.">
+
+  <!-- Estilos y fuentes (consistentes con el sitio) -->
+  <link href="https://fonts.googleapis.com/css?family=Dosis:200,300,400,500,700" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Overpass:300,400,400i,600,700" rel="stylesheet">
+  <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
+  <link rel="stylesheet" href="css/animate.css">
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    body { background: linear-gradient(180deg,#f6fbfd,#eef7fa); }
+    .game-wrap { padding: 40px 0; }
+    #pf-canvas { border-radius:12px; background:#000; display:block; margin:0 auto; box-shadow:0 10px 30px rgba(0,0,0,0.18); }
+    .controls { text-align:center; margin-top:14px; }
+    .info { text-align:center; margin-bottom:10px; }
+    .back-link { position: fixed; left: 16px; top: 16px; }
+  </style>
+</head>
+<body>
+
+<a class="btn btn-outline-secondary back-link" href="recursos.html">← Volver a Recursos</a>
+
+<main class="container game-wrap">
+  <div class="row justify-content-center">
+    <div class="col-md-8 text-center">
+      <h1>PAC-Fish</h1>
+      <p class="lead">Elige tu pez y evita a las truchas. Usa ← → ↑ ↓ o WASD. 30 niveles.</p>
+
+      <div style="margin-bottom:8px;">
+        <label style="margin-right:10px;"><input type="radio" name="pf-character" value="orestia" checked> Orestia</label>
+        <label style="margin-right:10px;"><input type="radio" name="pf-character" value="sardina"> Sardina</label>
+        <label><input type="radio" name="pf-character" value="bagre"> Bagre</label>
+      </div>
+
+      <div class="info">Nivel: <span id="pf-level">1</span> · Vidas: <span id="pf-lives">3</span> · Puntos: <span id="pf-score">0</span></div>
+
+      <canvas id="pf-canvas" width="520" height="520"></canvas>
+
+      <div class="controls">
+        <button id="pf-start" class="btn btn-primary">Iniciar / Reiniciar</button>
+        <button id="pf-pause" class="btn btn-secondary">Pausa</button>
+      </div>
+
+      <p style="margin-top:12px; color:#666; font-size:0.95rem;">Sugerencia: para mejor experiencia usa un desktop o laptop. En móviles, usa orientación horizontal.</p>
+    </div>
+  </div>
+</main>
+
+<script>
+/* PAC-FISH (separado): misma lógica que la versión embebida pero aislada para rendimiento */
+const PF_CONFIG = { tileSize:20, cols:26, rows:26, initialLives:3, maxLevel:30 };
+function generateMap(cols, rows) {
+  const map = Array(rows).fill().map(()=>Array(cols).fill(2));
+  for (let r=0;r<rows;r++){
+    for (let c=0;c<cols;c++){
+      if (r===0||c===0||r===rows-1||c===cols-1) map[r][c]=1;
+      else if ((r%5===0 && c%4===0) || (r%7===0 && c%6===0)) map[r][c]=1;
+    }
+  }
+  const cx = Math.floor(cols/2), cy = Math.floor(rows/2);
+  for(let dr=-1; dr<=1; dr++) for(let dc=-1; dc<=1; dc++) map[cy+dr][cx+dc] = 0;
+  return map;
+}
+function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
+class Entity{constructor(x,y){this.x=x;this.y=y;this.dir={x:0,y:0}}}
+class Player extends Entity{constructor(x,y){super(x,y);this.nextDir={x:0,y:0}}}
+class Ghost extends Entity{constructor(x,y,color){super(x,y);this.color=color||'#f55';this.speed=1}}
+
+const canvas = document.getElementById('pf-canvas'); const ctx = canvas.getContext('2d');
+const cfg = PF_CONFIG; const WIDTH = cfg.cols*cfg.tileSize; const HEIGHT = cfg.rows*cfg.tileSize; canvas.width=WIDTH; canvas.height=HEIGHT;
+let map = generateMap(cfg.cols,cfg.rows); let player, ghosts, score, lives, level, pelletsRemaining; let running=false, paused=false;
+
+function resetGame(){ level=1; lives=cfg.initialLives; score=0; startLevel(level); updateHUD(); }
+function startLevel(l){ map = generateMap(cfg.cols,cfg.rows); player = new Player(1.5,1.5); player.dir={x:0,y:0}; player.nextDir={x:0,y:0}; ghosts=[]; const baseGhosts = Math.min(6, Math.floor(1 + l/5)); for(let i=0;i<baseGhosts;i++){ const gx=Math.floor(cfg.cols/2)+((i%2)?i:-i); const gy=Math.floor(cfg.rows/2)+((i%2)?-i:i); const g=new Ghost(gx,gy,'#'+(Math.floor(Math.random()*16777215).toString(16))); g.speed = 0.55 + Math.min(1.5, l*0.05); ghosts.push(g);} pelletsRemaining=0; for(let r=0;r<cfg.rows;r++)for(let c=0;c<cfg.cols;c++) if(map[r][c]===2) pelletsRemaining++; map[Math.floor(cfg.rows/2)][Math.floor(cfg.cols/2)] = 0; running=true; paused=false; updateHUD(); }
+
+function draw(){ ctx.fillStyle='#001'; ctx.fillRect(0,0,WIDTH,HEIGHT); for(let r=0;r<cfg.rows;r++){ for(let c=0;c<cfg.cols;c++){ const x=c*cfg.tileSize, y=r*cfg.tileSize; if(map[r][c]===1){ ctx.fillStyle='#154360'; ctx.fillRect(x,y,cfg.tileSize,cfg.tileSize);} else if(map[r][c]===2){ ctx.fillStyle='#ffd54f'; const cx=x+cfg.tileSize/2, cy=y+cfg.tileSize/2; ctx.beginPath(); ctx.arc(cx,cy, Math.max(2,cfg.tileSize*0.09),0,Math.PI*2); ctx.fill(); } } }
+  // player
+  const px=player.x*cfg.tileSize, py=player.y*cfg.tileSize; ctx.save(); ctx.translate(px+cfg.tileSize/2, py+cfg.tileSize/2); const sel=document.querySelector('input[name="pf-character"]:checked').value; let pColor='#FFD700'; if(sel==='sardina') pColor='#6ECFF6'; if(sel==='bagre') pColor='#A07C4A'; ctx.fillStyle=pColor; ctx.beginPath(); ctx.arc(0,0,cfg.tileSize*0.4,0,Math.PI*2); ctx.fill(); ctx.restore();
+  // ghosts
+  ghosts.forEach(g=>{ const gx=g.x*cfg.tileSize+cfg.tileSize/2, gy=g.y*cfg.tileSize+cfg.tileSize/2; ctx.fillStyle=g.color; ctx.beginPath(); ctx.arc(gx,gy,cfg.tileSize*0.42,0,Math.PI*2); ctx.fill(); ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(gx-cfg.tileSize*0.12,gy-cfg.tileSize*0.08,cfg.tileSize*0.12,0,Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.arc(gx+cfg.tileSize*0.12,gy-cfg.tileSize*0.08,cfg.tileSize*0.12,0,Math.PI*2); ctx.fill(); }); }
+
+function isWallAt(px,py){ const c=Math.floor(px), r=Math.floor(py); if(r<0||c<0||r>=cfg.rows||c>=cfg.cols) return true; return map[r][c]===1; }
+function update(delta){ if(!running||paused) return; if(player.nextDir.x!==0||player.nextDir.y!==0){ const nx=player.x+player.nextDir.x*0.2, ny=player.y+player.nextDir.y*0.2; if(!isWallAt(nx,ny)) player.dir={...player.nextDir}; } const pSpeed=3.2; player.x += player.dir.x*pSpeed*(delta/1000); player.y += player.dir.y*pSpeed*(delta/1000); player.x = clamp(player.x,0.1,cfg.cols-0.9); player.y = clamp(player.y,0.1,cfg.rows-0.9); const pr=Math.floor(player.y), pc=Math.floor(player.x); if(map[pr][pc]===2){ map[pr][pc]=0; pelletsRemaining--; score+=10; updateHUD(); if(pelletsRemaining<=0){ level++; if(level>cfg.maxLevel){ alert('¡Felicidades! Completaste todos los niveles.'); resetGame(); return; } else { startLevel(level); return; } } }
+  ghosts.forEach(g=>{ const dx=player.x-g.x, dy=player.y-g.y; const dist=Math.sqrt(dx*dx+dy*dy); let targetDir={x:0,y:0}; if(dist<6){ targetDir.x=dx>0?1:(dx<0?-1:0); targetDir.y=dy>0?1:(dy<0?-1:0); } else { if(Math.random()<0.02){ const dirs=[{x:1,y:0},{x:-1,y:0},{x:0,y:1},{x:0,y:-1}]; targetDir = dirs[Math.floor(Math.random()*dirs.length)]; } else targetDir = g.dir; } const newX = g.x + targetDir.x * g.speed * (delta/1000); const newY = g.y + targetDir.y * g.speed * (delta/1000); if(!isWallAt(newX,newY)){ g.x=newX; g.y=newY; g.dir=targetDir; } else { const dirs=[{x:1,y:0},{x:-1,y:0},{x:0,y:1},{x:0,y:-1}]; const alt=dirs[Math.floor(Math.random()*dirs.length)]; const ax=g.x+alt.x*g.speed*(delta/1000), ay=g.y+alt.y*g.speed*(delta/1000); if(!isWallAt(ax,ay)){ g.x=ax; g.y=ay; g.dir=alt; } } const ddx=player.x-g.x, ddy=player.y-g.y; if(Math.sqrt(ddx*ddx+ddy*ddy) < 0.6){ lives--; updateHUD(); if(lives<=0){ alert('Juego terminado. Reiniciando...'); resetGame(); } else { startLevel(level); } } }); }
+function updateHUD(){ document.getElementById('pf-level').innerText = level; document.getElementById('pf-lives').innerText = lives; document.getElementById('pf-score').innerText = score; }
+
+window.addEventListener('keydown', e=>{ if(!player) return; if(e.key==='ArrowUp'||e.key==='w'||e.key==='W') player.nextDir={x:0,y:-1}; if(e.key==='ArrowDown'||e.key==='s'||e.key==='S') player.nextDir={x:0,y:1}; if(e.key==='ArrowLeft'||e.key==='a'||e.key==='A') player.nextDir={x:-1,y:0}; if(e.key==='ArrowRight'||e.key==='d'||e.key==='D') player.nextDir={x:1,y:0}; });
+
+let lastTime = performance.now(); function loop(now){ const delta = now - lastTime; lastTime = now; update(delta); draw(); requestAnimationFrame(loop); }
+
+document.getElementById('pf-start').addEventListener('click', ()=>{ resetGame(); lastTime = performance.now(); requestAnimationFrame(loop); });
+document.getElementById('pf-pause').addEventListener('click', ()=>{ paused = !paused; document.getElementById('pf-pause').innerText = paused ? 'Reanudar' : 'Pausa'; });
+
+(function init(){ startLevel(1); updateHUD(); })();
+
+</script>
+</body>
+</html>
