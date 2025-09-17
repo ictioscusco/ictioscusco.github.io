@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>PAC-Swim — Slither-style peces</title>
+<title>PAC-SWIM — Corregido</title>
 <style>
   :root { --ui-bg: rgba(255,255,255,0.95); --accent: #2f8f66; --muted:#666; }
   html,body{ height:100%; margin:0; }
@@ -20,7 +20,7 @@
   #hud { position:absolute; right:12px; top:14px; color:white; z-index:5; text-align:right; }
   #chooser { display:flex; gap:8px; align-items:center; }
   select { padding:6px 8px; border-radius:8px; }
-  #message { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:20; pointer-events:none; }
+  #message { position:absolute; inset:0; display:none; align-items:center; justify-content:center; z-index:20; pointer-events:none; }
   .panel { background: rgba(0,0,0,0.5); color:white; padding:18px 22px; border-radius:12px; text-align:center; pointer-events:all; }
   small{ color:#ccc; display:block; margin-top:8px; font-size:0.9rem; }
   @media (max-width:640px){ #topbar { padding:8px; } .btn { padding:6px 8px; } }
@@ -61,9 +61,9 @@
       <div>Truchas: <span id="ghostsCount">0</span></div>
     </div>
 
-    <div id="message" style="display:none">
+    <div id="message">
       <div class="panel">
-        <h2 id="msgTitle">Game Over</h2>
+        <h2 id="msgTitle">Has muerto</h2>
         <div id="msgBody"></div>
         <div style="margin-top:12px;">
           <button id="respawn" class="btn primary">Volver a jugar</button>
@@ -73,40 +73,29 @@
   </div>
 
 <script>
-/*
-  PAC-SWIM: slither-style en 2D con peces y truchas
-  - Un sólo archivo HTML + JS
-  - Ajusta las constantes en SETTINGS para cambiar la experiencia
-*/
+/* Versión corregida: se solucionó un typo (SETTINGSpelletCount) que detenía el loop,
+   y se inicializa mouse.worldX/Y para que player se mueva aunque no hayas movido el ratón. */
 
-// ---------- SETTINGS (ajusta a gusto) ----------
+/* SETTINGS */
 const SETTINGS = {
-  worldW: 2400, // tamaño del mundo en píxeles (mapa cuadrado)
-  worldH: 1600,
-  pelletCount: 900,          // pellets visibles iniciales
-  pelletMass: 1.0,          // masa individual de un pellet
-  nativeCount: 10,          // peces nativos que deambulan
-  troutCount: 8,            // truchas/enemigos
-  safeSpawnRadius: 260,     // spawn seguro alrededor del player (pix)
-  playerStartMass: 18,      // masa inicial (área proporcional)
-  sardinaStartMass: 12,
-  bagreStartMass: 28,
-  massToRadius: (m)=> Math.sqrt(m) * 3, // función masa -> radio (tuneable)
-  eatFactor: 0.65,          // cuanto de la masa del comido se suma al comedor
-  troutAggroRange: 240,     // distancia a la que trout se vuelve más agresiva
-  troutSpeedBase: 120,      // px/s base trucha (se divide por tamaño)
-  nativeSpeedBase: 160,
-  playerSpeedBase: 220,
+  worldW: 2400, worldH: 1600,
+  pelletCount: 900, pelletMass: 1.0,
+  nativeCount: 10, troutCount: 8,
+  safeSpawnRadius: 260,
+  playerStartMass: 18, sardinaStartMass: 12, bagreStartMass: 28,
+  massToRadius: (m)=> Math.sqrt(m) * 3,
+  eatFactor: 0.65,
+  troutAggroRange: 240,
+  troutSpeedBase: 120, nativeSpeedBase: 160, playerSpeedBase: 220,
   friction: 0.98,
   pelletRespawn: true
 };
 
-// ---------- Utilities ----------
 function rand(min,max){ return min + Math.random()*(max-min); }
 function dist(a,b){ const dx=a.x-b.x, dy=a.y-b.y; return Math.hypot(dx,dy); }
 function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
 
-// ---------- World & Canvas ----------
+/* Canvas & world */
 const canvas = document.getElementById('c');
 const ctx = canvas.getContext('2d');
 let W = window.innerWidth, H = window.innerHeight - document.getElementById('topbar').offsetHeight;
@@ -114,116 +103,66 @@ canvas.width = W; canvas.height = H;
 window.addEventListener('resize', ()=>{ W = window.innerWidth; H = window.innerHeight - document.getElementById('topbar').offsetHeight; canvas.width = W; canvas.height = H; });
 
 const world = { w: SETTINGS.worldW, h: SETTINGS.worldH };
-
-// Camera (center on player)
 const camera = { x: world.w/2, y: world.h/2, zoom: 1 };
 
-// ---------- Game state ----------
-let player = null;
-let pellets = [];
-let natives = [];
-let trouts = [];
-let running = false;
-let paused = false;
-let lastTime = performance.now();
-let mouse = { x:0, y:0, worldX:0, worldY:0, down:false };
-let score = 0;
+/* State */
+let player = null, pellets = [], natives = [], trouts = [];
+let running = false, paused = false, lastTime = performance.now(), mouse = { x:0, y:0, worldX:0, worldY:0, down:false }, score = 0;
 
-// ---------- Input (mouse/touch + keyboard) ----------
-canvas.addEventListener('mousemove', (e)=>{
-  const rect = canvas.getBoundingClientRect();
-  mouse.x = e.clientX - rect.left;
-  mouse.y = e.clientY - rect.top;
-  mouse.worldX = camera.x - W/2/camera.zoom + mouse.x/camera.zoom;
-  mouse.worldY = camera.y - H/2/camera.zoom + mouse.y/camera.zoom;
-});
+/* Input */
+canvas.addEventListener('mousemove', (e)=>{ const rect = canvas.getBoundingClientRect(); mouse.x = e.clientX - rect.left; mouse.y = e.clientY - rect.top; mouse.worldX = camera.x - W/2/camera.zoom + mouse.x/camera.zoom; mouse.worldY = camera.y - H/2/camera.zoom + mouse.y/camera.zoom; });
 canvas.addEventListener('mousedown', ()=> mouse.down=true);
 canvas.addEventListener('mouseup', ()=> mouse.down=false);
 canvas.addEventListener('touchstart', (e)=> { mouse.down=true; e.preventDefault(); mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; mouse.worldX = camera.x - W/2/camera.zoom + mouse.x/camera.zoom; mouse.worldY = camera.y - H/2/camera.zoom + mouse.y/camera.zoom; }, {passive:false});
 canvas.addEventListener('touchmove', (e)=> { e.preventDefault(); mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; mouse.worldX = camera.x - W/2/camera.zoom + mouse.x/camera.zoom; mouse.worldY = camera.y - H/2/camera.zoom + mouse.y/camera.zoom; }, {passive:false});
 canvas.addEventListener('touchend', ()=> mouse.down=false);
+window.addEventListener('keydown', (e)=>{ const keys = ['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' ','w','a','s','d','W','A','S','D']; if (keys.includes(e.key)) e.preventDefault(); });
 
-// evitar scroll con flechas/WASD
-window.addEventListener('keydown', (e)=>{
-  const keys = ['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' ','w','a','s','d','W','A','S','D'];
-  if (keys.includes(e.key)) e.preventDefault();
-});
-
-// ---------- Entities: base class ----------
+/* Entities */
 class Fish {
   constructor(x,y,mass,color,type='native'){
-    this.x = x; this.y = y; this.vx = 0; this.vy = 0;
-    this.mass = mass; this.r = SETTINGS.massToRadius(this.mass);
-    this.color = color || '#fff';
-    this.type = type; // 'player','native','trout'
-    this.target = null;
-    this.dead = false;
-    this.lastEat = 0;
+    this.x=x; this.y=y; this.vx=0; this.vy=0; this.mass=mass; this.r = SETTINGS.massToRadius(this.mass);
+    this.color=color||'#fff'; this.type=type; this.target=null; this.dead=false; this.lastEat=0;
   }
   updateRadius(){ this.r = SETTINGS.massToRadius(this.mass); }
-  getSpeedBase(){
-    if (this.type==='player') return SETTINGS.playerSpeedBase;
-    if (this.type==='native') return SETTINGS.nativeSpeedBase;
-    if (this.type==='trout') return SETTINGS.troutSpeedBase;
-    return 120;
-  }
-  getSpeed(){
-    // speed reduces with mass: base / (1 + sqrt(mass)*k)
-    const base = this.getSpeedBase();
-    return base / (1 + Math.sqrt(this.mass)*0.05);
-  }
+  getSpeedBase(){ if (this.type==='player') return SETTINGS.playerSpeedBase; if (this.type==='native') return SETTINGS.nativeSpeedBase; if (this.type==='trout') return SETTINGS.troutSpeedBase; return 120; }
+  getSpeed(){ const base=this.getSpeedBase(); return base / (1 + Math.sqrt(this.mass)*0.05); }
   applyMovement(dx,dy,dt){
     const s = this.getSpeed();
-    // accelerate toward (dx,dy) normalized
     const len = Math.hypot(dx,dy) || 1;
     const nx = dx/len, ny = dy/len;
-    // set velocity directly for crisp control
-    this.vx = nx * s;
-    this.vy = ny * s;
-    this.x += this.vx * dt;
-    this.y += this.vy * dt;
-    // clamp in world
+    this.vx = nx * s; this.vy = ny * s;
+    this.x += this.vx * dt; this.y += this.vy * dt;
     this.x = clamp(this.x, this.r+4, world.w - (this.r+4));
     this.y = clamp(this.y, this.r+4, world.h - (this.r+4));
   }
 }
 
-// ---------- Spawning ----------
+/* Spawn helpers */
 function spawnPellets(n){
   for (let i=0;i<n;i++){
-    pellets.push({
-      x: rand(20, world.w-20),
-      y: rand(20, world.h-20),
-      mass: SETTINGS.pelletMass,
-      r: SETTINGS.massToRadius(SETTINGS.pelletMass),
-      color: '#ffd54f'
-    });
+    pellets.push({ x: rand(20, world.w-20), y: rand(20, world.h-20), mass: SETTINGS.pelletMass, r: SETTINGS.massToRadius(SETTINGS.pelletMass), color: '#ffd54f' });
   }
 }
-
 function spawnNatives(n){
   for (let i=0;i<n;i++){
-    const x = rand(60, world.w-60);
-    const y = rand(60, world.h-60);
-    const mass = rand(6, 26); // tamaños variados
-    natives.push(new Fish(x,y,mass, '#9ae0ff','native'));
+    const x = rand(60, world.w-60), y = rand(60, world.h-60), mass = rand(6,26);
+    const nf = new Fish(x,y,mass,'#9ae0ff','native');
+    // give some initial small velocity to see movement
+    nf.vx = rand(-30,30); nf.vy = rand(-30,30);
+    natives.push(nf);
   }
 }
-
 function spawnTrouts(n, safeZone){
   for (let i=0;i<n;i++){
-    // spawn ensuring min distance from safeZone {x,y,r}
     let tries=0;
     while(tries<500){
       tries++;
-      const x = rand(60, world.w-60);
-      const y = rand(60, world.h-60);
+      const x = rand(60, world.w-60), y = rand(60, world.h-60);
       const dd = Math.hypot(x - safeZone.x, y - safeZone.y);
       if (dd > safeZone.r + 80) {
-        // trucha tamaño: algunas grandes (predadoras) otras medianas
-        const mass = Math.random() < 0.3 ? rand(40, 110) : rand(18, 45);
-        const t = new Fish(x,y,mass, '#ff7b7b','trout');
-        // random wandering
+        const mass = Math.random() < 0.3 ? rand(40,110) : rand(18,45);
+        const t = new Fish(x,y,mass,'#ff7b7b','trout');
         t.vx = rand(-20,20); t.vy = rand(-20,20);
         trouts.push(t);
         break;
@@ -232,7 +171,7 @@ function spawnTrouts(n, safeZone){
   }
 }
 
-// ---------- Player setup ----------
+/* Player setup */
 function createPlayer(type){
   const centerX = world.w/2, centerY = world.h/2;
   let mass = SETTINGS.playerStartMass;
@@ -242,27 +181,26 @@ function createPlayer(type){
   player.updateRadius();
 }
 
-// ---------- Init game ----------
+/* Init game */
 function initGame(){
-  pellets = []; natives = []; trouts = []; score = 0;
+  pellets=[]; natives=[]; trouts=[]; score=0;
   const chosen = document.getElementById('fishType').value;
   createPlayer(chosen);
+  // ensure mouse.worldX/Y has a sensible default so player moves even if cursor hasn't moved yet
+  mouse.worldX = player.x; mouse.worldY = player.y;
   spawnPellets(SETTINGS.pelletCount);
   spawnNatives(SETTINGS.nativeCount);
-  // spawn trouts away from player
   spawnTrouts(SETTINGS.troutCount, {x: player.x, y: player.y, r: SETTINGS.safeSpawnRadius});
   running = true; paused = false;
   document.getElementById('message').style.display = 'none';
   updateHUD();
 }
 
-// ---------- Collision / Eating rules ----------
+/* Eating logic */
 function tryEat(pred, prey){
-  // pred eats prey if pred.radius > prey.radius * 1.08 (slight advantage)
   if (prey.dead) return false;
   if (pred.r > prey.r * 1.08 && dist(pred,prey) < pred.r - prey.r*0.25) {
     prey.dead = true;
-    // transfer mass (a fraction)
     pred.mass += prey.mass * SETTINGS.eatFactor;
     pred.updateRadius();
     if (pred.type === 'player') score += Math.round(prey.mass*2);
@@ -270,15 +208,12 @@ function tryEat(pred, prey){
   }
   return false;
 }
-
-// pellets consumption
 function tryEatPellet(f, pelletIndex){
   const p = pellets[pelletIndex];
   const d = Math.hypot(f.x - p.x, f.y - p.y);
   if (d < f.r - p.r*0.2) {
     f.mass += p.mass * SETTINGS.eatFactor;
     f.updateRadius();
-    // remove pellet
     pellets.splice(pelletIndex,1);
     if (f.type === 'player') score += 1;
     return true;
@@ -286,250 +221,94 @@ function tryEatPellet(f, pelletIndex){
   return false;
 }
 
-// ---------- AI behavior ----------
+/* AI */
 function updateNatives(dt){
   natives.forEach(n => {
-    // simple behavior: seek nearest pellet in small radius else wander
-    let found = null; let best = 99999;
+    let found=null, best=1e9;
     for (let i=0;i<pellets.length;i++){
       const p = pellets[i]; const d = Math.hypot(p.x - n.x, p.y - n.y);
       if (d < best && d < 320) { best = d; found = p; }
     }
-    if (found){
-      n.applyMovement(found.x - n.x, found.y - n.y, dt);
-    } else {
-      // wander: random small target occasionally
-      if (!n.target || Math.random() < 0.01) {
-        n.target = { x: n.x + rand(-220,220), y: n.y + rand(-220,220) };
-      }
+    if (found) n.applyMovement(found.x - n.x, found.y - n.y, dt);
+    else {
+      if (!n.target || Math.random()<0.01) n.target = { x: n.x + rand(-220,220), y: n.y + rand(-220,220) };
       n.applyMovement(n.target.x - n.x, n.target.y - n.y, dt);
     }
-    // avoid trouts if much larger
-    trouts.forEach(t=>{
-      const d = Math.hypot(t.x - n.x, t.y - n.y);
-      if (t.mass > n.mass * 1.2 && d < 260) {
-        // flee
-        n.applyMovement(n.x - t.x, n.y - t.y, dt);
-      }
-    });
-
-    // eat pellets if overlapping
-    for (let i=pellets.length-1;i>=0;i--){
-      tryEatPellet(n, i);
-    }
+    trouts.forEach(t=>{ const d = Math.hypot(t.x - n.x, t.y - n.y); if (t.mass > n.mass * 1.2 && d < 260) n.applyMovement(n.x - t.x, n.y - t.y, dt); });
+    for (let i=pellets.length-1;i>=0;i--) tryEatPellet(n, i);
   });
 }
 
 function updateTrouts(dt){
-  trouts.forEach(t => {
-    // behavior: if trout is much larger than player, hunt the player; else wander and eat pellets/natives
+  trouts.forEach(t=>{
     const dPlayer = Math.hypot(player.x - t.x, player.y - t.y);
-    if (t.mass > player.mass * 1.06 && dPlayer < SETTINGS.troutAggroRange) {
-      // hunt player
-      t.applyMovement(player.x - t.x, player.y - t.y, dt);
-    } else {
-      // hunt nearest native or pellet
-      let target = null; let best = 99999;
+    if (t.mass > player.mass * 1.06 && dPlayer < SETTINGS.troutAggroRange) t.applyMovement(player.x - t.x, player.y - t.y, dt);
+    else {
+      let target=null, best=1e9;
       natives.forEach(n=>{ const d = Math.hypot(n.x - t.x, n.y - t.y); if (d < best) { best = d; target = n; }});
-      if (!target) {
-        for (let p of pellets) { const d = Math.hypot(p.x - t.x, p.y - t.y); if (d < best) { best=d; target=p; } }
-      }
+      if (!target) for (let p of pellets){ const d = Math.hypot(p.x - t.x, p.y - t.y); if (d < best) { best = d; target = p; } }
       if (target) t.applyMovement(target.x - t.x, target.y - t.y, dt);
-      else {
-        // wander
-        if (!t.target || Math.random() < 0.005) t.target = { x: t.x + rand(-240,240), y: t.y + rand(-240,240) };
-        t.applyMovement(t.target.x - t.x, t.target.y - t.y, dt);
-      }
+      else { if (!t.target || Math.random()<0.005) t.target = { x: t.x + rand(-240,240), y: t.y + rand(-240,240) }; t.applyMovement(t.target.x - t.x, t.target.y - t.y, dt); }
     }
-
-    // eat pellets
-    for (let i=pellets.length-1;i>=0;i--){
-      const eaten = tryEatPellet(t,i);
-      if (eaten && SETTINGS.pelletRespawn) spawnPellets(1);
-    }
-
-    // eat natives
-    for (let i=natives.length-1;i>=0;i--){
-      const nat = natives[i];
-      if (!nat.dead && tryEat(t, nat)){
-        natives.splice(i,1);
-      }
-    }
+    for (let i=pellets.length-1;i>=0;i--){ const eaten = tryEatPellet(t,i); if (eaten && SETTINGS.pelletRespawn) spawnPellets(1); }
+    for (let i=natives.length-1;i>=0;i--){ const nat = natives[i]; if (!nat.dead && tryEat(t, nat)) natives.splice(i,1); }
   });
 }
 
-// ---------- Player update ----------
+/* Player update */
 function updatePlayer(dt){
-  // direction toward mouse.worldX/worldY
   const tx = mouse.worldX || player.x, ty = mouse.worldY || player.y;
-  if (mouse.down || true) {
-    player.applyMovement(tx - player.x, ty - player.y, dt);
-  } else {
-    // slight friction: if mouse not moved, continue small inertia
-    player.x += player.vx * dt; player.y += player.vy * dt;
-  }
-  // eat pellets
-  for (let i=pellets.length-1;i>=0;i--){
-    tryEatPellet(player,i);
-  }
-  // eat natives if player bigger
-  for (let i=natives.length-1;i>=0;i--){
-    const nat = natives[i];
-    if (!nat.dead && tryEat(player, nat)){
-      natives.splice(i,1);
-    }
-  }
-  // collide with trouts: if trout larger -> die; if player larger and close -> eat trout
-  for (let i=trouts.length-1;i>=0;i--){
-    const t = trouts[i];
-    if (tryEat(player, t)){
-      // player ate trout
-      trouts.splice(i,1);
-      // spawn a replacement trout after some time
-      setTimeout(()=> spawnTrouts(1, {x: player.x, y: player.y, r: SETTINGS.safeSpawnRadius}), 3000);
-    } else if (tryEat(t, player)){
-      // trout ate player -> game over
-      gameOver('Te comió una trucha más grande');
-      return;
-    }
-  }
+  if (mouse.down || true) player.applyMovement(tx - player.x, ty - player.y, dt);
+  else { player.x += player.vx * dt; player.y += player.vy * dt; }
+  for (let i=pellets.length-1;i>=0;i--) tryEatPellet(player,i);
+  for (let i=natives.length-1;i>=0;i--){ const nat = natives[i]; if (!nat.dead && tryEat(player, nat)) natives.splice(i,1); }
+  for (let i=trouts.length-1;i>=0;i--){ const t = trouts[i]; if (tryEat(player, t)){ trouts.splice(i,1); setTimeout(()=> spawnTrouts(1, {x: player.x, y: player.y, r: SETTINGS.safeSpawnRadius}), 3000); } else if (tryEat(t, player)){ gameOver('Te comió una trucha más grande'); return; } }
 }
 
-// ---------- Core loop ----------
+/* Main update */
 function update(dt){
   if (!running || paused) return;
-  // update camera to center on player
-  camera.x = player.x;
-  camera.y = player.y;
-  // update natives & trouts
+  camera.x = player.x; camera.y = player.y;
   updateNatives(dt);
   updateTrouts(dt);
   updatePlayer(dt);
-  // keep pellet count
-  if (pellets.length < SETTINGS.pelletCount && SETTINGS.pelletRespawn) spawnPellets(SETTINGSpelletCount - pellets.length);
+  if (pellets.length < SETTINGS.pelletCount && SETTINGS.pelletRespawn) spawnPellets(SETTINGS.pelletCount - pellets.length); // CORREGIDO
   updateHUD();
 }
 
-// ---------- Rendering ----------
-function worldToScreen(x,y){
-  const sx = (x - camera.x) * camera.zoom + W/2;
-  const sy = (y - camera.y) * camera.zoom + H/2;
-  return { x: sx, y: sy };
-}
+/* Rendering */
+function worldToScreen(x,y){ const sx = (x - camera.x) * camera.zoom + W/2; const sy = (y - camera.y) * camera.zoom + H/2; return { x: sx, y: sy }; }
 
 function draw(){
-  // clear
   ctx.clearRect(0,0,W,H);
-  // background grid or gradient
-  const g = ctx.createLinearGradient(0,0,0,H);
-  g.addColorStop(0,'#012'); g.addColorStop(1,'#00121a');
-  ctx.fillStyle = g;
-  ctx.fillRect(0,0,W,H);
-
-  // draw pellets
-  for (let p of pellets){
-    const s = worldToScreen(p.x,p.y);
-    ctx.beginPath();
-    ctx.fillStyle = p.color;
-    ctx.arc(s.x, s.y, p.r * camera.zoom, 0, Math.PI*2);
-    ctx.fill();
-  }
-
-  // draw natives
-  for (let n of natives){
-    const s = worldToScreen(n.x,n.y);
-    ctx.beginPath();
-    ctx.fillStyle = n.color;
-    ctx.ellipse(s.x, s.y, n.r*1.2*camera.zoom, n.r*0.8*camera.zoom, 0, 0, Math.PI*2);
-    ctx.fill();
-  }
-
-  // draw trouts (enemies)
-  for (let t of trouts){
-    const s = worldToScreen(t.x,t.y);
-    ctx.beginPath();
-    ctx.fillStyle = t.color;
-    ctx.ellipse(s.x, s.y, t.r*1.3*camera.zoom, t.r*0.9*camera.zoom, 0, 0, Math.PI*2);
-    ctx.fill();
-    // eye
-    ctx.fillStyle = '#fff';
-    ctx.beginPath(); ctx.arc(s.x - t.r*0.2*camera.zoom, s.y - t.r*0.25*camera.zoom, Math.max(2, t.r*0.12*camera.zoom), 0, Math.PI*2); ctx.fill();
-    ctx.fillStyle = '#000';
-    ctx.beginPath(); ctx.arc(s.x - t.r*0.2*camera.zoom, s.y - t.r*0.25*camera.zoom, Math.max(1, t.r*0.05*camera.zoom), 0, Math.PI*2); ctx.fill();
-  }
-
-  // draw player on top
-  const sp = worldToScreen(player.x, player.y);
-  ctx.beginPath();
-  ctx.fillStyle = player.color;
-  ctx.ellipse(sp.x, sp.y, player.r*1.2*camera.zoom, player.r*0.9*camera.zoom, 0, 0, Math.PI*2);
-  ctx.fill();
-  // player eye
-  ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(sp.x - player.r*0.18*camera.zoom, sp.y - player.r*0.22*camera.zoom, Math.max(2, player.r*0.1*camera.zoom), 0, Math.PI*2); ctx.fill();
-  ctx.fillStyle = '#000'; ctx.beginPath(); ctx.arc(sp.x - player.r*0.18*camera.zoom, sp.y - player.r*0.22*camera.zoom, Math.max(1, player.r*0.05*camera.zoom), 0, Math.PI*2); ctx.fill();
-
-  // mini-map or bounds? (optional)
+  const g = ctx.createLinearGradient(0,0,0,H); g.addColorStop(0,'#012'); g.addColorStop(1,'#00121a'); ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
+  for (let p of pellets){ const s = worldToScreen(p.x,p.y); ctx.beginPath(); ctx.fillStyle = p.color; ctx.arc(s.x, s.y, p.r * camera.zoom, 0, Math.PI*2); ctx.fill(); }
+  for (let n of natives){ const s = worldToScreen(n.x,n.y); ctx.beginPath(); ctx.fillStyle = n.color; ctx.ellipse(s.x, s.y, n.r*1.2*camera.zoom, n.r*0.8*camera.zoom, 0, 0, Math.PI*2); ctx.fill(); }
+  for (let t of trouts){ const s = worldToScreen(t.x,t.y); ctx.beginPath(); ctx.fillStyle = t.color; ctx.ellipse(s.x, s.y, t.r*1.3*camera.zoom, t.r*0.9*camera.zoom, 0, 0, Math.PI*2); ctx.fill(); ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(s.x - t.r*0.2*camera.zoom, s.y - t.r*0.25*camera.zoom, Math.max(2, t.r*0.12*camera.zoom), 0, Math.PI*2); ctx.fill(); ctx.fillStyle='#000'; ctx.beginPath(); ctx.arc(s.x - t.r*0.2*camera.zoom, s.y - t.r*0.25*camera.zoom, Math.max(1, t.r*0.05*camera.zoom), 0, Math.PI*2); ctx.fill(); }
+  const sp = worldToScreen(player.x, player.y); ctx.beginPath(); ctx.fillStyle = player.color; ctx.ellipse(sp.x, sp.y, player.r*1.2*camera.zoom, player.r*0.9*camera.zoom, 0, 0, Math.PI*2); ctx.fill(); ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(sp.x - player.r*0.18*camera.zoom, sp.y - player.r*0.22*camera.zoom, Math.max(2, player.r*0.1*camera.zoom), 0, Math.PI*2); ctx.fill(); ctx.fillStyle='#000'; ctx.beginPath(); ctx.arc(sp.x - player.r*0.18*camera.zoom, sp.y - player.r*0.22*camera.zoom, Math.max(1, player.r*0.05*camera.zoom), 0, Math.PI*2); ctx.fill();
 }
 
-// ---------- HUD & UI ----------
-function updateHUD(){
-  document.getElementById('score').innerText = score;
-  document.getElementById('size').innerText = Math.round(player.mass);
-  document.getElementById('ghostsCount').innerText = trouts.length;
-}
+/* HUD & Game Over */
+function updateHUD(){ document.getElementById('score').innerText = score; document.getElementById('size').innerText = Math.round(player.mass); document.getElementById('ghostsCount').innerText = trouts.length; }
+function gameOver(reason){ running=false; document.getElementById('msgTitle').innerText='Has muerto'; document.getElementById('msgBody').innerText = reason + '. Puntaje: ' + score; document.getElementById('message').style.display = 'flex'; }
 
-// ---------- Game Over ----------
-function gameOver(reason){
-  running = false;
-  document.getElementById('msgTitle').innerText = 'Has muerto';
-  document.getElementById('msgBody').innerText = reason + '. Puntaje: ' + score;
-  document.getElementById('message').style.display = 'flex';
-}
+/* Loop */
+function frameLoop(now){ const dt = Math.min(0.06, (now - lastTime)/1000); lastTime = now; update(dt); draw(); requestAnimationFrame(frameLoop); }
 
-// ---------- Main loop & timing ----------
-function frameLoop(now){
-  const dt = Math.min(0.06, (now - lastTime)/1000); // cap dt
-  lastTime = now;
-  update(dt);
-  draw();
-  requestAnimationFrame(frameLoop);
-}
+/* Buttons */
+document.getElementById('btnStart').addEventListener('click', ()=>{ initGame(); lastTime = performance.now(); requestAnimationFrame(frameLoop); });
+document.getElementById('btnPause').addEventListener('click', ()=>{ paused = !paused; document.getElementById('btnPause').innerText = paused ? 'Reanudar' : 'Pausa'; });
+document.getElementById('btnReset').addEventListener('click', ()=>{ initGame(); });
+document.getElementById('respawn').addEventListener('click', ()=>{ document.getElementById('message').style.display='none'; initGame(); });
 
-// ---------- Controls buttons ----------
-document.getElementById('btnStart').addEventListener('click', ()=>{
-  initGame();
-  lastTime = performance.now();
-  requestAnimationFrame(frameLoop);
-});
-document.getElementById('btnPause').addEventListener('click', ()=>{
-  paused = !paused;
-  document.getElementById('btnPause').innerText = paused ? 'Reanudar' : 'Pausa';
-});
-document.getElementById('btnReset').addEventListener('click', ()=>{
-  initGame();
-});
-document.getElementById('respawn').addEventListener('click', ()=>{
-  document.getElementById('message').style.display = 'none';
-  initGame();
-});
-
-// Prevent keys from scrolling the page (arrow keys, space)
-window.addEventListener('keydown', e => {
-  if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key)) e.preventDefault();
-});
-
-// initialize defaults
+/* start but don't auto-run (user clicks Iniciar) */
 (function start(){
-  // center camera scale
-  camera.zoom = Math.min(1, W / 800);
-  // place initial UI defaults
-  document.getElementById('message').style.display = 'none';
-  // Pre-spawn minimal world so the ui shows counts
+  camera.zoom = Math.min(1, Math.max(0.6, W / 1000));
   initGame();
-  running = false;
-  // but not auto-start until user clicks Iniciar (to avoid accidental mobile taps)
+  running = false; // wait for user click
 })();
 </script>
 </body>
 </html>
+
 
