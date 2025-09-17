@@ -1,760 +1,509 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>PAC-Fish — Refactorizado (Lógica Mejorada)</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PAC-FISH — Salva a los Peces Nativos</title>
   <style>
-    :root { --ui-padding:18px; --bg1:#f6fbfd; --bg2:#eef7fa; }
-    html,body { height:100%; margin:0; }
-    body { background: linear-gradient(180deg,var(--bg1),var(--bg2)); font-family: Arial, Helvetica, sans-serif; display:flex; align-items:center; justify-content:center; padding:var(--ui-padding); box-sizing:border-box; }
-    .wrap { width:100%; max-width:1400px; text-align:center; }
-    h1 { margin:0 0 8px 0; }
-    .info { margin:8px 0 12px 0; color:#222; }
-    #pf-canvas { border-radius:12px; background:#00131a; display:block; margin:0 auto; box-shadow:0 10px 30px rgba(0,0,0,0.18); }
-    .controls { margin-top:12px; }
-    .hide-badge { display:inline-block; padding:6px 10px; border-radius:16px; background:#2f8f66; color:#fff; font-size:0.85rem; margin-left:8px }
-    button{ padding:8px 12px; margin:0 6px; cursor:pointer; }
-    @media (max-width:720px){
-      .wrap { padding-bottom:10px; }
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #89f7fe, #66a6ff);
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      color: #2c3e50;
+    }
+    h1 {
+      font-size: 1.8rem;
+      text-align: center;
+      margin: 10px 0;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+    #game-container {
+      position: relative;
+      margin: 10px auto;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+      border-radius: 16px;
+      overflow: hidden;
+      background: #001f3f;
+    }
+    canvas {
+      display: block;
+      background: #001f3f;
+      image-rendering: pixelated;
+    }
+    .hud {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+      max-width: 600px;
+      padding: 12px;
+      background: rgba(0,31,63,0.8);
+      border-radius: 12px;
+      margin-top: 10px;
+      color: white;
+      font-weight: bold;
+      text-shadow: 1px 1px 2px black;
+    }
+    .btn {
+      padding: 10px 20px;
+      margin: 10px 5px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 50px;
+      background: #2ecc71;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    .btn:hover { background: #27ae60; }
+    .btn:active { transform: scale(0.98); }
+    .message {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.8);
+      color: white;
+      padding: 20px;
+      border-radius: 16px;
+      text-align: center;
+      font-size: 1.2rem;
+      max-width: 80%;
+      z-index: 100;
+      display: none;
+    }
+    .hide-badge {
+      background: #27ae60;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      display: none;
+    }
+    @media (max-width: 600px) {
+      h1 { font-size: 1.4rem; }
+      .hud { flex-direction: column; gap: 8px; }
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <h1>PAC-Fish (Refactorizado — Lógica Mejorada)</h1>
-
-    <div style="margin-bottom:8px;">
-      <label style="margin-right:10px;"><input type="radio" name="pf-character" value="orestia" checked> Orestia</label>
-      <label style="margin-right:10px;"><input type="radio" name="pf-character" value="sardina"> Sardina</label>
-      <label><input type="radio" name="pf-character" value="bagre"> Bagre</label>
-    </div>
-
-    <div class="info">
-      Nivel: <span id="pf-level">1</span> · Vidas: <span id="pf-lives">3</span> · Puntos: <span id="pf-score">0</span>
-      <span id="hide-indicator" class="hide-badge" style="display:none">En escondite</span>
-      · Pellets: <span id="pf-pellets">0</span> · Peces nativos: <span id="pf-natives">0</span>
-    </div>
-
-    <canvas id="pf-canvas"></canvas>
-
-    <div class="controls">
-      <button id="pf-start">Iniciar / Reiniciar</button>
-      <button id="pf-pause">Pausa</button>
-    </div>
-
-    <p style="margin-top:12px; color:#666; font-size:0.95rem;">El canvas es responsivo y se adapta a la pantalla. Usa ←→↑↓ o WASD. Power-ups: caracoles/hyalellas (velocidad).</p>
+  <h1>🐠 PAC-FISH: ¡Salva a los Peces Nativos!</h1>
+  <div id="game-container">
+    <canvas id="gameCanvas"></canvas>
+    <div id="message" class="message"></div>
   </div>
+  <div class="hud">
+    <div>Nivel: <span id="level">1</span></div>
+    <div>Vidas: <span id="lives">3</span></div>
+    <div>Puntos: <span id="score">0</span></div>
+    <div><span id="hide-indicator" class="hide-badge">¡Escondido!</span></div>
+  </div>
+  <button id="startBtn" class="btn">▶️ Iniciar Juego</button>
+  <button id="pauseBtn" class="btn">⏸️ Pausa</button>
 
-<script>
-// ============= CONFIGURACIÓN =============
-const CONFIG = {
-  cols: 22,
-  rows: 22,
-  initialLives: 3,
-  maxLevel: 30,
-  nativeCount: 4,
-  powerupCount: 4,
-  minGhostSpawnDistFromPlayer: 4.0,
-  minGhostSpawnDistBetween: 2.4,
-  playerRadius: 0.44,
-  collisionRadius: 0.44
-};
+  <script>
+    // Configuración del juego
+    const CONFIG = {
+      cols: 19,
+      rows: 19,
+      tileSize: 28,
+      initialLives: 3,
+      maxLevel: 5,
+      truchasBase: 2,
+      nativeSpeed: 3.5,
+      truchaSpeedBase: 2.8
+    };
 
-// ============= ESTADO DEL JUEGO =============
-const gameState = {
-  running: false,
-  paused: false,
-  level: 1,
-  lives: CONFIG.initialLives,
-  score: 0,
-  pelletsRemaining: 0,
-  lastTime: 0,
-  map: null,
-  player: null,
-  ghosts: [],
-  natives: [],
-  canvas: null,
-  ctx: null,
-  tile: 28,
-  width: 0,
-  height: 0
-};
+    // Estado del juego
+    const state = {
+      canvas: null,
+      ctx: null,
+      map: [],
+      player: null,
+      truchas: [],
+      level: 1,
+      lives: CONFIG.initialLives,
+      score: 0,
+      pellets: 0,
+      running: false,
+      paused: false,
+      lastTime: 0,
+      hideActive: false,
+      hideTimer: 0,
+      speedBoost: false,
+      speedBoostTimer: 0,
+      gameOver: false
+    };
 
-// ============= UTILIDADES =============
-function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
-function distance(x1, y1, x2, y2) { return Math.hypot(x2 - x1, y2 - y1); }
-function randomColor() { return '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0'); }
+    // Inicializar
+    window.onload = function() {
+      state.canvas = document.getElementById('gameCanvas');
+      state.ctx = state.canvas.getContext('2d');
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+      setupControls();
+      showStartMessage();
+    };
 
-// ============= CLASES =============
-
-class Entity {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-    this.dir = { x: 0, y: 0 };
-  }
-
-  // Método genérico para dibujarse (sobrescribir en subclases)
-  draw(ctx, tile) {}
-
-  // Comportamiento genérico de movimiento con colisión
-  tryMove(map, speed, delta) {
-    const nx = this.x + this.dir.x * speed * (delta / 1000);
-    const ny = this.y + this.dir.y * speed * (delta / 1000);
-
-    if (!this.collidesWithWall(map, nx, ny)) {
-      this.x = nx;
-      this.y = ny;
-      return true;
+    function resizeCanvas() {
+      const margin = 80;
+      const availWidth = window.innerWidth - margin;
+      const availHeight = window.innerHeight - margin - 200;
+      const maxSize = Math.min(availWidth, availHeight);
+      CONFIG.tileSize = Math.floor(maxSize / Math.max(CONFIG.cols, CONFIG.rows));
+      if (CONFIG.tileSize < 14) CONFIG.tileSize = 14;
+      state.canvas.width = CONFIG.cols * CONFIG.tileSize;
+      state.canvas.height = CONFIG.rows * CONFIG.tileSize;
     }
 
-    // Intentar mover solo en X
-    if (this.dir.x !== 0) {
-      const nxOnly = this.x + this.dir.x * speed * (delta / 1000);
-      if (!this.collidesWithWall(map, nxOnly, this.y)) {
-        this.x = nxOnly;
-        return true;
-      }
-    }
+    function setupControls() {
+      document.getElementById('startBtn').addEventListener('click', startGame);
+      document.getElementById('pauseBtn').addEventListener('click', togglePause);
 
-    // Intentar mover solo en Y
-    if (this.dir.y !== 0) {
-      const nyOnly = this.y + this.dir.y * speed * (delta / 1000);
-      if (!this.collidesWithWall(map, this.x, nyOnly)) {
-        this.y = nyOnly;
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  collidesWithWall(map, x, y) {
-    const radius = CONFIG.collisionRadius;
-    const minC = Math.floor(x - radius);
-    const maxC = Math.floor(x + radius);
-    const minR = Math.floor(y - radius);
-    const maxR = Math.floor(y + radius);
-
-    for (let r = minR; r <= maxR; r++) {
-      for (let c = minC; c <= maxC; c++) {
-        if (r < 0 || c < 0 || r >= CONFIG.rows || c >= CONFIG.cols) return true;
-        if (map[r][c] === 1) return true;
-      }
-    }
-    return false;
-  }
-}
-
-class Player extends Entity {
-  constructor(x, y) {
-    super(x, y);
-    this.nextDir = { x: 0, y: 0 };
-    this.hidden = false;
-    this.hideExpires = 0;
-    this.hideCooldowns = [0, 0, 0, 0];
-    this.speedBoostExpires = 0;
-    this.baseSpeed = 4.0;
-  }
-
-  getSpeed(now) {
-    return now < this.speedBoostExpires ? this.baseSpeed * 1.6 : this.baseSpeed;
-  }
-
-  draw(ctx, tile) {
-    const px = this.x * tile;
-    const py = this.y * tile;
-
-    ctx.save();
-    ctx.translate(px + tile / 2, py + tile / 2);
-
-    const sel = document.querySelector('input[name="pf-character"]:checked').value;
-    let color = '#FFD700';
-    if (sel === 'sardina') color = '#6ECFF6';
-    if (sel === 'bagre') color = '#A07C4A';
-
-    if (this.hidden) {
-      ctx.beginPath();
-      ctx.arc(0, 0, tile * 0.7, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(46,204,113,0.14)';
-      ctx.fill();
-      ctx.strokeStyle = 'rgba(46,204,113,0.28)';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-    }
-
-    ctx.fillStyle = color;
-    ctx.beginPath();
-    ctx.arc(0, 0, tile * 0.42, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.restore();
-  }
-
-  collectItem(map, r, c) {
-    if (map[r][c] === 2) {
-      map[r][c] = 0;
-      gameState.pelletsRemaining--;
-      gameState.score += 10;
-      return true;
-    } else if (map[r][c] === 3) {
-      const centers = map.__hideCenters;
-      let cornerIndex = -1;
-      centers.forEach((cpt, idx) => {
-        if (Math.abs(r - cpt.r) <= 1 && Math.abs(c - cpt.c) <= 1) cornerIndex = idx;
+      window.addEventListener('keydown', (e) => {
+        if (!state.player) return;
+        const key = e.key.toLowerCase();
+        if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright', 'w', 'a', 's', 'd'].includes(key)) {
+          e.preventDefault();
+          if (key === 'arrowup' || key === 'w') state.player.nextDir = { x: 0, y: -1 };
+          if (key === 'arrowdown' || key === 's') state.player.nextDir = { x: 0, y: 1 };
+          if (key === 'arrowleft' || key === 'a') state.player.nextDir = { x: -1, y: 0 };
+          if (key === 'arrowright' || key === 'd') state.player.nextDir = { x: 1, y: 0 };
+        }
       });
-      if (cornerIndex >= 0) {
-        const now = performance.now();
-        if (now > this.hideCooldowns[cornerIndex]) {
-          this.hidden = true;
-          this.hideExpires = now + 5000;
-          this.hideCooldowns[cornerIndex] = now + 15000;
-          document.getElementById('hide-indicator').style.display = 'inline-block';
-        }
-      }
-      return true;
-    } else if (map[r][c] === 4) {
-      map[r][c] = 0;
-      this.speedBoostExpires = performance.now() + 7000;
-      gameState.score += 30;
-      return true;
     }
-    return false;
-  }
-}
 
-class Ghost extends Entity {
-  constructor(x, y, color) {
-    super(x, y);
-    this.color = color || '#f55';
-    this.speed = 3.6;
-  }
-
-  draw(ctx, tile) {
-    const gx = this.x * tile + tile / 2;
-    const gy = this.y * tile + tile / 2;
-
-    ctx.fillStyle = this.color;
-    ctx.beginPath();
-    ctx.ellipse(gx, gy, tile * 0.46, tile * 0.36, 0, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.fillStyle = '#fff';
-    ctx.beginPath();
-    ctx.arc(gx - tile * 0.12, gy - tile * 0.05, tile * 0.12, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(gx + tile * 0.12, gy - tile * 0.05, tile * 0.12, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.fillStyle = '#000';
-    ctx.beginPath();
-    ctx.arc(gx - tile * 0.12, gy - tile * 0.05, tile * 0.05, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(gx + tile * 0.12, gy - tile * 0.05, tile * 0.05, 0, Math.PI * 2);
-    ctx.fill();
-  }
-
-  updateAI(player, level) {
-    const dx = player.x - this.x;
-    const dy = player.y - this.y;
-    const dist = distance(this.x, this.y, player.x, player.y);
-
-    if (!player.hidden && dist < Math.max(7, 8 - Math.min(3, level * 0.06))) {
-      if (Math.abs(dx) > Math.abs(dy)) {
-        this.dir.x = dx > 0 ? 1 : -1;
-        this.dir.y = 0;
-      } else {
-        this.dir.x = 0;
-        this.dir.y = dy > 0 ? 1 : -1;
-      }
-    } else {
-      const cx = CONFIG.cols / 2 - 1;
-      const cy = CONFIG.rows / 2 - 1;
-      const cdx = cx - this.x;
-      const cdy = cy - this.y;
-
-      if (Math.random() < 0.5) {
-        if (Math.abs(cdx) > Math.abs(cdy)) {
-          this.dir.x = cdx > 0 ? 1 : -1;
-          this.dir.y = 0;
-        } else {
-          this.dir.x = 0;
-          this.dir.y = cdy > 0 ? 1 : -1;
-        }
-      } else {
-        if (Math.random() < 0.18 + level * 0.01) {
-          const dirs = [{x:1,y:0}, {x:-1,y:0}, {x:0,y:1}, {x:0,y:-1}];
-          this.dir = dirs[Math.floor(Math.random() * dirs.length)];
-        }
-      }
+    function startGame() {
+      state.level = 1;
+      state.lives = CONFIG.initialLives;
+      state.score = 0;
+      state.gameOver = false;
+      startLevel(state.level);
+      gameLoop(0);
     }
-  }
 
-  checkCollision(player) {
-    if (!player.hidden && distance(this.x, this.y, player.x, player.y) < 0.6) {
-      gameState.lives--;
+    function togglePause() {
+      state.paused = !state.paused;
+      document.getElementById('pauseBtn').textContent = state.paused ? '▶️ Reanudar' : '⏸️ Pausa';
+    }
+
+    function startLevel(level) {
+      generateMap();
+      state.player = {
+        x: Math.floor(CONFIG.cols / 2) + 0.5,
+        y: Math.floor(CONFIG.rows / 2) + 0.5,
+        dir: { x: 0, y: 0 },
+        nextDir: { x: 0, y: 0 }
+      };
+
+      // Generar truchas
+      state.truchas = [];
+      const truchaCount = Math.min(6, CONFIG.truchasBase + Math.floor(level / 2));
+      for (let i = 0; i < truchaCount; i++) {
+        let x, y;
+        do {
+          x = Math.floor(Math.random() * (CONFIG.cols - 4)) + 2 + 0.5;
+          y = Math.floor(Math.random() * (CONFIG.rows - 4)) + 2 + 0.5;
+        } while (isColliding(x, y) || distance(x, y, state.player.x, state.player.y) < 5);
+        state.truchas.push({
+          x,
+          y,
+          dir: { x: 0, y: 0 },
+          speed: CONFIG.truchaSpeedBase + level * 0.2
+        });
+      }
+
+      state.pellets = countPellets();
+      state.hideActive = false;
+      state.speedBoost = false;
+      state.running = true;
       updateHUD();
-      if (gameState.lives <= 0) {
-        alert('Juego terminado. Reiniciando...');
-        resetGame();
-        return true;
-      } else {
-        startLevel(gameState.level);
-        return true;
-      }
     }
-    return false;
-  }
-}
 
-class NativeFish extends Entity {
-  constructor(x, y) {
-    super(x, y);
-    this.baseSpeed = 2.2;
-    this.speedBoostExpires = 0;
-  }
+    function generateMap() {
+      state.map = Array(CONFIG.rows).fill().map(() => Array(CONFIG.cols).fill(2)); // 2 = pellet
 
-  getSpeed(now) {
-    return now < this.speedBoostExpires ? this.baseSpeed * 1.6 : this.baseSpeed;
-  }
-
-  draw(ctx, tile) {
-    const gx = this.x * tile + tile / 2;
-    const gy = this.y * tile + tile / 2;
-
-    ctx.fillStyle = '#9ae0ff';
-    ctx.beginPath();
-    ctx.ellipse(gx, gy, tile * 0.36, tile * 0.22, 0, 0, Math.PI * 2);
-    ctx.fill();
-
-    if (performance.now() < this.speedBoostExpires) {
-      ctx.strokeStyle = 'rgba(138,224,255,0.45)';
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.arc(gx, gy, tile * 0.48, 0, Math.PI * 2);
-      ctx.stroke();
-    }
-  }
-
-  updateAI(map) {
-    if (Math.random() < 0.14) {
-      let target = null;
-      let bestD = 999;
-
-      for (let r = Math.max(1, Math.floor(this.y) - 5); r <= Math.min(CONFIG.rows - 2, Math.floor(this.y) + 5); r++) {
-        for (let c = Math.max(1, Math.floor(this.x) - 5); c <= Math.min(CONFIG.cols - 2, Math.floor(this.x) + 5); c++) {
-          if (map[r][c] === 2) {
-            const dx = (c + 0.5) - this.x;
-            const dy = (r + 0.5) - this.y;
-            const d = distance(0, 0, dx, dy);
-            if (d < bestD) {
-              bestD = d;
-              target = { x: Math.sign(dx), y: Math.sign(dy) };
-            }
+      // Bordes
+      for (let r = 0; r < CONFIG.rows; r++) {
+        for (let c = 0; c < CONFIG.cols; c++) {
+          if (r === 0 || c === 0 || r === CONFIG.rows - 1 || c === CONFIG.cols - 1) {
+            state.map[r][c] = 1; // 1 = pared
           }
         }
       }
 
-      if (target) {
-        this.dir = target;
-      } else {
-        const dirs = [{x:1,y:0}, {x:-1,y:0}, {x:0,y:1}, {x:0,y:-1}];
-        this.dir = dirs[Math.floor(Math.random() * dirs.length)];
-      }
-    }
-  }
+      // Obstáculos internos
+      const blocks = [
+        { r: 3, c: 3, h: 3, w: 3 },
+        { r: 3, c: CONFIG.cols - 6, h: 3, w: 3 },
+        { r: CONFIG.rows - 6, c: 3, h: 3, w: 3 },
+        { r: CONFIG.rows - 6, c: CONFIG.cols - 6, h: 3, w: 3 },
+        { r: Math.floor(CONFIG.rows / 2) - 1, c: Math.floor(CONFIG.cols / 2) - 2, h: 3, w: 4 }
+      ];
 
-  collectItem(map, r, c) {
-    if (map[r][c] === 2) {
-      map[r][c] = 0;
-      gameState.pelletsRemaining--;
-      gameState.score += 2;
-      return true;
-    } else if (map[r][c] === 4) {
-      map[r][c] = 0;
-      this.speedBoostExpires = performance.now() + 7000;
-      return true;
-    }
-    return false;
-  }
-}
+      blocks.forEach(block => {
+        for (let dr = 0; dr < block.h; dr++) {
+          for (let dc = 0; dc < block.w; dc++) {
+            const r = block.r + dr;
+            const c = block.c + dc;
+            if (r > 0 && c > 0 && r < CONFIG.rows - 1 && c < CONFIG.cols - 1) {
+              state.map[r][c] = 1;
+            }
+          }
+        }
+      });
 
-// ============= MAPA =============
-function generateMap(cols, rows) {
-  const map = Array(rows).fill().map(() => Array(cols).fill(2));
+      // Escondites (plantas)
+      state.map.__hides = [
+        { r: 1, c: 1 }, { r: 1, c: CONFIG.cols - 3 },
+        { r: CONFIG.rows - 3, c: 1 }, { r: CONFIG.rows - 3, c: CONFIG.cols - 3 }
+      ];
+      state.map.__hides.forEach(h => {
+        for (let dr = 0; dr < 2; dr++) {
+          for (let dc = 0; dc < 2; dc++) {
+            const r = h.r + dr;
+            const c = h.c + dc;
+            if (r > 0 && c > 0 && r < CONFIG.rows - 1 && c < CONFIG.cols - 1) {
+              state.map[r][c] = 3; // 3 = escondite
+            }
+          }
+        }
+      });
 
-  // Bordes
-  for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) {
-      if (r === 0 || c === 0 || r === rows - 1 || c === cols - 1) map[r][c] = 1;
-    }
-  }
-
-  // Obstáculos internos
-  const blocks = [
-    {r:3,c:3,h:3,w:3}, {r:3,c:cols-6,h:3,w:3},
-    {r:rows-6,c:3,h:3,w:3}, {r:rows-6,c:cols-6,h:3,w:3},
-    {r:Math.floor(rows/2)-1,c:Math.floor(cols/2)-3,h:3,w:6}
-  ];
-
-  blocks.forEach(b => {
-    for (let rr = 0; rr < b.h; rr++) {
-      for (let cc = 0; cc < b.w; cc++) {
-        const r = b.r + rr;
-        const c = b.c + cc;
-        if (r > 0 && c > 0 && r < rows - 1 && c < cols - 1) map[r][c] = 1;
-      }
-    }
-  });
-
-  // Escondites
-  const corners = [ {r:1,c:1}, {r:1,c:cols-3}, {r:rows-3,c:1}, {r:rows-3,c:cols-3} ];
-  corners.forEach(pt => {
-    for (let dr = 0; dr < 2; dr++) {
-      for (let dc = 0; dc < 2; dc++) {
-        const rr = pt.r + dr;
-        const cc = pt.c + dc;
-        if (rr > 0 && cc > 0 && rr < rows - 1 && cc < cols - 1) map[rr][cc] = 3;
-      }
-    }
-  });
-  map.__hideCenters = corners;
-
-  // Spawn central limpio
-  const cx = Math.floor(cols / 2);
-  const cy = Math.floor(rows / 2);
-  for (let dr = -1; dr <= 1; dr++) {
-    for (let dc = -1; dc <= 1; dc++) {
-      const r = cy + dr;
-      const c = cx + dc;
-      if (r > 0 && c > 0 && r < rows - 1 && c < cols - 1) map[r][c] = 0;
-    }
-  }
-
-  // Power-ups
-  map.__powerups = [];
-  let attempts = 0;
-  while (map.__powerups.length < CONFIG.powerupCount && attempts < 500) {
-    attempts++;
-    const r = 2 + Math.floor(Math.random() * (rows - 4));
-    const c = 2 + Math.floor(Math.random() * (cols - 4));
-    if (map[r][c] === 2) {
-      map[r][c] = 4;
-      map.__powerups.push({r, c});
-    }
-  }
-
-  return map;
-}
-
-function countPellets(map) {
-  let count = 0;
-  for (let r = 0; r < CONFIG.rows; r++) {
-    for (let c = 0; c < CONFIG.cols; c++) {
-      if (map[r][c] === 2) count++;
-    }
-  }
-  return count;
-}
-
-// ============= SPAWN =============
-function spawnGhosts(level) {
-  const ghosts = [];
-  const baseGhosts = Math.min(10, Math.floor(2 + level * 0.7));
-  const centerX = CONFIG.cols / 2;
-  const centerY = CONFIG.rows / 2;
-  const radius = 4.0 + Math.min(5, Math.floor(level / 4));
-  const triesLimit = 400;
-
-  for (let i = 0; i < baseGhosts; i++) {
-    let placed = false;
-    let tries = 0;
-
-    while (!placed && tries < triesLimit) {
-      tries++;
-      const angle = Math.random() * Math.PI * 2;
-      const gx = Math.floor(centerX + Math.cos(angle) * radius) + 0.5;
-      const gy = Math.floor(centerY + Math.sin(angle) * radius) + 0.5;
-
-      if (distance(gx, gy, centerX + 0.5, centerY + 0.5) < CONFIG.minGhostSpawnDistFromPlayer) continue;
-
-      let tooClose = false;
-      for (const ghost of ghosts) {
-        if (distance(ghost.x, ghost.y, gx, gy) < CONFIG.minGhostSpawnDistBetween) {
-          tooClose = true;
-          break;
+      // Power-ups (caracoles)
+      let powerups = 0;
+      while (powerups < 3 && powerups < state.pellets / 5) {
+        const r = Math.floor(Math.random() * (CONFIG.rows - 4)) + 2;
+        const c = Math.floor(Math.random() * (CONFIG.cols - 4)) + 2;
+        if (state.map[r][c] === 2) {
+          state.map[r][c] = 4; // 4 = power-up
+          powerups++;
         }
       }
-      if (tooClose) continue;
-
-      if (collidesWithWallAt(gameState.map, gx, gy)) continue;
-
-      const ghost = new Ghost(gx, gy, randomColor());
-      ghost.speed = Math.min(5.2, 2.8 + level * 0.18 + Math.random() * 0.6);
-      ghosts.push(ghost);
-      placed = true;
     }
 
-    if (!placed) {
-      const fallback = new Ghost(centerX + 2 + i * 0.2, centerY + 2 + i * 0.2, '#ff5555');
-      fallback.speed = Math.min(5.2, 3.0 + Math.random() * 0.4);
-      ghosts.push(fallback);
+    function countPellets() {
+      let count = 0;
+      for (let r = 0; r < CONFIG.rows; r++) {
+        for (let c = 0; c < CONFIG.cols; c++) {
+          if (state.map[r][c] === 2) count++;
+        }
+      }
+      return count;
     }
-  }
 
-  return ghosts;
-}
+    function isColliding(x, y) {
+      const radius = 0.45;
+      const minR = Math.floor(y - radius);
+      const maxR = Math.floor(y + radius);
+      const minC = Math.floor(x - radius);
+      const maxC = Math.floor(x + radius);
 
-function spawnNatives() {
-  const natives = [];
-  for (let i = 0; i < CONFIG.nativeCount; i++) {
-    const gx = Math.floor(CONFIG.cols / 2 + (i % 2 ? -5 : 5) + (Math.random() * 2 - 1)) + 0.5;
-    const gy = Math.floor(CONFIG.rows / 2 + (i < 2 ? -3 : 3) + (Math.random() * 2 - 1)) + 0.5;
-    if (!collidesWithWallAt(gameState.map, gx, gy)) {
-      natives.push(new NativeFish(gx, gy));
+      for (let r = minR; r <= maxR; r++) {
+        for (let c = minC; c <= maxC; c++) {
+          if (r < 0 || c < 0 || r >= CONFIG.rows || c >= CONFIG.cols) return true;
+          if (state.map[r][c] === 1) return true;
+        }
+      }
+      return false;
     }
-  }
-  return natives;
-}
 
-function collidesWithWallAt(map, x, y) {
-  const radius = CONFIG.collisionRadius;
-  const minC = Math.floor(x - radius);
-  const maxC = Math.floor(x + radius);
-  const minR = Math.floor(y - radius);
-  const maxR = Math.floor(y + radius);
-
-  for (let r = minR; r <= maxR; r++) {
-    for (let c = minC; c <= maxC; c++) {
-      if (r < 0 || c < 0 || r >= CONFIG.rows || c >= CONFIG.cols) return true;
-      if (map[r][c] === 1) return true;
+    function distance(x1, y1, x2, y2) {
+      return Math.hypot(x2 - x1, y2 - y1);
     }
-  }
-  return false;
-}
 
-// ============= RENDERIZADO =============
-function draw() {
-  const { ctx, canvas, tile, map, player, ghosts, natives } = gameState;
+    function tryMove(entity, dirX, dirY, speed, delta) {
+      const nx = entity.x + dirX * speed * (delta / 1000);
+      const ny = entity.y + dirY * speed * (delta / 1000);
+      if (!isColliding(nx, ny)) {
+        entity.x = nx;
+        entity.y = ny;
+        return true;
+      }
+      if (dirX !== 0 && !isColliding(entity.x + dirX * speed * (delta / 1000), entity.y)) {
+        entity.x += dirX * speed * (delta / 1000);
+        return true;
+      }
+      if (dirY !== 0 && !isColliding(entity.x, entity.y + dirY * speed * (delta / 1000))) {
+        entity.y += dirY * speed * (delta / 1000);
+        return true;
+      }
+      return false;
+    }
 
-  // Ajustar tamaño del canvas
-  canvas.style.width = gameState.width + 'px';
-  canvas.style.height = gameState.height + 'px';
+    function update(delta) {
+      if (!state.running || state.paused || state.gameOver) return;
 
-  // Fondo
-  ctx.fillStyle = '#00131a';
-  ctx.fillRect(0, 0, gameState.width, gameState.height);
+      const now = performance.now();
 
-  // Dibujar mapa
-  for (let r = 0; r < CONFIG.rows; r++) {
-    for (let c = 0; c < CONFIG.cols; c++) {
-      const x = c * tile;
-      const y = r * tile;
+      // Temporizadores
+      if (state.hideActive && now > state.hideTimer) {
+        state.hideActive = false;
+        document.getElementById('hide-indicator').style.display = 'none';
+      }
+      if (state.speedBoost && now > state.speedBoostTimer) {
+        state.speedBoost = false;
+      }
 
-      if (map[r][c] === 1) {
-        ctx.fillStyle = '#133';
-        ctx.fillRect(x, y, tile, tile);
-      } else if (map[r][c] === 2) {
-        ctx.fillStyle = '#ffd54f';
-        ctx.beginPath();
-        ctx.arc(x + tile/2, y + tile/2, Math.max(2, tile * 0.08), 0, Math.PI * 2);
-        ctx.fill();
-      } else if (map[r][c] === 3) {
-        ctx.fillStyle = '#093';
-        ctx.fillRect(x + 2, y + 2, tile - 4, tile - 4);
-      } else if (map[r][c] === 4) {
-        const cx = x + tile/2;
-        const cy = y + tile/2;
-        ctx.fillStyle = '#8be04f';
-        ctx.beginPath();
-        ctx.arc(cx, cy, tile * 0.18, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.strokeStyle = '#2b5e2b';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.arc(cx, cy, tile * 0.28, Math.PI * 0.4, Math.PI * 1.2);
-        ctx.stroke();
+      // Movimiento del jugador
+      if (state.player.nextDir.x !== 0 || state.player.nextDir.y !== 0) {
+        const testX = state.player.x + state.player.nextDir.x * 0.3;
+        const testY = state.player.y + state.player.nextDir.y * 0.3;
+        if (!isColliding(testX, testY)) {
+          state.player.dir = { ...state.player.nextDir };
+        }
+      }
+
+      const playerSpeed = state.speedBoost ? CONFIG.nativeSpeed * 1.8 : CONFIG.nativeSpeed;
+      tryMove(state.player, state.player.dir.x, state.player.dir.y, playerSpeed, delta);
+
+      // Limites
+      state.player.x = Math.max(0.6, Math.min(CONFIG.cols - 0.6, state.player.x));
+      state.player.y = Math.max(0.6, Math.min(CONFIG.rows - 0.6, state.player.y));
+
+      // Interacción con el mapa
+      const pr = Math.floor(state.player.y);
+      const pc = Math.floor(state.player.x);
+
+      if (state.map[pr][pc] === 2) {
+        state.map[pr][pc] = 0;
+        state.score += 10;
+        state.pellets--;
+        updateHUD();
+        if (state.pellets <= 0) nextLevel();
+      } else if (state.map[pr][pc] === 3 && !state.hideActive) {
+        state.hideActive = true;
+        state.hideTimer = now + 5000;
+        document.getElementById('hide-indicator').style.display = 'inline';
+      } else if (state.map[pr][pc] === 4) {
+        state.map[pr][pc] = 0;
+        state.speedBoost = true;
+        state.speedBoostTimer = now + 6000;
+        state.score += 30;
+        updateHUD();
+      }
+
+      // IA de truchas
+      state.truchas.forEach(trucha => {
+        const dx = state.player.x - trucha.x;
+        const dy = state.player.y - trucha.y;
+        const dist = distance(state.player.x, state.player.y, trucha.x, trucha.y);
+
+        if (dist < 8) {
+          trucha.dir.x = Math.abs(dx) > Math.abs(dy) ? Math.sign(dx) : 0;
+          trucha.dir.y = Math.abs(dx) > Math.abs(dy) ? 0 : Math.sign(dy);
+        } else {
+          if (Math.random() < 0.02) {
+            const dirs = [{x:1,y:0}, {x:-1,y:0}, {x:0,y:1}, {x:0,y:-1}];
+            trucha.dir = dirs[Math.floor(Math.random() * 4)];
+          }
+        }
+
+        tryMove(trucha, trucha.dir.x, trucha.dir.y, trucha.speed, delta);
+
+        // Colisión con jugador
+        if (!state.hideActive && distance(trucha.x, trucha.y, state.player.x, state.player.y) < 0.7) {
+          loseLife();
+        }
+      });
+    }
+
+    function loseLife() {
+      state.lives--;
+      updateHUD();
+      showMessage("¡AY! Una trucha me atrapó 😢", 1200);
+      if (state.lives <= 0) {
+        gameOver();
+      } else {
+        // Reiniciar posición
+        state.player.x = Math.floor(CONFIG.cols / 2) + 0.5;
+        state.player.y = Math.floor(CONFIG.rows / 2) + 0.5;
+        state.player.dir = { x: 0, y: 0 };
+        state.hideActive = false;
+        document.getElementById('hide-indicator').style.display = 'none';
       }
     }
-  }
 
-  // Dibujar entidades
-  player.draw(ctx, tile);
-  natives.forEach(n => n.draw(ctx, tile));
-  ghosts.forEach(g => g.draw(ctx, tile));
-}
-
-// ============= ACTUALIZACIÓN =============
-function update(delta) {
-  if (!gameState.running || gameState.paused) return;
-
-  const now = performance.now();
-
-  // Expirar escondite
-  if (gameState.player.hidden && now > gameState.player.hideExpires) {
-    gameState.player.hidden = false;
-    document.getElementById('hide-indicator').style.display = 'none';
-  }
-
-  // Cambiar dirección del jugador
-  if (gameState.player.nextDir.x !== 0 || gameState.player.nextDir.y !== 0) {
-    const testX = gameState.player.x + gameState.player.nextDir.x * 0.25;
-    const testY = gameState.player.y + gameState.player.nextDir.y * 0.25;
-    if (!gameState.player.collidesWithWall(gameState.map, testX, testY)) {
-      gameState.player.dir = { ...gameState.player.nextDir };
+    function gameOver() {
+      state.running = false;
+      state.gameOver = true;
+      showMessage("¡JUEGO TERMINADO! 😔\nLas truchas invasoras ganaron...\nPero puedes intentarlo de nuevo. ¡Los peces nativos te necesitan!", 5000);
     }
-  }
 
-  // Mover jugador
-  gameState.player.tryMove(gameState.map, gameState.player.getSpeed(now), delta);
-  gameState.player.x = clamp(gameState.player.x, 0.12, CONFIG.cols - 0.12);
-  gameState.player.y = clamp(gameState.player.y, 0.12, CONFIG.rows - 0.12);
-
-  // Recoger items
-  const pr = Math.floor(gameState.player.y);
-  const pc = Math.floor(gameState.player.x);
-  if (gameState.player.collectItem(gameState.map, pr, pc)) {
-    updateHUD();
-    if (gameState.pelletsRemaining <= 0) nextLevel();
-  }
-
-  // Actualizar nativos
-  gameState.natives.forEach(n => {
-    n.updateAI(gameState.map);
-    n.tryMove(gameState.map, n.getSpeed(now), delta);
-
-    const nr = Math.floor(n.y);
-    const nc = Math.floor(n.x);
-    if (n.collectItem(gameState.map, nr, nc)) {
-      updateHUD();
-      if (gameState.pelletsRemaining <= 0) nextLevel();
+    function nextLevel() {
+      state.level++;
+      if (state.level > CONFIG.maxLevel) {
+        state.running = false;
+        showMessage("🎉 ¡FELICIDADES! 🎉\nSalvaste a los peces nativos de todas las truchas.\n¡Comparte este logro y ayuda a proteger los ríos reales!", 6000);
+      } else {
+        showMessage(`¡Nivel ${state.level} completado! ⭐\n¡Sigue salvando a los peces nativos!`, 2000);
+        setTimeout(() => startLevel(state.level), 2100);
+      }
     }
-  });
 
-  // Actualizar fantasmas
-  gameState.ghosts.forEach(g => {
-    g.updateAI(gameState.player, gameState.level);
-    g.tryMove(gameState.map, g.speed, delta);
+    function draw() {
+      const ctx = state.ctx;
+      const tile = CONFIG.tileSize;
 
-    if (g.checkCollision(gameState.player)) {
-      // Ya se reinició el nivel o el juego
-      return;
-    }
-  });
-}
+      // Fondo
+      ctx.fillStyle = '#001f3f';
+      ctx.fillRect(0, 0, state.canvas.width, state.canvas.height);
 
-function nextLevel() {
-  gameState.level++;
-  if (gameState.level > CONFIG.maxLevel) {
-    alert('¡Felicidades! completaste todos los niveles.');
-    resetGame();
-  } else {
-    startLevel(gameState.level);
-  }
-}
+      // Dibujar mapa
+      for (let r = 0; r < CONFIG.rows; r++) {
+        for (let c = 0; c < CONFIG.cols; c++) {
+          const x = c * tile;
+          const y = r * tile;
 
-// ============= CONTROL =============
-function setupInput() {
-  window.addEventListener('keydown', (e) => {
-    const keys = ['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d','W','A','S','D'];
-    if (keys.includes(e.key)) e.preventDefault();
+          if (state.map[r][c] === 1) {
+            ctx.fillStyle = '#2c3e50';
+            ctx.fillRect(x, y, tile, tile);
+          } else if (state.map[r][c] === 2) {
+            ctx.fillStyle = '#FFD700';
+            ctx.beginPath();
+            ctx.arc(x + tile/2, y + tile/2, tile * 0.15, 0, Math.PI * 2);
+            ctx.fill();
+          } else if (state.map[r][c] === 3) {
+            ctx.fillStyle = '#27ae60';
+            ctx.fillRect(x + 2, y + 2, tile - 4, tile - 4);
+            // Dibujar hojitas
+            ctx.fillStyle = '#2ecc71';
+            ctx.beginPath();
+            ctx.arc(x + tile/3, y + tile/4, tile * 0.1, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(x + tile*2/3, y + tile*3/4, tile * 0.1, 0, Math.PI * 2);
+            ctx.fill();
+          } else if (state.map[r][c] === 4) {
+            // Caracol power-up
+            ctx.fillStyle = '#F39C12';
+            ctx.beginPath();
+            ctx.arc(x + tile/2, y + tile/2, tile * 0.2, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#8B4513';
+            ctx.beginPath();
+            ctx.arc(x + tile/2 + 2, y + tile/2 - 2, tile * 0.06, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+      }
 
-    if (!gameState.player) return;
+      // Dibujar jugador (pez nativo)
+      const px = state.player.x * tile;
+      const py = state.player.y * tile;
+      ctx.save();
+      ctx.translate(px + tile/2, py + tile/2);
 
-    if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') gameState.player.nextDir = { x: 0, y: -1 };
-    if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') gameState.player.nextDir = { x: 0, y: 1 };
-    if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') gameState.player.nextDir = { x: -1, y: 0 };
-    if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') gameState.player.nextDir = { x: 1, y: 0 };
-  });
-}
+      // Cuerpo
+      ctx.fillStyle = '#FF6B6B';
+      ctx.beginPath();
+      ctx.ellipse(0, 0, tile * 0.35, tile * 0.25, 0, 0, Math.PI * 2);
+      ctx.fill();
 
-// ============= LOOP =============
-function gameLoop(timestamp) {
-  if (!gameState.lastTime) gameState.lastTime = timestamp;
-  const delta = timestamp - gameState.lastTime;
-  gameState.lastTime = timestamp;
-
-  update(delta);
-  draw();
-
-  if (gameState.running) {
-    requestAnimationFrame(gameLoop);
-  }
-}
-
-// ============= INICIALIZACIÓN =============
-function resizeCanvas() {
-  const marginX = 60;
-  const marginY = 160;
-  const availW = Math.max(300, window.innerWidth - marginX);
-  const availH = Math.max(300, window.innerHeight - marginY);
-  const maxSize = Math.min(availW, availH);
-
-  gameState.tile = Math.floor(maxSize / Math.max(CONFIG.cols, CONFIG.rows));
-  if (gameState.tile < 14) gameState.tile = 14;
-
-  gameState.width = CONFIG.cols * gameState.tile;
-  gameState.height = CONFIG.rows * gameState.tile;
-  gameState.canvas.width = gameState.width;
-  gameState.canvas.height = gameState.height;
-}
-
-function startLevel(level) {
-  gameState.map = generateMap(CONFIG.cols, CONFIG.rows);
-  gameState.player = new Player(Math.floor(CONFIG.cols / 2) + 0.5, Math.floor(CONFIG.rows / 2) + 0.5);
-  gameState.ghosts = spawnGhosts(level);
-  gameState.natives = spawnNatives();
-  gameState.pelletsRemaining = countPellets(gameState.map);
-
-  gameState.running = true;
-  gameState.paused = false;
-  updateHUD();
-}
-
-function resetGame() {
-  gameState.level = 1;
-  gameState.lives = CONFIG.initialLives;
-  gameState.score = 0;
-  startLevel(1);
-}
-
-function updateHUD() {
-  document.getElementById('pf-level').textContent = gameState.level;
-  document.getElementById('pf-lives').textContent = gameState.lives;
-  document.getElementById('pf-score').textContent = gameState.score;
-  document.getElementById('pf-pellets').textContent = gameState.pelletsRemaining;
-  document.getElementById('pf-natives').textContent = gameState.natives.length;
-}
-
-// ============= INICIO =============
-(function init() {
-  gameState.canvas = document.getElementById('pf-canvas');
-  gameState.ctx = gameState.canvas.getContext('2d');
-
-  window.addEventListener('resize', () => {
-    resizeCanvas();
-    draw();
-  });
-
-  resizeCanvas();
-  setupInput();
-
-  document.getElementById('pf-start').addEventListener('click', () => {
-    resetGame();
-    gameState.lastTime = 0;
-    requestAnimationFrame(gameLoop);
-  });
-
-  document.getElementById('pf-pause').addEventListener('click', () => {
-    gameState.paused = !gameState.paused;
-    document.getElementById('pf-pause').textContent = gameState.paused ? 'Reanudar' : 'Pausa';
-  });
-
-  startLevel(1);
-  updateHUD();
-})();
-</script>
-</body>
-</html>
+      // Ojo
+     
