@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>IcTiosCusco — Recursos</title>
+    <meta name="description" content="Recursos educativos e interactivos sobre Orestias y ecosistemas altoandinos.">
+
+    <!-- Fuentes y estilos (mismos que index.html para mantener consistencia) -->
+    <link href="https://fonts.googleapis.com/css?family=Dosis:200,300,400,500,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Overpass:300,400,400i,600,700" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+    <link rel="stylesheet" href="css/aos.css">
+    <link rel="stylesheet" href="css/ionicons.min.css">
+    <link rel="stylesheet" href="css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="css/jquery.timepicker.css">
+
+    <link rel="stylesheet" href="css/flaticon.css">
+    <link rel="stylesheet" href="css/icomoon.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- model-viewer (para mostrar modelos 3D) -->
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
+    <style>
+      /* Pequeñas adaptaciones locales */
+      .hero-wrap { background-image: url('images/laguna_ictioscusco.jpg'); background-size:cover; }
+      .resource-card { background: #fff; border-radius: 10px; box-shadow: 0 6px 18px rgba(0,0,0,0.06); overflow: hidden; }
+      .resource-card .card-media { height: 240px; display:flex; align-items:center; justify-content:center; background: linear-gradient(180deg, #eef6f9, #f9fbfc); }
+      .resource-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.25rem; }
+      .resource-sub { font-size: 0.9rem; color: #6c757d; margin-bottom: .5rem }
+      .resource-actions { display:flex; gap:.5rem; }
+      model-viewer { width:100%; height:100%; }
+      @media (max-width:576px) { .resource-card .card-media { height: 160px; } }
+    </style>
+  </head>
+  <body>
+
+  <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="index.html">
+        <img src="images/logo.png" alt="IcTiosCusco logo" style="height:44px; margin-right:10px;">
+        <span>IcTiosCusco</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="oi oi-menu"></span> Menu
+      </button>
+
+      <div class="collapse navbar-collapse" id="ftco-nav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item"><a href="index.html" class="nav-link">Inicio</a></li>
+          <li class="nav-item"><a href="about.html" class="nav-link">Quiénes somos</a></li>
+          <li class="nav-item"><a href="causes.html" class="nav-link">Proyectos</a></li>
+          <li class="nav-item"><a href="donate.html" class="nav-link">Donación</a></li>
+          <li class="nav-item"><a href="blog.html" class="nav-link">Noticias</a></li>
+          <li class="nav-item"><a href="gallery.html" class="nav-link">Galería</a></li>
+          <li class="nav-item"><a href="event.html" class="nav-link">Miembros</a></li>
+
+          <!-- Recursos: activo en esta página -->
+          <li class="nav-item active"><a href="recursos.html" class="nav-link">Recursos</a></li>
+
+          <li class="nav-item"><a href="contact.html" class="nav-link">Contacto</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="hero-wrap d-flex align-items-center" style="height:320px;">
+    <div class="overlay"></div>
+    <div class="container text-center">
+      <div class="row justify-content-center">
+        <div class="col-md-10 heading-section ftco-animate">
+          <h1 class="mb-3">Recursos</h1>
+          <p class="lead">Fichas, modelos 3D y actividades para aprender sobre los peces altoandinos.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="ftco-section bg-light">
+    <div class="container">
+      <div class="row justify-content-center mb-4">
+        <div class="col-md-8 text-center">
+          <h2 class="mb-3">Fichas y modelos 3D</h2>
+          <p>Haz click en "Ver ficha" para abrir la información detallada. Los modelos 3D se pueden rotar y hacer zoom.</p>
+        </div>
+      </div>
+
+      <div class="row" id="recursos-grid">
+
+        <!-- Tarjeta 1 -->
+        <div class="col-md-4 d-flex mb-4 ftco-animate">
+          <div class="resource-card w-100">
+            <div class="card-media">
+              <!-- Si tienes modelo, reemplaza el src por models/orestias1.glb -->
+              <model-viewer src="models/orestias1.glb" alt="Orestias sp. Huaypo" camera-controls auto-rotate shadow-intensity="0"></model-viewer>
+            </div>
+            <div class="p-3">
+              <div class="resource-title">Orestias sp. Huaypo</div>
+              <div class="resource-sub">Orestias cf. agassii</div>
+              <div class="resource-sub">Laguna Huaypo</div>
+              <div class="resource-actions mt-2">
+                <button class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#fichaModal" data-id="orestias-1">Ver ficha</button>
+                <a class="btn btn-outline-secondary btn-sm" href="models/orestias1.glb" download>Descargar 3D</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tarjeta 2 -->
+        <div class="col-md-4 d-flex mb-4 ftco-animate">
+          <div class="resource-card w-100">
+            <div class="card-media">
+              <model-viewer src="models/orestias2.glb" alt="Orestias sp. Piuray" camera-controls auto-rotate shadow-intensity="0"></model-viewer>
+            </div>
+            <div class="p-3">
+              <div class="resource-title">Orestias sp. Piuray</div>
+              <div class="resource-sub">Orestias sp.</div>
+              <div class="resource-sub">Laguna Piuray</div>
+              <div class="resource-actions mt-2">
+                <button class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#fichaModal" data-id="orestias-2">Ver ficha</button>
+                <a class="btn btn-outline-secondary btn-sm" href="models/orestias2.glb" download>Descargar 3D</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tarjeta 3: juego -->
+        <div class="col-md-4 d-flex mb-4 ftco-animate">
+          <div class="resource-card w-100">
+            <div class="card-media" style="background-image: url('images/rec_juego.jpg'); background-size:cover; background-position:center;"></div>
+            <div class="p-3">
+              <div class="resource-title">Juego educativo</div>
+              <div class="resource-sub">Quiz interactivo</div>
+              <div class="resource-sub">Identifica especies</div>
+              <div class="resource-actions mt-2">
+                <button class="btn btn-success btn-sm" id="open-quiz">Jugar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row mt-3">
+        <div class="col text-center">
+          <a href="#" class="btn btn-outline-primary">Ver todas las fichas</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Modal ficha (genérico) -->
+  <div class="modal fade" id="fichaModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="fichaModalTitle"></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6" id="fichaModalMedia"></div>
+            <div class="col-md-6">
+              <p id="fichaModalSci"></p>
+              <p id="fichaModalHabitat"></p>
+              <p id="fichaModalDesc"></p>
+              <p><a id="fichaModalPdf" href="#" class="btn btn-outline-primary btn-sm" target="_blank">Descargar ficha (PDF)</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal quiz -->
+  <div class="modal fade" id="quizModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header"><h5 class="modal-title">Juego: ¿Qué especie es?</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body text-center">
+          <div id="quizMedia" style="height:220px; display:flex; align-items:center; justify-content:center;"></div>
+          <div id="quizQuestion" class="mt-3 mb-2 font-weight-bold"></div>
+          <div id="quizOptions" class="d-flex flex-column"></div>
+          <div id="quizResult" class="mt-3 font-weight-bold"></div>
+        </div>
+        <div class="modal-footer">
+          <button id="quizNext" class="btn btn-primary">Siguiente</button>
+          <button class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer (igual que en index.html) -->
+  <footer class="ftco-footer ftco-section img">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row mb-5">
+        <div class="col-md-3">
+          <div class="ftco-footer-widget mb-4">
+            <h2 class="ftco-heading-2">Sobre IcTiosCusco</h2>
+            <p>Grupo de investigación dedicado a la conservación y estudio de peces andinos (Orestias) en la región de Cusco.</p>
+            <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
+              <li class="ftco-animate"><a href="#" aria-label="Facebook"><span class="icon-facebook"></span></a></li>
+              <li class="ftco-animate"><a href="#" aria-label="Instagram"><span class="icon-instagram"></span></a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="ftco-footer-widget mb-4">
+            <h2 class="ftco-heading-2">Publicaciones recientes</h2>
+            <div class="block-21 mb-4 d-flex">
+              <a class="blog-img mr-4" style="background-image: url(images/noticia_1.jpg);"></a>
+              <div class="text">
+                <h3 class="heading"><a href="#">Resultados preliminares de Huaypo</a></h3>
+                <div class="meta"><div><a href="#"><span class="icon-calendar"></span> Sept 10, 2024</a></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="ftco-footer-widget mb-4 ml-md-4">
+            <h2 class="ftco-heading-2">Enlaces</h2>
+            <ul class="list-unstyled">
+              <li><a href="index.html" class="py-2 d-block">Inicio</a></li>
+              <li><a href="about.html" class="py-2 d-block">Quiénes somos</a></li>
+              <li><a href="donate.html" class="py-2 d-block">Donación</a></li>
+              <li><a href="causes.html" class="py-2 d-block">Proyectos</a></li>
+              <li><a href="event.html" class="py-2 d-block">Miembros</a></li>
+              <li><a href="blog.html" class="py-2 d-block">Noticias</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="ftco-footer-widget mb-4">
+            <h2 class="ftco-heading-2">¿Tienes preguntas?</h2>
+            <div class="block-23 mb-3">
+              <ul>
+                <li><span class="icon icon-map-marker"></span><span class="text">Cusco, Perú</span></li>
+                <li><a href="tel:+51969392189"><span class="icon icon-phone"></span><span class="text">+51 969 392 189</span></a></li>
+                <li><a href="mailto:contacto@ictioscusco.org"><span class="icon icon-envelope"></span><span class="text">ictioscusco@gmail.com</span></a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <p>Copyright &copy;<script>document.write(new Date().getFullYear());</script> IcTiosCusco. Todos los derechos reservados.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts (mismos que index.html) -->
+  <script src="js/jquery.min.js"></script>
+  <script src="js/jquery-migrate-3.0.1.min.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/jquery.easing.1.3.js"></script>
+  <script src="js/jquery.waypoints.min.js"></script>
+  <script src="js/jquery.stellar.min.js"></script>
+  <script src="js/owl.carousel.min.js"></script>
+  <script src="js/jquery.magnific-popup.min.js"></script>
+  <script src="js/aos.js"></script>
+  <script src="js/jquery.animateNumber.min.js"></script>
+  <script src="js/bootstrap-datepicker.js"></script>
+  <script src="js/jquery.timepicker.min.js"></script>
+  <script src="js/scrollax.min.js"></script>
+  <script src="js/google-map.js"></script>
+  <script src="js/main.js"></script>
+
+  <script>
+    // Datos sencillos para el modal y el quiz (puedes ampliarlos desde un archivo JS aparte)
+    const RESOURCE_DATA = {
+      'orestias-1': {
+        title: 'Orestias sp. Huaypo', scientific: 'Orestias cf. agassii', habitat: 'Laguna Huaypo', description: 'Ficha breve con características morfométricas, distribución y amenazas.', pdf: 'docs/ficha_orestias_huaypo.pdf', media: 'models/orestias1.glb'
+      },
+      'orestias-2': {
+        title: 'Orestias sp. Piuray', scientific: 'Orestias sp.', habitat: 'Laguna Piuray', description: 'Ficha con datos de muestreo y recomendaciones de conservación.', pdf: 'docs/ficha_orestias_piuray.pdf', media: 'models/orestias2.glb'
+      }
+    };
+
+    $(document).ready(function(){
+      // Abrir modal ficha y cargar contenido dinámico
+      $('#fichaModal').on('show.bs.modal', function (event) {
+        const button = $(event.relatedTarget);
+        const id = button.data('id');
+        const data = RESOURCE_DATA[id];
+        if (!data) return;
+        $('#fichaModalTitle').text(data.title);
+        $('#fichaModalSci').html('<strong>Nombre científico:</strong> ' + data.scientific);
+        $('#fichaModalHabitat').html('<strong>Hábitat:</strong> ' + data.habitat);
+        $('#fichaModalDesc').text(data.description);
+        if (data.pdf) { $('#fichaModalPdf').attr('href', data.pdf).show(); } else { $('#fichaModalPdf').hide(); }
+        const mediaDiv = $('#fichaModalMedia');
+        mediaDiv.html('');
+        if (data.media && data.media.endsWith('.glb')) {
+          const mv = $('<model-viewer>', { src: data.media, alt: data.title, 'camera-controls': '', 'auto-rotate': '', style: 'width:100%; height:320px;' });
+          mediaDiv.append(mv);
+        } else if (data.media) {
+          mediaDiv.css('background-image', 'url('+data.media+')').css('height','320px').css('background-size','cover');
+        }
+      });
+
+      // Quiz
+      $('#open-quiz').on('click', function(){ $('#quizModal').modal('show'); });
+
+      const QUIZ = [
+        {q:'¿Cuál de estas especies es propia de lagunas altoandinas?', choices:['Orestias','Tilapia','Trucha Arcoíris'], answer:0 },
+        {q:'¿Dónde viven principalmente los Orestias?', choices:['Ríos estuarinos','Lagunas altoandinas','Océano'], answer:1 }
+      ];
+      let qi = 0;
+      function showQ(){ const Q = QUIZ[qi]; $('#quizQuestion').text(Q.q); $('#quizOptions').html(''); Q.choices.forEach((c,i)=>{ const b = $('<button>').addClass('btn btn-outline-primary btn-block mb-2').text(c).click(()=>{ $('#quizResult').text(i===Q.answer? '¡Correcto!':'Incorrecto — intenta el siguiente.'); }); $('#quizOptions').append(b); }); }
+      $('#quizModal').on('shown.bs.modal', function(){ qi=0; $('#quizResult').text(''); showQ(); });
+      $('#quizNext').on('click', function(){ qi++; if (qi>=QUIZ.length) { $('#quizModal').modal('hide'); } else { $('#quizResult').text(''); showQ(); } });
+    });
+  </script>
+
+  </body>
+</html>
