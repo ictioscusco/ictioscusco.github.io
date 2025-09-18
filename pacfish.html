@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>PAC-FISH — IcTiosCusco (cuevas, huevos, hembras)</title>
+  <title>PAC-FISH — IcTiosCusco (cuevas, chance, hembras limitadas)</title>
 
   <link href="https://fonts.googleapis.com/css?family=Dosis:200,300,400,500,700" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Overpass:300,400,400i,600,700" rel="stylesheet">
@@ -21,20 +21,31 @@
 
     /* Small HUD pieces */
     #overlay { position:absolute; left:12px; top:12px; color:white; z-index:6; text-shadow:0 2px 6px rgba(0,0,0,0.6); }
-    #hud { position:absolute; right:12px; top:12px; color:white; z-index:6; text-align:right; }
+    #hud { position:absolute; right:12px; top:12px; color:white; z-index:6; text-align:right; display:flex; gap:8px; align-items:center; }
+    #hud .hud-item { margin-left:8px; }
+
     #minimap { position:absolute; right:16px; bottom:16px; width:160px; height:140px; z-index:6; border-radius:999px; overflow:hidden; box-shadow:0 6px 16px rgba(0,0,0,0.25); background:rgba(0,0,0,0.12); display:flex; align-items:center; justify-content:center; }
     #mm { border-radius:999px; display:block; width:92%; height:92%; background:transparent; }
 
-    /* circular legend above minimap */
-    #legendWrap { position:absolute; right:12px; bottom:180px; z-index:8; display:flex; gap:8px; align-items:center; transform:translateY(0); }
+    /* vertical legend above minimap */
+    #legendWrap { position:absolute; right:12px; bottom:310px; z-index:8; display:flex; flex-direction:column; gap:8px; align-items:flex-end; }
     .legend { background: rgba(0,0,0,0.6); color:white; padding:8px 10px; border-radius:999px; font-size:0.82rem; display:flex; gap:10px; align-items:center; box-shadow:0 6px 14px rgba(0,0,0,0.35); }
     .sw { width:14px; height:10px; border-radius:3px; display:inline-block; border:1px solid rgba(255,255,255,0.08); }
 
     /* hidden indicator */
     #hiddenBadge { position:absolute; left:12px; bottom:18px; color:#fff; background:rgba(0,0,0,0.4); padding:6px 8px; border-radius:8px; z-index:9; display:none; }
 
+    /* chance button */
+    #chanceBtn { position:absolute; left:16px; top:74px; z-index:9; }
+
     /* cave styling control (small UI circle) */
     .caveMarker { width:12px; height:12px; border-radius:50%; background:rgba(0,0,0,0.45); box-shadow:inset 0 -4px 10px rgba(0,0,0,0.6); border:2px solid rgba(255,255,255,0.06); }
+
+    /* responsive adjustments */
+    @media (max-width:420px){
+      #legendWrap { right:8px; bottom:260px; }
+      #chanceBtn { left:8px; }
+    }
   </style>
 </head>
 <body>
@@ -64,25 +75,27 @@
       <a class="btn btn-outline-primary btn-sm btn-back" href="recursos.html">← Volver a Recursos</a>
     </div>
     <p style="margin:0 0 12px 0; color:#444;">
-      Lee la mini-historia antes de cada nivel. Controles: mueve con el ratón o tocando la pantalla. Usa cuevas para esconderte.
+      Lee la mini-historia antes de cada nivel. Controles: mueve con el ratón o tocando la pantalla. Usa cuevas para esconderte. "Usar chance" te rescata una vez por nivel.
     </p>
 
     <div id="game-container">
       <canvas id="c"></canvas>
 
       <div id="overlay">Mov: ratón / tacto</div>
-      <div id="hud">Score: <span id="score">0</span><br>Tamaño: <span id="size">0</span></div>
+
+      <div id="hud">
+        <div class="hud-item">Score: <strong id="score">0</strong></div>
+        <div class="hud-item">Tamaño: <strong id="size">0</strong></div>
+        <div class="hud-item"><button id="chanceBtn" class="btn btn-warning btn-sm">Usar chance</button></div>
+      </div>
 
       <div id="legendWrap">
-        <div class="legend" id="legendBox">
-          <span style="font-weight:600; margin-right:8px;">Leyenda</span>
-          <span title="Pejerrey hembra" class="sw" style="background:#a0e0ff"></span> Hembra
-          <span class="sw" style="background:#6fb7ff; margin-left:6px"></span> Macho
-          <span class="sw" style="background:#c08f4a; margin-left:6px"></span> Carpa
-          <span class="sw" style="background:#ff7b7b; margin-left:6px"></span> Trucha
-          <span class="sw" style="background:#7ef78a; margin-left:6px"></span> Huevo
-          <span class="sw" style="background:#333; margin-left:6px"></span> Cueva
-        </div>
+        <div class="legend"><span class="sw" style="background:#a0e0ff"></span> Pejerrey H</div>
+        <div class="legend"><span class="sw" style="background:#6fb7ff"></span> Pejerrey M</div>
+        <div class="legend"><span class="sw" style="background:#c08f4a"></span> Carpa</div>
+        <div class="legend"><span class="sw" style="background:#ff7b7b"></span> Trucha</div>
+        <div class="legend"><span class="sw" style="background:#7ef78a"></span> Huevo</div>
+        <div class="legend"><span class="sw" style="background:#333"></span> Cueva</div>
       </div>
 
       <div id="minimap"><canvas id="mm"></canvas></div>
@@ -121,7 +134,6 @@
   <script src="js/jquery.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
 
-  <!-- Juego completo con cuevas, huevos y hembras -->
   <script>
   (function(){
     // CONFIG
@@ -137,10 +149,11 @@
       troutSpeedBase: 120,
       pelletRespawn: true
     };
-    const REPRO_MIN_MASS = 400; // reproducción rara
-    const EGG_MAX = 8; // pocos huevos por mapa
-    const EGG_SPEED_BUFF = 1.6; // multiplicador de velocidad
-    const EGG_BUFF_TIME = 6.0; // segundos
+    const REPRO_MIN_MASS = 400;
+    const EGG_MAX = 8;
+    const EGG_SPEED_BUFF = 1.6;
+    const EGG_BUFF_TIME = 6.0;
+    const CHANCE_INVULN = 6.0; // segundos de invulnerabilidad / espacio seguro
 
     function rand(a,b){ return a + Math.random()*(b-a); }
     function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
@@ -167,6 +180,7 @@
     let caves = [], eggs = [];
     let running=false, paused=false, lastTime=performance.now(), mouse={x:0,y:0,worldX:0,worldY:0,down:false}, score=0;
     let currentLevelIndex=0, levelProgress={}, oxygen=100, pollutionZones=[];
+    let chanceUsed = false;
 
     // LEVELS (Urcos objetivo cambiado)
     const LEVELS = [
@@ -174,7 +188,7 @@
         id: 'urcos', name: 'Urcos',
         pelletCount: 700,
         composition: { pejerrey: 42, carpa: 14, trout: 0 },
-        targets: { 'pejerrey_F': 10 }, // comer 10 pejerreyes HEMBRA
+        targets: { 'pejerrey_F': 10 },
         description: 'Urcos: Rolando Chaparrea sembró pejerreyes en la laguna. Debes crecer y eliminar 10 pejerreyes HEMBRA para frenar sus generaciones.'
       },
       {
@@ -199,8 +213,7 @@
         this.x=x; this.y=y; this.vx=0; this.vy=0; this.mass=mass; this.r=SETTINGS.massToRadius(this.mass);
         this.color=color; this.type=type; this.species=species; this.dead=false; this.reproCooldown=0;
         this.prefersPellets=false;
-        // additional
-        this.sex = null; // 'F' or 'M' for pejerreyes
+        this.sex = null;
         this.eggCooldown = 0;
       }
       updateRadius(){ this.r = SETTINGS.massToRadius(this.mass); }
@@ -210,24 +223,46 @@
     }
 
     function spawnPellets(n){ for(let i=0;i<n;i++) pellets.push({ x:rand(20,world.w-20), y:rand(20,world.h-20), mass:SETTINGS.pelletMass, r:SETTINGS.massToRadius(SETTINGS.pelletMass), color:'#ffd54f' }); }
-    function spawnNativesFromComposition(comp){
+
+    // spawnNativesFromComposition ahora recibe levelId para poder ajustar hembras en Urcos
+    function spawnNativesFromComposition(comp, levelId){
       Object.entries(comp).forEach(([spec,count])=>{
+        if(spec === 'pejerrey' && levelId === 'urcos'){
+          // aseguramos exactamente 10 hembras (o menos si count<10)
+          const femCount = Math.min(10, count);
+          // create array of sexes: first femCount are 'F', others 'M'
+          const sexes = [];
+          for(let i=0;i<count;i++) sexes.push(i < femCount ? 'F' : 'M');
+          // shuffle sexes slightly to distribute, but keep count
+          for(let s = sexes.length - 1; s > 0; s--){ const r = Math.floor(Math.random()*(s+1)); const tmp = sexes[s]; sexes[s]=sexes[r]; sexes[r]=tmp; }
+          for(let i=0;i<count;i++){
+            const x=rand(60,world.w-60), y=rand(60,world.h-60);
+            const mass = rand(8,22);
+            const sex = sexes[i];
+            const color = sex==='F' ? '#a0e0ff' : '#6fb7ff';
+            const f = new Fish(x,y,mass,color,'native','pejerrey');
+            f.sex = sex;
+            f.vx = rand(-30,30); f.vy = rand(-30,30);
+            natives.push(f);
+          }
+          return;
+        }
+
         for(let i=0;i<count;i++){
           const x=rand(60,world.w-60), y=rand(60,world.h-60);
           const mass = spec==='carpa'? rand(18,40) : spec==='pejerrey'? rand(8,22) : rand(18,60);
           const color = spec==='carpa'? '#c08f4a' : spec==='pejerrey'? '#9ae0ff' : '#ff7b7b';
           const f = new Fish(x,y,mass,color,'native',spec);
           if(spec==='carpa') f.prefersPellets=true;
-          // if pejerrey, assign sex (roughly 40% female to have fewer hembras)
           if(spec==='pejerrey'){ f.sex = (Math.random() < 0.38) ? 'F' : 'M'; if(f.sex==='F') f.color = '#a0e0ff'; else f.color = '#6fb7ff'; }
           f.vx=rand(-30,30); f.vy=rand(-30,30);
           natives.push(f);
         }
       });
     }
+
     function spawnFrogs(n){ for(let i=0;i<n;i++) frogs.push({ x:rand(60,world.w-60), y:rand(60,world.h-60), r:8, mass:2, color:'#6bff7a', dead:false }); }
 
-    // caves: create a few in map, small count (2-4)
     function spawnCavesForLevel(levelId){
       caves = [];
       const caveCount = (levelId==='urcos') ? 3 : (levelId==='lucre' ? 2 : 2);
@@ -236,26 +271,21 @@
       }
     }
 
-    // eggs helpers
     function spawnEgg(x,y){
       if(eggs.length >= EGG_MAX) return;
       eggs.push({ x, y, r:6, created: performance.now() });
     }
 
-    // player
     function createPlayer(){ player = new Fish(world.w/2, world.h/2, SETTINGS.playerStartMass, '#ffd54f','player','orestia'); player.updateRadius();
-      // extra fields
-      player.hidden = false;
-      player.speedBuff = 1.0;
-      player.speedBuffTimer = 0;
+      player.hidden = false; player.speedBuff = 1.0; player.speedBuffTimer = 0; player.invulnerable = false;
     }
 
-    // tryEat improved (handles pejerrey eating player and female count)
+    // tryEat improved
     function tryEat(pred, prey){
       if(!prey || prey.dead) return false;
 
-      // Pejerrey special: if pred is pejerrey and pred.mass > player.mass*1.05, can eat player at distance relaxed
-      if(pred.species === 'pejerrey' && prey.type === 'player' && pred.mass > player.mass * 1.05){
+      // if prey is player and pred pejerrey big enough
+      if(pred.species === 'pejerrey' && prey.type === 'player' && pred.mass > player.mass * 1.05 && !player.invulnerable){
         const d = Math.hypot(pred.x - prey.x, pred.y - prey.y);
         if(d < pred.r * 0.95){
           prey.dead = true;
@@ -268,20 +298,17 @@
         return false;
       }
 
-      // Normal eat condition
+      // normal condition
       if(pred.r > prey.r * 1.08 && dist(pred,prey) < pred.r - prey.r*0.25){
-        // increment targets if player ate target
-        const wasPlayer = (prey.type === 'player');
-        // handle counters before removing
+        // if prey is female pejerrey count progress
         if(prey.type !== 'player' && prey.species === 'pejerrey' && prey.sex === 'F'){
-          // increment female pejerrey killed
           levelProgress['pejerrey_F'] = (levelProgress['pejerrey_F']||0) + 1;
         }
         prey.dead = true;
         pred.mass += prey.mass * SETTINGS.eatFactor;
         pred.updateRadius();
         if(pred.type !== 'player') pred.reproCooldown = Math.max(0, pred.reproCooldown - 1);
-        if(pred.type === 'player'){ score += Math.round(prey.mass*2); }
+        if(pred.type === 'player') score += Math.round(prey.mass*2);
         if(pred.type !== 'player') checkRepro(pred);
         return true;
       }
@@ -303,12 +330,10 @@
       return false;
     }
 
-    // player can eat eggs: speed buff
     function tryEatEgg(f, idx){
       const e = eggs[idx];
       const d = Math.hypot(f.x - e.x, f.y - e.y);
       if(d < f.r + e.r*0.8){
-        // only player gets speed buff
         if(f.type === 'player'){
           f.speedBuff = EGG_SPEED_BUFF;
           f.speedBuffTimer = EGG_BUFF_TIME;
@@ -319,7 +344,7 @@
       return false;
     }
 
-    // reproduction (rare)
+    // reproduction rare
     function checkRepro(f){
       if(f.mass < REPRO_MIN_MASS) return;
       if(natives.length >= 300) return;
@@ -338,7 +363,7 @@
       f.reproCooldown = 12 + Math.random()*12;
     }
 
-    // AI: improved natives (pejerreyes prioritize food, females lay eggs)
+    // natives AI
     function updateNatives(dt){
       for(let i=0;i<natives.length;i++){
         const n = natives[i];
@@ -346,20 +371,18 @@
         if(n.reproCooldown > 0) n.reproCooldown -= dt;
         if(n.eggCooldown > 0) n.eggCooldown -= dt;
 
-        // Female pejerrey egg-laying behavior (rare, only if big enough)
+        // egg-laying for females (rare)
         if(n.species === 'pejerrey' && n.sex === 'F' && n.mass > 18 && n.eggCooldown <= 0 && eggs.length < EGG_MAX && Math.random() < 0.012){
-          // lay egg nearby, sparse distribution
           const ex = clamp(n.x + rand(-180,180), 30, world.w-30);
           const ey = clamp(n.y + rand(-180,180), 30, world.h-30);
           spawnEgg(ex, ey);
-          n.eggCooldown = 18 + Math.random()*30; // wait long before another egg
+          n.eggCooldown = 18 + Math.random()*30;
         }
 
-        // If player is hidden (inside cave), pejerreyes should stop chasing player and wander/flee
+        // if player hidden -> avoid chasing
         if(player.hidden){
-          // if pejerrey was aggressive, make it slowly move away from player's cave
           if(n.species === 'pejerrey' && n.mass > 14){
-            n.applyMovement(n.x - player.x, n.y - player.y, dt*0.8); // flee away
+            n.applyMovement(n.x - player.x, n.y - player.y, dt*0.8);
             continue;
           } else {
             if(!n.target || Math.random() < 0.01) n.target = { x: n.x + rand(-220,220), y: n.y + rand(-220,220) };
@@ -368,14 +391,11 @@
           }
         }
 
-        // Determine if should chase player (pejerrey that exceeded threshold or bigger than player)
         const shouldChasePlayer = (n.species === 'pejerrey' && n.mass > Math.max(20, player.mass * 1.05));
 
         if(shouldChasePlayer){
-          // chase player
           n.applyMovement(player.x - n.x, player.y - n.y, dt);
-          tryEat(n, player); // try to eat if in range
-          // also attempt to eat smaller fishes nearby
+          tryEat(n, player);
           for(let j = natives.length - 1; j >= 0; j--){
             const other = natives[j];
             if(other === n || other.dead) continue;
@@ -388,15 +408,13 @@
           continue;
         }
 
-        // Not chasing: prioritize pellets -> carpas -> small pejerreyes (canibalism)
+        // prioritize pellets -> carpa -> small pejerreyes
         let target = null, best = 1e9;
-        // pellets
         for(let k=0;k<pellets.length;k++){
           const p = pellets[k];
           const d = Math.hypot(p.x - n.x, p.y - n.y);
           if(d < best && d < 420){ best = d; target = { type:'pellet', refIndex:k, x:p.x, y:p.y }; }
         }
-        // carpas
         if(!target){
           for(let k=0;k<natives.length;k++){
             const other = natives[k];
@@ -407,7 +425,6 @@
             }
           }
         }
-        // small pejerreyes (canibalism)
         if(!target){
           for(let k=0;k<natives.length;k++){
             const other = natives[k];
@@ -443,7 +460,6 @@
       }
     }
 
-    // trouts unchanged except they may eat natives and frogs
     function updateTrouts(dt){
       for(let t of trouts){
         if(t.dead) continue;
@@ -466,19 +482,15 @@
       }
     }
 
-    // player update includes eggs eating and cave detection
     function updatePlayer(dt){
-      // speed buff time
       if(player.speedBuffTimer > 0){
         player.speedBuffTimer = Math.max(0, player.speedBuffTimer - dt);
         if(player.speedBuffTimer === 0) player.speedBuff = 1.0;
       }
 
-      // apply movement scaled by speedBuff
       const tx = mouse.worldX || player.x, ty = mouse.worldY || player.y;
-      // temporarily modify player's getSpeed via multiplying base speed
       const desiredDx = tx - player.x, desiredDy = ty - player.y;
-      const sBase = player.getSpeedBase ? player.getSpeedBase() : SETTINGS.playerSpeedBase;
+      const sBase = SETTINGS.playerSpeedBase;
       const speed = (sBase / (1 + Math.sqrt(player.mass)*0.05)) * player.speedBuff;
       const len = Math.hypot(desiredDx,desiredDy) || 1;
       player.vx = (desiredDx/len)*speed; player.vy = (desiredDy/len)*speed;
@@ -486,31 +498,25 @@
       player.x = clamp(player.x, player.r+4, world.w - (player.r+4));
       player.y = clamp(player.y, player.r+4, world.h - (player.r+4));
 
-      // eat pellets
       for(let i=pellets.length-1;i>=0;i--) tryEatPellet(player,i);
-      // eat eggs
       for(let i=eggs.length-1;i>=0;i--) tryEatEgg(player,i);
 
-      // eat natives if possible
       for(let i=natives.length-1;i>=0;i--){
         const nat = natives[i];
         if(!nat.dead && tryEat(player, nat)) natives.splice(i,1);
       }
-      // trouts
       for(let i=trouts.length-1;i>=0;i--){
         const t = trouts[i];
         if(tryEat(player, t)){ trouts.splice(i,1); setTimeout(()=> spawnTrouts(1, {x:player.x, y:player.y, r:120}), 3000); }
         else if(tryEat(t, player)){ gameOver('Te comió una trucha más grande'); return; }
       }
 
-      // cave detection: if inside any cave set hidden=true
       const wasHidden = player.hidden;
       player.hidden = false;
       for(const c of caves){ const d = Math.hypot(player.x - c.x, player.y - c.y); if(d < c.r - 6){ player.hidden = true; break; } }
       document.getElementById('hiddenBadge').style.display = player.hidden ? 'block' : 'none';
     }
 
-    // helper: spawnTrouts similar
     function spawnTrouts(n, safeZone){
       for(let i=0;i<n;i++){
         let tries=0;
@@ -529,7 +535,7 @@
       }
     }
 
-    // main update
+    // update main
     function update(dt){
       if(!running || paused) return;
       camera.x = player.x; camera.y = player.y;
@@ -554,7 +560,6 @@
       checkLevelComplete();
     }
 
-    // check level complete
     function checkLevelComplete(){
       const L = LEVELS[currentLevelIndex];
       const needed = Object.values(L.targets).reduce((a,b)=>a+b,0);
@@ -568,23 +573,49 @@
       }
     }
 
-    // draw and minimap
-    function worldToScreen(x,y){
-      return { x: (x - camera.x)*camera.zoom + canvas.width/2, y: (y - camera.y)*camera.zoom + canvas.height/2 };
-    }
+    // draw with special water texture for Urcos
+    function worldToScreen(x,y){ return { x: (x - camera.x)*camera.zoom + canvas.width/2, y: (y - camera.y)*camera.zoom + canvas.height/2 }; }
+
     function draw(){
       ctx.clearRect(0,0,canvas.width,canvas.height);
-      const g = ctx.createLinearGradient(0,0,0,canvas.height); g.addColorStop(0,'#012'); g.addColorStop(1,'#00121a'); ctx.fillStyle=g; ctx.fillRect(0,0,canvas.width,canvas.height);
       const L = LEVELS[currentLevelIndex];
 
-      // draw caves (dark circles with rim)
+      // background: if Urcos, bluish-green water texture, else default blue
+      if(L.id === 'urcos'){
+        // bluish-green gradient
+        const g = ctx.createLinearGradient(0,0,0,canvas.height);
+        g.addColorStop(0, '#043f36');
+        g.addColorStop(1, '#012f2a');
+        ctx.fillStyle = g; ctx.fillRect(0,0,canvas.width,canvas.height);
+
+        // light ripple overlay (subtle, deterministic pseudo-ripples)
+        ctx.globalAlpha = 0.06;
+        ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+        ctx.lineWidth = 1;
+        const time = performance.now() * 0.0008;
+        for(let row=0; row<8; row++){
+          ctx.beginPath();
+          const y = canvas.height * (row / 8) + Math.sin(time + row)*6;
+          for(let x= -20; x <= canvas.width + 20; x += 20){
+            const offset = Math.sin((x*0.01) + time*1.4 + row*0.6) * 6;
+            if(x === -20) ctx.moveTo(x, y + offset);
+            else ctx.lineTo(x, y + offset);
+          }
+          ctx.stroke();
+        }
+        ctx.globalAlpha = 1;
+      } else {
+        const g = ctx.createLinearGradient(0,0,0,canvas.height); g.addColorStop(0,'#012'); g.addColorStop(1,'#00121a'); ctx.fillStyle=g; ctx.fillRect(0,0,canvas.width,canvas.height);
+      }
+
+      // draw caves
       for(const c of caves){
         const s = worldToScreen(c.x,c.y);
-        ctx.beginPath(); ctx.fillStyle = 'rgba(10,10,10,0.55)'; ctx.arc(s.x, s.y, c.r*camera.zoom, 0, Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.fillStyle = 'rgba(6,6,6,0.6)'; ctx.arc(s.x, s.y, c.r*camera.zoom, 0, Math.PI*2); ctx.fill();
         ctx.beginPath(); ctx.strokeStyle='rgba(255,255,255,0.06)'; ctx.lineWidth=2; ctx.arc(s.x,s.y,c.r*camera.zoom,0,Math.PI*2); ctx.stroke();
       }
 
-      // pollution
+      // pollution (titicaca)
       if(L.id === 'titicaca'){
         for(let z of pollutionZones){ const s = worldToScreen(z.x,z.y); ctx.beginPath(); ctx.fillStyle='rgba(160,60,60,0.12)'; ctx.arc(s.x,s.y,z.r*camera.zoom,0,Math.PI*2); ctx.fill(); }
       }
@@ -592,22 +623,23 @@
       // pellets
       for(let p of pellets){ const s = worldToScreen(p.x,p.y); ctx.beginPath(); ctx.fillStyle = p.color; ctx.arc(s.x, s.y, p.r * camera.zoom, 0, Math.PI*2); ctx.fill(); }
 
-      // eggs (distinct look)
+      // eggs
       for(const e of eggs){ const s = worldToScreen(e.x,e.y); ctx.beginPath(); ctx.fillStyle = '#7ef78a'; ctx.arc(s.x,s.y,e.r*camera.zoom,0,Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.fillStyle='rgba(255,255,255,0.12)'; ctx.arc(s.x-2,s.y-2, e.r*0.35*camera.zoom,0,Math.PI*2); ctx.fill(); }
 
       // natives
       for(const n of natives){ if(n.dead) continue; const s = worldToScreen(n.x,n.y); ctx.beginPath(); ctx.fillStyle = n.color; ctx.ellipse(s.x, s.y, n.r*1.15*camera.zoom, n.r*0.9*camera.zoom, 0, 0, Math.PI*2); ctx.fill();
-        // small sex marker
         if(n.species==='pejerrey'){ ctx.beginPath(); ctx.fillStyle = (n.sex==='F' ? '#fff' : '#000'); ctx.arc(s.x + Math.max(2, n.r*0.25*camera.zoom), s.y - Math.max(2, n.r*0.25*camera.zoom), 2*camera.zoom, 0, Math.PI*2); ctx.fill(); }
       }
 
       // frogs
       for(const fr of frogs){ if(fr.dead) continue; const s = worldToScreen(fr.x,fr.y); ctx.beginPath(); ctx.fillStyle = fr.color; ctx.arc(s.x,s.y,fr.r*camera.zoom,0,Math.PI*2); ctx.fill(); }
 
-      // player (with subtle glow if speed buff)
+      // player with glow if invuln or buffered
       const sp = worldToScreen(player.x, player.y);
       ctx.beginPath(); ctx.fillStyle = player.color; ctx.ellipse(sp.x, sp.y, player.r*1.3*camera.zoom, player.r*0.95*camera.zoom, 0, 0, Math.PI*2); ctx.fill();
-      if(player.speedBuff > 1){
+      if(player.invulnerable){
+        ctx.beginPath(); ctx.strokeStyle = 'rgba(255,240,180,0.18)'; ctx.lineWidth = 8 * camera.zoom; ctx.arc(sp.x, sp.y, player.r*1.6*camera.zoom, 0, Math.PI*2); ctx.stroke();
+      } else if(player.speedBuff > 1){
         ctx.beginPath(); ctx.strokeStyle = 'rgba(180,220,255,0.14)'; ctx.lineWidth = 6 * camera.zoom; ctx.arc(sp.x, sp.y, player.r*1.6*camera.zoom, 0, Math.PI*2); ctx.stroke();
       }
     }
@@ -618,20 +650,19 @@
       for(let i=0;i<pellets.length;i+=Math.max(1,Math.floor(pellets.length/200))){ const p=pellets[i]; mmCtx.fillStyle='#ffd54f'; mmCtx.fillRect(p.x*sx - 1, p.y*sy - 1, 2, 2); }
       for(const n of natives){ if(n.dead) continue; mmCtx.fillStyle = n.species==='carpa'? '#c08f4a' : n.species==='pejerrey'? (n.sex==='F' ? '#a0e0ff' : '#6fb7ff') : '#ff7b7b'; mmCtx.fillRect(n.x*sx-2, n.y*sy-2, 4,4); }
       for(const e of eggs){ mmCtx.fillStyle = '#7ef78a'; mmCtx.fillRect(e.x*sx-2, e.y*sy-2, 3,3); }
+      for(const c of caves){ mmCtx.fillStyle = '#333'; mmCtx.beginPath(); mmCtx.arc(c.x*sx, c.y*sy, Math.max(3, c.r*sx*0.35), 0, Math.PI*2); mmCtx.fill(); }
       mmCtx.fillStyle = '#fff0a8'; mmCtx.beginPath(); mmCtx.arc(player.x*sx, player.y*sy, Math.max(2, player.r*0.12), 0, Math.PI*2); mmCtx.fill();
-      // camera rect
       const vx = (camera.x - canvas.width/2/camera.zoom) * sx; const vy = (camera.y - canvas.height/2/camera.zoom) * sy;
       const vw = (canvas.width/camera.zoom) * sx; const vh = (canvas.height/camera.zoom) * sy;
       mmCtx.strokeStyle = 'rgba(255,255,255,0.5)'; mmCtx.lineWidth = 1; mmCtx.strokeRect(vx, vy, vw, vh);
       mmCtx.restore();
     }
 
-    // HUD and messages
     function updateHUD(){ document.getElementById('score').innerText = score; document.getElementById('size').innerText = Math.round(player ? player.mass : 0); }
 
     function gameOver(reason){ running=false; document.getElementById('msgTitle').innerText='Has muerto'; document.getElementById('msgBody').innerText = reason + '. Puntaje: ' + score; document.getElementById('message').style.display = 'flex'; }
 
-    // INPUT
+    // input handlers
     canvas.addEventListener('mousemove',(e)=>{ const rect = canvas.getBoundingClientRect(); mouse.x = e.clientX - rect.left; mouse.y = e.clientY - rect.top; mouse.worldX = camera.x - canvas.width/2/camera.zoom + mouse.x/camera.zoom; mouse.worldY = camera.y - canvas.height/2/camera.zoom + mouse.y/camera.zoom; });
     canvas.addEventListener('mousedown', ()=> mouse.down=true);
     canvas.addEventListener('mouseup', ()=> mouse.down=false);
@@ -639,25 +670,49 @@
     canvas.addEventListener('touchmove',(e)=>{ mouse.x=e.touches[0].clientX; mouse.y=e.touches[0].clientY; mouse.worldX = camera.x - canvas.width/2/camera.zoom + mouse.x/camera.zoom; mouse.worldY = camera.y - canvas.height/2/camera.zoom + mouse.y/camera.zoom; e.preventDefault(); }, {passive:false});
     canvas.addEventListener('touchend', ()=> mouse.down=false);
 
-    // Level lifecycle
+    // chance mechanic: teleport to nearest cave + invulnerability window
+    function useChance(){
+      if(!running) return;
+      if(chanceUsed) return;
+      if(caves.length === 0) return;
+      // find nearest cave center
+      let best = null, bestD = 1e9;
+      for(const c of caves){ const d = Math.hypot(player.x - c.x, player.y - c.y); if(d < bestD){ bestD = d; best = c; } }
+      if(!best) return;
+      // teleport player slightly inside cave
+      player.x = best.x + 1;
+      player.y = best.y + 1;
+      player.hidden = true;
+      player.invulnerable = true;
+      chanceUsed = true;
+      document.getElementById('chanceBtn').setAttribute('disabled','disabled');
+      // remove invulnerability after window
+      setTimeout(()=>{ player.invulnerable = false; player.hidden = true; /* remain hidden until player moves out */ }, CHANCE_INVULN * 1000);
+    }
+
+    document.getElementById('chanceBtn').addEventListener('click', useChance);
+
+    // level lifecycle
     function showBrief(idx){
       currentLevelIndex = idx;
       const L = LEVELS[idx];
       levelProgress = {};
       for(const k in L.targets) levelProgress[k]=0;
-      // spawn caves and eggs arrays cleared
       spawnCavesForLevel(L.id);
       eggs = [];
+      chanceUsed = false;
+      document.getElementById('chanceBtn').removeAttribute('disabled');
       document.getElementById('briefTitle').innerText = 'Antes de: ' + L.name;
-      document.getElementById('briefText').innerHTML = '<strong>Mini-historia educativa:</strong><br>' + L.description + '<br><em>Objetivo:</em> ' + Object.entries(L.targets).map(([k,v])=> v + ' × ' + k).join(', ') + '<p style="margin-top:6px;"><em>Historia corta:</em> Un poblador llamado <strong>Rolando Chaparrea</strong> sembró pejerreyes en la laguna. Ahora debes sobrevivir y frenar la sobrepoblación.</p>';
+      document.getElementById('briefText').innerHTML = '<strong>Mini-historia educativa:</strong><br>' + L.description + '<br><em>Objetivo:</em> ' + Object.entries(L.targets).map(([k,v])=> v + ' × ' + k).join(', ') + '<p style="margin-top:6px;"><em>Historia:</em> Un poblador llamado <strong>Rolando Chaparrea</strong> sembró pejerreyes en la laguna. Ahora debes sobrevivir y frenar la sobrepoblación.</p>';
       document.getElementById('startOverlay').style.display='flex';
     }
 
     function startLevel(idx){
       const L = LEVELS[idx];
       pellets=[]; natives=[]; trouts=[]; frogs=[]; eggs=[]; score=0; oxygen=100; pollutionZones=[];
+      chanceUsed = false;
       spawnPellets(L.pelletCount || 500);
-      spawnNativesFromComposition(L.composition);
+      spawnNativesFromComposition(L.composition, L.id);
       spawnCavesForLevel(L.id);
       if(L.id==='lucre') spawnFrogs(18);
       if(L.id==='titicaca'){
@@ -667,6 +722,7 @@
       createPlayer();
       running=true; lastTime = performance.now(); requestAnimationFrame(loop);
       document.getElementById('startOverlay').style.display='none';
+      document.getElementById('chanceBtn').removeAttribute('disabled');
     }
 
     function loop(now){
@@ -676,11 +732,9 @@
       requestAnimationFrame(loop);
     }
 
-    // buttons
     document.getElementById('btnStart').addEventListener('click', ()=> { startLevel(currentLevelIndex); });
     document.getElementById('respawn').addEventListener('click', ()=> { document.getElementById('message').style.display='none'; showBrief(0); });
 
-    // init
     (function init(){
       resizeCanvas();
       mm.width = mm.clientWidth * devicePixelRatio;
@@ -688,7 +742,6 @@
       showBrief(0);
     })();
 
-    // expose for debug
     window.PACFISH = { startLevel, showBrief, LEVELS };
 
   })();
@@ -696,4 +749,6 @@
 
 </body>
 </html>
+
+
 
