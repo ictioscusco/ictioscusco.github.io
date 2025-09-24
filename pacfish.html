@@ -60,7 +60,7 @@
       <div id="hud">
         <div class="hud-item">Score: <strong id="score">0</strong></div>
         <div class="hud-item">Tamaño: <strong id="size">0</strong></div>
-        <div class="hud-item">Hembras faltantes: <strong id="femaleRemain">0</strong></div>
+        <div class="hud-item"><span>Hembras faltantes: </span><strong id="femaleRemain">0</strong></div>
         <div class="hud-item"><button id="chanceBtn" class="btn btn-warning btn-sm">Usar chance</button></div>
       </div>
 
@@ -118,13 +118,12 @@
       playerStartMass: 18,
       massToRadius: (m)=> Math.sqrt(m)*3,
       eatFactor: 0.65,
-      troutAggroRange: 340,       // mayor rango de detección
-      // velocidad base (ajustable)
+      troutAggroRange: 340,
       playerSpeedBase: 360,
       nativeSpeedBase: 150,
-      troutSpeedBase: 190,        // truchas más rápidas
+      troutSpeedBase: 190,
       pelletRespawn: true,
-      troutEatGainMultiplier: 1.35 // truchas crecen más al comer
+      troutEatGainMultiplier: 1.35
     };
     const REPRO_MIN_MASS = 400;
     const EGG_MAX = 8;
@@ -136,9 +135,35 @@
     function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
     function dist(a,b){ const dx=a.x-b.x, dy=a.y-b.y; return Math.hypot(dx,dy); }
 
-    // ---------- sprites y orientación por sprite ----------
-    // Si tu sprite "orestia.png" mira hacia la izquierda (es decir, su dibujo apunta a la izquierda),
-    // pon -1. Si mira a la derecha, pon 1.
+    // ---------- LEVELS (Nivel 2: solo truchas, sin huevos) ----------
+    const LEVELS = [
+      {
+        id: 'urcos', name: 'Urcos',
+        pelletCount: 700,
+        composition: { pejerrey: 42, carpa: 14, trout: 0 },
+        targets: { 'pejerrey_F': 10 },
+        allowEggs: true,
+        description: 'Urcos: Rolando Chaparrea sembró pejerreyes en la laguna. Debes crecer y eliminar 10 pejerreyes HEMBRA para frenar sus generaciones.'
+      },
+      {
+        id: 'lucre', name: 'Lucre-Huacarpay',
+        pelletCount: 600,
+        composition: { pejerrey: 10, carpa: 40, trout: 10 },
+        targets: { trout: 10 },
+        allowEggs: false,
+        description: 'Lucre: truchas voraces han llegado. Debes eliminar 10 truchas para recuperar el equilibrio.'
+      },
+      {
+        id: 'titicaca', name: 'Lago Titicaca',
+        pelletCount: 500,
+        composition: { pejerrey: 10, carpa: 20, trout: 12 },
+        targets: { trout: 12, 'pejerrey_F': 12 },
+        allowEggs: true,
+        description: 'Titicaca: invasores voraces y contaminación. Sobrevive y elimina invasores para restaurar el ecosistema.'
+      }
+    ];
+
+    // ---------- sprites y orientación ----------
     const SPRITE_MAP = {
       orestia: 'orestia.png',
       pejerrey_F: 'pejerrey_f.png',
@@ -147,9 +172,7 @@
       carpa: 'carpa.png'
     };
     const SPRITE_FACE_DIRECTION = {
-      // por defecto supongo que ORESTIA mira a la IZQUIERDA (-1).
-      // Si tu Orestia apunta a la derecha, cambia este valor a 1.
-      orestia: -1,
+      orestia: -1,    // si tu orestia mira a la derecha pon 1
       pejerrey_F: 1,
       pejerrey_M: 1,
       trout: 1,
@@ -166,7 +189,7 @@
     const canvas = document.getElementById('c'), ctx = canvas.getContext('2d');
     const mm = document.getElementById('mm'), mmCtx = mm.getContext('2d');
 
-    // partículas para efecto eutrofia
+    // algae particles for eutrophied water effect
     let algaeParticles = [];
     function initAlgae(){
       algaeParticles = [];
@@ -202,33 +225,7 @@
     let currentLevelIndex=0, levelProgress={}, oxygen=100, pollutionZones=[];
     let chanceUsed = false;
 
-    const LEVELS = [
-      {
-        id: 'urcos', name: 'Urcos',
-        pelletCount: 700,
-        composition: { pejerrey: 42, carpa: 14, trout: 0 },
-        targets: { 'pejerrey_F': 10 },
-        description: 'Urcos: Rolando Chaparrea sembró pejerreyes en la laguna. Debes crecer y eliminar 10 pejerreyes HEMBRA para frenar sus generaciones.'
-      },
-      {
-        id: 'lucre', name: 'Lucre-Huacarpay',
-        pelletCount: 600,
-        composition: { pejerrey: 10, carpa: 40, trout: 10 },
-        // nivel 2: lo que pediste: eliminar truchas y 10 hembras
-        targets: { trout: 10, 'pejerrey_F': 10 },
-        description: 'Lucre: truchas voraces han llegado. Debes eliminar 10 truchas y reducir 10 hembras de pejerrey.'
-      },
-      {
-        id: 'titicaca', name: 'Lago Titicaca',
-        pelletCount: 500,
-        composition: { pejerrey: 10, carpa: 20, trout: 12 },
-        // nivel 3: objetivo parecido para terminar el juego
-        targets: { trout: 12, 'pejerrey_F': 12 },
-        description: 'Titicaca: invasores voraces y contaminación. Sobrevive y elimina invasores para restaurar el ecosistema.'
-      }
-    ];
-
-    // ---------- ENTIDADES ----------
+    // ---------- entities ----------
     class Fish {
       constructor(x,y,mass,color,type='native',species='generic'){
         this.x=x; this.y=y; this.vx=0; this.vy=0; this.mass=mass; this.r=SETTINGS.massToRadius(this.mass);
@@ -245,7 +242,6 @@
           const reduce = Math.min(0.3, (this.mass - 20)/200);
           s *= (1 - reduce);
         }
-        // truchas ligeramente más rápidas cuanto más grandes (voracidad)
         if(this.species === 'trout') s *= 1 + Math.min(0.6, (this.mass-18)/120);
         return s;
       }
@@ -261,10 +257,8 @@
       }
     }
 
-    // pellets
     function spawnPellets(n){ for(let i=0;i<n;i++) pellets.push({ x:rand(20,world.w-20), y:rand(20,world.h-20), mass:SETTINGS.pelletMass, r:SETTINGS.massToRadius(SETTINGS.pelletMass), color:'#ffd54f' }); }
 
-    // spawnNatives - CORRECCIÓN (evita manchas negras)
     function spawnNativesFromComposition(comp, levelId){
       Object.entries(comp).forEach(([spec,count])=>{
         if(spec === 'pejerrey' && levelId === 'urcos'){
@@ -302,16 +296,14 @@
     function spawnEgg(x,y){ if(eggs.length >= EGG_MAX) return; eggs.push({ x, y, r:6, created: performance.now() }); }
     function createPlayer(){ player = new Fish(world.w/2, world.h/2, SETTINGS.playerStartMass, '#ffd54f','player','orestia'); player.updateRadius(); player.hidden=false; player.speedBuff=1; player.speedBuffTimer=0; player.invulnerable=false; player.facing=1; player.facingTarget=1; }
 
-    // ---------- EATING (ajustada para trucha) ----------
+    // ---------- Eating ----------
     function tryEat(pred, prey){
       if(!prey || prey.dead) return false;
 
-      // pejerrey vs player special
       if(pred.species === 'pejerrey' && prey.type === 'player' && pred.mass > player.mass * 1.05 && !player.invulnerable){
         const d = Math.hypot(pred.x - prey.x, pred.y - prey.y);
         if(d < pred.r * 0.95){
           prey.dead = true;
-          // trucha obtiene más ganancia? aquí pred es pejerrey
           pred.mass += prey.mass * SETTINGS.eatFactor;
           pred.updateRadius();
           if(pred.type !== 'player') pred.reproCooldown = Math.max(0, pred.reproCooldown - 1);
@@ -326,7 +318,6 @@
           levelProgress['pejerrey_F'] = (levelProgress['pejerrey_F']||0) + 1;
         }
         prey.dead = true;
-        // trout growth multiplier
         if(pred.species === 'trout'){
           pred.mass += prey.mass * SETTINGS.eatFactor * (SETTINGS.troutEatGainMultiplier || 1.0);
         } else {
@@ -385,7 +376,7 @@
       f.reproCooldown = 12 + Math.random()*12;
     }
 
-    // ---------- AI updates (truchas agresivas) ----------
+    // ---------- AI (egg-laying respects allowEggs) ----------
     function updateNatives(dt){
       for(let i=0;i<natives.length;i++){
         const n = natives[i];
@@ -394,7 +385,9 @@
         if(n.eggCooldown > 0) n.eggCooldown -= dt;
         n.facing += (n.facingTarget - n.facing) * Math.min(1, dt*8);
 
-        if(n.species === 'pejerrey' && n.sex === 'F' && n.mass > 18 && n.eggCooldown <= 0 && eggs.length < EGG_MAX && Math.random() < 0.012){
+        // egg-laying for females (rare) only if level allows eggs
+        if(n.species === 'pejerrey' && n.sex === 'F' && n.mass > 18 && n.eggCooldown <= 0
+           && eggs.length < EGG_MAX && Math.random() < 0.012 && LEVELS[currentLevelIndex].allowEggs){
           const ex = clamp(n.x + rand(-180,180), 30, world.w-30);
           const ey = clamp(n.y + rand(-180,180), 30, world.h-30);
           spawnEgg(ex, ey);
@@ -419,7 +412,6 @@
           continue;
         }
 
-        // target selection
         let target = null, best = 1e9;
         for(let k=0;k<pellets.length;k++){
           const p = pellets[k];
@@ -474,7 +466,6 @@
         t.facing += (t.facingTarget - t.facing) * Math.min(1, dt*8);
 
         const dPlayer = Math.hypot(player.x-t.x, player.y-t.y);
-        // AGRESIVA: persigue si está cerca, o si ya es relativamente grande
         if(dPlayer < SETTINGS.troutAggroRange || t.mass >= player.mass * 0.8){
           t.applyMovement(player.x-t.x, player.y-t.y, dt);
           tryEat(t, player);
@@ -506,7 +497,7 @@
       const speed = (sBase / (1 + Math.sqrt(player.mass)*0.03)) * player.speedBuff;
       const len = Math.hypot(desiredDx,desiredDy) || 1;
       const nx = desiredDx/len;
-      if(Math.abs(desiredDx) > 6) player.facingTarget = Math.sign(desiredDx); // threshold
+      if(Math.abs(desiredDx) > 6) player.facingTarget = Math.sign(desiredDx);
       player.vx = nx*speed; player.vy = (desiredDy/len)*speed;
       player.x += player.vx * dt; player.y += player.vy * dt;
       player.x = clamp(player.x, player.r+4, world.w - (player.r+4));
@@ -549,12 +540,11 @@
       }
     }
 
-    // ---------- UPDATE (main) ----------
+    // ---------- MAIN UPDATE ----------
     function update(dt){
       if(!running || paused) return;
       camera.x = player.x; camera.y = player.y;
 
-      // dynamic zoom: camera gets a bit farther as player grows
       const growth = Math.max(0, (player.mass - SETTINGS.playerStartMass) * 0.007);
       camera.zoom = clamp(camera.baseZoom * (1 - growth), 0.45, 1.4);
 
@@ -568,7 +558,6 @@
         if(oxygen <= 0){ gameOver('Moriste por falta de oxígeno'); return; }
       }
 
-      // algae particle drift
       for(const p of algaeParticles){
         p.y -= p.speed * dt * 30;
         p.x += Math.sin(performance.now()*0.0004*p.sway) * 0.0006 * (1/p.size) * dt * 800;
@@ -600,7 +589,7 @@
       }
     }
 
-    // ---------- RENDER (incluye efecto eutrofia) ----------
+    // ---------- RENDER ----------
     function worldToScreen(x,y){ return { x: (x - camera.x)*camera.zoom + canvas.width/2, y: (y - camera.y)*camera.zoom + canvas.height/2 }; }
 
     function drawSprite(img, x, y, w, h, flip){
@@ -621,7 +610,6 @@
       ctx.clearRect(0,0,canvas.width,canvas.height);
       const L = LEVELS[currentLevelIndex];
 
-      // background: bluish + subtle turbidity
       if(L.id === 'urcos' || L.id === 'titicaca'){
         const g = ctx.createLinearGradient(0,0,0,canvas.height);
         g.addColorStop(0, '#083a2f');
@@ -631,7 +619,6 @@
         const g = ctx.createLinearGradient(0,0,0,canvas.height); g.addColorStop(0,'#012'); g.addColorStop(1,'#00121a'); ctx.fillStyle=g; ctx.fillRect(0,0,canvas.width,canvas.height);
       }
 
-      // eutrophicated swirl / bloom overlay
       ctx.save();
       ctx.globalCompositeOperation = 'lighter';
       for(let i=0;i<3;i++){
@@ -645,7 +632,6 @@
       }
       ctx.restore();
 
-      // algae particles (small green dots)
       ctx.save();
       for(const p of algaeParticles){
         const x = p.x * canvas.width;
@@ -657,25 +643,20 @@
       }
       ctx.restore();
 
-      // caves
       for(const c of caves){
         const s = worldToScreen(c.x,c.y);
         ctx.beginPath(); ctx.fillStyle = 'rgba(6,6,6,0.6)'; ctx.arc(s.x, s.y, c.r*camera.zoom, 0, Math.PI*2); ctx.fill();
         ctx.beginPath(); ctx.strokeStyle='rgba(255,255,255,0.06)'; ctx.lineWidth=2; ctx.arc(s.x,s.y,c.r*camera.zoom,0,Math.PI*2); ctx.stroke();
       }
 
-      // pellets
       for(let p of pellets){ const s = worldToScreen(p.x,p.y); ctx.beginPath(); ctx.fillStyle = p.color; ctx.arc(s.x, s.y, p.r * camera.zoom, 0, Math.PI*2); ctx.fill(); }
 
-      // eggs
       for(const e of eggs){ const s = worldToScreen(e.x,e.y); ctx.beginPath(); ctx.fillStyle = '#7ef78a'; ctx.arc(s.x,s.y,e.r*camera.zoom,0,Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.fillStyle='rgba(255,255,255,0.12)'; ctx.arc(s.x-2,s.y-2, e.r*0.35*camera.zoom,0,Math.PI*2); ctx.fill(); }
 
-      // natives (sprites or fallback)
       for(const n of natives){
         if(n.dead) continue;
         const s = worldToScreen(n.x,n.y);
         const size = Math.max(8, n.r*2*camera.zoom);
-        // decide sprite key
         if(n.species === 'pejerrey'){
           const key = (n.sex==='F') ? 'pejerrey_F' : 'pejerrey_M';
           const img = SPRITES[key];
@@ -693,10 +674,8 @@
         }
       }
 
-      // frogs
       for(const fr of frogs){ if(fr.dead) continue; const s = worldToScreen(fr.x,fr.y); ctx.beginPath(); ctx.fillStyle = fr.color; ctx.arc(s.x,s.y,fr.r*camera.zoom,0,Math.PI*2); ctx.fill(); }
 
-      // player (orestia): use sprite orientation mapping
       const sp = worldToScreen(player.x, player.y);
       const psize = Math.max(10, player.r*2*camera.zoom);
       const pimg = SPRITES['orestia'];
@@ -726,13 +705,20 @@
       mmCtx.restore();
     }
 
+    // ---------- HUD ----------
     function updateHUD(){
       document.getElementById('score').innerText = score;
       document.getElementById('size').innerText = Math.round(player ? player.mass : 0);
       const L = LEVELS[currentLevelIndex];
-      const femaleTarget = L.targets['pejerrey_F'] || 0;
+      const femaleTarget = L.targets && L.targets['pejerrey_F'] ? L.targets['pejerrey_F'] : 0;
       const killed = levelProgress['pejerrey_F'] || 0;
-      document.getElementById('femaleRemain').innerText = Math.max(0, femaleTarget - killed);
+      const femaleElem = document.getElementById('femaleRemain');
+      if(femaleTarget > 0){
+        femaleElem.innerText = Math.max(0, femaleTarget - killed);
+        femaleElem.parentElement.style.display = 'inline-block';
+      } else {
+        femaleElem.parentElement.style.display = 'none';
+      }
     }
 
     function gameOver(reason){ running=false; document.getElementById('msgTitle').innerText='Has muerto'; document.getElementById('msgBody').innerText = reason + '. Puntaje: ' + score; document.getElementById('message').style.display = 'flex'; }
@@ -800,7 +786,7 @@
       requestAnimationFrame(loop);
     }
 
-    // ---------- UI handlers ----------
+    // ---------- UI ----------
     document.getElementById('fullBtn').addEventListener('click', function(ev){ ev.stopPropagation(); ev.preventDefault(); const container = document.getElementById('game-container'); if(!document.fullscreenElement){ if(container.requestFullscreen) container.requestFullscreen().catch(()=>{}); else if(container.webkitRequestFullscreen) container.webkitRequestFullscreen(); } else { if(document.exitFullscreen) document.exitFullscreen().catch(()=>{}); } });
 
     document.getElementById('btnStart').addEventListener('click', function(ev){ ev.stopPropagation(); ev.preventDefault(); startLevel(currentLevelIndex); });
