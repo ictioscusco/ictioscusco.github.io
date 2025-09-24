@@ -86,6 +86,7 @@
       <div id="hud">
         <div class="hud-item">Score: <strong id="score">0</strong></div>
         <div class="hud-item">Tamaño: <strong id="size">0</strong></div>
+        <div class="hud-item">Hembras faltantes: <strong id="femaleRemain">0</strong></div>
         <div class="hud-item"><button id="chanceBtn" class="btn btn-warning btn-sm">Usar chance</button></div>
       </div>
 
@@ -144,8 +145,10 @@
       massToRadius: (m)=> Math.sqrt(m)*3,
       eatFactor: 0.65,
       troutAggroRange: 240,
-      playerSpeedBase: 220,
-      nativeSpeedBase: 160,
+
+      // *** Aumenté la base del jugador y reduje la penalización por masa ***
+      playerSpeedBase: 360,    // antes 220 -> jugador más ágil
+      nativeSpeedBase: 150,
       troutSpeedBase: 120,
       pelletRespawn: true
     };
@@ -158,6 +161,21 @@
     function rand(a,b){ return a + Math.random()*(b-a); }
     function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
     function dist(a,b){ const dx=a.x-b.x, dy=a.y-b.y; return Math.hypot(dx,dy); }
+
+    // sprite loading (coloca imágenes en /images/ con los nombres sugeridos abajo)
+    const SPRITES = {};
+    const SPRITE_MAP = {
+      orestia: 'orestia.png',
+      pejerrey_F: 'pejerrey_f.png',
+      pejerrey_M: 'pejerrey_m.png',
+      trout: 'trout.png',
+      carpa: 'carpa.png'
+    };
+    for(const k in SPRITE_MAP){
+      const img = new Image();
+      img.src = 'images/' + SPRITE_MAP[k];
+      SPRITES[k] = img;
+    }
 
     // canvas
     const canvas = document.getElementById('c'), ctx = canvas.getContext('2d');
@@ -188,7 +206,7 @@
         id: 'urcos', name: 'Urcos',
         pelletCount: 700,
         composition: { pejerrey: 42, carpa: 14, trout: 0 },
-        targets: { 'pejerrey_F': 10 },
+        targets: { 'pejerrey_F': 10 }, // objetivo: eliminar 10 hembras pejerrey
         description: 'Urcos: Rolando Chaparrea sembró pejerreyes en la laguna. Debes crecer y eliminar 10 pejerreyes HEMBRA para frenar sus generaciones.'
       },
       {
@@ -218,7 +236,20 @@
       }
       updateRadius(){ this.r = SETTINGS.massToRadius(this.mass); }
       getSpeedBase(){ if(this.type==='player') return SETTINGS.playerSpeedBase; if(this.species==='trout') return SETTINGS.troutSpeedBase; return SETTINGS.nativeSpeedBase; }
-      getSpeed(){ const base=this.getSpeedBase(); let s = base / (1 + Math.sqrt(this.mass)*0.05); if(this.species==='pejerrey' && this.mass>20) s *= 1 + (this.mass-20)/60; return s; }
+      getSpeed(){
+        const base=this.getSpeedBase();
+        // base speed reduced by mass (all fishes), but more forgiving for player
+        let s = base / (1 + Math.sqrt(this.mass)*0.05);
+
+        // --- Ajuste para pejerrey: ya no ganan velocidad al crecer; de hecho se reduce ligeramente ---
+        if(this.species === 'pejerrey' && this.mass > 20){
+          // reduce hasta un 30% máximo si son muy grandes
+          const reduce = Math.min(0.3, (this.mass - 20)/200);
+          s *= (1 - reduce);
+        }
+
+        return s;
+      }
       applyMovement(dx,dy,dt){ const s=this.getSpeed(); const len=Math.hypot(dx,dy)||1; const nx=dx/len, ny=dy/len; this.vx = nx*s; this.vy = ny*s; this.x += this.vx*dt; this.y += this.vy*dt; this.x = clamp(this.x, this.r+4, world.w - (this.r+4)); this.y = clamp(this.y, this.r+4, world.h - (this.r+4)); }
     }
 
@@ -252,7 +283,8 @@
           const x=rand(60,world.w-60), y=rand(60,world.h-60);
           const mass = spec==='carpa'? rand(18,40) : spec==='pejerrey'? rand(8,22) : rand(18,60);
           const color = spec==='carpa'? '#c08f4a' : spec==='pejerrey'? '#9ae0ff' : '#ff7b7b';
-          const f = new Fish(x,y,mass,color,'native',spec);
+          const f = new Fish(x,y,mass,'native',spec);
+          // note: fallback color set later if pejerrey with sex
           if(spec==='carpa') f.prefersPellets=true;
           if(spec==='pejerrey'){ f.sex = (Math.random() < 0.38) ? 'F' : 'M'; if(f.sex==='F') f.color = '#a0e0ff'; else f.color = '#6fb7ff'; }
           f.vx=rand(-30,30); f.vy=rand(-30,30);
@@ -276,7 +308,8 @@
       eggs.push({ x, y, r:6, created: performance.now() });
     }
 
-    function createPlayer(){ player = new Fish(world.w/2, world.h/2, SETTINGS.playerStartMass, '#ffd54f','player','orestia'); player.updateRadius();
+    function createPlayer(){
+      player = new Fish(world.w/2, world.h/2, SETTINGS.playerStartMass, '#ffd54f','player','orestia'); player.updateRadius();
       player.hidden = false; player.speedBuff = 1.0; player.speedBuffTimer = 0; player.invulnerable = false;
     }
 
@@ -488,10 +521,12 @@
         if(player.speedBuffTimer === 0) player.speedBuff = 1.0;
       }
 
+      // --- menos penalización por masa para el jugador (antes 0.05) ---
       const tx = mouse.worldX || player.x, ty = mouse.worldY || player.y;
       const desiredDx = tx - player.x, desiredDy = ty - player.y;
       const sBase = SETTINGS.playerSpeedBase;
-      const speed = (sBase / (1 + Math.sqrt(player.mass)*0.05)) * player.speedBuff;
+      // reduce la penalización de masa (hace al jugador menos lento al crecer)
+      const speed = (sBase / (1 + Math.sqrt(player.mass)*0.03)) * player.speedBuff;
       const len = Math.hypot(desiredDx,desiredDy) || 1;
       player.vx = (desiredDx/len)*speed; player.vy = (desiredDy/len)*speed;
       player.x += player.vx * dt; player.y += player.vy * dt;
@@ -626,17 +661,42 @@
       // eggs
       for(const e of eggs){ const s = worldToScreen(e.x,e.y); ctx.beginPath(); ctx.fillStyle = '#7ef78a'; ctx.arc(s.x,s.y,e.r*camera.zoom,0,Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.fillStyle='rgba(255,255,255,0.12)'; ctx.arc(s.x-2,s.y-2, e.r*0.35*camera.zoom,0,Math.PI*2); ctx.fill(); }
 
-      // natives
-      for(const n of natives){ if(n.dead) continue; const s = worldToScreen(n.x,n.y); ctx.beginPath(); ctx.fillStyle = n.color; ctx.ellipse(s.x, s.y, n.r*1.15*camera.zoom, n.r*0.9*camera.zoom, 0, 0, Math.PI*2); ctx.fill();
-        if(n.species==='pejerrey'){ ctx.beginPath(); ctx.fillStyle = (n.sex==='F' ? '#fff' : '#000'); ctx.arc(s.x + Math.max(2, n.r*0.25*camera.zoom), s.y - Math.max(2, n.r*0.25*camera.zoom), 2*camera.zoom, 0, Math.PI*2); ctx.fill(); }
+      // natives (draw as sprite if available, fallback to ellipse)
+      for(const n of natives){ if(n.dead) continue; const s = worldToScreen(n.x,n.y);
+        const size = Math.max(8, n.r*2*camera.zoom);
+        if(n.species === 'pejerrey'){
+          const key = (n.sex==='F') ? 'pejerrey_F' : 'pejerrey_M';
+          const img = SPRITES[key];
+          if(img && img.complete && img.naturalWidth>0){
+            ctx.drawImage(img, s.x - size/2, s.y - size/2, size, size);
+          } else {
+            ctx.beginPath(); ctx.fillStyle = n.color; ctx.ellipse(s.x, s.y, n.r*1.15*camera.zoom, n.r*0.9*camera.zoom, 0, 0, Math.PI*2); ctx.fill();
+            ctx.beginPath(); ctx.fillStyle = (n.sex==='F' ? '#fff' : '#000'); ctx.arc(s.x + Math.max(2, n.r*0.25*camera.zoom), s.y - Math.max(2, n.r*0.25*camera.zoom), 2*camera.zoom, 0, Math.PI*2); ctx.fill();
+          }
+        } else {
+          const imgKey = n.species === 'carpa' ? 'carpa' : (n.species==='trout' ? 'trout' : null);
+          const img = imgKey ? SPRITES[imgKey] : null;
+          if(img && img.complete && img.naturalWidth>0){
+            ctx.drawImage(img, s.x - size/2, s.y - size/2, size, size);
+          } else {
+            ctx.beginPath(); ctx.fillStyle = n.color; ctx.ellipse(s.x, s.y, n.r*1.15*camera.zoom, n.r*0.9*camera.zoom, 0, 0, Math.PI*2); ctx.fill();
+          }
+        }
       }
 
       // frogs
       for(const fr of frogs){ if(fr.dead) continue; const s = worldToScreen(fr.x,fr.y); ctx.beginPath(); ctx.fillStyle = fr.color; ctx.arc(s.x,s.y,fr.r*camera.zoom,0,Math.PI*2); ctx.fill(); }
 
-      // player with glow if invuln or buffered
+      // player with sprite fallback
       const sp = worldToScreen(player.x, player.y);
-      ctx.beginPath(); ctx.fillStyle = player.color; ctx.ellipse(sp.x, sp.y, player.r*1.3*camera.zoom, player.r*0.95*camera.zoom, 0, 0, Math.PI*2); ctx.fill();
+      const psize = Math.max(10, player.r*2*camera.zoom);
+      const pimg = SPRITES['orestia'];
+      if(pimg && pimg.complete && pimg.naturalWidth>0){
+        ctx.drawImage(pimg, sp.x - psize/2, sp.y - psize/2, psize, psize);
+      } else {
+        ctx.beginPath(); ctx.fillStyle = player.color; ctx.ellipse(sp.x, sp.y, player.r*1.3*camera.zoom, player.r*0.95*camera.zoom, 0, 0, Math.PI*2); ctx.fill();
+      }
+
       if(player.invulnerable){
         ctx.beginPath(); ctx.strokeStyle = 'rgba(255,240,180,0.18)'; ctx.lineWidth = 8 * camera.zoom; ctx.arc(sp.x, sp.y, player.r*1.6*camera.zoom, 0, Math.PI*2); ctx.stroke();
       } else if(player.speedBuff > 1){
@@ -658,7 +718,17 @@
       mmCtx.restore();
     }
 
-    function updateHUD(){ document.getElementById('score').innerText = score; document.getElementById('size').innerText = Math.round(player ? player.mass : 0); }
+    function updateHUD(){
+      document.getElementById('score').innerText = score;
+      document.getElementById('size').innerText = Math.round(player ? player.mass : 0);
+
+      // actualizar contador de hembras objetivo (si existe)
+      const L = LEVELS[currentLevelIndex];
+      const femaleTarget = L.targets['pejerrey_F'] || 0;
+      const killed = levelProgress['pejerrey_F'] || 0;
+      const remaining = Math.max(0, femaleTarget - killed);
+      document.getElementById('femaleRemain').innerText = remaining;
+    }
 
     function gameOver(reason){ running=false; document.getElementById('msgTitle').innerText='Has muerto'; document.getElementById('msgBody').innerText = reason + '. Puntaje: ' + score; document.getElementById('message').style.display = 'flex'; }
 
@@ -749,6 +819,4 @@
 
 </body>
 </html>
-
-
 
