@@ -53,7 +53,7 @@
     </div>
 
     <p style="margin:0 0 12px 0; color:#444;">
-      Lee la mini-historia antes de cada nivel. Controles: mueve con el ratón o tocando la pantalla. Usa cuevas para esconderte. "Usar chance" te rescata una vez por nivel.
+      Lee la mini-historia antes de cada nivel. Controles: mueve con el ratón o tocando la pantalla. Usa cuevas para esconderte.
     </p>
 
     <div id="game-container">
@@ -68,7 +68,6 @@
           <div id="oxygenBarWrap"><small style="display:block; font-size:0.75rem; color:#fff;">O₂</small><div id="oxygenBar"><div id="oxygenFill"></div></div></div>
         </div>
         <div class="hud-item"><span id="targetLabel">Hembras faltantes: </span><strong id="targetRemain">0</strong></div>
-        <div class="hud-item"><button id="chanceBtn" class="btn btn-warning btn-sm">Usar chance</button></div>
       </div>
 
       <div id="legendWrap">
@@ -140,7 +139,6 @@
     const EGG_MAX = 8;
     const EGG_SPEED_BUFF = 1.6;
     const EGG_BUFF_TIME = 6.0;
-    const CHANCE_INVULN = 6.0;
 
     function rand(a,b){ return a + Math.random()*(b-a); }
     function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
@@ -219,9 +217,9 @@
     let caves = [], eggs = [];
     let running=false, paused=false, lastTime=performance.now(), mouse={x:0,y:0,worldX:0,worldY:0,down:false}, score=0;
     let currentLevelIndex=0, levelProgress={}, oxygen=100, pollutionZones=[];
-    let chanceUsed = false, transientTimer=null;
+    let transientTimer=null;
     let lives = 3;
-    let algaeParticles = []; // <-- declarado correctamente
+    let algaeParticles = [];
 
     // ---------- entity ----------
     class Fish {
@@ -258,18 +256,13 @@
     // ---------- spawners ----------
     function spawnPellets(n){ for(let i=0;i<n;i++) pellets.push({ x:rand(20,world.w-20), y:rand(20,world.h-20), mass:SETTINGS.pelletMass, r:SETTINGS.massToRadius(SETTINGS.pelletMass), color:'#ffd54f' }); }
 
-    // Ahora spawnNativesFromComposition acepta totalDesired (número total aproximado de peces a crear)
     function spawnNativesFromComposition(comp, levelId, totalDesired = 60){
-      // comp puede venir en "porcentajes" (suma ~100) o ya en conteos (suma pequeña)
       const entries = Object.entries(comp);
       let sum = entries.reduce((s,[k,v])=> s + Number(v || 0), 0);
-      let useCounts = false;
       if(sum > 20 && sum <= 100){
-        // probablemente porcentajes -> escalar
         entries.forEach(([spec, val])=>{
           const count = Math.round(totalDesired * (Number(val)/sum));
           if(spec === 'pejerrey' && levelId === 'urcos'){
-            // en urcos queremos asegurar al menos unas hembras
             const femCount = Math.min(10, count);
             const sexes = [];
             for(let i=0;i<count;i++) sexes.push(i < femCount ? 'F' : 'M');
@@ -285,14 +278,11 @@
             }
             return;
           }
-
-          // crear count peces para species
           for(let i=0;i<count;i++){
             const x=rand(60,world.w-60), y=rand(60,world.h-60);
             const mass = spec==='carpa'? rand(18,40) : spec==='pejerrey'? rand(8,22) : rand(18,60);
             const color = spec==='carpa'? '#c08f4a' : spec==='pejerrey'? '#9ae0ff' : '#ff7b7b';
             const f = new Fish(x,y,mass,'#ffffff','native',spec);
-            // ajuste de color/sex para pejerrey
             if(spec==='carpa') f.prefersPellets=true;
             if(spec==='pejerrey'){ f.sex = (Math.random() < 0.38) ? 'F' : 'M'; if(f.sex==='F') f.color = '#a0e0ff'; else f.color = '#6fb7ff'; }
             else f.color = color;
@@ -301,7 +291,6 @@
           }
         });
       } else {
-        // interpretamos como conteos directos
         entries.forEach(([spec,count])=>{
           if(spec === 'pejerrey' && levelId === 'urcos'){
             const femCount = Math.min(10, count);
@@ -332,7 +321,6 @@
         });
       }
     }
-
     function spawnFrogs(n){ for(let i=0;i<n;i++) frogs.push({ x:rand(60,world.w-60), y:rand(60,world.h-60), r:8, mass:2, color:'#6bff7a', dead:false }); }
     function spawnCavesForLevel(levelId){ caves = []; const caveCount = (levelId==='urcos') ? 3 : (levelId==='lucre' ? 2 : 2); for(let i=0;i<caveCount;i++){ caves.push({ x: rand(120, world.w-120), y: rand(120, world.h-120), r: rand(40,72) }); } }
     function spawnEgg(x,y){ if(eggs.length >= EGG_MAX) return; eggs.push({ x, y, r:6, created: performance.now() }); }
@@ -601,13 +589,73 @@
       setTimeout(()=>{ el.style.display='none'; }, 200);
     }
 
+    // ---------- PLAYER (movimiento y colisiones) ----------
+    function updatePlayer(dt){
+      if(!player) return;
+
+      // objetivo: cursor/tacto en coordenadas de mundo
+      let targetX = (typeof mouse.worldX === 'number') ? mouse.worldX : player.x;
+      let targetY = (typeof mouse.worldY === 'number') ? mouse.worldY : player.y;
+
+      // si quieres que sólo se mueva con click/hold, descomenta:
+      // if(!mouse.down) { targetX = player.x; targetY = player.y; }
+
+      const dx = targetX - player.x;
+      const dy = targetY - player.y;
+      const len = Math.hypot(dx,dy) || 1;
+      const nx = dx / len, ny = dy / len;
+
+      const speedMultiplier = (player.speedBuff && player.speedBuff > 0) ? player.speedBuff : 1;
+      const s = player.getSpeed() * speedMultiplier;
+
+      if(Math.abs(nx) > 0.25) player.facingTarget = Math.sign(nx);
+
+      player.vx = nx * s;
+      player.vy = ny * s;
+      player.x += player.vx * dt;
+      player.y += player.vy * dt;
+
+      player.x = clamp(player.x, player.r + 4, world.w - (player.r + 4));
+      player.y = clamp(player.y, player.r + 4, world.h - (player.r + 4));
+
+      // comer pellets
+      for(let i = pellets.length - 1; i >= 0; i--){
+        tryEatPellet(player, i);
+      }
+      // comer huevos
+      for(let i = eggs.length - 1; i >= 0; i--){
+        tryEatEgg(player, i);
+      }
+      // comer peces
+      for(let i = natives.length - 1; i >= 0; i--){
+        const n = natives[i];
+        if(!n || n.dead) continue;
+        if(tryEat(player, n)){
+          if(n.dead){
+            natives.splice(i, 1);
+          }
+        }
+      }
+
+      // timers de buff
+      if(player.speedBuffTimer > 0){
+        player.speedBuffTimer -= dt;
+        if(player.speedBuffTimer <= 0){
+          player.speedBuffTimer = 0;
+          player.speedBuff = 1;
+        }
+      }
+
+      // facing suave
+      player.facing += (player.facingTarget - player.facing) * Math.min(1, dt * 8);
+    }
+
     // ---------- MAIN UPDATE ----------
     function update(dt){
       if(!running || paused) return;
       if(!player) return;
       camera.x = player.x; camera.y = player.y;
 
-      // Zoom estilo Agar.io - suavizado
       const refMass = Math.max(1, SETTINGS.playerStartMass);
       const targetZoom = clamp(camera.baseZoom * Math.sqrt(refMass / Math.max(1, player.mass)), 0.35, 1.6);
       camera.zoom += (targetZoom - camera.zoom) * Math.min(1, dt * 6);
@@ -665,7 +713,6 @@
     }
 
     // ---------- RENDER ----------
-    // worldToScreen usa dimensiones CSS (tras setTransform el ctx dibuja en CSS px)
     function worldToScreen(x,y){ return { x: (x - camera.x)*camera.zoom + cssW/2, y: (y - camera.y)*camera.zoom + cssH/2 }; }
 
     function drawSprite(img, x, y, w, h, flip){
@@ -684,7 +731,7 @@
 
     function draw(){
       if(!ctx) return;
-      if(!player) return; // guard
+      if(!player) return;
       ctx.clearRect(0,0,cssW,cssH);
       const L = LEVELS[currentLevelIndex];
 
@@ -880,18 +927,6 @@
       canvas.addEventListener('touchend', ()=> mouse.down=false);
     }
 
-    function useChance(){
-      if(!running) return;
-      if(chanceUsed) return;
-      if(caves.length === 0) return;
-      let best = null, bestD = 1e9;
-      for(const c of caves){ const d = Math.hypot(player.x - c.x, player.y - c.y); if(d < bestD){ bestD = d; best = c; } }
-      if(!best) return;
-      player.x = best.x + 1; player.y = best.y + 1; player.hidden = true; player.invulnerable = true; chanceUsed = true;
-      const cb = document.getElementById('chanceBtn'); if(cb) cb.setAttribute('disabled','disabled');
-      setTimeout(()=>{ player.invulnerable = false; player.hidden = true; }, CHANCE_INVULN * 1000);
-    }
-
     // ---------- lifecycle ----------
     function showBrief(idx){
       currentLevelIndex = idx;
@@ -900,9 +935,7 @@
       for(const k in L.targets) levelProgress[k]=0;
       spawnCavesForLevel(L.id);
       eggs = [];
-      chanceUsed = false;
       oxygen = 100;
-      const cb = document.getElementById('chanceBtn'); if(cb) cb.removeAttribute('disabled');
       const bt = document.getElementById('briefTitle'); if(bt) bt.innerText = 'Antes de: ' + L.name;
       const btxt = document.getElementById('briefText'); if(btxt) btxt.innerHTML = '<strong>Mini-historia educativa:</strong><br>' + L.description + '<br><em>Objetivo:</em> ' + Object.entries(L.targets).map(([k,v])=> v + ' × ' + k).join(', ');
       const overlay = document.getElementById('startOverlay'); if(overlay) overlay.style.display='flex';
@@ -921,9 +954,7 @@
         resizeCanvas();
         const L = LEVELS[idx];
         pellets=[]; natives=[]; trouts=[]; frogs=[]; eggs=[]; score=0; pollutionZones=[];
-        chanceUsed = false;
         spawnPellets(L.pelletCount || 500);
-        // calculo simple del número de peces a generar: proporcional a pellets
         const totalDesiredFish = Math.max(30, Math.round((L.pelletCount || 500) / 12));
         spawnNativesFromComposition(L.composition, L.id, totalDesiredFish);
         spawnCavesForLevel(L.id);
@@ -938,10 +969,8 @@
         initAlgae();
         running=true; lastTime = performance.now(); requestAnimationFrame(loop);
         const overlay = document.getElementById('startOverlay'); if(overlay) overlay.style.display='none';
-        const cb = document.getElementById('chanceBtn'); if(cb) cb.removeAttribute('disabled');
         updateHUD();
 
-        // ---- debug info (borra si quieres) ----
         console.log('startLevel', L.id, 'pellets', pellets.length, 'natives', natives.length, 'caves', caves.length, 'eggs', eggs.length);
       } catch(err){ console.error('startLevel error', err); }
     }
@@ -975,9 +1004,6 @@
       const fullBtn = document.getElementById('fullBtn');
       if(fullBtn) fullBtn.addEventListener('click', function(ev){ ev.stopPropagation(); ev.preventDefault(); const container = document.getElementById('game-container'); if(!document.fullscreenElement){ if(container.requestFullscreen) container.requestFullscreen().catch(()=>{}); else if(container.webkitRequestFullscreen) container.webkitRequestFullscreen(); } else { if(document.exitFullscreen) document.exitFullscreen().catch(()=>{}); } });
 
-      const chanceBtn = document.getElementById('chanceBtn');
-      if(chanceBtn) chanceBtn.addEventListener('click', useChance);
-
       lives = 3;
       initAlgae();
       showBrief(0);
@@ -994,5 +1020,3 @@
   </script>
 </body>
 </html>
-
-
