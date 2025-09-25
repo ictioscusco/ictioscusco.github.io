@@ -135,7 +135,7 @@
     function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
     function dist(a,b){ const dx=a.x-b.x, dy=a.y-b.y; return Math.hypot(dx,dy); }
 
-    // ---------- LEVELS (Nivel 2: solo truchas, sin huevos) ----------
+    // ---------- LEVELS (Nivel 2: ahora permite huevos) ----------
     const LEVELS = [
       {
         id: 'urcos', name: 'Urcos',
@@ -150,7 +150,7 @@
         pelletCount: 600,
         composition: { pejerrey: 10, carpa: 40, trout: 10 },
         targets: { trout: 10 },
-        allowEggs: false,
+        allowEggs: true,    // <-- cambiado a true para permitir huevos en el nivel 2
         description: 'Lucre: truchas voraces han llegado. Debes eliminar 10 truchas para recuperar el equilibrio.'
       },
       {
@@ -189,6 +189,7 @@
     const canvas = document.getElementById('c'), ctx = canvas.getContext('2d');
     const mm = document.getElementById('mm'), mmCtx = mm.getContext('2d');
 
+    // algae particles for eutrophied water effect
     let algaeParticles = [];
     function initAlgae(){
       algaeParticles = [];
@@ -299,6 +300,11 @@
     function tryEat(pred, prey){
       if(!prey || prey.dead) return false;
 
+      // Evitar que NPCs se coman truchas — solo el jugador puede consumir truchas objetivo.
+      if(pred.type !== 'player' && prey.species === 'trout'){
+        return false;
+      }
+
       if(pred.species === 'pejerrey' && prey.type === 'player' && pred.mass > player.mass * 1.05 && !player.invulnerable){
         const d = Math.hypot(pred.x - prey.x, pred.y - prey.y);
         if(d < pred.r * 0.95){
@@ -313,7 +319,7 @@
       }
 
       if(pred.r > prey.r * 1.08 && dist(pred,prey) < pred.r - prey.r*0.25){
-        // Contabiliza objetivos **solo** si el depredador es el jugador
+        // Contabiliza objetivos solo si el depredador es el jugador
         const L = LEVELS[currentLevelIndex] || {};
         if(pred.type === 'player'){
           if(prey.species === 'pejerrey' && prey.sex === 'F' && L.targets && L.targets['pejerrey_F']){
@@ -457,7 +463,15 @@
             }
           } else if(target.type === 'fish'){
             const other = natives[target.refIndex];
-            if(other && !other.dead){ if(tryEat(n, other)){ if(other.dead){ const idx = natives.indexOf(other); if(idx>=0) natives.splice(idx,1); } } }
+            if(other && !other.dead){
+              // tryEat puede bloquear comer truchas si el predador no es player (ver arriba)
+              if(tryEat(n, other)){
+                if(other.dead){
+                  const idx = natives.indexOf(other);
+                  if(idx>=0) natives.splice(idx,1);
+                }
+              }
+            }
           }
         } else {
           if(!n.target || Math.random() < 0.01) n.target = { x: n.x + rand(-220,220), y: n.y + rand(-220,220) };
@@ -467,6 +481,7 @@
     }
 
     function updateTrouts(dt){
+      // trouts está sincronizado desde `natives` en update()
       for(let t of trouts){
         if(t.dead) continue;
         if(t.reproCooldown>0) t.reproCooldown -= dt;
@@ -475,7 +490,7 @@
         const dPlayer = Math.hypot(player.x-t.x, player.y-t.y);
         if(dPlayer < SETTINGS.troutAggroRange || t.mass >= player.mass * 0.8){
           t.applyMovement(player.x-t.x, player.y-t.y, dt);
-          tryEat(t, player);
+          tryEat(t, player); // si la trucha puede comerse al player lo hará
         } else {
           let target=null, best=1e9;
           for(let f of frogs){ if(f.dead) continue; const d=Math.hypot(f.x-t.x,f.y-t.y); if(d<best){best=d;target=f;} }
@@ -486,7 +501,17 @@
         }
 
         for(let i=pellets.length-1;i>=0;i--){ const eaten = tryEatPellet(t,i); if(eaten && SETTINGS.pelletRespawn) spawnPellets(1); }
-        for(let i=natives.length-1;i>=0;i--){ const nat=natives[i]; if(!nat.dead && tryEat(t,nat)) natives.splice(i,1); }
+
+        // Evitar canibalismo entre truchas: no permitir que trucha coma otra trucha
+        for(let i=natives.length-1;i>=0;i--){
+          const nat = natives[i];
+          if(!nat || nat.dead) continue;
+          if(nat.species === 'trout') continue; // NO permitir que una trucha se coma otra trucha
+          if(tryEat(t, nat)){
+            natives.splice(i,1);
+          }
+        }
+
         for(let j=frogs.length-1;j>=0;j--){ const fr=frogs[j]; if(fr.dead) continue; const d=Math.hypot(fr.x-t.x,fr.y-t.y); if(d < t.r + fr.r*0.5){ fr.dead=true; t.mass += fr.mass*SETTINGS.eatFactor* (SETTINGS.troutEatGainMultiplier || 1); t.updateRadius(); frogs.splice(j,1); } }
         checkRepro(t);
       }
@@ -520,8 +545,14 @@
       }
       for(let i=trouts.length-1;i>=0;i--){
         const t = trouts[i];
-        if(tryEat(player, t)){ trouts.splice(i,1); setTimeout(()=> spawnTrouts(1, {x:player.x, y:player.y, r:120}), 3000); }
-        else if(tryEat(t, player)){ gameOver('Te comió una trucha más grande'); return; }
+        if(tryEat(player, t)){
+          // player se comió una trucha: quitar de trouts y mantener spawn si quieres
+          trouts.splice(i,1);
+          // respawn suave de una trucha lejos del jugador (opcional)
+          setTimeout(()=> spawnTrouts(1, {x:player.x, y:player.y, r:120}), 3000);
+        } else if(tryEat(t, player)){
+          gameOver('Te comió una trucha más grande'); return;
+        }
       }
 
       player.hidden = false;
@@ -540,7 +571,7 @@
             const mass = Math.random() < 0.3 ? rand(40,110) : rand(18,45);
             const t = new Fish(x,y,mass,'#ff7b7b','native','trout');
             t.vx = rand(-20,20); t.vy = rand(-20,20);
-            trouts.push(t);
+            natives.push(t); // agregar al array natives — después se sincroniza trouts desde natives
             break;
           }
         }
@@ -573,7 +604,10 @@
       }
 
       updateNatives(dt);
+
+      // sincronizar trouts con natives (asegura que la lista de trouts se actualice)
       trouts = natives.filter(n=>n.species==='trout' && !n.dead);
+
       updateTrouts(dt);
       updatePlayer(dt);
 
@@ -789,6 +823,7 @@
       if(L.id==='titicaca'){
         for(let i=0;i<6;i++) pollutionZones.push({ x:rand(200,world.w-200), y:rand(200,world.h-200), r:rand(80,160), driftX:rand(-10,10), driftY:rand(-10,10) });
       }
+      // sincronizar trouts con natives (se actualizará en update)
       trouts = natives.filter(n=>n.species==='trout');
       createPlayer();
       initAlgae();
@@ -824,4 +859,3 @@
 
 </body>
 </html>
-
