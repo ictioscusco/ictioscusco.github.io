@@ -1,125 +1,4 @@
-<!doctype html>
-<html lang="es">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>PAC-FISH — IcTiosCusco (final)</title>
-  <link href="https://fonts.googleapis.com/css?family=Dosis:200,300,400,500,700" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Overpass:300,400,400i,600,700" rel="stylesheet">
-  <link rel="stylesheet" href="css/bootstrap.min.css">
-  <style>
-    body { background: linear-gradient(#e8fbf3,#dff6f0); }
-    .game-wrap { max-width:1400px; margin:18px auto; padding:12px; background:rgba(255,255,255,0.95); border-radius:10px; box-shadow:0 8px 30px rgba(0,0,0,0.08); }
-    #game-container { height:720px; position:relative; border-radius:8px; overflow:hidden; background:linear-gradient(#022,#013); }
-    canvas { width:100%; height:100%; display:block; background:transparent; }
-    .game-top { display:flex; gap:12px; align-items:center; margin-bottom:12px; z-index:20; position:relative; }
-    .btn-back { margin-left:6px; }
-    #overlay { position:absolute; left:12px; top:12px; color:white; z-index:16; text-shadow:0 2px 6px rgba(0,0,0,0.6); }
-    #hud { position:absolute; right:12px; top:12px; color:white; z-index:16; text-align:right; display:flex; gap:8px; align-items:center; }
-    #hud .hud-item { margin-left:8px; }
-    #oxygenBarWrap { width:140px; text-align:left; display:inline-block; vertical-align:middle; }
-    #oxygenBar { width:140px; height:8px; background:rgba(255,255,255,0.12); border-radius:6px; overflow:hidden; display:block; }
-    #oxygenFill { height:100%; width:100%; background:linear-gradient(90deg,#7ef78a,#3cb371); border-radius:6px; transition:width 0.18s linear; }
-    #minimap { position:absolute; right:16px; bottom:16px; width:180px; height:160px; z-index:6; border-radius:999px; overflow:hidden; box-shadow:0 6px 16px rgba(0,0,0,0.25); background:rgba(0,0,0,0.12); display:flex; align-items:center; justify-content:center; }
-    #mm { border-radius:999px; display:block; width:92%; height:92%; background:transparent; }
-    #legendWrap { position:absolute; right:12px; bottom:310px; z-index:8; display:flex; flex-direction:column; gap:8px; align-items:flex-end; }
-    .legend { background: rgba(0,0,0,0.6); color:white; padding:8px 10px; border-radius:999px; font-size:0.82rem; display:flex; gap:10px; align-items:center; box-shadow:0 6px 14px rgba(0,0,0,0.35); }
-    .sw { width:14px; height:10px; border-radius:3px; display:inline-block; border:1px solid rgba(255,255,255,0.08); }
-    #hiddenBadge { position:absolute; left:12px; bottom:18px; color:#fff; background:rgba(0,0,0,0.4); padding:6px 8px; border-radius:8px; z-index:16; display:none; }
-    .controls { display:flex; gap:8px; align-items:center; margin-left:auto; }
-    #pollutionFlash { position:absolute; inset:0; pointer-events:none; z-index:40; display:none; transition:background 0.18s ease; }
-    #transientMsg { position:absolute; left:50%; transform:translateX(-50%); top:18px; z-index:80; background:rgba(0,0,0,0.7); color:white; padding:8px 12px; border-radius:8px; display:none; }
-    #bloomWarning { position:absolute; left:50%; transform:translateX(-50%); top:70px; z-index:90; background:rgba(200,40,30,0.95); color:white; padding:10px 14px; border-radius:8px; display:none; font-weight:600; box-shadow:0 6px 20px rgba(0,0,0,0.4); }
-    @media (max-width:760px){ #game-container{ height:520px; } }
-  </style>
-</head>
-<body>
-
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-      <a class="navbar-brand d-flex align-items-center" href="index.html">
-        <img src="images/logo.png" alt="IcTiosCusco" style="height:36px; margin-right:8px;">
-        <span>IcTiosCusco</span>
-      </a>
-    </div>
-  </nav>
-
-  <main class="game-wrap">
-    <div class="game-top">
-      <h2 style="margin:0">PAC-FISH — Educación ambiental</h2>
-      <div class="controls">
-        <button id="fullBtn" class="btn btn-outline-secondary btn-sm">Pantalla completa</button>
-        <a id="resBtn" class="btn btn-outline-primary btn-sm btn-back" href="recursos.html">← Volver a Recursos</a>
-      </div>
-    </div>
-
-    <p style="margin:0 0 12px 0; color:#444;">
-      Lee la mini-historia antes de cada nivel. Controles: mueve con el ratón o tocando la pantalla. Usa cuevas para esconderte.
-    </p>
-
-    <div id="game-container">
-      <canvas id="c"></canvas>
-      <div id="overlay">Mov: ratón / tacto</div>
-
-      <div id="hud">
-        <div class="hud-item">Score: <strong id="score">0</strong></div>
-        <div class="hud-item">Tamaño: <strong id="size">0</strong></div>
-        <div class="hud-item">Vidas: <strong id="lives">3</strong></div>
-        <div class="hud-item" id="oxygenHUD">
-          <div id="oxygenBarWrap"><small style="display:block; font-size:0.75rem; color:#fff;">O₂</small><div id="oxygenBar"><div id="oxygenFill"></div></div></div>
-        </div>
-        <div class="hud-item"><span id="targetLabel">Hembras faltantes: </span><strong id="targetRemain">0</strong></div>
-      </div>
-
-      <div id="legendWrap">
-        <div class="legend"><span class="sw" style="background:#a0e0ff"></span> Pejerrey H</div>
-        <div class="legend"><span class="sw" style="background:#6fb7ff"></span> Pejerrey M</div>
-        <div class="legend"><span class="sw" style="background:#c08f4a"></span> Carpa</div>
-        <div class="legend"><span class="sw" style="background:#ff7b7b"></span> Trucha</div>
-        <div class="legend"><span class="sw" style="background:#7ef78a"></span> Huevo</div>
-        <div class="legend"><span class="sw" style="background:#333"></span> Cueva</div>
-      </div>
-
-      <div id="minimap"><canvas id="mm"></canvas></div>
-      <div id="hiddenBadge">Escondido (cueva)</div>
-
-      <div id="transientMsg"></div>
-      <div id="pollutionFlash"></div>
-      <div id="bloomWarning">¡Atención! Bloom de algas: el O₂ está bajando rápidamente.</div>
-
-      <div id="startOverlay" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:60; background:linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55));">
-        <div id="startBox" style="background:rgba(0,0,0,0.9); color:#fff; padding:20px 22px; border-radius:10px; max-width:720px; text-align:left;">
-          <h3 id="briefTitle" style="margin-top:0">PAC-FISH — Antes de empezar</h3>
-          <div id="briefText" style="margin-bottom:12px; color:#e9f6f0;"></div>
-          <div style="display:flex; gap:8px;">
-            <button id="btnStart" class="btn btn-success">Comenzar nivel</button>
-            <button id="btnCancel" class="btn btn-outline-light">Cancelar</button>
-          </div>
-        </div>
-      </div>
-
-      <div id="message" style="position:absolute; inset:0; display:none; align-items:center; justify-content:center; z-index:70;">
-        <div style="background:rgba(0,0,0,0.7); color:white; padding:20px 22px; border-radius:10px; text-align:center;">
-          <h3 id="msgTitle">Has muerto</h3>
-          <div id="msgBody"></div>
-          <div style="margin-top:12px;">
-            <button id="respawn" class="btn btn-primary">Aceptar</button>
-            <a class="btn btn-outline-light" href="recursos.html">Volver a Recursos</a>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </main>
-
-  <footer style="text-align:center; padding:12px 8px; color:#666;">
-    <small>IcTiosCusco — Educación ambiental • © <span id="year"></span></small>
-  </footer>
-
-  <script>document.getElementById('year').innerText = new Date().getFullYear();</script>
-  <script src="js/jquery.min.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-
+<!-- ... (todo el HTML previo igual hasta el <script> original) ... -->
   <script>
   (function(){
     // ---------- CONFIG ----------
@@ -177,7 +56,7 @@
         id: 'titicaca', name: 'Lago Titicaca',
         pelletCount: 500,
         composition: { pejerrey: 10, carpa: 20, trout: 12 },
-        // Nivel 3: objetivo incluye truchas y hembras
+        // Nota: el objetivo de este nivel se actualizará dinámicamente al empezar el nivel
         targets: { trout: 12, 'pejerrey_F': 12 },
         allowEggs: true,
         description: '<strong>Titicaca — Contaminación y burbujeo.</strong> Vertidos y eutrofización causan zonas de burbujeo que consumen oxígeno. Evita las zonas contaminadas, sobrevive y elimina invasores para restaurar la salud del lago.'
@@ -287,7 +166,10 @@
           const x=rand(60,world.w-60), y=rand(60,world.h-60);
           const mass = spec==='carpa'? rand(18,40) : spec==='pejerrey'? rand(8,22) : rand(18,60);
           const color = spec==='carpa'? '#c08f4a' : spec==='pejerrey'? '#9ae0ff' : '#ff7b7b';
-          const f = new Fish(x,y,mass,color,'native',spec);
+          const f = new Fish(x,y,mass,'native', 'native', spec);
+          // note: original constructor usage expects (x,y,mass,color,type,species). fix color position:
+          f.color = (spec==='carpa'? '#c08f4a' : spec==='pejerrey'? '#9ae0ff' : '#ff7b7b');
+          f.type = 'native'; f.species = spec;
           if(spec==='carpa') f.prefersPellets=true;
           if(spec==='pejerrey'){ f.sex = (Math.random() < 0.38) ? 'F' : 'M'; if(f.sex==='F') f.color = '#a0e0ff'; else f.color = '#6fb7ff'; }
           f.vx=rand(-30,30); f.vy=rand(-30,30);
@@ -315,7 +197,7 @@
       transientTimer = setTimeout(()=>{ el.style.display='none'; }, ms);
     }
 
-    // ---------- tryEat (REEMPLAZADA) ----------
+    // ---------- tryEat (REEMPLAZADA/MEJORADA) ----------
     function tryEat(pred, prey){
       if(!prey || prey.dead) return false;
 
@@ -334,6 +216,22 @@
           return true;
         }
         return false;
+      }
+
+      // --- NUEVA EXCEPCIÓN: permitir que TRUCHAS coman al JUGADOR incluso si la regla rígida de tamaño no se cumple ---
+      if(pred.species === 'trout' && prey.type === 'player' && !player.invulnerable){
+        const d = Math.hypot(pred.x - prey.x, pred.y - prey.y);
+        // Si la trucha está muy cerca (relativo a su radio) o es lo bastante grande en relación al jugador, come al jugador.
+        if(d < pred.r * 1.05 || pred.mass >= player.mass * 0.70){
+          prey.dead = true;
+          // la trucha gana masa como en la rama de truchas
+          pred.mass += prey.mass * SETTINGS.eatFactor * (SETTINGS.troutEatGainMultiplier || 1.0);
+          pred.updateRadius();
+          if(pred.type !== 'player') pred.reproCooldown = Math.max(0, pred.reproCooldown - 1);
+          // Si una trucha te come, disparar la lógica de muerte del jugador.
+          handlePlayerDeath('Te comió una trucha');
+          return true;
+        }
       }
 
       // Condición general de depredación por tamaño y distancia
@@ -532,7 +430,7 @@
           else { if(!t.target || Math.random()<0.005) t.target={x:t.x+rand(-240,240),y:t.y+rand(-240,240)}; t.applyMovement(t.target.x-t.x,t.target.y-t.y,dt); }
         }
 
-        for(let i=pellets.length-1;i>=0;i--){ const eaten = tryEatPellet(t,i); if(eaten && SETTINGS.pelletRespawn) spawnPellets(1); }
+        for(let i=0;i<pellets.length;i++){ const eaten = tryEatPellet(t,i); if(eaten && SETTINGS.pelletRespawn) spawnPellets(1); }
 
         // Truchas pueden comerse otros no-truchas (tryEat ya controla)
         for(let i=0;i<natives.length;i++){
@@ -673,11 +571,19 @@
         const bw = document.getElementById('bloomWarning'); if(bw) bw.style.display = 'none';
       }
 
+      // --- Actualizar algas MOVIÉNDOLAS EN EL MAPA (coordenadas de mundo) ---
       for(const p of algaeParticles){
-        p.y -= p.speed * dt * 30;
-        p.x += Math.sin(performance.now()*0.0004*p.sway) * 0.0006 * (1/p.size) * dt * 800;
-        if(p.y < -0.08) { p.y = 1.08; p.x = Math.random(); }
-        if(p.x < -0.2) p.x = 1.2; if(p.x > 1.2) p.x = -0.2;
+        // movimiento base
+        p.x += p.vx * dt * 20;
+        p.y += p.vy * dt * 20;
+        // oscilación suave
+        p.x += Math.sin(performance.now()*0.0004*p.sway) * 0.06 * dt * 60;
+        p.y += Math.cos(performance.now()*0.0006*p.sway) * 0.03 * dt * 60;
+        // wrap dentro del mundo para que se mantengan en mapa
+        if(p.x < 10) p.x = world.w - 10;
+        if(p.x > world.w - 10) p.x = 10;
+        if(p.y < 10) p.y = world.h - 10;
+        if(p.y > world.h - 10) p.y = 10;
       }
 
       updateNatives(dt);
@@ -739,14 +645,14 @@
         const g = ctx.createLinearGradient(0,0,0,cssH); g.addColorStop(0,'#012'); g.addColorStop(1,'#00121a'); ctx.fillStyle=g; ctx.fillRect(0,0,cssW,cssH);
       }
 
-      // algae decorativa
+      // algae decorativa (ahora en coordenadas del mapa)
       ctx.save(); ctx.globalCompositeOperation = 'lighter';
       for(const p of algaeParticles){
-        const x = p.x * cssW;
-        const y = p.y * cssH;
+        const s = worldToScreen(p.x, p.y);
+        const size = Math.max(3, p.size) * camera.zoom * 0.35;
         ctx.beginPath();
         ctx.fillStyle = `rgba(90,200,110,${p.alpha})`;
-        ctx.arc(x,y,p.size*camera.zoom*0.35,0,Math.PI*2);
+        ctx.arc(s.x, s.y, size, 0, Math.PI*2);
         ctx.fill();
       }
       ctx.restore();
@@ -957,8 +863,17 @@
 
     function initAlgae(){
       algaeParticles = [];
+      // ahora usamos coordenadas de mundo para que las algas se muevan en el mapa
       for(let i=0;i<80;i++){
-        algaeParticles.push({ x: Math.random(), y: Math.random(), size: rand(4,18), speed: rand(0.005, 0.03), alpha: rand(0.06,0.22), sway: rand(0.2,1.6) });
+        algaeParticles.push({
+          x: rand(20, world.w-20),
+          y: rand(20, world.h-20),
+          size: rand(4,18),
+          vx: rand(-6,6),
+          vy: rand(-1,2),
+          alpha: rand(0.06,0.22),
+          sway: rand(0.2,1.6)
+        });
       }
     }
 
@@ -994,6 +909,20 @@
         } else oxygen = 100;
         natives = natives.filter(n=>!n.dead);
         trouts = natives.filter(n=>n.species==='trout');
+
+        // --- Si es Titicaca, ajustar targets para "matar a todas las truchas" dinámicamente ---
+        if(L.id === 'titicaca'){
+          const totalTrouts = natives.filter(n => n.species === 'trout').length;
+          // sustituimos targets por la meta de eliminar todas las truchas
+          L.targets = { trout: totalTrouts };
+        }
+
+        // asegurarse de inicializar levelProgress con los targets finales
+        levelProgress = {};
+        if(L && L.targets){
+          for(const k in L.targets) levelProgress[k] = 0;
+        }
+
         let spawnX = world.w/2, spawnY = world.h/2; if(caves && caves.length){ spawnX = caves[0].x + 6; spawnY = caves[0].y + 6; }
         createPlayer(spawnX, spawnY);
         camera.zoom = camera.baseZoom;
@@ -1048,3 +977,4 @@
   </script>
 </body>
 </html>
+
