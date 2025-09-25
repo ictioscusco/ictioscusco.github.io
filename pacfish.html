@@ -19,6 +19,9 @@
     #overlay { position:absolute; left:12px; top:12px; color:white; z-index:16; text-shadow:0 2px 6px rgba(0,0,0,0.6); }
     #hud { position:absolute; right:12px; top:12px; color:white; z-index:16; text-align:right; display:flex; gap:8px; align-items:center; }
     #hud .hud-item { margin-left:8px; }
+    #oxygenBarWrap { width:150px; text-align:left; display:inline-block; vertical-align:middle; }
+    #oxygenBar { width:150px; height:8px; background:rgba(255,255,255,0.12); border-radius:6px; overflow:hidden; display:block; }
+    #oxygenFill { height:100%; width:100%; background:linear-gradient(90deg,#7ef78a,#3cb371); border-radius:6px; transition:width 0.18s linear; }
     #minimap { position:absolute; right:16px; bottom:16px; width:160px; height:140px; z-index:6; border-radius:999px; overflow:hidden; box-shadow:0 6px 16px rgba(0,0,0,0.25); background:rgba(0,0,0,0.12); display:flex; align-items:center; justify-content:center; }
     #mm { border-radius:999px; display:block; width:92%; height:92%; background:transparent; }
     #legendWrap { position:absolute; right:12px; bottom:310px; z-index:8; display:flex; flex-direction:column; gap:8px; align-items:flex-end; }
@@ -26,6 +29,8 @@
     .sw { width:14px; height:10px; border-radius:3px; display:inline-block; border:1px solid rgba(255,255,255,0.08); }
     #hiddenBadge { position:absolute; left:12px; bottom:18px; color:#fff; background:rgba(0,0,0,0.4); padding:6px 8px; border-radius:8px; z-index:16; display:none; }
     .controls { display:flex; gap:8px; align-items:center; margin-left:auto; }
+    #pollutionFlash { position:absolute; inset:0; pointer-events:none; z-index:40; display:none; }
+    #transientMsg { position:absolute; left:50%; transform:translateX(-50%); top:18px; z-index:80; background:rgba(0,0,0,0.7); color:white; padding:8px 12px; border-radius:8px; display:none; }
     @media (max-width:760px){ #game-container{ height:520px; } }
   </style>
 </head>
@@ -60,6 +65,9 @@
       <div id="hud">
         <div class="hud-item">Score: <strong id="score">0</strong></div>
         <div class="hud-item">Tamaño: <strong id="size">0</strong></div>
+        <div class="hud-item" id="oxygenHUD">
+          <div id="oxygenBarWrap"><small style="display:block; font-size:0.75rem; color:#fff;">O₂</small><div id="oxygenBar"><div id="oxygenFill"></div></div></div>
+        </div>
         <div class="hud-item"><span id="targetLabel">Hembras faltantes: </span><strong id="targetRemain">0</strong></div>
         <div class="hud-item"><button id="chanceBtn" class="btn btn-warning btn-sm">Usar chance</button></div>
       </div>
@@ -75,6 +83,9 @@
 
       <div id="minimap"><canvas id="mm"></canvas></div>
       <div id="hiddenBadge">Escondido (cueva)</div>
+
+      <div id="transientMsg"></div>
+      <div id="pollutionFlash"></div>
 
       <div id="startOverlay" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:60; background:linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55));">
         <div id="startBox" style="background:rgba(0,0,0,0.9); color:#fff; padding:20px 22px; border-radius:10px; max-width:720px; text-align:left;">
@@ -135,7 +146,7 @@
     function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
     function dist(a,b){ const dx=a.x-b.x, dy=a.y-b.y; return Math.hypot(dx,dy); }
 
-    // ---------- LEVELS (Nivel 2: ahora permite huevos) ----------
+    // ---------- LEVELS (mini-historias mejoradas) ----------
     const LEVELS = [
       {
         id: 'urcos', name: 'Urcos',
@@ -143,15 +154,15 @@
         composition: { pejerrey: 42, carpa: 14, trout: 0 },
         targets: { 'pejerrey_F': 10 },
         allowEggs: true,
-        description: 'Urcos: Rolando Chaparrea sembró pejerreyes en la laguna. Debes crecer y eliminar 10 pejerreyes HEMBRA para frenar sus generaciones.'
+        description: '<strong>Urcos — Ingreso de especies.</strong> Un vivero local liberó pejerreyes para aumentar la pesca. Aunque parezca útil, las hembras proliferan rápidamente. Objetivo: eliminar 10 hembras para reducir la tasa de reproducción y permitir la recuperación del ecosistema nativo.'
       },
       {
         id: 'lucre', name: 'Lucre-Huacarpay',
         pelletCount: 600,
         composition: { pejerrey: 10, carpa: 40, trout: 10 },
         targets: { trout: 10 },
-        allowEggs: true,    // <-- cambiado a true para permitir huevos en el nivel 2
-        description: 'Lucre: truchas voraces han llegado. Debes eliminar 10 truchas para recuperar el equilibrio.'
+        allowEggs: true,
+        description: '<strong>Lucre — Truchas invasoras.</strong> Se han introducido truchas voraces que compiten y depredan a las especies andinas. Tu objetivo es eliminar 10 truchas invasoras para dar respiro a la comunidad íctica local.'
       },
       {
         id: 'titicaca', name: 'Lago Titicaca',
@@ -159,7 +170,7 @@
         composition: { pejerrey: 10, carpa: 20, trout: 12 },
         targets: { trout: 12, 'pejerrey_F': 12 },
         allowEggs: true,
-        description: 'Titicaca: invasores voraces y contaminación. Sobrevive y elimina invasores para restaurar el ecosistema.'
+        description: '<strong>Titicaca — Contaminación y burbujeo.</strong> Vertidos y eutrofización generan zonas de burbujeo con compuestos que consumen oxígeno. Evita las zonas contaminadas, sobrevive y elimina invasores para restaurar la salud del lago.'
       }
     ];
 
@@ -224,6 +235,7 @@
     let running=false, paused=false, lastTime=performance.now(), mouse={x:0,y:0,worldX:0,worldY:0,down:false}, score=0;
     let currentLevelIndex=0, levelProgress={}, oxygen=100, pollutionZones=[];
     let chanceUsed = false;
+    let transientTimer = null;
 
     // ---------- entities ----------
     class Fish {
@@ -296,6 +308,14 @@
     function spawnEgg(x,y){ if(eggs.length >= EGG_MAX) return; eggs.push({ x, y, r:6, created: performance.now() }); }
     function createPlayer(){ player = new Fish(world.w/2, world.h/2, SETTINGS.playerStartMass, '#ffd54f','player','orestia'); player.updateRadius(); player.hidden=false; player.speedBuff=1; player.speedBuffTimer=0; player.invulnerable=false; player.facing=1; player.facingTarget=1; }
 
+    // ---------- Transient UI ----------
+    function showTransient(text, ms=1500){
+      const el = document.getElementById('transientMsg');
+      if(transientTimer) { clearTimeout(transientTimer); transientTimer = null; }
+      el.innerText = text; el.style.display = 'block';
+      transientTimer = setTimeout(()=>{ el.style.display='none'; }, ms);
+    }
+
     // ---------- Eating ----------
     function tryEat(pred, prey){
       if(!prey || prey.dead) return false;
@@ -324,9 +344,11 @@
         if(pred.type === 'player'){
           if(prey.species === 'pejerrey' && prey.sex === 'F' && L.targets && L.targets['pejerrey_F']){
             levelProgress['pejerrey_F'] = (levelProgress['pejerrey_F']||0) + 1;
+            showTransient('Hembra eliminada — objetivo actualizado', 900);
           }
           if(prey.species === 'trout' && L.targets && L.targets['trout']){
             levelProgress['trout'] = (levelProgress['trout']||0) + 1;
+            showTransient('Trucha eliminada — objetivo actualizado', 900);
           }
         }
 
@@ -364,7 +386,7 @@
       const e = eggs[idx];
       const d = Math.hypot(f.x - e.x, f.y - e.y);
       if(d < f.r + e.r*0.8){
-        if(f.type === 'player'){ f.speedBuff = EGG_SPEED_BUFF; f.speedBuffTimer = EGG_BUFF_TIME; }
+        if(f.type === 'player'){ f.speedBuff = EGG_SPEED_BUFF; f.speedBuffTimer = EGG_BUFF_TIME; showTransient('¡Huevo comido! Velocidad temporal'); }
         eggs.splice(idx,1);
         return true;
       }
@@ -464,7 +486,6 @@
           } else if(target.type === 'fish'){
             const other = natives[target.refIndex];
             if(other && !other.dead){
-              // tryEat puede bloquear comer truchas si el predador no es player (ver arriba)
               if(tryEat(n, other)){
                 if(other.dead){
                   const idx = natives.indexOf(other);
@@ -481,7 +502,6 @@
     }
 
     function updateTrouts(dt){
-      // trouts está sincronizado desde `natives` en update()
       for(let t of trouts){
         if(t.dead) continue;
         if(t.reproCooldown>0) t.reproCooldown -= dt;
@@ -546,9 +566,8 @@
       for(let i=trouts.length-1;i>=0;i--){
         const t = trouts[i];
         if(tryEat(player, t)){
-          // player se comió una trucha: quitar de trouts y mantener spawn si quieres
           trouts.splice(i,1);
-          // respawn suave de una trucha lejos del jugador (opcional)
+          // respawn suave — spawnTrouts añade a natives
           setTimeout(()=> spawnTrouts(1, {x:player.x, y:player.y, r:120}), 3000);
         } else if(tryEat(t, player)){
           gameOver('Te comió una trucha más grande'); return;
@@ -571,11 +590,49 @@
             const mass = Math.random() < 0.3 ? rand(40,110) : rand(18,45);
             const t = new Fish(x,y,mass,'#ff7b7b','native','trout');
             t.vx = rand(-20,20); t.vy = rand(-20,20);
-            natives.push(t); // agregar al array natives — después se sincroniza trouts desde natives
+            natives.push(t);
             break;
           }
         }
       }
+    }
+
+    // ---------- Pollution / Bubbles ----------
+    function createPollutionZone(x,y,r){
+      const z = { x, y, r, driftX: rand(-20,20), driftY: rand(-20,20), particles: [] };
+      for(let i=0;i<30;i++){
+        z.particles.push({
+          x: x + rand(-r*0.7, r*0.7),
+          y: y + rand(-r*0.7, r*0.7),
+          vy: rand(-6,-14),
+          size: rand(1,4),
+          alpha: rand(0.05,0.25),
+          offsetX: rand(-6,6)
+        });
+      }
+      return z;
+    }
+
+    function updatePollution(dt){
+      for(const z of pollutionZones){
+        z.x += z.driftX * 0.01 * dt * 60; z.y += z.driftY * 0.01 * dt * 60;
+        if(z.x < 60 || z.x > world.w-60) z.driftX *= -1;
+        if(z.y < 60 || z.y > world.h-60) z.driftY *= -1;
+        // animate particles
+        for(const p of z.particles){
+          p.y += p.vy * 0.02 * dt * 60;
+          p.x += Math.sin(performance.now()*0.0007 + p.offsetX) * 0.02 * dt * 60;
+          if(p.y < z.y - z.r*0.8){ p.y = z.y + z.r*0.8; p.x = z.x + rand(-z.r*0.6, z.r*0.6); }
+        }
+      }
+    }
+
+    function renderPollutionOverlay(intensity){
+      const overlay = document.getElementById('pollutionFlash');
+      overlay.style.display = 'block';
+      overlay.style.background = `radial-gradient(circle at ${50 + rand(-10,10)}% ${40 + rand(-10,10)}%, rgba(180,40,30,${clamp(intensity*0.35,0,0.45)}), rgba(0,0,0,0))`;
+      // hide after short time
+      setTimeout(()=>{ overlay.style.display='none'; }, 220);
     }
 
     // ---------- MAIN UPDATE ----------
@@ -588,13 +645,25 @@
 
       const L = LEVELS[currentLevelIndex];
 
-      if(L.id === 'titicaca'){
-        for(let z of pollutionZones){ z.x += z.driftX*dt; z.y += z.driftY*dt; if(z.x<50||z.x>world.w-50) z.driftX *= -1; if(z.y<50||z.y>world.h-50) z.driftY *= -1; }
-        let oxLoss = 0.02;
-        for(let z of pollutionZones){ const d = Math.hypot(player.x - z.x, player.y - z.y); if(d < z.r) oxLoss += 0.3; }
-        oxygen = clamp(oxygen - oxLoss*10*dt, 0, 100);
-        if(oxygen <= 0){ gameOver('Moriste por falta de oxígeno'); return; }
+      // oxygen baseline
+      let oxLossBase = 0.01; // lento consumo natural
+      // update pollution zones & calculate extra oxygen loss
+      let insideAny = false;
+      updatePollution(dt);
+      for(const z of pollutionZones){
+        const d = Math.hypot(player.x - z.x, player.y - z.y);
+        if(d < z.r){
+          insideAny = true;
+          // damage scales with proximity to center (closer => more loss)
+          const factor = 1 - (d / z.r);
+          const extra = 0.4 + 0.6 * factor; // entre 0.4 y 1.0
+          oxLossBase += extra;
+          // small visual cue when inside
+          renderPollutionOverlay(extra);
+        }
       }
+      oxygen = clamp(oxygen - oxLossBase * 12 * dt, 0, 100);
+      if(oxygen <= 0){ gameOver('Moriste por falta de oxígeno (zonas contaminadas)'); return; }
 
       for(const p of algaeParticles){
         p.y -= p.speed * dt * 30;
@@ -604,10 +673,7 @@
       }
 
       updateNatives(dt);
-
-      // sincronizar trouts con natives (asegura que la lista de trouts se actualice)
       trouts = natives.filter(n=>n.species==='trout' && !n.dead);
-
       updateTrouts(dt);
       updatePlayer(dt);
 
@@ -684,6 +750,37 @@
       }
       ctx.restore();
 
+      // draw pollution zones with particles (visible bubbles)
+      for(const z of pollutionZones){
+        const s = worldToScreen(z.x, z.y);
+        const pr = z.r * camera.zoom;
+        // pulsing ring
+        const pulse = 0.9 + 0.12 * Math.sin(performance.now()*0.002 + z.x*0.0001);
+        ctx.beginPath();
+        const grad = ctx.createRadialGradient(s.x, s.y, pr*0.15, s.x, s.y, pr);
+        grad.addColorStop(0, 'rgba(255,120,100,0.18)');
+        grad.addColorStop(0.5, 'rgba(180,40,30,0.08)');
+        grad.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = grad;
+        ctx.beginPath(); ctx.ellipse(s.x, s.y, pr*pulse, pr*0.55*pulse, 0, 0, Math.PI*2); ctx.fill();
+
+        // draw small rising bubbles
+        ctx.save();
+        ctx.globalCompositeOperation = 'lighter';
+        for(const p of z.particles){
+          const sx = (p.x - camera.x)*camera.zoom + canvas.width/2;
+          const sy = (p.y - camera.y)*camera.zoom + canvas.height/2;
+          ctx.beginPath();
+          ctx.fillStyle = `rgba(220,240,255,${p.alpha})`;
+          ctx.arc(sx, sy, p.size * camera.zoom, 0, Math.PI*2);
+          ctx.fill();
+        }
+        ctx.restore();
+
+        // subtle ring outline
+        ctx.beginPath(); ctx.strokeStyle = 'rgba(255,150,120,0.06)'; ctx.lineWidth = 3 * camera.zoom; ctx.arc(s.x, s.y, pr, 0, Math.PI*2); ctx.stroke();
+      }
+
       for(const c of caves){
         const s = worldToScreen(c.x,c.y);
         ctx.beginPath(); ctx.fillStyle = 'rgba(6,6,6,0.6)'; ctx.arc(s.x, s.y, c.r*camera.zoom, 0, Math.PI*2); ctx.fill();
@@ -739,6 +836,7 @@
       for(const n of natives){ if(n.dead) continue; mmCtx.fillStyle = n.species==='carpa'? '#c08f4a' : n.species==='pejerrey'? (n.sex==='F' ? '#a0e0ff' : '#6fb7ff') : '#ff7b7b'; mmCtx.fillRect(n.x*sx-2, n.y*sy-2, 4,4); }
       for(const e of eggs){ mmCtx.fillStyle = '#7ef78a'; mmCtx.fillRect(e.x*sx-2, e.y*sy-2, 3,3); }
       for(const c of caves){ mmCtx.fillStyle = '#333'; mmCtx.beginPath(); mmCtx.arc(c.x*sx, c.y*sy, Math.max(3, c.r*sx*0.35), 0, Math.PI*2); mmCtx.fill(); }
+      for(const z of pollutionZones){ mmCtx.fillStyle = 'rgba(255,120,100,0.25)'; mmCtx.beginPath(); mmCtx.arc(z.x*sx, z.y*sy, Math.max(4, z.r*sx*0.25), 0, Math.PI*2); mmCtx.fill(); }
       mmCtx.fillStyle = '#fff0a8'; mmCtx.beginPath(); mmCtx.arc(player.x*sx, player.y*sy, Math.max(2, player.r*0.12), 0, Math.PI*2); mmCtx.fill();
       const vx = (camera.x - canvas.width/2/camera.zoom) * sx; const vy = (camera.y - canvas.height/2/camera.zoom) * sy;
       const vw = (canvas.width/camera.zoom) * sx; const vh = (canvas.height/camera.zoom) * sy;
@@ -750,6 +848,11 @@
     function updateHUD(){
       document.getElementById('score').innerText = score;
       document.getElementById('size').innerText = Math.round(player ? player.mass : 0);
+      // oxygen
+      const oxygenFill = document.getElementById('oxygenFill');
+      oxygenFill.style.width = Math.max(0, oxygen) + '%';
+      if(oxygen < 30) oxygenFill.style.background = 'linear-gradient(90deg,#ff9a9a,#ff4d4d)'; else oxygenFill.style.background = 'linear-gradient(90deg,#7ef78a,#3cb371)';
+
       const L = LEVELS[currentLevelIndex];
       const labelEl = document.getElementById('targetLabel');
       const remainEl = document.getElementById('targetRemain');
@@ -808,7 +911,7 @@
       chanceUsed = false;
       document.getElementById('chanceBtn').removeAttribute('disabled');
       document.getElementById('briefTitle').innerText = 'Antes de: ' + L.name;
-      document.getElementById('briefText').innerHTML = '<strong>Mini-historia educativa:</strong><br>' + L.description + '<br><em>Objetivo:</em> ' + Object.entries(L.targets).map(([k,v])=> v + ' × ' + k).join(', ') + '<p style="margin-top:6px;"><em>Historia:</em> Un poblador llamado <strong>Rolando Chaparrea</strong> sembró pejerreyes en la laguna. Ahora debes sobrevivir y frenar la sobrepoblación.</p>';
+      document.getElementById('briefText').innerHTML = L.description + '<br><em>Objetivo:</em> ' + Object.entries(L.targets).map(([k,v])=> v + ' × ' + k).join(', ');
       document.getElementById('startOverlay').style.display='flex';
     }
 
@@ -821,9 +924,11 @@
       spawnCavesForLevel(L.id);
       if(L.id==='lucre') spawnFrogs(18);
       if(L.id==='titicaca'){
-        for(let i=0;i<6;i++) pollutionZones.push({ x:rand(200,world.w-200), y:rand(200,world.h-200), r:rand(80,160), driftX:rand(-10,10), driftY:rand(-10,10) });
+        // crear varias zonas de polución (burbujas) con partículas
+        for(let i=0;i<6;i++){
+          pollutionZones.push(createPollutionZone(rand(200,world.w-200), rand(200,world.h-200), rand(90,170)));
+        }
       }
-      // sincronizar trouts con natives (se actualizará en update)
       trouts = natives.filter(n=>n.species==='trout');
       createPlayer();
       initAlgae();
