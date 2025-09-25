@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>PAC-FISH — IcTiosCusco (corregido)</title>
+  <title>PAC-FISH — IcTiosCusco (final)</title>
   <link href="https://fonts.googleapis.com/css?family=Dosis:200,300,400,500,700" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Overpass:300,400,400i,600,700" rel="stylesheet">
   <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -29,7 +29,7 @@
     .controls { display:flex; gap:8px; align-items:center; margin-left:auto; }
     #pollutionFlash { position:absolute; inset:0; pointer-events:none; z-index:40; display:none; transition:background 0.18s ease; }
     #transientMsg { position:absolute; left:50%; transform:translateX(-50%); top:18px; z-index:80; background:rgba(0,0,0,0.7); color:white; padding:8px 12px; border-radius:8px; display:none; }
-    #bloomWarning { position:absolute; left:50%; transform:translateX(-50%); top:70px; z-index:90; background:rgba(180,40,30,0.95); color:white; padding:10px 14px; border-radius:8px; display:none; font-weight:600; box-shadow:0 6px 20px rgba(0,0,0,0.4); }
+    #bloomWarning { position:absolute; left:50%; transform:translateX(-50%); top:70px; z-index:90; background:rgba(200,40,30,0.95); color:white; padding:10px 14px; border-radius:8px; display:none; font-weight:600; box-shadow:0 6px 20px rgba(0,0,0,0.4); }
     @media (max-width:760px){ #game-container{ height:520px; } }
   </style>
 </head>
@@ -142,10 +142,10 @@
     const EGG_SPEED_BUFF = 1.6;
     const EGG_BUFF_TIME = 6.0;
 
-    // ZOOM tuning (ajusta si quieres)
+    // ZOOM tuning
     const ZOOM_REF_MASS = Math.max(1, SETTINGS.playerStartMass);
     const ZOOM_IN_CAP = 1.8;
-    const ZOOM_OUT_START_MASS = 2000;
+    const ZOOM_OUT_START_MASS = 3000;
     const ZOOM_OUT_MIN = 0.45;
     const ZOOM_SMOOTH = 3.0;
 
@@ -155,7 +155,7 @@
     function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
     function dist(a,b){ const dx=a.x-b.x, dy=a.y-b.y; return Math.hypot(dx,dy); }
 
-    // ---------- LEVELS (minihistorias) ----------
+    // ---------- LEVELS ----------
     const LEVELS = [
       {
         id: 'urcos', name: 'Urcos',
@@ -177,7 +177,7 @@
         id: 'titicaca', name: 'Lago Titicaca',
         pelletCount: 500,
         composition: { pejerrey: 10, carpa: 20, trout: 12 },
-        // nivel 3: objetivo incluye truchas (tal como pediste)
+        // Nivel 3: objetivo incluye truchas y hembras
         targets: { trout: 12, 'pejerrey_F': 12 },
         allowEggs: true,
         description: '<strong>Titicaca — Contaminación y burbujeo.</strong> Vertidos y eutrofización causan zonas de burbujeo que consumen oxígeno. Evita las zonas contaminadas, sobrevive y elimina invasores para restaurar la salud del lago.'
@@ -315,12 +315,14 @@
       transientTimer = setTimeout(()=>{ el.style.display='none'; }, ms);
     }
 
-    // ---------- eating ----------
+    // ---------- tryEat (REEMPLAZADA) ----------
     function tryEat(pred, prey){
       if(!prey || prey.dead) return false;
-      // permitimos que las truchas NPC coman truchas y demás; sólo bloqueamos que otros NPC no coman truchas
+
+      // Evitar que NPCs que no son truchas coman truchas (pero permitir truchas comerse entre ellas).
       if(pred.type !== 'player' && prey.species === 'trout' && pred.species !== 'trout') return false;
-      // pejerreyes grandes pueden comerse al jugador
+
+      // Caso: pejerrey grande come al jugador
       if(pred.species === 'pejerrey' && prey.type === 'player' && pred.mass > player.mass * 1.05 && !player.invulnerable){
         const d = Math.hypot(pred.x - prey.x, pred.y - prey.y);
         if(d < pred.r * 0.95){
@@ -333,18 +335,31 @@
         }
         return false;
       }
+
+      // Condición general de depredación por tamaño y distancia
       if(pred.r > prey.r * 1.08 && dist(pred,prey) < pred.r - prey.r*0.25){
         const L = LEVELS[currentLevelIndex] || {};
-        if(pred.type === 'player'){
-          if(prey.species === 'pejerrey' && prey.sex === 'F' && L.targets && L.targets['pejerrey_F']){
-            levelProgress['pejerrey_F'] = (levelProgress['pejerrey_F']||0) + 1;
-            showTransient('Hembra eliminada', 900);
+
+        // Determinar si la víctima es uno de los objetivos del nivel
+        let targetKey = null;
+        if(prey.species === 'trout' && L.targets && L.targets['trout']) targetKey = 'trout';
+        if(prey.species === 'pejerrey' && prey.sex === 'F' && L.targets && L.targets['pejerrey_F']) targetKey = 'pejerrey_F';
+
+        // Contabilizar la muerte del objetivo UNA SOLA VEZ (marca _counted en la presa)
+        if(targetKey && !prey._counted){
+          levelProgress[targetKey] = (levelProgress[targetKey] || 0) + 1;
+          prey._counted = true;
+          if(pred.type === 'player'){
+            if(targetKey === 'trout') showTransient('Trucha eliminada', 900);
+            else if(targetKey === 'pejerrey_F') showTransient('Hembra eliminada', 900);
           }
-          if(prey.species === 'trout' && L.targets && L.targets['trout']){
-            levelProgress['trout'] = (levelProgress['trout']||0) + 1;
-            showTransient('Trucha eliminada', 900);
+        } else {
+          if(pred.type === 'player' && !targetKey){
+            showTransient('Presa comida', 700);
           }
         }
+
+        // Ejecutar la "comida": marcar muerto y aplicar ganancia de masa
         prey.dead = true;
         if(pred.species === 'trout'){
           pred.mass += prey.mass * SETTINGS.eatFactor * (SETTINGS.troutEatGainMultiplier || 1.0);
@@ -352,14 +367,18 @@
           pred.mass += prey.mass * SETTINGS.eatFactor;
         }
         pred.updateRadius();
+
         if(pred.type !== 'player') pred.reproCooldown = Math.max(0, pred.reproCooldown - 1);
         if(pred.type === 'player') score += Math.round(prey.mass*2);
         if(pred.type !== 'player') checkRepro(pred);
+
         return true;
       }
+
       return false;
     }
 
+    // ---------- pellets / eggs ----------
     function tryEatPellet(f,i){
       if(i < 0 || i >= pellets.length) return false;
       const p = pellets[i];
@@ -441,7 +460,7 @@
           continue;
         }
 
-        // buscar objetivo (pellet > carpa > pejerrey pequeño)
+        // buscar objetivo
         let target = null, best = 1e9;
         for(let k=0;k<pellets.length;k++){
           const p = pellets[k];
@@ -482,7 +501,7 @@
             const other = natives[target.refIndex];
             if(other && !other.dead){
               if(tryEat(n, other)){
-                // don't splice here — mark dead and let GC remove later
+                // mark other.dead inside tryEat; avoid splicing here
               }
             }
           }
@@ -515,13 +534,13 @@
 
         for(let i=pellets.length-1;i>=0;i--){ const eaten = tryEatPellet(t,i); if(eaten && SETTINGS.pelletRespawn) spawnPellets(1); }
 
-        // Truchas pueden comerse otros no-truchas (tryEat ya lo controla)
+        // Truchas pueden comerse otros no-truchas (tryEat ya controla)
         for(let i=0;i<natives.length;i++){
           const nat = natives[i];
           if(!nat || nat.dead) continue;
           if(nat === t) continue;
           if(tryEat(t, nat)){
-            // nat.dead = true already inside tryEat
+            // nat.dead set inside tryEat
           }
         }
 
@@ -561,7 +580,6 @@
       const el = document.getElementById('pollutionFlash');
       if(!el) return;
       el.style.display = 'block';
-      // más dramático: rojo con alpha ligado a intensidad
       el.style.background = `radial-gradient(circle at 50% 40%, rgba(200,40,30,${clamp(intensity*0.5,0,0.7)}), rgba(0,0,0,0))`;
       setTimeout(()=>{ el.style.display='none'; }, 280);
     }
@@ -569,16 +587,14 @@
     // ---------- PLAYER ----------
     function updatePlayer(dt){
       if(!player) return;
-      // CORRECCIÓN del mapping: world = camera.x + (mouse.x - cssW/2)/zoom
+      // map mouse -> world using camera center and zoom (corregido)
       let targetX = (typeof mouse.worldX === 'number') ? mouse.worldX : player.x;
       let targetY = (typeof mouse.worldY === 'number') ? mouse.worldY : player.y;
 
-      // threshold para que no tiemble cuando está muy cerca
       const dx = targetX - player.x;
       const dy = targetY - player.y;
       const dlen = Math.hypot(dx,dy);
       if(dlen < 4) {
-        // muy cerca: parar
         player.vx = 0; player.vy = 0;
       } else {
         const nx = dx / dlen, ny = dy / dlen;
@@ -592,13 +608,12 @@
       player.x = clamp(player.x, player.r + 4, world.w - (player.r + 4));
       player.y = clamp(player.y, player.r + 4, world.h - (player.r + 4));
 
-      // comer
       for(let i = pellets.length - 1; i >= 0; i--) tryEatPellet(player, i);
       for(let i = eggs.length - 1; i >= 0; i--) tryEatEgg(player, i);
       for(let i = natives.length - 1; i >= 0; i--){
         const n = natives[i];
         if(!n || n.dead) continue;
-        if(tryEat(player, n)) if(n.dead) { /* leave for GC later */ }
+        if(tryEat(player, n)) { /* n.dead flagged inside tryEat */ }
       }
 
       if(player.speedBuffTimer > 0){
@@ -615,7 +630,7 @@
       if(!player) return;
       camera.x = player.x; camera.y = player.y;
 
-      // --- ZOOM dinámico ---
+      // ZOOM dinámico
       const mass = Math.max(1, player.mass);
       const massRatio = Math.sqrt(mass / ZOOM_REF_MASS);
       let targetZoom;
@@ -644,10 +659,8 @@
             renderPollutionOverlay(extra);
           }
         }
-        // reducir oxígeno con factor
         oxygen = clamp(oxygen - oxLossBase * 10 * dt, 0, 100);
         if(oxygen <= 0){ handlePlayerDeath('Moriste por falta de oxígeno'); return; }
-        // avisos si muy afectado por bloom
         if(bloomIntensityMax > OXYGEN_BLOOM_WARN || oxygen < 35){
           const bw = document.getElementById('bloomWarning');
           if(bw) bw.style.display = 'block';
@@ -660,7 +673,6 @@
         const bw = document.getElementById('bloomWarning'); if(bw) bw.style.display = 'none';
       }
 
-      // algae movement (decorativo)
       for(const p of algaeParticles){
         p.y -= p.speed * dt * 30;
         p.x += Math.sin(performance.now()*0.0004*p.sway) * 0.0006 * (1/p.size) * dt * 800;
@@ -669,11 +681,10 @@
       }
 
       updateNatives(dt);
-      // limpiar dead en natives antes de rebuild trouts
+      // limpiar muertos
       natives = natives.filter(n => n && !n.dead);
       trouts = natives.filter(n=>n.species==='trout' && !n.dead);
       updateTrouts(dt);
-      // limpiar dead en natives otra vez (por si trouts mataron)
       natives = natives.filter(n => n && !n.dead);
 
       updatePlayer(dt);
@@ -728,7 +739,7 @@
         const g = ctx.createLinearGradient(0,0,0,cssH); g.addColorStop(0,'#012'); g.addColorStop(1,'#00121a'); ctx.fillStyle=g; ctx.fillRect(0,0,cssW,cssH);
       }
 
-      // algae (decorativo)
+      // algae decorativa
       ctx.save(); ctx.globalCompositeOperation = 'lighter';
       for(const p of algaeParticles){
         const x = p.x * cssW;
@@ -825,10 +836,10 @@
       mmCtx.save(); mmCtx.fillStyle='rgba(0,0,0,0.08)'; mmCtx.fillRect(0,0,w,h);
       const sx = w / world.w, sy = h / world.h;
 
-      // pellets (sparse)
+      // pellets sparse
       for(let i=0;i<pellets.length;i+=Math.max(1,Math.floor(pellets.length/200))){ const p=pellets[i]; mmCtx.fillStyle='#ffd54f'; mmCtx.fillRect(p.x*sx - 1, p.y*sy - 1, 2, 2); }
 
-      // natives
+      // natives background
       for(const n of natives){ if(n.dead) continue; mmCtx.fillStyle = n.species==='carpa'? '#c08f4a' : n.species==='pejerrey'? (n.sex==='F' ? '#a0e0ff' : '#6fb7ff') : '#ff7b7b'; mmCtx.fillRect(n.x*sx-2, n.y*sy-2, 4,4); }
 
       // eggs + caves + pollution
@@ -959,7 +970,7 @@
         spawnPellets(L.pelletCount || 500);
         spawnNativesFromComposition(L.composition, L.id);
 
-        // asegurar que haya al menos N truchas si la composición lo pide
+        // asegurar truchas mínimas
         (function ensureTroutCount(){
           const desired = (L && L.composition && L.composition.trout) ? Number(L.composition.trout) : 0;
           if(desired <= 0) return;
@@ -981,7 +992,6 @@
           for(let i=0;i<6;i++) pollutionZones.push(createPollutionZone(rand(200,world.w-200), rand(200,world.h-200), rand(80,160)));
           oxygen = 100;
         } else oxygen = 100;
-        // limpiar y asignar trouts
         natives = natives.filter(n=>!n.dead);
         trouts = natives.filter(n=>n.species==='trout');
         let spawnX = world.w/2, spawnY = world.h/2; if(caves && caves.length){ spawnX = caves[0].x + 6; spawnY = caves[0].y + 6; }
@@ -1038,5 +1048,3 @@
   </script>
 </body>
 </html>
-
-
