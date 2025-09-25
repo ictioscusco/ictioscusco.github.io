@@ -221,6 +221,7 @@
     let currentLevelIndex=0, levelProgress={}, oxygen=100, pollutionZones=[];
     let chanceUsed = false, transientTimer=null;
     let lives = 3;
+    let algaeParticles = []; // <-- declarado correctamente
 
     // ---------- entity ----------
     class Fish {
@@ -256,37 +257,82 @@
 
     // ---------- spawners ----------
     function spawnPellets(n){ for(let i=0;i<n;i++) pellets.push({ x:rand(20,world.w-20), y:rand(20,world.h-20), mass:SETTINGS.pelletMass, r:SETTINGS.massToRadius(SETTINGS.pelletMass), color:'#ffd54f' }); }
-    function spawnNativesFromComposition(comp, levelId){
-      Object.entries(comp).forEach(([spec,count])=>{
-        if(spec === 'pejerrey' && levelId === 'urcos'){
-          const femCount = Math.min(10, count);
-          const sexes = [];
-          for(let i=0;i<count;i++) sexes.push(i < femCount ? 'F' : 'M');
-          for(let s = sexes.length - 1; s > 0; s--){ const r = Math.floor(Math.random()*(s+1)); const tmp = sexes[s]; sexes[s]=sexes[r]; sexes[r]=tmp; }
+
+    // Ahora spawnNativesFromComposition acepta totalDesired (número total aproximado de peces a crear)
+    function spawnNativesFromComposition(comp, levelId, totalDesired = 60){
+      // comp puede venir en "porcentajes" (suma ~100) o ya en conteos (suma pequeña)
+      const entries = Object.entries(comp);
+      let sum = entries.reduce((s,[k,v])=> s + Number(v || 0), 0);
+      let useCounts = false;
+      if(sum > 20 && sum <= 100){
+        // probablemente porcentajes -> escalar
+        entries.forEach(([spec, val])=>{
+          const count = Math.round(totalDesired * (Number(val)/sum));
+          if(spec === 'pejerrey' && levelId === 'urcos'){
+            // en urcos queremos asegurar al menos unas hembras
+            const femCount = Math.min(10, count);
+            const sexes = [];
+            for(let i=0;i<count;i++) sexes.push(i < femCount ? 'F' : 'M');
+            for(let s = sexes.length - 1; s > 0; s--){ const r = Math.floor(Math.random()*(s+1)); const tmp = sexes[s]; sexes[s]=sexes[r]; sexes[r]=tmp; }
+            for(let i=0;i<count;i++){
+              const x=rand(60,world.w-60), y=rand(60,world.h-60);
+              const mass = rand(8,22);
+              const sex = sexes[i];
+              const color = sex==='F' ? '#a0e0ff' : '#6fb7ff';
+              const f = new Fish(x,y,mass,color,'native','pejerrey');
+              f.sex = sex; f.vx = rand(-30,30); f.vy = rand(-30,30);
+              natives.push(f);
+            }
+            return;
+          }
+
+          // crear count peces para species
           for(let i=0;i<count;i++){
             const x=rand(60,world.w-60), y=rand(60,world.h-60);
-            const mass = rand(8,22);
-            const sex = sexes[i];
-            const color = sex==='F' ? '#a0e0ff' : '#6fb7ff';
-            const f = new Fish(x,y,mass,color,'native','pejerrey');
-            f.sex = sex; f.vx = rand(-30,30); f.vy = rand(-30,30);
+            const mass = spec==='carpa'? rand(18,40) : spec==='pejerrey'? rand(8,22) : rand(18,60);
+            const color = spec==='carpa'? '#c08f4a' : spec==='pejerrey'? '#9ae0ff' : '#ff7b7b';
+            const f = new Fish(x,y,mass,'#ffffff','native',spec);
+            // ajuste de color/sex para pejerrey
+            if(spec==='carpa') f.prefersPellets=true;
+            if(spec==='pejerrey'){ f.sex = (Math.random() < 0.38) ? 'F' : 'M'; if(f.sex==='F') f.color = '#a0e0ff'; else f.color = '#6fb7ff'; }
+            else f.color = color;
+            f.vx=rand(-30,30); f.vy=rand(-30,30);
             natives.push(f);
           }
-          return;
-        }
-
-        for(let i=0;i<count;i++){
-          const x=rand(60,world.w-60), y=rand(60,world.h-60);
-          const mass = spec==='carpa'? rand(18,40) : spec==='pejerrey'? rand(8,22) : rand(18,60);
-          const color = spec==='carpa'? '#c08f4a' : spec==='pejerrey'? '#9ae0ff' : '#ff7b7b';
-          const f = new Fish(x,y,mass,color,'native',spec);
-          if(spec==='carpa') f.prefersPellets=true;
-          if(spec==='pejerrey'){ f.sex = (Math.random() < 0.38) ? 'F' : 'M'; if(f.sex==='F') f.color = '#a0e0ff'; else f.color = '#6fb7ff'; }
-          f.vx=rand(-30,30); f.vy=rand(-30,30);
-          natives.push(f);
-        }
-      });
+        });
+      } else {
+        // interpretamos como conteos directos
+        entries.forEach(([spec,count])=>{
+          if(spec === 'pejerrey' && levelId === 'urcos'){
+            const femCount = Math.min(10, count);
+            const sexes = [];
+            for(let i=0;i<count;i++) sexes.push(i < femCount ? 'F' : 'M');
+            for(let s = sexes.length - 1; s > 0; s--){ const r = Math.floor(Math.random()*(s+1)); const tmp = sexes[s]; sexes[s]=sexes[r]; sexes[r]=tmp; }
+            for(let i=0;i<count;i++){
+              const x=rand(60,world.w-60), y=rand(60,world.h-60);
+              const mass = rand(8,22);
+              const sex = sexes[i];
+              const color = sex==='F' ? '#a0e0ff' : '#6fb7ff';
+              const f = new Fish(x,y,mass,color,'native','pejerrey');
+              f.sex = sex; f.vx = rand(-30,30); f.vy = rand(-30,30);
+              natives.push(f);
+            }
+            return;
+          }
+          for(let i=0;i<count;i++){
+            const x=rand(60,world.w-60), y=rand(60,world.h-60);
+            const mass = spec==='carpa'? rand(18,40) : spec==='pejerrey'? rand(8,22) : rand(18,60);
+            const color = spec==='carpa'? '#c08f4a' : spec==='pejerrey'? '#9ae0ff' : '#ff7b7b';
+            const f = new Fish(x,y,mass,'#ffffff','native',spec);
+            if(spec==='carpa') f.prefersPellets=true;
+            if(spec==='pejerrey'){ f.sex = (Math.random() < 0.38) ? 'F' : 'M'; if(f.sex==='F') f.color = '#a0e0ff'; else f.color = '#6fb7ff'; }
+            f.vx=rand(-30,30); f.vy=rand(-30,30);
+            natives.push(f);
+          }
+        });
+      }
     }
+
     function spawnFrogs(n){ for(let i=0;i<n;i++) frogs.push({ x:rand(60,world.w-60), y:rand(60,world.h-60), r:8, mass:2, color:'#6bff7a', dead:false }); }
     function spawnCavesForLevel(levelId){ caves = []; const caveCount = (levelId==='urcos') ? 3 : (levelId==='lucre' ? 2 : 2); for(let i=0;i<caveCount;i++){ caves.push({ x: rand(120, world.w-120), y: rand(120, world.h-120), r: rand(40,72) }); } }
     function spawnEgg(x,y){ if(eggs.length >= EGG_MAX) return; eggs.push({ x, y, r:6, created: performance.now() }); }
@@ -422,7 +468,7 @@
           }
         }
 
-        const shouldChasePlayer = (n.species === 'pejerrey' && n.mass > Math.max(20, player.mass * 1.05));
+        const shouldChasePlayer = player && (n.species === 'pejerrey' && n.mass > Math.max(20, player.mass * 1.05));
         if(shouldChasePlayer){
           n.applyMovement(player.x - n.x, player.y - n.y, dt);
           tryEat(n, player);
@@ -484,6 +530,7 @@
     }
 
     function updateTrouts(dt){
+      if(!player) return;
       for(let t of trouts){
         if(t.dead) continue;
         if(t.reproCooldown>0) t.reproCooldown -= dt;
@@ -557,6 +604,7 @@
     // ---------- MAIN UPDATE ----------
     function update(dt){
       if(!running || paused) return;
+      if(!player) return;
       camera.x = player.x; camera.y = player.y;
 
       // Zoom estilo Agar.io - suavizado
@@ -596,7 +644,8 @@
       updateTrouts(dt);
       updatePlayer(dt);
 
-      if(pellets.length < L.pelletCount && SETTINGS.pelletRespawn) spawnPellets(L.pelletCount - pellets.length);
+      const pelletTarget = L.pelletCount || 500;
+      if(pellets.length < pelletTarget && SETTINGS.pelletRespawn) spawnPellets(pelletTarget - pellets.length);
 
       updateHUD();
       checkLevelComplete();
@@ -634,7 +683,8 @@
     }
 
     function draw(){
-      if(!ctx || !player) return;
+      if(!ctx) return;
+      if(!player) return; // guard
       ctx.clearRect(0,0,cssW,cssH);
       const L = LEVELS[currentLevelIndex];
 
@@ -739,6 +789,7 @@
 
     function drawMinimap(){
       if(!mmCtx) return;
+      if(!player) return;
       const w = mm.width / DPR, h = mm.height / DPR;
       mmCtx.clearRect(0,0, w, h);
       mmCtx.save(); mmCtx.fillStyle='rgba(0,0,0,0.08)'; mmCtx.fillRect(0,0,w,h);
@@ -757,16 +808,20 @@
 
     // ---------- HUD ----------
     function updateHUD(){
-      document.getElementById('score').innerText = score;
-      document.getElementById('size').innerText = Math.round(player ? player.mass : 0);
-      document.getElementById('lives').innerText = lives;
+      const scoreEl = document.getElementById('score');
+      const sizeEl = document.getElementById('size');
+      const livesEl = document.getElementById('lives');
+      if(scoreEl) scoreEl.innerText = score;
+      if(sizeEl) sizeEl.innerText = Math.round(player ? player.mass : 0);
+      if(livesEl) livesEl.innerText = lives;
       const oxygenFill = document.getElementById('oxygenFill');
       if(oxygenFill) oxygenFill.style.width = Math.max(0, oxygen) + '%';
-      if(oxygen < 30) oxygenFill.style.background = 'linear-gradient(90deg,#ff9a9a,#ff4d4d)'; else oxygenFill.style.background = 'linear-gradient(90deg,#7ef78a,#3cb371)';
+      if(oxygen < 30 && oxygenFill) oxygenFill.style.background = 'linear-gradient(90deg,#ff9a9a,#ff4d4d)'; else if(oxygenFill) oxygenFill.style.background = 'linear-gradient(90deg,#7ef78a,#3cb371)';
 
       const L = LEVELS[currentLevelIndex];
       const labelEl = document.getElementById('targetLabel');
       const remainEl = document.getElementById('targetRemain');
+      if(!L || !labelEl || !remainEl) return;
 
       let targetKey = null;
       if(L.targets['pejerrey_F']) targetKey = 'pejerrey_F';
@@ -833,7 +888,7 @@
       for(const c of caves){ const d = Math.hypot(player.x - c.x, player.y - c.y); if(d < bestD){ bestD = d; best = c; } }
       if(!best) return;
       player.x = best.x + 1; player.y = best.y + 1; player.hidden = true; player.invulnerable = true; chanceUsed = true;
-      document.getElementById('chanceBtn').setAttribute('disabled','disabled');
+      const cb = document.getElementById('chanceBtn'); if(cb) cb.setAttribute('disabled','disabled');
       setTimeout(()=>{ player.invulnerable = false; player.hidden = true; }, CHANCE_INVULN * 1000);
     }
 
@@ -847,10 +902,10 @@
       eggs = [];
       chanceUsed = false;
       oxygen = 100;
-      document.getElementById('chanceBtn').removeAttribute('disabled');
-      document.getElementById('briefTitle').innerText = 'Antes de: ' + L.name;
-      document.getElementById('briefText').innerHTML = '<strong>Mini-historia educativa:</strong><br>' + L.description + '<br><em>Objetivo:</em> ' + Object.entries(L.targets).map(([k,v])=> v + ' × ' + k).join(', ');
-      document.getElementById('startOverlay').style.display='flex';
+      const cb = document.getElementById('chanceBtn'); if(cb) cb.removeAttribute('disabled');
+      const bt = document.getElementById('briefTitle'); if(bt) bt.innerText = 'Antes de: ' + L.name;
+      const btxt = document.getElementById('briefText'); if(btxt) btxt.innerHTML = '<strong>Mini-historia educativa:</strong><br>' + L.description + '<br><em>Objetivo:</em> ' + Object.entries(L.targets).map(([k,v])=> v + ' × ' + k).join(', ');
+      const overlay = document.getElementById('startOverlay'); if(overlay) overlay.style.display='flex';
       updateHUD();
     }
 
@@ -868,7 +923,9 @@
         pellets=[]; natives=[]; trouts=[]; frogs=[]; eggs=[]; score=0; pollutionZones=[];
         chanceUsed = false;
         spawnPellets(L.pelletCount || 500);
-        spawnNativesFromComposition(L.composition, L.id);
+        // calculo simple del número de peces a generar: proporcional a pellets
+        const totalDesiredFish = Math.max(30, Math.round((L.pelletCount || 500) / 12));
+        spawnNativesFromComposition(L.composition, L.id, totalDesiredFish);
         spawnCavesForLevel(L.id);
         if(L.id==='lucre') spawnFrogs(18);
         if(L.id==='titicaca'){
@@ -880,9 +937,12 @@
         createPlayer(spawnX, spawnY);
         initAlgae();
         running=true; lastTime = performance.now(); requestAnimationFrame(loop);
-        document.getElementById('startOverlay').style.display='none';
-        document.getElementById('chanceBtn').removeAttribute('disabled');
+        const overlay = document.getElementById('startOverlay'); if(overlay) overlay.style.display='none';
+        const cb = document.getElementById('chanceBtn'); if(cb) cb.removeAttribute('disabled');
         updateHUD();
+
+        // ---- debug info (borra si quieres) ----
+        console.log('startLevel', L.id, 'pellets', pellets.length, 'natives', natives.length, 'caves', caves.length, 'eggs', eggs.length);
       } catch(err){ console.error('startLevel error', err); }
     }
 
@@ -909,12 +969,14 @@
       const respawnBtn = document.getElementById('respawn');
 
       if(btnStart) btnStart.addEventListener('click', function(ev){ ev.stopPropagation(); ev.preventDefault(); startLevel(currentLevelIndex); });
-      if(btnCancel) btnCancel.addEventListener('click', function(ev){ ev.stopPropagation(); ev.preventDefault(); document.getElementById('startOverlay').style.display='none'; });
-      if(respawnBtn) respawnBtn.addEventListener('click', function(){ document.getElementById('message').style.display='none'; if(lives <= 0){ lives = 3; score = 0; showBrief(0); } else { if(!running) respawnPlayerAtLevelStart(); } });
+      if(btnCancel) btnCancel.addEventListener('click', function(ev){ ev.stopPropagation(); ev.preventDefault(); const so = document.getElementById('startOverlay'); if(so) so.style.display='none'; });
+      if(respawnBtn) respawnBtn.addEventListener('click', function(){ const msg = document.getElementById('message'); if(msg) msg.style.display='none'; if(lives <= 0){ lives = 3; score = 0; showBrief(0); } else { if(!running) respawnPlayerAtLevelStart(); } });
 
-      document.getElementById('fullBtn').addEventListener('click', function(ev){ ev.stopPropagation(); ev.preventDefault(); const container = document.getElementById('game-container'); if(!document.fullscreenElement){ if(container.requestFullscreen) container.requestFullscreen().catch(()=>{}); else if(container.webkitRequestFullscreen) container.webkitRequestFullscreen(); } else { if(document.exitFullscreen) document.exitFullscreen().catch(()=>{}); } });
+      const fullBtn = document.getElementById('fullBtn');
+      if(fullBtn) fullBtn.addEventListener('click', function(ev){ ev.stopPropagation(); ev.preventDefault(); const container = document.getElementById('game-container'); if(!document.fullscreenElement){ if(container.requestFullscreen) container.requestFullscreen().catch(()=>{}); else if(container.webkitRequestFullscreen) container.webkitRequestFullscreen(); } else { if(document.exitFullscreen) document.exitFullscreen().catch(()=>{}); } });
 
-      document.getElementById('chanceBtn').addEventListener('click', useChance);
+      const chanceBtn = document.getElementById('chanceBtn');
+      if(chanceBtn) chanceBtn.addEventListener('click', useChance);
 
       lives = 3;
       initAlgae();
@@ -932,3 +994,5 @@
   </script>
 </body>
 </html>
+
+
