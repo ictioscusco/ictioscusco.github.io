@@ -60,7 +60,7 @@
       <div id="hud">
         <div class="hud-item">Score: <strong id="score">0</strong></div>
         <div class="hud-item">Tamaño: <strong id="size">0</strong></div>
-        <div class="hud-item"><span>Hembras faltantes: </span><strong id="femaleRemain">0</strong></div>
+        <div class="hud-item"><span id="targetLabel">Hembras faltantes: </span><strong id="targetRemain">0</strong></div>
         <div class="hud-item"><button id="chanceBtn" class="btn btn-warning btn-sm">Usar chance</button></div>
       </div>
 
@@ -172,7 +172,7 @@
       carpa: 'carpa.png'
     };
     const SPRITE_FACE_DIRECTION = {
-      orestia: -1,    // si tu orestia mira a la derecha pon 1
+      orestia: -1,
       pejerrey_F: 1,
       pejerrey_M: 1,
       trout: 1,
@@ -189,7 +189,6 @@
     const canvas = document.getElementById('c'), ctx = canvas.getContext('2d');
     const mm = document.getElementById('mm'), mmCtx = mm.getContext('2d');
 
-    // algae particles for eutrophied water effect
     let algaeParticles = [];
     function initAlgae(){
       algaeParticles = [];
@@ -314,9 +313,17 @@
       }
 
       if(pred.r > prey.r * 1.08 && dist(pred,prey) < pred.r - prey.r*0.25){
-        if(prey.type !== 'player' && prey.species === 'pejerrey' && prey.sex === 'F'){
-          levelProgress['pejerrey_F'] = (levelProgress['pejerrey_F']||0) + 1;
+        // Contabiliza objetivos **solo** si el depredador es el jugador
+        const L = LEVELS[currentLevelIndex] || {};
+        if(pred.type === 'player'){
+          if(prey.species === 'pejerrey' && prey.sex === 'F' && L.targets && L.targets['pejerrey_F']){
+            levelProgress['pejerrey_F'] = (levelProgress['pejerrey_F']||0) + 1;
+          }
+          if(prey.species === 'trout' && L.targets && L.targets['trout']){
+            levelProgress['trout'] = (levelProgress['trout']||0) + 1;
+          }
         }
+
         prey.dead = true;
         if(pred.species === 'trout'){
           pred.mass += prey.mass * SETTINGS.eatFactor * (SETTINGS.troutEatGainMultiplier || 1.0);
@@ -710,14 +717,25 @@
       document.getElementById('score').innerText = score;
       document.getElementById('size').innerText = Math.round(player ? player.mass : 0);
       const L = LEVELS[currentLevelIndex];
-      const femaleTarget = L.targets && L.targets['pejerrey_F'] ? L.targets['pejerrey_F'] : 0;
-      const killed = levelProgress['pejerrey_F'] || 0;
-      const femaleElem = document.getElementById('femaleRemain');
-      if(femaleTarget > 0){
-        femaleElem.innerText = Math.max(0, femaleTarget - killed);
-        femaleElem.parentElement.style.display = 'inline-block';
+      const labelEl = document.getElementById('targetLabel');
+      const remainEl = document.getElementById('targetRemain');
+
+      // Decide qué objetivo mostrar (prioriza pejerrey_F, luego trout, luego la primera clave)
+      let targetKey = null;
+      if(L.targets['pejerrey_F']) targetKey = 'pejerrey_F';
+      else if(L.targets['trout']) targetKey = 'trout';
+      else { const keys = Object.keys(L.targets); if(keys.length) targetKey = keys[0]; }
+
+      if(targetKey){
+        let total = L.targets[targetKey] || 0;
+        let done = levelProgress[targetKey] || 0;
+        if(targetKey === 'pejerrey_F') labelEl.innerText = 'Hembras faltantes: ';
+        else if(targetKey === 'trout') labelEl.innerText = 'Truchas faltantes: ';
+        else labelEl.innerText = targetKey + ': ';
+        remainEl.innerText = Math.max(0, total - done);
+        remainEl.parentElement.style.display = 'inline-block';
       } else {
-        femaleElem.parentElement.style.display = 'none';
+        remainEl.parentElement.style.display = 'none';
       }
     }
 
@@ -806,3 +824,4 @@
 
 </body>
 </html>
+
