@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>PAC-FISH — IcTiosCusco (versión completa)</title>
+  <title>PAC-FISH — IcTiosCusco (Eutrofizado + Truchas voraces)</title>
 
   <link href="https://fonts.googleapis.com/css?family=Dosis:200,300,400,500,700" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Overpass:300,400,400i,600,700" rel="stylesheet">
@@ -19,8 +19,8 @@
     #overlay { position:absolute; left:12px; top:12px; color:white; z-index:16; text-shadow:0 2px 6px rgba(0,0,0,0.6); }
     #hud { position:absolute; right:12px; top:12px; color:white; z-index:16; text-align:right; display:flex; gap:8px; align-items:center; }
     #hud .hud-item { margin-left:8px; }
-    #oxygenBarWrap { width:150px; text-align:left; display:inline-block; vertical-align:middle; }
-    #oxygenBar { width:150px; height:8px; background:rgba(255,255,255,0.12); border-radius:6px; overflow:hidden; display:block; }
+    #oxygenBarWrap { width:140px; text-align:left; display:inline-block; vertical-align:middle; }
+    #oxygenBar { width:140px; height:8px; background:rgba(255,255,255,0.12); border-radius:6px; overflow:hidden; display:block; }
     #oxygenFill { height:100%; width:100%; background:linear-gradient(90deg,#7ef78a,#3cb371); border-radius:6px; transition:width 0.18s linear; }
     #minimap { position:absolute; right:16px; bottom:16px; width:160px; height:140px; z-index:6; border-radius:999px; overflow:hidden; box-shadow:0 6px 16px rgba(0,0,0,0.25); background:rgba(0,0,0,0.12); display:flex; align-items:center; justify-content:center; }
     #mm { border-radius:999px; display:block; width:92%; height:92%; background:transparent; }
@@ -29,7 +29,7 @@
     .sw { width:14px; height:10px; border-radius:3px; display:inline-block; border:1px solid rgba(255,255,255,0.08); }
     #hiddenBadge { position:absolute; left:12px; bottom:18px; color:#fff; background:rgba(0,0,0,0.4); padding:6px 8px; border-radius:8px; z-index:16; display:none; }
     .controls { display:flex; gap:8px; align-items:center; margin-left:auto; }
-    #pollutionFlash { position:absolute; inset:0; pointer-events:none; z-index:40; display:none; }
+    #pollutionFlash { position:absolute; inset:0; pointer-events:none; z-index:40; display:none; transition:background 0.18s ease; }
     #transientMsg { position:absolute; left:50%; transform:translateX(-50%); top:18px; z-index:80; background:rgba(0,0,0,0.7); color:white; padding:8px 12px; border-radius:8px; display:none; }
     @media (max-width:760px){ #game-container{ height:520px; } }
   </style>
@@ -147,7 +147,7 @@
     function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
     function dist(a,b){ const dx=a.x-b.x, dy=a.y-b.y; return Math.hypot(dx,dy); }
 
-    // ---------- LEVELS (mini-historias) ----------
+    // ---------- LEVELS (mini-historias mejoradas) ----------
     const LEVELS = [
       {
         id: 'urcos', name: 'Urcos',
@@ -155,7 +155,7 @@
         composition: { pejerrey: 42, carpa: 14, trout: 0 },
         targets: { 'pejerrey_F': 10 },
         allowEggs: true,
-        description: '<strong>Urcos — Ingreso de especies.</strong> Un vivero local liberó pejerreyes para aumentar la pesca. Aunque parezca útil, las hembras proliferan rápidamente. Objetivo: eliminar 10 hembras para reducir la tasa de reproducción y permitir la recuperación del ecosistema nativo.'
+        description: '<strong>Urcos — Ingreso de especies.</strong> Un vivero liberó pejerreyes para aumentar la pesca. Aunque ayude a corto plazo, las hembras proliferan y alteran el equilibrio. Objetivo: eliminar 10 hembras para reducir la futura sobrepoblación.'
       },
       {
         id: 'lucre', name: 'Lucre-Huacarpay',
@@ -163,7 +163,7 @@
         composition: { pejerrey: 10, carpa: 40, trout: 10 },
         targets: { trout: 10 },
         allowEggs: true,
-        description: '<strong>Lucre — Truchas invasoras.</strong> Se han introducido truchas voraces que compiten y depredan a las especies andinas. Tu objetivo es eliminar 10 truchas invasoras para dar respiro a la comunidad íctica local.'
+        description: '<strong>Lucre — Truchas invasoras.</strong> Truchas voraces compiten por recursos y depredan especies nativas. Elimina 10 truchas invasoras para dar respiro al ecosistema.'
       },
       {
         id: 'titicaca', name: 'Lago Titicaca',
@@ -171,7 +171,7 @@
         composition: { pejerrey: 10, carpa: 20, trout: 12 },
         targets: { trout: 12, 'pejerrey_F': 12 },
         allowEggs: true,
-        description: '<strong>Titicaca — Contaminación y burbujeo.</strong> Vertidos y eutrofización generan zonas de burbujeo con compuestos que consumen oxígeno. Evita las zonas contaminadas, sobrevive y elimina invasores para restaurar la salud del lago.'
+        description: '<strong>Titicaca — Contaminación y burbujeo.</strong> Vertidos y eutrofización causan zonas de burbujeo que consumen oxígeno. Evita las zonas contaminadas, sobrevive y elimina invasores para restaurar la salud del lago.'
       }
     ];
 
@@ -198,12 +198,11 @@
     }
 
     // ---------- canvas ----------
-    const canvas = document.getElementById('c'), ctx = canvas.getContext('2d');
-    const mm = document.getElementById('mm'), mmCtx = mm.getContext('2d');
+    const canvas = document.getElementById('c'), ctx = canvas.getContext && canvas.getContext('2d');
+    const mm = document.getElementById('mm'), mmCtx = mm.getContext && mm.getContext('2d');
 
     // algae particles for eutrophied water effect
     let algaeParticles = [];
-
     function initAlgae(){
       algaeParticles = [];
       for(let i=0;i<80;i++){
@@ -222,14 +221,16 @@
       const rect = document.getElementById('game-container').getBoundingClientRect();
       canvas.width = Math.floor(rect.width);
       canvas.height = Math.floor(rect.height);
-      mm.width = Math.floor(mm.clientWidth * devicePixelRatio);
-      mm.height = Math.floor(mm.clientHeight * devicePixelRatio);
-      camera.baseZoom = Math.min(1.1, Math.max(0.5, window.innerWidth/900));
+      if(mm){
+        mm.width = Math.floor(mm.clientWidth * devicePixelRatio);
+        mm.height = Math.floor(mm.clientHeight * devicePixelRatio);
+      }
+      camera.baseZoom = Math.min(1.1, Math.max(0.4, window.innerWidth/900));
     }
-    window.addEventListener('resize', ()=> { try{ resizeCanvas(); }catch(e){console.warn(e);} });
+    window.addEventListener('resize', resizeCanvas);
 
     const world = { w: SETTINGS.worldW, h: SETTINGS.worldH };
-    const camera = { x: world.w/2, y: world.h/2, baseZoom: Math.min(1.1, Math.max(0.5, window.innerWidth/900)), zoom:1 };
+    const camera = { x: world.w/2, y: world.h/2, baseZoom: Math.min(1.1, Math.max(0.4, window.innerWidth/900)), zoom:1 };
 
     // ---------- state ----------
     let player=null, pellets=[], natives=[], trouts=[], frogs=[];
@@ -239,7 +240,7 @@
     let chanceUsed = false;
     let transientTimer = null;
 
-    // LIVES (global)
+    // Global lives (3 lives for the whole game)
     let lives = 3;
 
     // ---------- entities ----------
@@ -320,9 +321,10 @@
     }
 
     // ---------- Transient UI ----------
-    function showTransient(text, ms=1500){
+    function showTransient(text, ms=1200){
       const el = document.getElementById('transientMsg');
-      if(transientTimer) { clearTimeout(transientTimer); transientTimer = null; }
+      if(!el) return;
+      if(transientTimer) clearTimeout(transientTimer);
       el.innerText = text; el.style.display = 'block';
       transientTimer = setTimeout(()=>{ el.style.display='none'; }, ms);
     }
@@ -355,11 +357,11 @@
         if(pred.type === 'player'){
           if(prey.species === 'pejerrey' && prey.sex === 'F' && L.targets && L.targets['pejerrey_F']){
             levelProgress['pejerrey_F'] = (levelProgress['pejerrey_F']||0) + 1;
-            showTransient('Hembra eliminada — objetivo actualizado', 900);
+            showTransient('Hembra eliminada', 900);
           }
           if(prey.species === 'trout' && L.targets && L.targets['trout']){
             levelProgress['trout'] = (levelProgress['trout']||0) + 1;
-            showTransient('Trucha eliminada — objetivo actualizado', 900);
+            showTransient('Trucha eliminada', 900);
           }
         }
 
@@ -397,7 +399,7 @@
       const e = eggs[idx];
       const d = Math.hypot(f.x - e.x, f.y - e.y);
       if(d < f.r + e.r*0.8){
-        if(f.type === 'player'){ f.speedBuff = EGG_SPEED_BUFF; f.speedBuffTimer = EGG_BUFF_TIME; showTransient('¡Huevo comido! Velocidad temporal'); }
+        if(f.type === 'player'){ f.speedBuff = EGG_SPEED_BUFF; f.speedBuffTimer = EGG_BUFF_TIME; showTransient('¡Huevo comido! Velocidad', 900); }
         eggs.splice(idx,1);
         return true;
       }
@@ -422,7 +424,7 @@
       f.reproCooldown = 12 + Math.random()*12;
     }
 
-    // ---------- AI (egg-laying respects allowEggs) ----------
+    // ---------- AI ----------
     function updateNatives(dt){
       for(let i=0;i<natives.length;i++){
         const n = natives[i];
@@ -537,7 +539,7 @@
         for(let i=natives.length-1;i>=0;i--){
           const nat = natives[i];
           if(!nat || nat.dead) continue;
-          if(nat.species === 'trout') continue;
+          if(nat.species === 'trout') continue; // NO permitir que una trucha se coma otra trucha
           if(tryEat(t, nat)){
             natives.splice(i,1);
           }
@@ -548,16 +550,16 @@
       }
     }
 
-    // ---------- Pollution / Bubbles ----------
+    // ---------- Pollution / bubbles ----------
     function createPollutionZone(x,y,r){
-      const z = { x, y, r, driftX: rand(-20,20), driftY: rand(-20,20), particles: [] };
-      for(let i=0;i<30;i++){
+      const z = { x, y, r, driftX: rand(-10,10), driftY: rand(-10,10), particles: [] };
+      for(let i=0;i<24;i++){
         z.particles.push({
           x: x + rand(-r*0.7, r*0.7),
           y: y + rand(-r*0.7, r*0.7),
           vy: rand(-6,-14),
           size: rand(1,4),
-          alpha: rand(0.05,0.25),
+          alpha: rand(0.06,0.22),
           offsetX: rand(-6,6)
         });
       }
@@ -578,38 +580,44 @@
     }
 
     function renderPollutionOverlay(intensity){
-      const overlay = document.getElementById('pollutionFlash');
-      overlay.style.display = 'block';
-      overlay.style.background = `radial-gradient(circle at ${50 + rand(-10,10)}% ${40 + rand(-10,10)}%, rgba(180,40,30,${clamp(intensity*0.35,0,0.45)}), rgba(0,0,0,0))`;
-      setTimeout(()=>{ overlay.style.display='none'; }, 220);
+      const el = document.getElementById('pollutionFlash');
+      if(!el) return;
+      el.style.display = 'block';
+      el.style.background = `radial-gradient(circle at 50% 40%, rgba(180,40,30,${clamp(intensity*0.35,0,0.45)}), rgba(0,0,0,0))`;
+      setTimeout(()=>{ el.style.display='none'; }, 200);
     }
 
     // ---------- MAIN UPDATE ----------
     function update(dt){
       if(!running || paused) return;
+      // Camera follows player
       camera.x = player.x; camera.y = player.y;
 
-      // ---- ZOOM estilo Agar.io (más suave) ----
-      const refMass = SETTINGS.playerStartMass;
+      // ---- ZOOM estilo Agar.io (suavizado) ----
+      const refMass = Math.max(1, SETTINGS.playerStartMass);
       const targetZoom = clamp(camera.baseZoom * Math.sqrt(refMass / Math.max(1, player.mass)), 0.35, 1.6);
       camera.zoom += (targetZoom - camera.zoom) * Math.min(1, dt * 6);
 
       const L = LEVELS[currentLevelIndex];
 
-      // oxygen baseline
-      let oxLossBase = 0.01;
-      updatePollution(dt);
-      for(const z of pollutionZones){
-        const d = Math.hypot(player.x - z.x, player.y - z.y);
-        if(d < z.r){
-          const factor = 1 - (d / z.r);
-          const extra = 0.4 + 0.6 * factor;
-          oxLossBase += extra;
-          renderPollutionOverlay(extra);
+      // oxygen baseline and pollution
+      let oxLossBase = 0.005;
+      if(L.id === 'titicaca'){
+        updatePollution(dt);
+        for(const z of pollutionZones){
+          const d = Math.hypot(player.x - z.x, player.y - z.y);
+          if(d < z.r){
+            const factor = 1 - (d / z.r);
+            const extra = 0.3 + 0.6 * factor;
+            oxLossBase += extra;
+            renderPollutionOverlay(extra);
+          }
         }
+        oxygen = clamp(oxygen - oxLossBase * 10 * dt, 0, 100);
+        if(oxygen <= 0){ handlePlayerDeath('Moriste por falta de oxígeno'); return; }
+      } else {
+        oxygen = clamp(oxygen + 5 * dt, 0, 100); // recuperar fuera de Titicaca
       }
-      oxygen = clamp(oxygen - oxLossBase * 12 * dt, 0, 100);
-      if(oxygen <= 0){ handlePlayerDeath('Moriste por falta de oxígeno (zonas contaminadas)'); return; }
 
       for(const p of algaeParticles){
         p.y -= p.speed * dt * 30;
@@ -619,7 +627,10 @@
       }
 
       updateNatives(dt);
+
+      // sincronizar trouts con natives (asegura que la lista de trouts se actualice)
       trouts = natives.filter(n=>n.species==='trout' && !n.dead);
+
       updateTrouts(dt);
       updatePlayer(dt);
 
@@ -660,6 +671,7 @@
     }
 
     function draw(){
+      if(!ctx || !player) return;
       ctx.clearRect(0,0,canvas.width,canvas.height);
       const L = LEVELS[currentLevelIndex];
 
@@ -696,7 +708,7 @@
       }
       ctx.restore();
 
-      // draw pollution zones with particles (visible bubbles)
+      // pollution zones
       for(const z of pollutionZones){
         const s = worldToScreen(z.x, z.y);
         const pr = z.r * camera.zoom;
@@ -773,6 +785,7 @@
     }
 
     function drawMinimap(){
+      if(!mmCtx) return;
       const w = mm.width, h = mm.height; mmCtx.clearRect(0,0,w,h); mmCtx.save(); mmCtx.fillStyle='rgba(0,0,0,0.1)'; mmCtx.fillRect(0,0,w,h);
       const sx = w / world.w, sy = h / world.h;
       for(let i=0;i<pellets.length;i+=Math.max(1,Math.floor(pellets.length/200))){ const p=pellets[i]; mmCtx.fillStyle='#ffd54f'; mmCtx.fillRect(p.x*sx - 1, p.y*sy - 1, 2, 2); }
@@ -789,62 +802,36 @@
 
     // ---------- HUD ----------
     function updateHUD(){
-      try{
-        document.getElementById('score').innerText = score;
-        document.getElementById('size').innerText = Math.round(player ? player.mass : 0);
-        document.getElementById('lives').innerText = lives;
-        const oxygenFill = document.getElementById('oxygenFill');
-        oxygenFill.style.width = Math.max(0, oxygen) + '%';
-        if(oxygen < 30) oxygenFill.style.background = 'linear-gradient(90deg,#ff9a9a,#ff4d4d)'; else oxygenFill.style.background = 'linear-gradient(90deg,#7ef78a,#3cb371)';
+      document.getElementById('score').innerText = score;
+      document.getElementById('size').innerText = Math.round(player ? player.mass : 0);
+      document.getElementById('lives').innerText = lives;
+      const oxygenFill = document.getElementById('oxygenFill');
+      if(oxygenFill) oxygenFill.style.width = Math.max(0, oxygen) + '%';
+      if(oxygen < 30) oxygenFill.style.background = 'linear-gradient(90deg,#ff9a9a,#ff4d4d)'; else oxygenFill.style.background = 'linear-gradient(90deg,#7ef78a,#3cb371)';
 
-        const L = LEVELS[currentLevelIndex];
-        const labelEl = document.getElementById('targetLabel');
-        const remainEl = document.getElementById('targetRemain');
+      const L = LEVELS[currentLevelIndex];
+      const labelEl = document.getElementById('targetLabel');
+      const remainEl = document.getElementById('targetRemain');
 
-        let targetKey = null;
-        if(L.targets['pejerrey_F']) targetKey = 'pejerrey_F';
-        else if(L.targets['trout']) targetKey = 'trout';
-        else { const keys = Object.keys(L.targets); if(keys.length) targetKey = keys[0]; }
+      let targetKey = null;
+      if(L.targets['pejerrey_F']) targetKey = 'pejerrey_F';
+      else if(L.targets['trout']) targetKey = 'trout';
+      else { const keys = Object.keys(L.targets); if(keys.length) targetKey = keys[0]; }
 
-        if(targetKey){
-          let total = L.targets[targetKey] || 0;
-          let done = levelProgress[targetKey] || 0;
-          if(targetKey === 'pejerrey_F') labelEl.innerText = 'Hembras faltantes: ';
-          else if(targetKey === 'trout') labelEl.innerText = 'Truchas faltantes: ';
-          else labelEl.innerText = targetKey + ': ';
-          remainEl.innerText = Math.max(0, total - done);
-          remainEl.parentElement.style.display = 'inline-block';
-        } else {
-          remainEl.parentElement.style.display = 'none';
-        }
-      } catch(e){ console.warn('updateHUD error', e); }
+      if(targetKey){
+        let total = L.targets[targetKey] || 0;
+        let done = levelProgress[targetKey] || 0;
+        if(targetKey === 'pejerrey_F') labelEl.innerText = 'Hembras faltantes: ';
+        else if(targetKey === 'trout') labelEl.innerText = 'Truchas faltantes: ';
+        else labelEl.innerText = targetKey + ': ';
+        remainEl.innerText = Math.max(0, total - done);
+        remainEl.parentElement.style.display = 'inline-block';
+      } else {
+        remainEl.parentElement.style.display = 'none';
+      }
     }
 
-    function gameOver(reason){ running=false; document.getElementById('msgTitle').innerText='Has muerto'; document.getElementById('msgBody').innerText = reason + '. Puntaje: ' + score; document.getElementById('message').style.display = 'flex'; }
-
-    // ---------- INPUT ----------
-    canvas.addEventListener('mousemove',(e)=>{ const rect=canvas.getBoundingClientRect(); mouse.x=e.clientX-rect.left; mouse.y=e.clientY-rect.top; mouse.worldX = camera.x - canvas.width/2/camera.zoom + mouse.x/camera.zoom; mouse.worldY = camera.y - canvas.height/2/camera.zoom + mouse.y/camera.zoom; });
-    canvas.addEventListener('mousedown', ()=> mouse.down=true);
-    canvas.addEventListener('mouseup', ()=> mouse.down=false);
-    canvas.addEventListener('touchstart',(e)=>{ mouse.down=true; mouse.x=e.touches[0].clientX; mouse.y=e.touches[0].clientY; mouse.worldX = camera.x - canvas.width/2/camera.zoom + mouse.x/camera.zoom; mouse.worldY = camera.y - canvas.height/2/camera.zoom + mouse.y/camera.zoom; e.preventDefault(); }, {passive:false});
-    canvas.addEventListener('touchmove',(e)=>{ mouse.x=e.touches[0].clientX; mouse.y=e.touches[0].clientY; mouse.worldX = camera.x - canvas.width/2/camera.zoom + mouse.x/camera.zoom; mouse.worldY = camera.y - canvas.height/2/camera.zoom + mouse.y/camera.zoom; e.preventDefault(); }, {passive:false});
-    canvas.addEventListener('touchend', ()=> mouse.down=false);
-
-    // chance mechanic
-    function useChance(){
-      if(!running) return;
-      if(chanceUsed) return;
-      if(caves.length === 0) return;
-      let best = null, bestD = 1e9;
-      for(const c of caves){ const d = Math.hypot(player.x - c.x, player.y - c.y); if(d < bestD){ bestD = d; best = c; } }
-      if(!best) return;
-      player.x = best.x + 1; player.y = best.y + 1; player.hidden = true; player.invulnerable = true; chanceUsed = true;
-      document.getElementById('chanceBtn').setAttribute('disabled','disabled');
-      setTimeout(()=>{ player.invulnerable = false; player.hidden = true; }, CHANCE_INVULN * 1000);
-    }
-    document.getElementById('chanceBtn').addEventListener('click', useChance);
-
-    // ---------- PLAYER DEATH / LIVES HANDLING ----------
+    // ---------- DEATH / LIVES ----------
     function handlePlayerDeath(reason){
       lives = Math.max(0, lives - 1);
       updateHUD();
@@ -872,6 +859,30 @@
       updateHUD();
     }
 
+    // ---------- INPUT ----------
+    function attachInput(){
+      if(!canvas) return;
+      canvas.addEventListener('mousemove',(e)=>{ const rect=canvas.getBoundingClientRect(); mouse.x=e.clientX-rect.left; mouse.y=e.clientY-rect.top; mouse.worldX = camera.x - canvas.width/2/camera.zoom + mouse.x/camera.zoom; mouse.worldY = camera.y - canvas.height/2/camera.zoom + mouse.y/camera.zoom; });
+      canvas.addEventListener('mousedown', ()=> mouse.down=true);
+      canvas.addEventListener('mouseup', ()=> mouse.down=false);
+      canvas.addEventListener('touchstart',(e)=>{ mouse.down=true; mouse.x=e.touches[0].clientX - canvas.getBoundingClientRect().left; mouse.y=e.touches[0].clientY - canvas.getBoundingClientRect().top; mouse.worldX = camera.x - canvas.width/2/camera.zoom + mouse.x/camera.zoom; mouse.worldY = camera.y - canvas.height/2/camera.zoom + mouse.y/camera.zoom; e.preventDefault(); }, {passive:false});
+      canvas.addEventListener('touchmove',(e)=>{ mouse.x=e.touches[0].clientX - canvas.getBoundingClientRect().left; mouse.y=e.touches[0].clientY - canvas.getBoundingClientRect().top; mouse.worldX = camera.x - canvas.width/2/camera.zoom + mouse.x/camera.zoom; mouse.worldY = camera.y - canvas.height/2/camera.zoom + mouse.y/camera.zoom; e.preventDefault(); }, {passive:false});
+      canvas.addEventListener('touchend', ()=> mouse.down=false);
+    }
+
+    // chance mechanic
+    function useChance(){
+      if(!running) return;
+      if(chanceUsed) return;
+      if(caves.length === 0) return;
+      let best = null, bestD = 1e9;
+      for(const c of caves){ const d = Math.hypot(player.x - c.x, player.y - c.y); if(d < bestD){ bestD = d; best = c; } }
+      if(!best) return;
+      player.x = best.x + 1; player.y = best.y + 1; player.hidden = true; player.invulnerable = true; chanceUsed = true;
+      document.getElementById('chanceBtn').setAttribute('disabled','disabled');
+      setTimeout(()=>{ player.invulnerable = false; player.hidden = true; }, CHANCE_INVULN * 1000);
+    }
+
     // ---------- LIFECYCLE ----------
     function showBrief(idx){
       currentLevelIndex = idx;
@@ -881,29 +892,33 @@
       spawnCavesForLevel(L.id);
       eggs = [];
       chanceUsed = false;
+      oxygen = 100;
       document.getElementById('chanceBtn').removeAttribute('disabled');
       document.getElementById('briefTitle').innerText = 'Antes de: ' + L.name;
-      document.getElementById('briefText').innerHTML = L.description + '<br><em>Objetivo:</em> ' + Object.entries(L.targets).map(([k,v])=> v + ' × ' + k).join(', ');
+      document.getElementById('briefText').innerHTML = '<strong>Mini-historia educativa:</strong><br>' + L.description + '<br><em>Objetivo:</em> ' + Object.entries(L.targets).map(([k,v])=> v + ' × ' + k).join(', ');
       document.getElementById('startOverlay').style.display='flex';
       updateHUD();
     }
 
     function startLevel(idx){
       try{
+        resizeCanvas();
         const L = LEVELS[idx];
-        pellets=[]; natives=[]; trouts=[]; frogs=[]; eggs=[]; score=0; oxygen=100; pollutionZones=[];
+        pellets=[]; natives=[]; trouts=[]; frogs=[]; eggs=[]; score=0; pollutionZones=[];
         chanceUsed = false;
         spawnPellets(L.pelletCount || 500);
         spawnNativesFromComposition(L.composition, L.id);
         spawnCavesForLevel(L.id);
         if(L.id==='lucre') spawnFrogs(18);
         if(L.id==='titicaca'){
-          for(let i=0;i<6;i++){
-            pollutionZones.push(createPollutionZone(rand(200,world.w-200), rand(200,world.h-200), rand(90,170)));
-          }
+          for(let i=0;i<6;i++) pollutionZones.push(createPollutionZone(rand(200,world.w-200), rand(200,world.h-200), rand(80,160)));
+          oxygen = 100;
+        } else {
+          oxygen = 100;
         }
+        // sincronizar trouts con natives
         trouts = natives.filter(n=>n.species==='trout');
-        // colocar jugador en spawn del nivel
+        // player spawn at cave if exists
         let spawnX = world.w/2, spawnY = world.h/2;
         if(caves && caves.length){ spawnX = caves[0].x + 6; spawnY = caves[0].y + 6; }
         createPlayer(spawnX, spawnY);
@@ -914,61 +929,54 @@
         updateHUD();
       } catch(err){
         console.error('startLevel error', err);
-        alert('Error al iniciar nivel — mira la consola (F12).');
       }
     }
 
     function loop(now){
-      const dt = Math.min(0.06, (now - lastTime)/1000);
-      lastTime = now;
-      update(dt); draw(); drawMinimap();
-      requestAnimationFrame(loop);
-    }
-
-    // ---------- UI wiring (segura: DOM ready) ----------
-    function init(){
       try{
-        console.log('Inicializando PAC-FISH (init)...');
-
-        // preparar canvas dimension y minimap
-        resizeCanvas();
-        mm.width = mm.clientWidth * devicePixelRatio; mm.height = mm.clientHeight * devicePixelRatio;
-
-        // listeners
-        const btnStart = document.getElementById('btnStart');
-        const btnCancel = document.getElementById('btnCancel');
-        const respawnBtn = document.getElementById('respawn');
-
-        if(btnStart) btnStart.addEventListener('click', function(ev){ ev.stopPropagation(); ev.preventDefault(); startLevel(currentLevelIndex); });
-        if(btnCancel) btnCancel.addEventListener('click', function(ev){ ev.stopPropagation(); ev.preventDefault(); document.getElementById('startOverlay').style.display='none'; });
-        if(respawnBtn) respawnBtn.addEventListener('click', function(){ document.getElementById('message').style.display='none'; if(lives <= 0){ lives = 3; score = 0; updateHUD(); showBrief(0); } else { if(!running) respawnPlayerAtLevelStart(); } });
-
-        document.getElementById('fullBtn').addEventListener('click', function(ev){ ev.stopPropagation(); ev.preventDefault(); const container = document.getElementById('game-container'); if(!document.fullscreenElement){ if(container.requestFullscreen) container.requestFullscreen().catch(()=>{}); else if(container.webkitRequestFullscreen) container.webkitRequestFullscreen(); } else { if(document.exitFullscreen) document.exitFullscreen().catch(()=>{}); } });
-
-        // fallback delegation: si btnStart se reemplaza luego
-        document.body.addEventListener('click', function(e){
-          const t = e.target;
-          if(t && t.id === 'btnStart' && !running){
-            e.preventDefault(); startLevel(currentLevelIndex);
-          }
-        });
-
-        // iniciar estado
-        lives = 3;
-        initAlgae();
-        showBrief(0);
-        updateHUD();
-
-        console.log('Init complete.');
+        const dt = Math.min(0.06, (now - lastTime)/1000);
+        lastTime = now;
+        update(dt); draw(); drawMinimap();
+        requestAnimationFrame(loop);
       } catch(e){
-        console.error('Error en init():', e);
+        console.error('Loop error', e);
+        running = false;
       }
     }
 
-    // start when the window is fully loaded (DOM + resources)
+    // ---------- UI wiring (safe init) ----------
+    function init(){
+      resizeCanvas();
+      if(mm){ mm.width = mm.clientWidth * devicePixelRatio; mm.height = mm.clientHeight * devicePixelRatio; }
+      attachInput();
+
+      // Buttons
+      const btnStart = document.getElementById('btnStart');
+      const btnCancel = document.getElementById('btnCancel');
+      const respawnBtn = document.getElementById('respawn');
+
+      if(btnStart) btnStart.addEventListener('click', function(ev){ ev.stopPropagation(); ev.preventDefault(); startLevel(currentLevelIndex); });
+      if(btnCancel) btnCancel.addEventListener('click', function(ev){ ev.stopPropagation(); ev.preventDefault(); document.getElementById('startOverlay').style.display='none'; });
+      if(respawnBtn) respawnBtn.addEventListener('click', function(){ document.getElementById('message').style.display='none'; if(lives <= 0){ lives = 3; score = 0; showBrief(0); } else { if(!running) respawnPlayerAtLevelStart(); } });
+
+      document.getElementById('fullBtn').addEventListener('click', function(ev){ ev.stopPropagation(); ev.preventDefault(); const container = document.getElementById('game-container'); if(!document.fullscreenElement){ if(container.requestFullscreen) container.requestFullscreen().catch(()=>{}); else if(container.webkitRequestFullscreen) container.webkitRequestFullscreen(); } else { if(document.exitFullscreen) document.exitFullscreen().catch(()=>{}); } });
+
+      document.getElementById('chanceBtn').addEventListener('click', useChance);
+
+      // start state
+      lives = 3;
+      initAlgae();
+      showBrief(0);
+
+      // start main loop
+      lastTime = performance.now();
+      requestAnimationFrame(loop);
+    }
+
+    // start when loaded
     window.addEventListener('load', init);
 
-    // Exponer para debug
+    // Expose for debug in console if needed
     window.PACFISH = { startLevel, showBrief, LEVELS, SETTINGS, respawnPlayerAtLevelStart };
 
   })();
