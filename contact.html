@@ -24,447 +24,335 @@
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
 
-    <!-- Estilos personalizados (paleta naranja + verde del logo) -->
     <style>
       :root{
-        --ictio-orange: #F96D00; /* naranja del logo */
-        --ictio-green: #25D366;  /* verde (WhatsApp) */
-        --ictio-dark: #06323a;   /* color oscuro para texto */
+        --ictio-orange: #F96D00;
+        --ictio-green: #25D366;
+        --ictio-dark: #06323a;
         --muted: #6b7280;
+        --input-border: #d3e8e3;
       }
 
-      .navbar-brand.d-flex { display: inline-flex; align-items: center; }
-      .navbar-brand img { height: 56px; width: auto; margin-right: 12px; }
-      .navbar-brand span { font-family: 'Overpass', 'Dosis', sans-serif !important; font-weight: 600; font-size: 1.05rem; color: var(--ictio-dark); line-height: 1; letter-spacing: 0.2px; }
+      body { font-family: "Overpass", "Dosis", sans-serif; color: var(--ictio-dark); background: #fff; }
 
-      .btn.btn-white {
-        background: #ffffff !important;
-        color: var(--ictio-dark) !important;
-        border: none !important;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-      }
+      /* Navbar minimal (usa tu propio navbar si quieres) */
+      .navbar-brand img { height: 44px; margin-right:10px; }
+      .navbar-brand span { font-weight:700; color:var(--ictio-dark); letter-spacing: .3px; }
 
-      /* Navbar transparent-to-solid */
-      #ftco-navbar { background-color: transparent; transition: background-color 0.25s ease; }
-      #ftco-navbar.scrolled { background-color: #fff !important; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-      #ftco-navbar .nav-link, #ftco-navbar .navbar-brand span { color: var(--ictio-dark) !important; transition: color 0.25s ease; }
+      /* Hero */
+      .hero-wrap { background-image: url('images/laguna_ictioscusco.jpg'); background-size:cover; background-position:center; min-height:220px; display:flex; align-items:center; }
+      .hero-wrap .overlay { position:absolute; inset:0; background: linear-gradient(180deg, rgba(0,0,0,0.14), rgba(0,0,0,0.28)); }
+      .hero-content { position:relative; z-index:2; text-align:center; width:100%; padding:36px 12px; color:#fff; }
 
-      /* Contact header info uses orange accents */
-      .contact-info p { margin-bottom: 0; color: var(--muted); }
-      .contact-info span { display:block; font-weight:700; color: var(--ictio-dark); }
-      .contact-info a { color: var(--ictio-orange); font-weight:600; text-decoration:none; }
+      /* Contact header */
+      .contact-info p { margin-bottom:0; color:var(--muted); }
+      .contact-info span{ display:block; font-weight:700; color:var(--ictio-dark); margin-bottom:6px; }
+      .contact-info a { color:var(--ictio-orange); text-decoration:none; font-weight:600; }
 
-      /* Form container style: mejorar contraste y que el cuadro se note */
+      /* Left card containing form */
       .contact-card {
-        background: #fff; /* blanco limpio */
-        border-left: 6px solid var(--ictio-orange);
-        padding: 24px;
-        border-radius: 10px;
-        box-shadow: 0 10px 30px rgba(6,50,58,0.04);
-      }
-      .contact-card h4 { color: var(--ictio-dark); margin-bottom:18px; }
-
-      /* Inputs más visibles */
-      .form-control {
         background: #fff;
-        border: 1px solid rgba(6,50,58,0.08);
-        padding: .75rem .9rem;
-        border-radius: 8px;
-        box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
-        transition: border-color .12s ease, box-shadow .12s ease;
+        border-left: 6px solid var(--ictio-orange);
+        padding: 26px;
+        border-radius: 12px;
+        box-shadow: 0 12px 30px rgba(6,50,58,0.06);
       }
-      .form-control::placeholder { color: #cbd5db; }
+
+      /* Make inputs clearly visible */
+      .form-control {
+        background: #f8fbfb;               /* subtle contrasting background */
+        border: 1px solid var(--input-border);
+        padding: .9rem 1rem;
+        border-radius: 10px;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+        transition: border-color .12s ease, box-shadow .12s ease, transform .06s ease;
+        font-size: .95rem;
+        color: var(--ictio-dark);
+      }
+      .form-control::placeholder { color:#cbd5db; }
       .form-control:focus {
         outline: none;
         border-color: var(--ictio-orange);
-        box-shadow: 0 6px 20px rgba(249,109,0,0.08);
+        box-shadow: 0 10px 28px rgba(249,109,0,0.08);
+        transform: translateY(-1px);
       }
 
-      /* Labels más destacados */
-      .contact-card label { font-weight:700; color: var(--ictio-dark); font-size: .95rem; }
+      .contact-card label { font-weight:700; color:var(--ictio-dark); margin-bottom:8px; display:block; }
 
-      /* Right column (acciones) */
-      .contact-actions { background: linear-gradient(180deg, #fff 0%, #fbfbfb 100%); border-radius: 10px; padding: 18px; box-shadow: 0 10px 25px rgba(6,50,58,0.04); }
-      .contact-actions h4 { color: var(--ictio-dark); }
-      .contact-actions .action { display:flex; align-items:center; gap:12px; padding:12px; border-radius:10px; text-decoration:none; color:inherit; border:1px solid rgba(6,50,58,0.04); }
-      .contact-actions .action svg { flex:0 0 36px; height:36px; width:36px; }
-      .contact-actions .action .title { font-weight:700; color:var(--ictio-dark); }
-      .contact-actions .action .desc { color:var(--muted); font-size:.95rem; }
+      /* Submit button */
+      .btn-send {
+        background: linear-gradient(90deg, var(--ictio-orange), #ff8c3a);
+        border: none;
+        color: #fff;
+        padding: .85rem 1.1rem;
+        border-radius: 10px;
+        font-weight:700;
+        box-shadow: 0 8px 20px rgba(249,109,0,0.12);
+      }
+      .btn-send:focus { outline: none; box-shadow: 0 10px 26px rgba(249,109,0,0.18); }
 
-      .btn-whatsapp { background: var(--ictio-green); color:#fff; border:none; padding:10px 14px; border-radius:8px; display:inline-flex; gap:8px; align-items:center; }
+      /* Right column actions: WhatsApp prominent */
+      .contact-actions { padding: 18px; border-radius: 12px; background: linear-gradient(180deg,#fff,#fbfbfb); box-shadow: 0 12px 30px rgba(6,50,58,0.04); }
+      .whatsapp-card {
+        display:flex; gap:14px; align-items:center; padding:18px;
+        border-radius:12px; background: linear-gradient(90deg, rgba(37,211,102,0.12), #f3fff6);
+        border: 1px solid rgba(37,211,102,0.12);
+      }
+      .whatsapp-card .badge {
+        background: var(--ictio-green); color:#fff; width:56px; height:56px; display:flex; align-items:center; justify-content:center; border-radius:10px; font-size:1.2rem; box-shadow: 0 8px 18px rgba(37,211,102,0.12);
+      }
+      .whatsapp-card .content { flex:1; }
+      .whatsapp-card .title { font-weight:800; color:var(--ictio-dark); margin-bottom:4px; }
+      .whatsapp-card .desc { color:var(--muted); font-size:.95rem; margin-bottom:6px; }
 
-      /* Newsletter */
-      .input-group .form-control { border-radius:6px 0 0 6px; }
-      .input-group .btn { border-radius:0 6px 6px 0; background: var(--ictio-orange); border:none; color:#fff; }
+      .whatsapp-cta {
+        display:inline-flex; align-items:center; gap:10px; padding:10px 14px; background:var(--ictio-green); color:#fff; border-radius:10px; text-decoration:none; font-weight:700;
+        box-shadow: 0 10px 28px rgba(37,211,102,0.12);
+      }
+      .whatsapp-cta svg { width:18px; height:18px; }
 
       /* FAQ */
-      .faq .card { border: none; border-bottom: 1px solid #eef3f3; }
+      .faq .card { border: none; border-bottom: 1px solid #eef4f3; }
       .faq .btn-link { color:var(--ictio-dark); text-decoration:none; font-weight:700; }
 
-      /* Responsividad */
-      @media (max-width:991.98px){ .contact-card, .contact-actions { margin-bottom:16px; } }
+      /* Responsive */
+      @media (max-width:991.98px) {
+        .whatsapp-card { flex-direction:row; }
+      }
+      @media (max-width:575.98px) {
+        .form-control { padding:.8rem; }
+      }
 
-      /* Form response box */
-      #form-response { display:none; margin-top:12px; font-weight:500; border-radius:6px; padding:10px 12px; }
-
+      /* small helper for spacing */
+      .mt-12 { margin-top:12px; }
     </style>
   </head>
 
   <body>
-  <!-- NAVBAR (igual que en index) -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-white" id="ftco-navbar">
-    <div class="container">
-      <a class="navbar-brand d-flex align-items-center" href="index.html">
-        <img src="images/logo.png" alt="IcTiosCusco logo">
-        <span>ICTIOSCUSCO</span>
-      </a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="oi oi-menu"></span> Menu
-      </button>
-
-      <div class="collapse navbar-collapse" id="ftco-nav">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item"><a href="index.html" class="nav-link">Inicio</a></li>
-          <li class="nav-item"><a href="about.html" class="nav-link">Nosotros</a></li>
-          <li class="nav-item"><a href="causes.html" class="nav-link">Proyectos</a></li>
-          <li class="nav-item"><a href="donate.html" class="nav-link">Donación</a></li>
-          <li class="nav-item"><a href="blog.html" class="nav-link">Noticias</a></li>
-          <li class="nav-item"><a href="gallery.html" class="nav-link">Galería</a></li>
-          <li class="nav-item"><a href="event.html" class="nav-link">Miembros</a></li>
-          <li class="nav-item"><a href="recursos.html" class="nav-link">Recursos</a></li>
-          <li class="nav-item active"><a href="contact.html" class="nav-link">Contacto</a></li>
-        </ul>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white" id="ftco-navbar">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="index.html">
+          <img src="images/logo.png" alt="IcTiosCusco logo">
+          <span>ICTIOSCUSCO</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav">
+          <span class="oi oi-menu"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="ftco-nav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a href="index.html" class="nav-link">Inicio</a></li>
+            <li class="nav-item"><a href="about.html" class="nav-link">Nosotros</a></li>
+            <li class="nav-item"><a href="causes.html" class="nav-link">Proyectos</a></li>
+            <li class="nav-item"><a href="event.html" class="nav-link">Miembros</a></li>
+            <li class="nav-item active"><a href="contact.html" class="nav-link">Contacto</a></li>
+          </ul>
+        </div>
       </div>
-    </div>
-  </nav>
-  <!-- END nav -->
+    </nav>
 
-  <!-- HERO -->
-  <div class="hero-wrap" style="background-image: url('images/laguna_ictioscusco.jpg');" data-stellar-background-ratio="0.5">
-    <div class="overlay"></div>
-    <div class="container">
-      <div class="row no-gutters slider-text align-items-center justify-content-center" data-scrollax-parent="true">
-        <div class="col-md-7 ftco-animate text-center">
-           <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Inicio</a></span> <span>Contacto</span></p>
-          <h1 class="mb-3 bread">Contáctanos</h1>
-          <p class="mb-0">¿Tienes preguntas sobre muestreos, colaboraciones o datos? Escríbenos y te responderemos.</p>
+    <!-- HERO -->
+    <div class="hero-wrap">
+      <div class="overlay"></div>
+      <div class="hero-content">
+        <div class="container">
+          <h1 style="font-weight:700; margin:0 0 6px;">Contáctanos</h1>
+          <p style="margin:0; color:rgba(255,255,255,0.92)">¿Tienes preguntas sobre muestreos, colaboraciones o datos? Escríbenos y te responderemos.</p>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- CONTACT SECTION (mapa reemplazado por acciones y FAQ) -->
-  <section class="ftco-section contact-section ftco-degree-bg">
-    <div class="container">
-      <div class="row d-flex mb-5 contact-info">
-        <div class="col-md-12 mb-4">
-          <h2 class="h4">Información de contacto</h2>
-        </div>
-        <div class="w-100"></div>
-
-        <div class="col-md-3">
-          <p><span>Teléfono:</span> <a href="tel:+51969392189">+51 969 392 189</a></p>
-        </div>
-        <div class="col-md-3">
-          <p><span>Correo:</span> <a href="mailto:ictioscusco@gmail.com">ictioscusco@gmail.com</a></p>
-        </div>
-        <div class="col-md-3">
-          <p><span>Síguenos:</span> <a href="https://www.instagram.com/ictioscusco" target="_blank" rel="noopener">@ictioscusco</a></p>
-        </div>
-        <div class="col-md-3">
-          <p><span>Sitio web:</span> <a href="index.html">ictioscusco.org</a></p>
-        </div>
-      </div>
-
-      <div class="row block-9">
-        <!-- Form column -->
-        <div class="col-md-6 pr-md-5">
-          <div class="contact-card">
-            <h4 class="mb-4">¿Tienes alguna consulta?</h4>
-
-            <!-- FORMULARIO: envío a Formspree -->
-            <form id="contact-form" class="volunter-form" novalidate>
-              <div class="form-group">
-                <label for="name">Tu nombre</label>
-                <input id="name" name="name" type="text" class="form-control" placeholder="Tu nombre" required>
-              </div>
-              <div class="form-group">
-                <label for="email">Tu correo</label>
-                <input id="email" name="email" type="email" class="form-control" placeholder="Tu correo" required>
-              </div>
-              <div class="form-group">
-                <label for="subject">Asunto</label>
-                <input id="subject" name="subject" type="text" class="form-control" placeholder="Asunto (p. ej. Colaboración)">
-              </div>
-              <div class="form-group">
-                <label for="message">Mensaje</label>
-                <textarea id="message" name="message" cols="30" rows="7" class="form-control" placeholder="Mensaje" required></textarea>
-              </div>
-
-              <div class="form-group">
-                <button type="submit" class="btn btn-primary py-3 px-5" style="background:var(--ictio-orange);border:none;">Enviar mensaje</button>
-              </div>
-
-              <div id="form-response" aria-live="polite"></div>
-            </form>
-
-            <p class="mt-3" style="font-size:.95rem;color:var(--muted)">
-              Si deseas obtener imágenes en alta resolución o solicitar datos para investigación, indícalo en el mensaje y te contactaremos para coordinar permisos y condiciones de uso.
-            </p>
+    <!-- CONTACT -->
+    <section class="ftco-section contact-section">
+      <div class="container">
+        <div class="row mb-5 contact-info">
+          <div class="col-md-3">
+            <p><span>Teléfono:</span> <a href="tel:+51969392189">+51 969 392 189</a></p>
+          </div>
+          <div class="col-md-3">
+            <p><span>Correo:</span> <a href="mailto:ictioscusco@gmail.com">ictioscusco@gmail.com</a></p>
+          </div>
+          <div class="col-md-3">
+            <p><span>Síguenos:</span> <a href="https://www.instagram.com/ictioscusco" target="_blank" rel="noopener">@ictioscusco</a></p>
+          </div>
+          <div class="col-md-3">
+            <p><span>Sitio web:</span> <a href="index.html">ictioscusco.org</a></p>
           </div>
         </div>
 
-        <!-- Actions column: reemplaza al mapa. Request de usuario: quitar Solicitud de datos y Recursos -->
-        <div class="col-md-6">
-          <div class="contact-actions">
-            <h4 class="mb-3">Otras formas de contactarnos</h4>
+        <div class="row">
+          <!-- Form column -->
+          <div class="col-md-6">
+            <div class="contact-card" role="region" aria-label="Formulario de contacto">
+              <h4 class="mb-3">¿Tienes alguna consulta?</h4>
 
-            <a class="action mb-3" href="https://wa.me/51969392189" target="_blank" rel="noopener noreferrer">
-              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.5 3.5L3.5 20.5" stroke="var(--ictio-green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              <div>
-                <div class="title">WhatsApp</div>
-                <div class="desc">Chatea con nosotros para consultas rápidas</div>
-              </div>
-            </a>
-
-            <a class="action mb-3" href="mailto:ictioscusco@gmail.com">
-              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v12H3z" stroke="var(--ictio-dark)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
-              <div>
-                <div class="title">Correo</div>
-                <div class="desc">Solicitudes formales o envío de archivos</div>
-              </div>
-            </a>
-
-            <hr />
-
-            <h5 class="mb-2">Suscríbete al boletín</h5>
-            <form id="newsletter-form" action="#" method="post" onsubmit="return false;">
-              <div class="input-group mb-3">
-                <input type="email" class="form-control" placeholder="Tu correo" aria-label="Correo para boletín" required>
-                <div class="input-group-append">
-                  <button class="btn" type="submit" style="background:var(--ictio-orange);color:#fff;">Suscribirme</button>
-                </div>
-              </div>
-            </form>
-
-            <hr />
-
-            <div class="faq">
-              <h5 class="mb-2">Preguntas frecuentes</h5>
-              <div id="accordion">
-                <div class="card">
-                  <div class="card-header p-0" id="headingOne">
-                    <h2 class="mb-0">
-                      <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">¿Cómo solicito datos para investigación?</button>
-                    </h2>
-                  </div>
-
-                  <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
-                    <div class="card-body">Envíanos un correo con el objetivo del estudio, los datos solicitados y la afiliación. Responderemos para coordinar permisos y formatos.</div>
-                  </div>
+              <form id="contact-form" novalidate>
+                <div class="form-group">
+                  <label for="name">Tu nombre</label>
+                  <input id="name" name="name" type="text" class="form-control" placeholder="Tu nombre" required>
                 </div>
 
-                <div class="card">
-                  <div class="card-header p-0" id="headingTwo">
-                    <h2 class="mb-0">
-                      <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">¿Puedo participar en muestreos?</button>
-                    </h2>
-                  </div>
-                  <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-                    <div class="card-body">Sí. Indícanos tu disponibilidad y experiencia; nuestras convocatorias también se publican en redes.</div>
-                  </div>
+                <div class="form-group">
+                  <label for="email">Tu correo</label>
+                  <input id="email" name="email" type="email" class="form-control" placeholder="Tu correo" required>
                 </div>
 
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER (adaptado) -->
-  <footer class="ftco-footer ftco-section img">
-    <div class="overlay"></div>
-    <div class="container">
-      <div class="row mb-5">
-        <div class="col-md-3">
-          <div class="ftco-footer-widget mb-4">
-            <h2 class="ftco-heading-2">Sobre IcTiosCusco</h2>
-            <p>Grupo de investigación dedicado a la conservación y estudio de peces andinos (Orestias) en la región de Cusco.</p>
-            <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
-              <li class="ftco-animate">
-                <a href="https://www.facebook.com/ConGeniusRockie" target="_blank" rel="noopener" aria-label="Facebook">
-                  <span class="icon-facebook"></span>
-                </a>
-              </li>
-              <li class="ftco-animate">
-                <a href="https://www.instagram.com/ictioscusco" target="_blank" rel="noopener" aria-label="Instagram">
-                  <span class="icon-instagram"></span>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="col-md-4">
-          <div class="ftco-footer-widget mb-4">
-            <h2 class="ftco-heading-2">Publicaciones recientes</h2>
-            <div class="block-21 mb-4 d-flex">
-              <a class="blog-img mr-4" style="background-image: url(images/noticia_1.jpg);"></a>
-              <div class="text">
-                <h3 class="heading"><a href="#">Resultados preliminares de Huaypo</a></h3>
-                <div class="meta">
-                  <div><a href="#"><span class="icon-calendar"></span> Sept 10, 2024</a></div>
-                  <div><a href="#"><span class="icon-person"></span> IcTiosCusco</a></div>
+                <div class="form-group">
+                  <label for="subject">Asunto</label>
+                  <input id="subject" name="subject" type="text" class="form-control" placeholder="Asunto (p. ej. Colaboración)">
                 </div>
-              </div>
+
+                <div class="form-group">
+                  <label for="message">Mensaje</label>
+                  <textarea id="message" name="message" rows="6" class="form-control" placeholder="Escribe tu mensaje..." required></textarea>
+                </div>
+
+                <div class="form-group mt-12">
+                  <button type="submit" class="btn-send">Enviar mensaje</button>
+                </div>
+
+                <div id="form-response" aria-live="polite" class="mt-12" style="display:none;"></div>
+              </form>
+
+              <p class="mt-12" style="color:var(--muted); font-size:.95rem;">
+                Si necesitas imágenes o datos para investigación, indícalo en el mensaje y te contactaremos para coordinar permisos y condiciones.
+              </p>
             </div>
           </div>
-        </div>
 
-        <div class="col-md-2">
-          <div class="ftco-footer-widget mb-4 ml-md-4">
-            <h2 class="ftco-heading-2">Enlaces</h2>
-            <ul class="list-unstyled">
-              <li><a href="index.html" class="py-2 d-block">Inicio</a></li>
-              <li><a href="about.html" class="py-2 d-block">Quiénes somos</a></li>
-              <li><a href="donate.html" class="py-2 d-block">Donación</a></li>
-              <li><a href="causes.html" class="py-2 d-block">Proyectos</a></li>
-              <li><a href="event.html" class="py-2 d-block">Miembros</a></li>
-              <li><a href="blog.html" class="py-2 d-block">Noticias</a></li>
-            </ul>
-          </div>
-        </div>
+          <!-- Actions column: WhatsApp destacado (correo y boletín removidos) -->
+          <div class="col-md-6">
+            <div class="contact-actions" role="region" aria-label="Otras formas de contacto">
+              <h4 class="mb-3">Otras formas de contactarnos</h4>
 
-        <div class="col-md-3">
-          <div class="ftco-footer-widget mb-4">
-              	<h2 class="ftco-heading-2">¿Tienes preguntas?</h2>
-                	<div class="block-23 mb-3">
-                <ul>
-                  <li><span class="icon icon-phone"></span><span class="text">+51 969 392 189</span></li>
-                  <li><a href="mailto:ictioscusco@gmail.com"><span class="icon icon-envelope"></span><span class="text">ictioscusco@gmail.com</span></a></li>
-                </ul>
+              <!-- WhatsApp destacado -->
+              <div class="whatsapp-card mb-3" aria-hidden="false">
+                <div class="badge" aria-hidden="true">WA</div>
+                <div class="content">
+                  <div class="title">WhatsApp</div>
+                  <div class="desc">Chatea con nosotros para consultas rápidas y coordinación de muestreos.</div>
+                  <div style="margin-top:10px;">
+                    <a class="whatsapp-cta" href="https://wa.me/51969392189" target="_blank" rel="noopener noreferrer">
+                      <!-- simple phone icon -->
+                      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 16.5v3a1.5 1.5 0 0 1-1.7 1.49C9.95 20.34 3.66 14.05 1.01 5.7A1.5 1.5 0 0 1 2.5 3.5h3a1.5 1.5 0 0 1 1.5 1.16c.22 1.15.66 2.28 1.31 3.33.4.67.23 1.53-.4 2.05L6.68 11.5c1.15 2.23 3.02 4.09 5.25 5.24l1.02-1.23c.52-.61 1.38-.8 2.05-.4 1.05.65 2.18 1.09 3.33 1.31A1.5 1.5 0 0 1 21 16.5z" stroke="#fff" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                      Chatear por WhatsApp
+                    </a>
+                  </div>
+                </div>
               </div>
+
+              <hr>
+
+              <!-- FAQ -->
+              <div class="faq">
+                <h5 class="mb-2">Preguntas frecuentes</h5>
+                <div id="accordion">
+                  <div class="card">
+                    <div class="card-header p-0" id="headingOne">
+                      <h2 class="mb-0">
+                        <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">¿Cómo solicito datos para investigación?</button>
+                      </h2>
+                    </div>
+                    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                      <div class="card-body">Envíanos un correo indicando objetivo, tipo de datos y afiliación. Respondemos para coordinar permisos y formatos.</div>
+                    </div>
+                  </div>
+
+                  <div class="card">
+                    <div class="card-header p-0" id="headingTwo">
+                      <h2 class="mb-0">
+                        <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">¿Puedo participar en muestreos?</button>
+                      </h2>
+                    </div>
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                      <div class="card-body">Sí. Indícanos tu disponibilidad y experiencia; publicamos convocatorias en nuestras redes.</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER (sin cambios importantes) -->
+    <footer class="ftco-footer ftco-section img">
+      <div class="container">
+        <div class="row mb-5">
+          <div class="col-md-3">
+            <h3>Sobre IcTiosCusco</h3>
+            <p>Grupo de investigación dedicado a la conservación y estudio de peces andinos (Orestias).</p>
+          </div>
+          <div class="col-md-4">
+            <h3>Publicaciones recientes</h3>
+            <p><a href="#">Resultados preliminares de Huaypo</a></p>
+          </div>
+          <div class="col-md-2">
+            <h3>Enlaces</h3>
+            <ul><li><a href="index.html">Inicio</a></li><li><a href="event.html">Miembros</a></li></ul>
+          </div>
+          <div class="col-md-3">
+            <h3>Contacto</h3>
+            <p>+51 969 392 189<br><a href="mailto:ictioscusco@gmail.com">ictioscusco@gmail.com</a></p>
           </div>
         </div>
 
+        <div class="row"><div class="col-md-12 text-center"><p>&copy; <script>document.write(new Date().getFullYear());</script> IcTiosCusco. Todos los derechos reservados.</p></div></div>
       </div>
+    </footer>
 
-      <div class="row">
-        <div class="col-md-12 text-center">
-          <p>Copyright &copy;<script>document.write(new Date().getFullYear());</script> IcTiosCusco. Todos los derechos reservados.</p>
-        </div>
-      </div>
-    </div>
-  </footer>
+    <!-- loader -->
+    <div id="ftco-loader" class="show fullscreen" style="display:none;"></div>
 
-  <!-- loader -->
-  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+    <!-- SCRIPTS -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/main.js"></script>
 
-  <!-- SCRIPTS -->
-  <script src="js/jquery.min.js"></script>
-  <script src="js/jquery-migrate-3.0.1.min.js"></script>
-  <script src="js/popper.min.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <script src="js/jquery.easing.1.3.js"></script>
-  <script src="js/jquery.waypoints.min.js"></script>
-  <script src="js/jquery.stellar.min.js"></script>
-  <script src="js/owl.carousel.min.js"></script>
-  <script src="js/jquery.magnific-popup.min.js"></script>
-  <script src="js/aos.js"></script>
-  <script src="js/jquery.animateNumber.min.js"></script>
-  <script src="js/bootstrap-datepicker.js"></script>
-  <script src="js/jquery.timepicker.min.js"></script>
-  <script src="js/scrollax.min.js"></script>
-  <script src="js/main.js"></script>
-
-  <!-- Script personalizado: manejo formulario a Formspree y comportamiento navbar -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      // NAVBAR: misma lógica que index (clase .scrolled)
-      var navbar = document.getElementById('ftco-navbar');
-      var navCollapse = $('#ftco-nav');
-
-      function checkScroll() {
-        if (window.scrollY > 50) {
-          navbar.classList.add('scrolled');
-        } else {
-          navbar.classList.remove('scrolled');
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        // NAVBAR scroll small handler (optional)
+        var navbar = document.getElementById('ftco-navbar');
+        function checkScroll() {
+          if (window.scrollY > 40) navbar.classList.add('scrolled'); else navbar.classList.remove('scrolled');
         }
-      }
-      checkScroll();
-      window.addEventListener('scroll', checkScroll, { passive: true });
+        checkScroll();
+        window.addEventListener('scroll', checkScroll, { passive: true });
 
-      if (navCollapse.length) {
-        navCollapse.on('shown.bs.collapse', function () {
-          navbar.classList.add('scrolled');
-        });
-        navCollapse.on('hidden.bs.collapse', function () {
-          if (window.scrollY <= 50) {
-            navbar.classList.remove('scrolled');
-          }
-        });
-      }
+        // FORM: submit to Formspree
+        const form = document.getElementById('contact-form');
+        const responseDiv = document.getElementById('form-response');
+        const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xqalnaaj'; // mantén tu endpoint
 
-      // FORMULARIO: envío usando Formspree (misma endpoint que usas en index)
-      const form = document.getElementById('contact-form');
-      const responseDiv = document.getElementById('form-response');
-      const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xqalnaaj';
+        function showMessage(text, success = true) {
+          responseDiv.style.display = 'block';
+          responseDiv.style.color = success ? '#155724' : '#721c24';
+          responseDiv.style.background = success ? 'rgba(40,167,69,0.08)' : 'rgba(220,53,69,0.06)';
+          responseDiv.style.border = success ? '1px solid rgba(40,167,69,0.12)' : '1px solid rgba(220,53,69,0.12)';
+          responseDiv.innerText = text;
+          if (success) setTimeout(()=> responseDiv.style.display='none', 6000);
+        }
 
-      function showMessage(text, success = true) {
-        responseDiv.style.display = 'block';
-        responseDiv.style.color = success ? '#155724' : '#721c24';
-        responseDiv.style.background = success ? 'rgba(40,167,69,0.08)' : 'rgba(220,53,69,0.06)';
-        responseDiv.style.border = success ? '1px solid rgba(40,167,69,0.12)' : '1px solid rgba(220,53,69,0.12)';
-        responseDiv.innerText = text;
-        if (success) setTimeout(function(){ responseDiv.style.display = 'none'; }, 6000);
-      }
-
-      if (form) {
-        form.addEventListener('submit', function (e) {
-          e.preventDefault();
-          // Validación básica HTML5: si inválido, mostrar mensaje
-          if (!form.checkValidity()) {
-            form.reportValidity();
-            return;
-          }
-
-          const data = new FormData(form);
-          fetch(FORMSPREE_ENDPOINT, {
-            method: 'POST',
-            headers: { 'Accept': 'application/json' },
-            body: data
-          }).then(function (resp) {
-            if (resp.ok) {
-              showMessage('Su mensaje fue enviado. Gracias por contactarnos.', true);
-              form.reset();
-            } else {
-              resp.json().then(function (data) {
-                let msg = (data && data.error) ? data.error : 'Ocurrió un error. Intenta nuevamente.';
-                showMessage(msg, false);
-              }).catch(function () {
-                showMessage('Ocurrió un error. Intenta nuevamente.', false);
-              });
-            }
-          }).catch(function () {
-            showMessage('No se pudo enviar. Verifica tu conexión a Internet.', false);
+        if (form) {
+          form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            if (!form.checkValidity()) { form.reportValidity(); return; }
+            const data = new FormData(form);
+            fetch(FORMSPREE_ENDPOINT, {
+              method: 'POST',
+              headers: { 'Accept': 'application/json' },
+              body: data
+            }).then(function (resp) {
+              if (resp.ok) { showMessage('Su mensaje fue enviado. Gracias por contactarnos.', true); form.reset(); }
+              else { resp.json().then(d => showMessage((d && d.error)? d.error : 'Ocurrió un error. Intenta nuevamente.', false)).catch(()=> showMessage('Ocurrió un error. Intenta nuevamente.', false)); }
+            }).catch(function () { showMessage('No se pudo enviar. Verifica tu conexión a Internet.', false); });
           });
-        });
-      }
-
-      // Newsletter (simulación local) — aquí conectas tu proveedor real (Mailchimp, Buttondown, etc.)
-      var newsletterForm = document.getElementById('newsletter-form');
-      if(newsletterForm){
-        newsletterForm.addEventListener('submit', function(e){
-          e.preventDefault();
-          alert('Gracias por suscribirte — integra aquí tu servicio de boletín (Mailchimp, Buttondown).');
-        });
-      }
-    });
-  </script>
-
+        }
+      });
+    </script>
   </body>
 </html>
