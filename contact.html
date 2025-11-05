@@ -24,54 +24,85 @@
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
 
-    <!-- Estilos personalizados (coherentes con index.html) -->
+    <!-- Estilos personalizados (paleta naranja + verde del logo) -->
     <style>
+      :root{
+        --ictio-orange: #F96D00; /* naranja del logo */
+        --ictio-green: #25D366;  /* verde (WhatsApp) */
+        --ictio-dark: #06323a;   /* color oscuro para texto */
+        --muted: #6b7280;
+      }
+
       .navbar-brand.d-flex { display: inline-flex; align-items: center; }
       .navbar-brand img { height: 56px; width: auto; margin-right: 12px; }
-      .navbar-brand span { font-family: 'Overpass', 'Dosis', sans-serif !important; font-weight: 600; font-size: 1.05rem; color: #fff; line-height: 1; letter-spacing: 0.2px; }
+      .navbar-brand span { font-family: 'Overpass', 'Dosis', sans-serif !important; font-weight: 600; font-size: 1.05rem; color: var(--ictio-dark); line-height: 1; letter-spacing: 0.2px; }
 
       .btn.btn-white {
         background: #ffffff !important;
-        color: #333333 !important;
+        color: var(--ictio-dark) !important;
         border: none !important;
         box-shadow: 0 2px 6px rgba(0,0,0,0.08);
       }
 
+      /* Navbar transparent-to-solid */
       #ftco-navbar { background-color: transparent; transition: background-color 0.25s ease; }
-      #ftco-navbar.scrolled { background-color: rgba(255,255,255,0.98) !important; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-      #ftco-navbar .nav-link, #ftco-navbar .navbar-brand span { color: #ffffff !important; transition: color 0.25s ease; }
-      #ftco-navbar.scrolled .nav-link, #ftco-navbar.scrolled .navbar-brand span { color: #222222 !important; }
-      #ftco-navbar .navbar-toggler { color: #ffffff !important; border-color: rgba(255,255,255,0.18) !important; }
-      #ftco-navbar.scrolled .navbar-toggler { color: #222222 !important; border-color: rgba(0,0,0,0.12) !important; }
-      #ftco-nav.collapse.show .nav-link { color: #222222 !important; }
+      #ftco-navbar.scrolled { background-color: #fff !important; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+      #ftco-navbar .nav-link, #ftco-navbar .navbar-brand span { color: var(--ictio-dark) !important; transition: color 0.25s ease; }
 
-      /* Contact layout */
-      .contact-info p { margin-bottom: 0; color: #333; }
-      .contact-info span { display:block; font-weight:600; color:#000; }
+      /* Contact header info uses orange accents */
+      .contact-info p { margin-bottom: 0; color: var(--muted); }
+      .contact-info span { display:block; font-weight:700; color: var(--ictio-dark); }
+      .contact-info a { color: var(--ictio-orange); font-weight:600; text-decoration:none; }
 
       /* Form container style: mejorar contraste y que el cuadro se note */
       .contact-card {
-        background: #f7fcfb; /* ligero verde-azulado para asociación con agua */
-        border: 1px solid rgba(6,50,58,0.06);
-        padding: 22px;
+        background: #fff; /* blanco limpio */
+        border-left: 6px solid var(--ictio-orange);
+        padding: 24px;
         border-radius: 10px;
-        box-shadow: 0 8px 24px rgba(6,50,58,0.04);
+        box-shadow: 0 10px 30px rgba(6,50,58,0.04);
       }
-      .contact-card .form-control { background: #ffffff; border: 1px solid #e6f0ef; border-radius: 6px; }
-      .contact-card label { font-weight:600; color:#0e2a39; }
+      .contact-card h4 { color: var(--ictio-dark); margin-bottom:18px; }
 
-      /* Right column (replaces map): contact actions & resources */
-      .contact-actions { background: #fff; border-radius: 10px; padding: 18px; box-shadow: 0 8px 22px rgba(10,25,35,0.04); }
-      .contact-actions .action { display:flex; align-items:center; gap:12px; padding:10px 8px; border-radius:8px; transition:background .12s ease; text-decoration:none; color:inherit; }
-      .contact-actions .action:hover { background: rgba(6,50,58,0.03); }
-      .btn-whatsapp { background:#25D366; color:#fff; border:none; padding:10px 14px; border-radius:8px; display:inline-flex; gap:8px; align-items:center; }
+      /* Inputs más visibles */
+      .form-control {
+        background: #fff;
+        border: 1px solid rgba(6,50,58,0.08);
+        padding: .75rem .9rem;
+        border-radius: 8px;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+        transition: border-color .12s ease, box-shadow .12s ease;
+      }
+      .form-control::placeholder { color: #cbd5db; }
+      .form-control:focus {
+        outline: none;
+        border-color: var(--ictio-orange);
+        box-shadow: 0 6px 20px rgba(249,109,0,0.08);
+      }
 
-      /* FAQ accordion tweaks */
+      /* Labels más destacados */
+      .contact-card label { font-weight:700; color: var(--ictio-dark); font-size: .95rem; }
+
+      /* Right column (acciones) */
+      .contact-actions { background: linear-gradient(180deg, #fff 0%, #fbfbfb 100%); border-radius: 10px; padding: 18px; box-shadow: 0 10px 25px rgba(6,50,58,0.04); }
+      .contact-actions h4 { color: var(--ictio-dark); }
+      .contact-actions .action { display:flex; align-items:center; gap:12px; padding:12px; border-radius:10px; text-decoration:none; color:inherit; border:1px solid rgba(6,50,58,0.04); }
+      .contact-actions .action svg { flex:0 0 36px; height:36px; width:36px; }
+      .contact-actions .action .title { font-weight:700; color:var(--ictio-dark); }
+      .contact-actions .action .desc { color:var(--muted); font-size:.95rem; }
+
+      .btn-whatsapp { background: var(--ictio-green); color:#fff; border:none; padding:10px 14px; border-radius:8px; display:inline-flex; gap:8px; align-items:center; }
+
+      /* Newsletter */
+      .input-group .form-control { border-radius:6px 0 0 6px; }
+      .input-group .btn { border-radius:0 6px 6px 0; background: var(--ictio-orange); border:none; color:#fff; }
+
+      /* FAQ */
       .faq .card { border: none; border-bottom: 1px solid #eef3f3; }
-      .faq .btn-link { color:#06323a; text-decoration:none; font-weight:600; }
+      .faq .btn-link { color:var(--ictio-dark); text-decoration:none; font-weight:700; }
 
-      /* small screens */
-      @media (max-width:767.98px){ .contact-card, .contact-actions { margin-bottom:16px; } }
+      /* Responsividad */
+      @media (max-width:991.98px){ .contact-card, .contact-actions { margin-bottom:16px; } }
 
       /* Form response box */
       #form-response { display:none; margin-top:12px; font-weight:500; border-radius:6px; padding:10px 12px; }
@@ -81,11 +112,11 @@
 
   <body>
   <!-- NAVBAR (igual que en index) -->
-  <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+  <nav class="navbar navbar-expand-lg navbar-light bg-white" id="ftco-navbar">
     <div class="container">
       <a class="navbar-brand d-flex align-items-center" href="index.html">
         <img src="images/logo.png" alt="IcTiosCusco logo">
-        <span>IcTiosCusco</span>
+        <span>ICTIOSCUSCO</span>
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="oi oi-menu"></span> Menu
@@ -113,16 +144,16 @@
     <div class="overlay"></div>
     <div class="container">
       <div class="row no-gutters slider-text align-items-center justify-content-center" data-scrollax-parent="true">
-        <div class="col-md-7 ftco-animate text-center" data-scrollax=" properties: { translateY: '70%' }">
-           <p class="breadcrumbs" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><span class="mr-2"><a href="index.html">Inicio</a></span> <span>Contacto</span></p>
-          <h1 class="mb-3 bread" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">Contáctanos</h1>
+        <div class="col-md-7 ftco-animate text-center">
+           <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Inicio</a></span> <span>Contacto</span></p>
+          <h1 class="mb-3 bread">Contáctanos</h1>
           <p class="mb-0">¿Tienes preguntas sobre muestreos, colaboraciones o datos? Escríbenos y te responderemos.</p>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- CONTACT SECTION (mapa reemplazado por acciones y recursos) -->
+  <!-- CONTACT SECTION (mapa reemplazado por acciones y FAQ) -->
   <section class="ftco-section contact-section ftco-degree-bg">
     <div class="container">
       <div class="row d-flex mb-5 contact-info">
@@ -151,7 +182,7 @@
           <div class="contact-card">
             <h4 class="mb-4">¿Tienes alguna consulta?</h4>
 
-            <!-- FORMULARIO: envío a Formspree (misma lógica que en index.html) -->
+            <!-- FORMULARIO: envío a Formspree -->
             <form id="contact-form" class="volunter-form" novalidate>
               <div class="form-group">
                 <label for="name">Tu nombre</label>
@@ -171,44 +202,36 @@
               </div>
 
               <div class="form-group">
-                <button type="submit" class="btn btn-primary py-3 px-5">Enviar mensaje</button>
+                <button type="submit" class="btn btn-primary py-3 px-5" style="background:var(--ictio-orange);border:none;">Enviar mensaje</button>
               </div>
 
               <div id="form-response" aria-live="polite"></div>
             </form>
 
-            <p class="mt-3" style="font-size:.95rem;color:#555">
+            <p class="mt-3" style="font-size:.95rem;color:var(--muted)">
               Si deseas obtener imágenes en alta resolución o solicitar datos para investigación, indícalo en el mensaje y te contactaremos para coordinar permisos y condiciones de uso.
             </p>
           </div>
         </div>
 
-        <!-- Actions column: reemplaza al mapa -->
+        <!-- Actions column: reemplaza al mapa. Request de usuario: quitar Solicitud de datos y Recursos -->
         <div class="col-md-6">
           <div class="contact-actions">
             <h4 class="mb-3">Otras formas de contactarnos</h4>
 
-            <a class="action" href="https://wa.me/51969392189" target="_blank" rel="noopener noreferrer">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20.5 3.5L3.5 20.5" stroke="#25D366" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <a class="action mb-3" href="https://wa.me/51969392189" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.5 3.5L3.5 20.5" stroke="var(--ictio-green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
               <div>
-                <div style="font-weight:700">WhatsApp</div>
-                <div style="font-size:.95rem;color:#666">Chatea con nosotros para consultas rápidas</div>
+                <div class="title">WhatsApp</div>
+                <div class="desc">Chatea con nosotros para consultas rápidas</div>
               </div>
             </a>
 
-            <a class="action" href="mailto:ictioscusco@gmail.com">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v12H3z" stroke="#06323a" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <a class="action mb-3" href="mailto:ictioscusco@gmail.com">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v12H3z" stroke="var(--ictio-dark)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
               <div>
-                <div style="font-weight:700">Solicitud de datos / imágenes</div>
-                <div style="font-size:.95rem;color:#666">Pide permisos y formatos por correo</div>
-              </div>
-            </a>
-
-            <a class="action" href="recursos.html">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="3" width="18" height="18" rx="3" stroke="#06323a" stroke-width="1.4"/></svg>
-              <div>
-                <div style="font-weight:700">Descargas y recursos</div>
-                <div style="font-size:.95rem;color:#666">Manuales, informes y datasets (cuando estén disponibles)</div>
+                <div class="title">Correo</div>
+                <div class="desc">Solicitudes formales o envío de archivos</div>
               </div>
             </a>
 
@@ -219,7 +242,7 @@
               <div class="input-group mb-3">
                 <input type="email" class="form-control" placeholder="Tu correo" aria-label="Correo para boletín" required>
                 <div class="input-group-append">
-                  <button class="btn btn-primary" type="submit">Suscribirme</button>
+                  <button class="btn" type="submit" style="background:var(--ictio-orange);color:#fff;">Suscribirme</button>
                 </div>
               </div>
             </form>
@@ -319,12 +342,12 @@
         <div class="col-md-3">
           <div class="ftco-footer-widget mb-4">
               	<h2 class="ftco-heading-2">¿Tienes preguntas?</h2>
-              	<div class="block-23 mb-3">
-              <ul>
-                <li><span class="icon icon-phone"></span><span class="text">+51 969 392 189</span></li>
-                <li><a href="mailto:ictioscusco@gmail.com"><span class="icon icon-envelope"></span><span class="text">ictioscusco@gmail.com</span></a></li>
-              </ul>
-            </div>
+                	<div class="block-23 mb-3">
+                <ul>
+                  <li><span class="icon icon-phone"></span><span class="text">+51 969 392 189</span></li>
+                  <li><a href="mailto:ictioscusco@gmail.com"><span class="icon icon-envelope"></span><span class="text">ictioscusco@gmail.com</span></a></li>
+                </ul>
+              </div>
           </div>
         </div>
 
