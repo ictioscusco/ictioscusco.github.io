@@ -28,23 +28,69 @@
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 
     <style>
-      /* Pequeñas adaptaciones locales */
-      .hero-wrap { background-image: url('images/laguna_ictioscusco.jpg'); background-size:cover; }
-      .resource-card { background: #fff; border-radius: 10px; box-shadow: 0 6px 18px rgba(0,0,0,0.06); overflow: hidden; }
-      .resource-card .card-media { height: 240px; display:flex; align-items:center; justify-content:center; background: linear-gradient(180deg, #eef6f9, #f9fbfc); }
-      .resource-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.25rem; }
-      .resource-sub { font-size: 0.9rem; color: #6c757d; margin-bottom: .5rem }
-      .resource-actions { display:flex; gap:.5rem; }
-      model-viewer { width:100%; height:100%; }
+      /* --- Estilos mejorados para Recursos --- */
+      :root{
+        --accent:#127a5a; /* color principal */
+        --muted:#6c757d;
+        --card-radius:12px;
+        --shadow: 0 10px 30px rgba(11,38,28,0.06);
+      }
 
-      /* pequeños botones de file input */
-      .file-label { cursor: pointer; }
+      .hero-wrap{
+        background-image: url('images/laguna_ictioscusco.jpg');
+        background-size:cover;
+        background-position:center center;
+      }
 
-      @media (max-width:576px) { .resource-card .card-media { height: 160px; } }
+      .heading-section h1{font-weight:700;letter-spacing:0.2px}
+      .lead{color:var(--muted)}
+
+      /* Grid y tarjetas */
+      #recursos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+      @media (max-width: 992px){#recursos-grid{grid-template-columns:repeat(2,1fr)}}
+      @media (max-width: 576px){#recursos-grid{grid-template-columns:1fr}}
+
+      .resource-card{background:#fff;border-radius:var(--card-radius);box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column;min-height:360px}
+      .card-media{height:260px;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#f3faf6,#ffffff);}
+      .card-body{padding:16px 18px;flex:1;display:flex;flex-direction:column}
+
+      .resource-title{font-size:1.05rem;font-weight:700;margin-bottom:6px;color:#083826}
+      .resource-sub{font-size:0.9rem;color:var(--muted);margin-bottom:6px}
+
+      .resource-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto}
+
+      /* Botones */
+      .btn-outline-primary { border-color:var(--accent); color:var(--accent); }
+      .btn-outline-primary:hover{background:var(--accent);color:#fff}
+      .btn-download{border-color:#a5a5a5;color:#444}
+
+      /* Input file mejorado */
+      .file-label{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:8px;border:1px dashed #cfd8d4;background:#fbfffb;color:var(--accent);cursor:pointer}
+      .file-label small{color:var(--muted);display:block}
+      .file-input{display:none}
+
+      /* Modal media area */
+      #fichaModalMedia{min-height:320px;background:#f7f7f7;border-radius:8px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+      #fichaModal .modal-body .col-md-6{padding:12px}
+
+      /* Search / filter bar */
+      .resources-toolbar{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:14px}
+      .resources-search{flex:1;max-width:520px;display:flex;gap:8px}
+      .resources-search input{flex:1;padding:10px 12px;border-radius:10px;border:1px solid #e1e7e5}
+      .filter-group{display:flex;gap:8px;align-items:center}
+
+      /* Small touches */
+      model-viewer{width:100%;height:100%}
+      .badge-laguna{background:#eef7f2;color:#0b3b2a;padding:4px 8px;border-radius:999px;font-weight:600}
+
+      /* Accessibility focus */
+      a:focus, button:focus, .file-label:focus{outline:3px solid rgba(18,140,126,0.12);outline-offset:2px}
+
     </style>
   </head>
   <body>
 
+  <!-- NAVBAR (igual que en index) -->
   <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
     <div class="container">
       <a class="navbar-brand d-flex align-items-center" href="index.html">
@@ -64,16 +110,14 @@
           <li class="nav-item"><a href="blog.html" class="nav-link">Noticias</a></li>
           <li class="nav-item"><a href="gallery.html" class="nav-link">Galería</a></li>
           <li class="nav-item"><a href="event.html" class="nav-link">Miembros</a></li>
-
-          <!-- Recursos: activo en esta página -->
           <li class="nav-item active"><a href="recursos.html" class="nav-link">Recursos</a></li>
-
           <li class="nav-item"><a href="contact.html" class="nav-link">Contacto</a></li>
         </ul>
       </div>
     </div>
   </nav>
 
+  <!-- HERO -->
   <div class="hero-wrap d-flex align-items-center" style="height:320px;">
     <div class="overlay"></div>
     <div class="container text-center">
@@ -88,89 +132,115 @@
 
   <section class="ftco-section bg-light">
     <div class="container">
+
       <div class="row justify-content-center mb-4">
-        <div class="col-md-8 text-center">
-          <h2 class="mb-3">Fichas y modelos 3D</h2>
-          <p>Haz click en "Ver ficha" para abrir la información detallada. Puedes subir tus propios modelos 3D (.glb/.gltf) desde cada tarjeta — se mostrarán aquí con rotación y controles.</p>
+        <div class="col-md-10">
+          <div class="resources-toolbar">
+            <div class="resources-search" role="search" aria-label="Buscar recursos">
+              <input id="search-res" type="search" placeholder="Buscar por nombre, laguna o tipo (ej. Orestias, ficha, 3D)..." aria-label="Buscar recursos">
+              <button id="clear-search" class="btn btn-outline-secondary" title="Limpiar búsqueda">Limpiar</button>
+            </div>
+            <div class="filter-group">
+              <label for="filter-type" class="sr-only">Filtrar por tipo</label>
+              <select id="filter-type" class="form-control" style="min-width:160px">
+                <option value="">Todos los tipos</option>
+                <option value="ficha">Ficha</option>
+                <option value="modelo">Modelo 3D</option>
+                <option value="juego">Juego</option>
+              </select>
+              <a href="#" id="btn-load-more" class="btn btn-outline-primary">Cargar más</a>
+            </div>
+          </div>
+
+          <div class="text-center mb-3">
+            <h2 class="mb-2">Fichas y modelos 3D</h2>
+            <p class="mb-0">Haz clic en "Ver ficha" para abrir información detallada. Puedes cargar tus propios archivos .glb para previsualizarlos localmente (no se suben al servidor).</p>
+          </div>
         </div>
       </div>
 
-      <div class="row" id="recursos-grid">
+      <!-- GRID de recursos -->
+      <div id="recursos-grid" aria-live="polite">
 
         <!-- Tarjeta 1 -->
-        <div class="col-md-4 d-flex mb-4 ftco-animate">
-          <div class="resource-card w-100">
-            <div class="card-media">
-              <!-- model-viewer con id para reemplazar src vía file input -->
-              <model-viewer id="mv-orestias1" src="models/orestias1.glb" alt="Orestias sp. Huaypo" camera-controls auto-rotate ar shadow-intensity="0"></model-viewer>
-            </div>
-            <div class="p-3">
+        <article class="resource-card" data-tags="orestias ficha modelo" data-laguna="Huaypo">
+          <div class="card-media" aria-hidden="true">
+            <model-viewer id="mv-orestias1" src="models/orestias1.glb" alt="Orestias sp. Huaypo" camera-controls auto-rotate ar shadow-intensity="0"></model-viewer>
+          </div>
+          <div class="card-body">
+            <div>
               <div class="resource-title">Orestias sp. Huaypo</div>
-              <div class="resource-sub">Orestias cf. agassii</div>
-              <div class="resource-sub">Laguna Huaypo</div>
-              <div class="resource-actions mt-2">
-                <button class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#fichaModal" data-id="orestias-1">Ver ficha</button>
-                <a class="btn btn-outline-secondary btn-sm" href="models/orestias1.glb" download>Descargar 3D</a>
-                <label class="btn btn-outline-info btn-sm file-label" title="Cargar un .glb local">
-                  Cargar 3D
-                  <input type="file" accept=".glb,.gltf" data-target="#mv-orestias1" style="display:none">
-                </label>
-                <button class="btn btn-outline-light btn-sm" data-reset="#mv-orestias1">Restaurar</button>
-              </div>
+              <div class="resource-sub">Orestias cf. agassii &middot; <span class="badge-laguna">Huaypo</span></div>
+              <div class="resource-sub">Modelo 3D interactivo (GLB)</div>
+            </div>
+            <div class="resource-actions">
+              <button class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#fichaModal" data-id="orestias-1">Ver ficha</button>
+              <a class="btn btn-download btn-sm" href="models/orestias1.glb" download title="Descargar modelo GLB">Descargar</a>
+
+              <label class="file-label" tabindex="0" title="Cargar un archivo .glb local">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v10" stroke="#127a5a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path><path d="M5 11l7-8 7 8" stroke="#127a5a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path><path d="M21 21H3" stroke="#127a5a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                <input class="file-input" type="file" accept=".glb,.gltf" data-target="#mv-orestias1">
+                <small>Subir 3D</small>
+              </label>
+
+              <button class="btn btn-outline-secondary btn-sm" data-reset="#mv-orestias1">Restaurar</button>
             </div>
           </div>
-        </div>
+        </article>
 
         <!-- Tarjeta 2 -->
-        <div class="col-md-4 d-flex mb-4 ftco-animate">
-          <div class="resource-card w-100">
-            <div class="card-media">
-              <model-viewer id="mv-orestias2" src="models/orestias2.glb" alt="Orestias sp. Piuray" camera-controls auto-rotate ar shadow-intensity="0"></model-viewer>
-            </div>
-            <div class="p-3">
+        <article class="resource-card" data-tags="orestias ficha modelo" data-laguna="Piuray">
+          <div class="card-media">
+            <model-viewer id="mv-orestias2" src="models/orestias2.glb" alt="Orestias sp. Piuray" camera-controls auto-rotate ar shadow-intensity="0"></model-viewer>
+          </div>
+          <div class="card-body">
+            <div>
               <div class="resource-title">Orestias sp. Piuray</div>
-              <div class="resource-sub">Orestias sp.</div>
-              <div class="resource-sub">Laguna Piuray</div>
-              <div class="resource-actions mt-2">
-                <button class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#fichaModal" data-id="orestias-2">Ver ficha</button>
-                <a class="btn btn-outline-secondary btn-sm" href="models/orestias2.glb" download>Descargar 3D</a>
-                <label class="btn btn-outline-info btn-sm file-label" title="Cargar un .glb local">
-                  Cargar 3D
-                  <input type="file" accept=".glb,.gltf" data-target="#mv-orestias2" style="display:none">
-                </label>
-                <button class="btn btn-outline-light btn-sm" data-reset="#mv-orestias2">Restaurar</button>
-              </div>
+              <div class="resource-sub">Orestias sp. &middot; <span class="badge-laguna">Piuray</span></div>
+              <div class="resource-sub">Modelo 3D interactivo (GLB)</div>
+            </div>
+            <div class="resource-actions">
+              <button class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#fichaModal" data-id="orestias-2">Ver ficha</button>
+              <a class="btn btn-download btn-sm" href="models/orestias2.glb" download title="Descargar modelo GLB">Descargar</a>
+
+              <label class="file-label" tabindex="0" title="Cargar un archivo .glb local">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v10" stroke="#127a5a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path><path d="M5 11l7-8 7 8" stroke="#127a5a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path><path d="M21 21H3" stroke="#127a5a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                <input class="file-input" type="file" accept=".glb,.gltf" data-target="#mv-orestias2">
+                <small>Subir 3D</small>
+              </label>
+
+              <button class="btn btn-outline-secondary btn-sm" data-reset="#mv-orestias2">Restaurar</button>
             </div>
           </div>
-        </div>
+        </article>
 
-        <!-- Tarjeta 3: JUGAR (abre pacfish.html) -->
-        <div class="col-md-4 d-flex mb-4 ftco-animate">
-          <div class="resource-card w-100">
-            <div class="card-media" style="background-image: url('images/rec_juego.jpg'); background-size:cover; background-position:center;"></div>
-            <div class="p-3">
+        <!-- Tarjeta 3: Juego PAC-Fish -->
+        <article class="resource-card" data-tags="juego pacfish" data-laguna="">
+          <div class="card-media" style="background-image:url('images/rec_juego.jpg');background-size:cover;background-position:center"></div>
+          <div class="card-body">
+            <div>
               <div class="resource-title">Juego PAC-Fish</div>
               <div class="resource-sub">Versión completa (se abre en nueva página)</div>
               <div class="resource-sub">Elige Orestia, Sardina o Bagre</div>
-              <div class="resource-actions mt-2">
-                <a class="btn btn-success btn-sm" href="pacfish.html">Jugar</a>
-              </div>
+            </div>
+            <div class="resource-actions">
+              <a class="btn btn-success btn-sm" href="pacfish.html" target="_blank" rel="noopener">Jugar</a>
             </div>
           </div>
-        </div>
+        </article>
 
       </div>
 
-      <div class="row mt-3">
+      <div class="row mt-4">
         <div class="col text-center">
-          <a href="#" class="btn btn-outline-primary">Ver todas las fichas</a>
+          <a href="#" id="ver-todas" class="btn btn-outline-primary">Ver todas las fichas</a>
         </div>
       </div>
 
     </div>
   </section>
 
-  <!-- Modal ficha (genérico) -->
+  <!-- Modal ficha (genérico, accesible) -->
   <div class="modal fade" id="fichaModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
       <div class="modal-content">
@@ -269,7 +339,6 @@
   <script src="js/bootstrap-datepicker.js"></script>
   <script src="js/jquery.timepicker.min.js"></script>
   <script src="js/scrollax.min.js"></script>
-  <script src="js/google-map.js"></script>
   <script src="js/main.js"></script>
 
   <script>
@@ -284,7 +353,24 @@
     };
 
     $(document).ready(function(){
-      // Abrir modal ficha y cargar contenido dinámico
+      // Buscador simple que filtra tarjetas por texto, tags y laguna
+      function filterResources(){
+        const q = $('#search-res').val().trim().toLowerCase();
+        const type = $('#filter-type').val();
+        $('#recursos-grid article').each(function(){
+          const $t = $(this);
+          const text = ($t.text() + ' ' + ($t.data('laguna')||'') + ' ' + ($t.attr('data-tags')||'')).toLowerCase();
+          const matchesQuery = q === '' || text.indexOf(q) !== -1;
+          const matchesType = !type || ($t.attr('data-tags')||'').indexOf(type) !== -1;
+          if(matchesQuery && matchesType){ $t.show(); } else { $t.hide(); }
+        });
+      }
+
+      $('#search-res').on('input', filterResources);
+      $('#filter-type').on('change', filterResources);
+      $('#clear-search').on('click', function(e){ e.preventDefault(); $('#search-res').val(''); $('#filter-type').val(''); filterResources(); });
+
+      // Modal ficha: carga dinámicamente media y texto
       $('#fichaModal').on('show.bs.modal', function (event) {
         const button = $(event.relatedTarget);
         const id = button.data('id');
@@ -295,18 +381,25 @@
         $('#fichaModalHabitat').html('<strong>Hábitat:</strong> ' + data.habitat);
         $('#fichaModalDesc').text(data.description);
         if (data.pdf) { $('#fichaModalPdf').attr('href', data.pdf).show(); } else { $('#fichaModalPdf').hide(); }
+
         const mediaDiv = $('#fichaModalMedia');
-        mediaDiv.html('');
-        if (data.media && (data.media.endsWith('.glb') || data.media.endsWith('.gltf'))) {
-          const mv = $('<model-viewer>', { src: data.media, alt: data.title, 'camera-controls': '', 'auto-rotate': '', style: 'width:100%; height:320px;' });
+        mediaDiv.empty();
+        if (data.media && (data.media.endsWith('.glb') || data.media.endsWith('.gltf'))){
+          const mv = $("<model-viewer/>", {
+            src: data.media,
+            alt: data.title,
+            'camera-controls':'',
+            'auto-rotate':'',
+            style: 'width:100%; height:320px;'
+          });
           mediaDiv.append(mv);
-        } else if (data.media) {
-          mediaDiv.css('background-image', 'url('+data.media+')').css('height','320px').css('background-size','cover');
+        } else if (data.media){
+          mediaDiv.css({ 'background-image':'url('+data.media+')','background-size':'cover','background-position':'center','height':'320px' });
         }
       });
 
-      // File inputs: permitir al usuario cargar .glb locales y verlos en el model-viewer
-      $('input[type="file"]').on('change', function(e){
+      // File inputs: permitir al usuario cargar .glb locales y verlos en el model-viewer (no sube al servidor)
+      $(document).on('change', '.file-input', function(e){
         const file = this.files[0];
         if (!file) return;
         const target = $(this).data('target');
@@ -317,25 +410,32 @@
         const objUrl = URL.createObjectURL(file);
         mv.setAttribute('src', objUrl);
         mv.dataset.objectUrl = objUrl;
+        // mostrar nombre de archivo temporal (accesibilidad)
+        $(this).closest('.file-label').find('small').text(file.name);
       });
 
       // Restaurar a src original
-      $('[data-reset]').on('click', function(){
+      $(document).on('click','[data-reset]', function(){
         const selector = $(this).data('reset');
         const mv = document.querySelector(selector);
         if (!mv) return;
-        // si hay objectURL guardada, revocarla
         if (mv.dataset.objectUrl) { URL.revokeObjectURL(mv.dataset.objectUrl); delete mv.dataset.objectUrl; }
-        // restaurar al atributo data-original-src si existe, sino recargar sin src
-        const orig = mv.getAttribute('data-original-src') || mv.getAttribute('src');
-        // force reload
+        const orig = mv.getAttribute('data-original-src') || mv.getAttribute('src') || '';
         mv.setAttribute('src', orig);
+        // restaurar etiqueta file
+        $(selector).closest('article').find('.file-label small').text('Subir 3D');
       });
 
       // Guardar src original en data-original-src para permitir restaurar
       document.querySelectorAll('model-viewer').forEach(mv => {
         if (!mv.getAttribute('data-original-src')) mv.setAttribute('data-original-src', mv.getAttribute('src') || '');
       });
+
+      // Cargar más (simulado): simplemente despliega mensaje por ahora
+      $('#btn-load-more').on('click', function(e){ e.preventDefault(); alert('Función "Cargar más" — aquí puedes integrar paginación o carga dinámica.'); });
+
+      // Botón ver todas
+      $('#ver-todas').on('click', function(e){ e.preventDefault(); alert('Redirigir a la página completa de fichas (si existe) o mostrar catálogo completo.'); });
 
     });
   </script>
