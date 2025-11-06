@@ -122,114 +122,88 @@
 
   <section class="ftco-section bg-light">
     <div class="container">
-
       <div class="row justify-content-center mb-4">
-        <div class="col-md-10">
-          <div class="resources-toolbar">
-            <div class="resources-search" role="search" aria-label="Buscar recursos">
-              <input id="search-res" type="search" placeholder="Buscar por nombre, laguna o tipo (ej. Orestias, ficha, 3D)..." aria-label="Buscar recursos">
-              <button id="clear-search" class="btn btn-outline-secondary" title="Limpiar búsqueda">Limpiar</button>
-            </div>
-            <div class="filter-group">
-              <label for="filter-type" class="sr-only">Filtrar por tipo</label>
-              <select id="filter-type" class="form-control" style="min-width:160px">
-                <option value="">Todos los tipos</option>
-                <option value="ficha">Ficha</option>
-                <option value="modelo">Modelo 3D</option>
-                <option value="juego">Juego</option>
-              </select>
-              <a href="#" id="btn-load-more" class="btn btn-outline-primary">Cargar más</a>
-            </div>
-          </div>
-
-          <div class="text-center mb-3">
-            <h2 class="mb-2">Fichas y modelos 3D</h2>
-            <p class="mb-0">Haz clic en "Ver ficha" para abrir información detallada. Puedes cargar tus propios archivos .glb para previsualizarlos localmente (no se suben al servidor).</p>
-          </div>
+        <div class="col-md-10 text-center">
+          <h2 class="mb-3" style="font-family:'Overpass','Dosis',sans-serif;font-weight:700;font-size:2rem;">Recursos</h2>
+          <p class="lead mb-0">Fichas, modelos 3D y actividades para aprender sobre los peces altoandinos.</p>
         </div>
       </div>
 
-      <!-- GRID de recursos -->
-      <div id="recursos-grid" aria-live="polite">
+      <!-- JUEGO: subtítulo + CTA -->
+      <div class="row mb-4">
+        <div class="col-md-8 offset-md-2 text-center">
+          <h3 style="font-family:'Overpass','Dosis',sans-serif;font-weight:700;">Juego PAC-Fish</h3>
+          <p class="mb-3">Diviértete y aprende seleccionando especies y completando retos.</p>
+          <a class="btn btn-success btn-lg" href="pacfish.html" target="_blank" rel="noopener">Jugar PAC-Fish</a>
+        </div>
+      </div>
 
-        <!-- Tarjeta 1 -->
-        <article class="resource-card" data-tags="orestias ficha modelo" data-laguna="Huaypo">
-          <div class="card-media" aria-hidden="true">
-            <model-viewer id="mv-orestias1" src="models/orestias1.glb" alt="Orestias sp. Huaypo" camera-controls auto-rotate ar shadow-intensity="0"></model-viewer>
-          </div>
-          <div class="card-body">
-            <div>
+      <!-- Modelos 3D: dos tarjetas (lado a lado en desktop) -->
+      <div class="row mb-3">
+        <div class="col-12">
+          <h3 style="font-family:'Overpass','Dosis',sans-serif;font-weight:700;">Modelos 3D</h3>
+        </div>
+      </div>
+
+      <div class="row" id="recursos-grid">
+
+        <!-- Modelo 1 -->
+        <div class="col-md-6 d-flex mb-4 ftco-animate">
+          <div class="resource-card w-100">
+            <div class="card-media">
+              <model-viewer id="mv-orestias1" src="models/orestias1.glb" alt="Orestias sp. Huaypo" camera-controls auto-rotate ar shadow-intensity="0"></model-viewer>
+            </div>
+            <div class="p-3 card-body">
               <div class="resource-title">Orestias sp. Huaypo</div>
-              <div class="resource-sub">Orestias cf. agassii &middot; <span class="badge-laguna">Huaypo</span></div>
+              <div class="resource-sub">Orestias cf. agassii · <span class="badge-laguna">Huaypo</span></div>
               <div class="resource-sub">Modelo 3D interactivo (GLB)</div>
-            </div>
-            <div class="resource-actions">
-              <button class="btn btn-outline-primary btn-sm" data-toggle="collapse" data-target="#expand-3d" aria-expanded="false" data-id="orestias-1">Ver ficha</button>
-              <a class="btn btn-download btn-sm" href="models/orestias1.glb" download title="Descargar modelo GLB">Descargar</a>
-
-              <label class="file-label" tabindex="0" title="Cargar un archivo .glb local">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v10" stroke="#127a5a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path><path d="M5 11l7-8 7 8" stroke="#127a5a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path><path d="M21 21H3" stroke="#127a5a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-                <input class="file-input" type="file" accept=".glb,.gltf" data-target="#mv-orestias1">
-                <small>Subir 3D</small>
-              </label>
-
-              <button class="btn btn-outline-secondary btn-sm" data-reset="#mv-orestias1">Restaurar</button>
+              <div class="resource-actions mt-2">
+                <button class="btn btn-outline-primary btn-sm" data-toggle="collapse" data-target="#expand-3d" aria-expanded="false" aria-controls="expand-3d">Ver modelos</button>
+                <a class="btn btn-download btn-sm" href="models/orestias1.glb" download title="Descargar modelo GLB">Descargar</a>
+                <label class="file-label" tabindex="0" title="Cargar un archivo .glb local">
+                  <input class="file-input" type="file" accept=".glb,.gltf" data-target="#mv-orestias1" style="display:none">
+                  <small>Subir 3D</small>
+                </label>
+                <button class="btn btn-outline-secondary btn-sm" data-reset="#mv-orestias1">Restaurar</button>
+              </div>
             </div>
           </div>
-        </article>
+        </div>
 
-        <!-- Tarjeta 2 -->
-        <article class="resource-card" data-tags="orestias ficha modelo" data-laguna="Piuray">
-          <div class="card-media">
-            <model-viewer id="mv-orestias2" src="models/orestias2.glb" alt="Orestias sp. Piuray" camera-controls auto-rotate ar shadow-intensity="0"></model-viewer>
-          </div>
-          <div class="card-body">
-            <div>
+        <!-- Modelo 2 -->
+        <div class="col-md-6 d-flex mb-4 ftco-animate">
+          <div class="resource-card w-100">
+            <div class="card-media">
+              <model-viewer id="mv-orestias2" src="models/orestias2.glb" alt="Orestias sp. Piuray" camera-controls auto-rotate ar shadow-intensity="0"></model-viewer>
+            </div>
+            <div class="p-3 card-body">
               <div class="resource-title">Orestias sp. Piuray</div>
-              <div class="resource-sub">Orestias sp. &middot; <span class="badge-laguna">Piuray</span></div>
+              <div class="resource-sub">Orestias sp. · <span class="badge-laguna">Piuray</span></div>
               <div class="resource-sub">Modelo 3D interactivo (GLB)</div>
-            </div>
-            <div class="resource-actions">
-              <button class="btn btn-outline-primary btn-sm" data-toggle="collapse" data-target="#expand-3d" aria-expanded="false" data-id="orestias-2">Ver ficha</button>
-              <a class="btn btn-download btn-sm" href="models/orestias2.glb" download title="Descargar modelo GLB">Descargar</a>
-
-              <label class="file-label" tabindex="0" title="Cargar un archivo .glb local">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v10" stroke="#127a5a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path><path d="M5 11l7-8 7 8" stroke="#127a5a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path><path d="M21 21H3" stroke="#127a5a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-                <input class="file-input" type="file" accept=".glb,.gltf" data-target="#mv-orestias2">
-                <small>Subir 3D</small>
-              </label>
-
-              <button class="btn btn-outline-secondary btn-sm" data-reset="#mv-orestias2">Restaurar</button>
+              <div class="resource-actions mt-2">
+                <button class="btn btn-outline-primary btn-sm" data-toggle="collapse" data-target="#expand-3d" aria-expanded="false" aria-controls="expand-3d">Ver modelos</button>
+                <a class="btn btn-download btn-sm" href="models/orestias2.glb" download title="Descargar modelo GLB">Descargar</a>
+                <label class="file-label" tabindex="0" title="Cargar un archivo .glb local">
+                  <input class="file-input" type="file" accept=".glb,.gltf" data-target="#mv-orestias2" style="display:none">
+                  <small>Subir 3D</small>
+                </label>
+                <button class="btn btn-outline-secondary btn-sm" data-reset="#mv-orestias2">Restaurar</button>
+              </div>
             </div>
           </div>
-        </article>
-
-        <!-- Tarjeta 3: Juego PAC-Fish -->
-        <article class="resource-card" data-tags="juego pacfish" data-laguna="">
-          <div class="card-media" style="background-image:url('images/rec_juego.jpg');background-size:cover;background-position:center"></div>
-          <div class="card-body">
-            <div>
-              <div class="resource-title">Juego PAC-Fish</div>
-              <div class="resource-sub">Versión completa (se abre en nueva página)</div>
-              <div class="resource-sub">Elige Orestia, Sardina o Bagre</div>
-            </div>
-            <div class="resource-actions">
-              <a class="btn btn-success btn-sm" href="pacfish.html" target="_blank" rel="noopener">Jugar</a>
-            </div>
-          </div>
-        </article>
+        </div>
 
       </div>
 
-      <!-- Área colapsable que muestra ambos modelos 3D y fichas (se abre al clicar en cualquiera de los 'Ver ficha') -->
-      <div id="expand-3d" class="collapse" aria-hidden="true">
-        <div class="models-row">
-          <div style="flex:1;min-width:260px">
+      <!-- Área colapsable que muestra ambos modelos 3D juntos -->
+      <div id="expand-3d" class="collapse mt-3" aria-hidden="true">
+        <div class="row" style="gap:12px;">
+          <div class="col-md-6">
             <h5 style="margin-top:0;margin-bottom:8px">Orestias sp. Huaypo</h5>
             <model-viewer id="mv-orestias1-exp" src="models/orestias1.glb" alt="Orestias sp. Huaypo" camera-controls auto-rotate ar style="width:100%;height:320px;" shadow-intensity="0"></model-viewer>
             <p style="margin-top:8px;color:#444">Orestias cf. agassii — Laguna Huaypo. <a href="docs/ficha_orestias_huaypo.pdf" target="_blank">Descargar ficha (PDF)</a></p>
           </div>
-          <div style="flex:1;min-width:260px">
+          <div class="col-md-6">
             <h5 style="margin-top:0;margin-bottom:8px">Orestias sp. Piuray</h5>
             <model-viewer id="mv-orestias2-exp" src="models/orestias2.glb" alt="Orestias sp. Piuray" camera-controls auto-rotate ar style="width:100%;height:320px;" shadow-intensity="0"></model-viewer>
             <p style="margin-top:8px;color:#444">Orestias sp. — Laguna Piuray. <a href="docs/ficha_orestias_piuray.pdf" target="_blank">Descargar ficha (PDF)</a></p>
@@ -237,9 +211,14 @@
         </div>
       </div>
 
+      <!-- FICHAS: listas de descargas debajo -->
       <div class="row mt-4">
-        <div class="col text-center">
-          <a href="#" id="ver-todas" class="btn btn-outline-primary">Ver todas las fichas</a>
+        <div class="col-12">
+          <h3 style="font-family:'Overpass','Dosis',sans-serif;font-weight:700;">Fichas</h3>
+          <ul class="list-unstyled">
+            <li><a href="docs/ficha_orestias_huaypo.pdf" target="_blank" rel="noopener">Ficha Orestias sp. Huaypo (PDF)</a></li>
+            <li><a href="docs/ficha_orestias_piuray.pdf" target="_blank" rel="noopener">Ficha Orestias sp. Piuray (PDF)</a></li>
+          </ul>
         </div>
       </div>
 
@@ -448,4 +427,5 @@
 
   </body>
 </html>
+
 
