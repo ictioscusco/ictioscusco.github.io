@@ -23,483 +23,236 @@
     <link rel="stylesheet" href="css/style.css" />
 
     <style>
-      /* Alineación visual con el index */
-      .navbar-brand.d-flex { display: inline-flex; align-items: center; }
-      .navbar-brand img { height: 56px; width: auto; margin-right: 12px; }
-      .navbar-brand span { font-family: 'Overpass', 'Dosis', sans-serif !important; font-weight: 600; font-size: 1.05rem; color: #fff; }
+      /* ---------- Visual adjustments ---------- */
+      body { font-family: "Overpass", "Dosis", sans-serif; background: #f8fafb; color:#0e2a39; }
+      .container { max-width:1200px; margin:0 auto; padding:18px; }
+      .navbar-brand img { height:56px; margin-right:12px; }
 
-      .hero-wrap h1 { text-shadow: 0 6px 18px rgba(0,0,0,0.18); }
+      .hero-wrap { background-size:cover; background-position:center; padding:36px 0; margin-bottom:18px; border-radius:8px; color:#fff; background-image:url('images/donate_hero.jpg'); }
 
-      /* Donación: bloque principal */
-      .donate-panel {
-        background: #fff;
-        border-radius: 10px;
-        padding: 20px;
-        box-shadow: 0 10px 30px rgba(16,24,40,0.06);
-        margin-bottom: 28px;
+      .donate-panel { background:#fff; border-radius:10px; padding:20px; box-shadow:0 10px 30px rgba(16,24,40,0.06); margin-bottom:28px; }
+
+      /* Inputs & textarea contrast (FIX) */
+      .form-control {
+        background: #f3fbfc !important;      /* light tinted background so text is visible */
+        color: #06323a !important;           /* dark teal text for contrast */
+        border: 1px solid #d1e8ea !important;
+        padding: 10px 12px;
+        border-radius: 6px;
+        box-shadow: none !important;
       }
-      .donate-amounts { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px; }
-      .donate-amounts button { min-width:110px; }
-      .donate-quick { margin-bottom: 12px; }
+      .form-control:focus {
+        outline: none;
+        border-color: #0b6b6b !important;
+        box-shadow: 0 6px 18px rgba(6,50,58,0.06);
+      }
+      textarea.form-control { min-height:110px; resize:vertical; }
 
-      /* Merch grid */
+      /* Placeholder color */
+      ::placeholder { color: rgba(6,50,58,0.4); }
+
+      /* QR image */
+      .qr-box {
+        text-align:center;
+        background:#fff;
+        border-radius:10px;
+        padding:12px;
+        box-shadow:0 8px 24px rgba(16,24,40,0.04);
+        margin-top:12px;
+      }
+      .qr-img { width:100%; max-width:260px; height:auto; display:block; margin:10px auto; border-radius:8px; border:1px solid #e6f2f3; box-shadow:0 6px 18px rgba(6,50,58,0.04); }
+      .qr-caption { font-size:0.95rem; color:#06323a; font-weight:600; margin-top:6px; }
+
+      /* Merch & cart styles (keep consistent) */
       .merch-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap:18px; }
-      .merch-card {
-        background:#fff;
-        border-radius:10px;
-        overflow:hidden;
-        box-shadow: 0 8px 24px rgba(16,24,40,0.06);
-        display:flex;
-        flex-direction:column;
-      }
+      .merch-card { background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 8px 24px rgba(16,24,40,0.06); display:flex; flex-direction:column; }
       .merch-card img { width:100%; height:220px; object-fit:cover; display:block; }
-      .merch-card .body { padding:14px; display:flex; flex-direction:column; gap:8px; }
-      .merch-card h4 { margin:0; font-size:1.05rem; }
-      .merch-card p { margin:0; color:#555; font-size:.95rem; }
+      .cart { background:#fff; border-radius:10px; padding:14px; box-shadow:0 8px 24px rgba(16,24,40,0.04); }
 
-      /* Carrito */
-      .cart {
-        background:#fff;
-        border-radius:10px;
-        padding:14px;
-        box-shadow: 0 8px 24px rgba(16,24,40,0.04);
-      }
-      .cart-row { display:flex; justify-content:space-between; gap:10px; align-items:center; margin-bottom:8px; }
-      .cart-row small { color:#666; }
-      .cart-total { font-weight:700; font-size:1.05rem; margin-top:10px; text-align:right; }
+      button.btn { cursor:pointer; }
 
-      /* Bank details */
-      .bank-box { background:rgba(2,62,138,0.03); padding:12px; border-radius:8px; color:#053069; margin-bottom:12px; }
-
-      /* Sandbox banner */
-      .sandbox-banner { background:#fff3cd; color:#856404; border:1px solid #ffeeba; padding:10px; border-radius:6px; margin-bottom:12px; }
-
-      @media (max-width: 575.98px) {
-        .merch-card img { height:180px; }
+      @media (max-width:575px) {
+        .hero-wrap { padding:24px 12px; }
+        .merch-card img { height:160px; }
+        .qr-img { max-width:200px; }
       }
     </style>
   </head>
 
   <body>
     <!-- NAV -->
-    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
-      <div class="container">
-        <a class="navbar-brand d-flex align-items-center" href="index.html">
+    <nav style="background:#06323a; padding:10px 0; color:#fff;">
+      <div class="container" style="display:flex; align-items:center;">
+        <a href="index.html" style="display:flex; align-items:center; text-decoration:none; color:inherit;">
           <img src="images/logo.png" alt="IcTiosCusco logo" />
-          <span>IcTiosCusco</span>
+          <span style="font-weight:700; margin-left:6px;">IcTiosCusco</span>
         </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
-                aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="oi oi-menu"></span> Menu
-        </button>
-
-        <div class="collapse navbar-collapse" id="ftco-nav">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item"><a href="index.html" class="nav-link">Inicio</a></li>
-            <li class="nav-item"><a href="about.html" class="nav-link">Nosotros</a></li>
-            <li class="nav-item"><a href="causes.html" class="nav-link">Proyectos</a></li>
-            <li class="nav-item active"><a href="donate.html" class="nav-link">Donación</a></li>
-            <li class="nav-item"><a href="blog.html" class="nav-link">Noticias</a></li>
-            <li class="nav-item"><a href="gallery.html" class="nav-link">Galería</a></li>
-            <li class="nav-item"><a href="event.html" class="nav-link">Miembros</a></li>
-            <li class="nav-item"><a href="recursos.html" class="nav-link">Recursos</a></li>
-            <li class="nav-item"><a href="contact.html" class="nav-link">Contacto</a></li>
-          </ul>
-        </div>
       </div>
     </nav>
-    <!-- END NAV -->
 
-    <!-- HERO -->
-    <div class="hero-wrap" style="background-image: url('images/donate_hero.jpg');" data-stellar-background-ratio="0.5">
-      <div class="overlay"></div>
-      <div class="container">
-        <div class="row no-gutters slider-text align-items-center justify-content-center">
-          <div class="col-md-8 text-center">
-            <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Inicio</a></span> <span>Donación</span></p>
-            <h1 class="mb-3">Apoya nuestro trabajo</h1>
-            <p class="mb-4">Tu aporte mantiene muestreos, análisis genéticos y talleres con comunidades. Gracias.</p>
+    <div class="container">
+      <!-- HERO -->
+      <div class="hero-wrap" role="img" aria-label="Apoya IcTiosCusco">
+        <div style="max-width:900px; margin:0 auto; text-align:center; padding:40px 18px;">
+          <h1 style="margin:0 0 8px; font-weight:700;">Apoya nuestro trabajo</h1>
+          <p style="margin:0; font-size:1.05rem;">Tu aporte mantiene muestreos, análisis genéticos y talleres con comunidades. Gracias.</p>
+        </div>
+      </div>
+
+      <!-- CONTENT -->
+      <div style="display:flex; gap:18px; flex-wrap:wrap;">
+        <div style="flex:1 1 680px; min-width:300px;">
+          <!-- Donación rápida -->
+          <div class="donate-panel">
+            <h3 style="margin-top:0;">Donar ahora</h3>
+
+            <div id="sandbox-note" class="sandbox-banner" style="display:none;">Modo sandbox activo — los pagos son de prueba.</div>
+
+            <p>Elige un monto o escribe el que desees. Se abrirá PayPal para completar el pago.</p>
+
+            <div style="margin-bottom:12px; display:flex; gap:8px; flex-wrap:wrap;">
+              <button class="btn btn-outline-primary quick-amount" data-amount="10">$ 10</button>
+              <button class="btn btn-outline-primary quick-amount" data-amount="25">$ 25</button>
+              <button class="btn btn-outline-primary quick-amount" data-amount="50">$ 50</button>
+              <button class="btn btn-outline-primary quick-amount" data-amount="100">$ 100</button>
+            </div>
+
+            <div style="display:flex; gap:8px; align-items:center; margin-bottom:12px;">
+              <input id="custom-amount" type="number" min="1" step="1" class="form-control" placeholder="Otro monto (USD)" style="max-width:180px;">
+              <div id="paypal-donate-button" style="margin-left:8px;"></div>
+              <!-- fallback donate button (old flow) -->
+              <button id="donate-paypal" class="btn btn-primary" style="margin-left:8px;">Donar (fallback)</button>
+            </div>
+
+            <small class="muted-small">Si tu cuenta no acepta USD, usa el botón de transferencia bancaria o el QR para PLIN.</small>
+          </div>
+
+          <!-- Merch -->
+          <div class="donate-panel">
+            <h3 style="margin-top:0;">Tienda solidaria</h3>
+            <p>Adquiere merch y recibe tu pedido. Los ingresos ayudan a financiar actividades de campo.</p>
+
+            <div class="merch-grid" id="merch-grid">
+              <div class="merch-card">
+                <img src="images/merch_polo.jpg" alt="Polo IcTiosCusco">
+                <div style="padding:14px; display:flex; flex-direction:column; gap:8px;">
+                  <div><h4 style="margin:0">Polo IcTiosCusco</h4><p style="margin:0">$ 16</p></div>
+                  <div style="display:flex; gap:8px; align-items:center;">
+                    <input type="number" class="form-control merch-qty" data-id="polo" value="1" min="1" style="width:80px;">
+                    <button class="btn btn-outline-primary btn-sm add-to-cart" data-id="polo" data-name="Polo IcTiosCusco" data-price="16">Agregar</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="merch-card">
+                <img src="images/merch_tomatodo.jpg" alt="Tomatodo IcTiosCusco">
+                <div style="padding:14px; display:flex; flex-direction:column; gap:8px;">
+                  <div><h4 style="margin:0">Tomatodo</h4><p style="margin:0">$ 11</p></div>
+                  <div style="display:flex; gap:8px; align-items:center;">
+                    <input type="number" class="form-control merch-qty" data-id="botella" value="1" min="1" style="width:80px;">
+                    <button class="btn btn-outline-primary btn-sm add-to-cart" data-id="botella" data-name="Tomatodo IcTiosCusco" data-price="11">Agregar</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="merch-card">
+                <img src="images/merch_foto.jpg" alt="Foto IcTiosCusco">
+                <div style="padding:14px; display:flex; flex-direction:column; gap:8px;">
+                  <div><h4 style="margin:0">Foto 20x30 cm</h4><p style="margin:0">$ 32</p></div>
+                  <div style="display:flex; gap:8px; align-items:center;">
+                    <input type="number" class="form-control merch-qty" data-id="foto" value="1" min="1" style="width:80px;">
+                    <button class="btn btn-outline-primary btn-sm add-to-cart" data-id="foto" data-name="Foto enmarcada IcTiosCusco" data-price="32">Agregar</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top:16px;">
+              <div class="cart" id="cart">
+                <h5 style="margin-top:0;">Carrito</h5>
+                <div id="cart-rows"><p class="muted-small">No hay artículos en el carrito.</p></div>
+                <div class="cart-total" id="cart-total">Total: $ 0</div>
+
+                <div style="display:flex; gap:8px; margin-top:12px; align-items:center;">
+                  <div id="paypal-cart-button"></div>
+                  <button id="checkout-paypal" class="btn btn-primary">Pagar (fallback)</button>
+                  <button id="order-mail" class="btn btn-outline-primary">Enviar pedido por correo</button>
+                </div>
+
+                <small class="muted-small d-block mt-2">Si PayPal no funciona, usa el QR para PLIN o la transferencia bancaria.</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right column -->
+        <div style="flex:0 1 360px; min-width:260px;">
+          <div class="donate-panel">
+            <h4 style="margin-top:0;">Contacto / Facturación</h4>
+            <form id="donation-contact-form">
+              <input name="name" class="form-control" placeholder="Tu nombre" required style="margin-bottom:8px;">
+              <input name="email" type="email" class="form-control" placeholder="Tu correo" required style="margin-bottom:8px;">
+              <input name="subject" type="text" class="form-control" placeholder="Asunto (p. ej. Donación / Pedido)" style="margin-bottom:8px;">
+              <textarea name="message" class="form-control" rows="4" placeholder="Consulta o pedido" required style="margin-bottom:8px;"></textarea>
+              <button type="submit" class="btn btn-primary">Enviar consulta</button>
+              <div id="don-form-response" aria-live="polite" style="display:none; margin-top:8px;"></div>
+            </form>
+
+            <!-- QR para PLIN -->
+            <div class="qr-box" aria-label="QR para PLIN">
+              <!-- Reemplaza 'images/qr_plin.png' por tu archivo real del QR -->
+              <a href="images/qr_plin.png" target="_blank" rel="noopener noreferrer" title="Abrir QR en tamaño completo">
+                <img src="images/qr_plin.png" alt="QR PLIN IcTiosCusco" class="qr-img">
+              </a>
+              <div class="qr-caption">Escanea con tu app bancaria (PLIN / app móvil) para donar</div>
+              <small style="display:block; margin-top:6px; color:#55686f;">Si tu banco no reconoce PLIN, comparte el comprobante a <a href="mailto:ictioscusco@gmail.com">ictioscusco@gmail.com</a>.</small>
+            </div>
+          </div>
+
+          <div class="donate-panel" style="margin-top:18px;">
+            <h5>¿Por qué donar?</h5>
+            <ul>
+              <li>Financiar muestreos de campo y redes de monitoreo.</li>
+              <li>Soportar análisis genéticos y conservación de hábitat.</li>
+              <li>Programas educativos con escuelas locales.</li>
+            </ul>
           </div>
         </div>
       </div>
+
+      <footer style="margin-top:28px; text-align:center; color:#55686f;">
+        <p>IcTiosCusco — &copy; <span id="year"></span></p>
+      </footer>
     </div>
 
-    <!-- CONTENT -->
-    <section class="ftco-section">
-      <div class="container">
-        <div class="row">
-
-          <!-- Left: Donación directa + merch -->
-          <div class="col-lg-8">
-            <!-- Donación rápida -->
-            <div class="donate-panel" id="donate-panel">
-              <h3>Donar ahora</h3>
-
-              <div id="sandbox-note" class="sandbox-banner" style="display:none;">
-                Modo sandbox activo — los pagos son de prueba. No se moverá dinero real.
-              </div>
-
-              <p>Elige un monto rápido o ingresa el monto que desees. Donación segura vía PayPal. También puedes transferir directamente vía bancaria.</p>
-
-              <div class="donate-quick">
-                <div class="donate-amounts" role="group" aria-label="Montos rápidos">
-                  <button class="btn btn-outline-primary" data-amount="10">$ 10</button>
-                  <button class="btn btn-outline-primary" data-amount="25">$ 25</button>
-                  <button class="btn btn-outline-primary" data-amount="50">$ 50</button>
-                  <button class="btn btn-outline-primary" data-amount="100">$ 100</button>
-                </div>
-
-                <div style="display:flex; gap:10px; align-items:center; margin-bottom:10px;">
-                  <label for="custom-amount" class="sr-only">Monto personalizado</label>
-                  <input id="custom-amount" type="number" min="1" step="1" class="form-control" placeholder="Otro monto (USD)" style="max-width:200px">
-                  <button id="donate-paypal" class="btn btn-primary">Donar con PayPal</button>
-                </div>
-
-                <small class="muted-small">Nota: se abrirá PayPal para completar el pago. Reemplaza el email de negocio en el código si aún no lo has hecho.</small>
-              </div>
-
-              <hr>
-
-              <!-- Bank transfer -->
-              <h5>Transferencia bancaria</h5>
-              <div class="bank-box" role="region" aria-label="Datos bancarios">
-                <!-- REEMPLAZA con tus datos bancarios reales -->
-                <strong>Banco:</strong> Banco de Ejemplo (REEMPLAZAR)<br>
-                <strong>Titular:</strong> IcTiosCusco (REEMPLAZAR)<br>
-                <strong>Cuenta:</strong> 123-456-789 (REEMPLAZAR)<br>
-                <strong>IBAN/Referencia:</strong> 00123456789012345678 (REEMPLAZAR)<br>
-                <small class="muted-small">Envía el comprobante a <a href="mailto:ictioscusco@gmail.com">ictioscusco@gmail.com</a> para validar la donación.</small>
-              </div>
-            </div>
-
-            <!-- Merch / tienda -->
-            <div class="donate-panel">
-              <h3>Tienda solidaria — productos para apoyar</h3>
-              <p>Adquiere merch y recibe tu pedido. Los ingresos ayudan a financiar actividades de campo y educación.</p>
-
-              <div class="merch-grid" id="merch-grid">
-                <!-- CARD 1: Polo -->
-                <div class="merch-card">
-                  <img src="images/merch_polo.jpg" alt="Polo IcTiosCusco">
-                  <div class="body">
-                    <div>
-                      <h4>Polo IcTiosCusco</h4>
-                      <p>Camiseta de algodón con logo — Tallas S/M/L/XL.</p>
-                      <strong>$ 16</strong>
-                    </div>
-                    <div style="display:flex; gap:8px; align-items:center; margin-top:6px;">
-                      <label style="margin:0;">Cant</label>
-                      <input type="number" class="form-control merch-qty" data-id="polo" value="1" min="1" style="width:80px;">
-                      <button class="btn btn-outline-primary btn-sm add-to-cart" data-id="polo" data-name="Polo IcTiosCusco" data-price="16">Agregar</button>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- CARD 2: Tomatodo -->
-                <div class="merch-card">
-                  <img src="images/merch_tomatodo.jpg" alt="Tomatodo IcTiosCusco">
-                  <div class="body">
-                    <div>
-                      <h4>Tomatodo (Botella)</h4>
-                      <p>Botella térmica con logo — 500 ml.</p>
-                      <strong>$ 11</strong>
-                    </div>
-                    <div style="display:flex; gap:8px; align-items:center; margin-top:6px;">
-                      <label style="margin:0;">Cant</label>
-                      <input type="number" class="form-control merch-qty" data-id="botella" value="1" min="1" style="width:80px;">
-                      <button class="btn btn-outline-primary btn-sm add-to-cart" data-id="botella" data-name="Tomatodo IcTiosCusco" data-price="11">Agregar</button>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- CARD 3: Foto encuadrada -->
-                <div class="merch-card">
-                  <img src="images/merch_foto.jpg" alt="Foto encuadrada IcTiosCusco">
-                  <div class="body">
-                    <div>
-                      <h4>Fotografía encuadrada</h4>
-                      <p>Impresión 20x30 cm enmarcada — edición limitada.</p>
-                      <strong>$ 32</strong>
-                    </div>
-                    <div style="display:flex; gap:8px; align-items:center; margin-top:6px;">
-                      <label style="margin:0;">Cant</label>
-                      <input type="number" class="form-control merch-qty" data-id="foto" value="1" min="1" style="width:80px;">
-                      <button class="btn btn-outline-primary btn-sm add-to-cart" data-id="foto" data-name="Foto encuadrada IcTiosCusco" data-price="32">Agregar</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Carrito -->
-              <div style="margin-top:16px;">
-                <div class="cart" id="cart">
-                  <h5>Carrito</h5>
-                  <div id="cart-rows">
-                    <p class="muted-small">No hay artículos en el carrito.</p>
-                  </div>
-                  <div class="cart-total" id="cart-total">Total: $ 0</div>
-
-                  <div style="display:flex; gap:8px; margin-top:12px;">
-                    <button id="checkout-paypal" class="btn btn-primary">Pagar con PayPal</button>
-                    <button id="order-mail" class="btn btn-outline-primary">Enviar pedido por correo</button>
-                  </div>
-
-                  <small class="muted-small d-block mt-2">Al pagar por PayPal se abrirá una ventana nueva. Si no usas PayPal, usa "Enviar pedido por correo" para coordinar pago y envío.</small>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-          <!-- Right column: info y formulario de contacto -->
-          <div class="col-lg-4">
-            <div class="donate-panel">
-              <h4>¿Necesitas factura o coordinar donación grande?</h4>
-              <p>Escríbenos y coordinamos recibos, facturación o convenios institucionales.</p>
-
-              <!-- Contact / pedido fallback (envía a Formspree) -->
-              <form id="donation-contact-form" class="volunter-form">
-                <div class="form-group">
-                  <input name="name" type="text" class="form-control" placeholder="Tu nombre" required>
-                </div>
-                <div class="form-group">
-                  <input name="email" type="email" class="form-control" placeholder="Tu correo" required>
-                </div>
-                <div class="form-group">
-                  <input name="subject" type="text" class="form-control" placeholder="Asunto (p. ej. Donación / Pedido)">
-                </div>
-                <div class="form-group">
-                  <textarea name="message" cols="30" rows="5" class="form-control" placeholder="Escribe tu consulta o indica pedido/importe" required></textarea>
-                </div>
-
-                <div class="form-group">
-                  <button type="submit" class="btn btn-primary py-2 px-4">Enviar consulta</button>
-                </div>
-
-                <div id="don-form-response" aria-live="polite" style="display:none; margin-top:8px;"></div>
-              </form>
-
-              <hr>
-
-              <h5>Contacto rápido</h5>
-              <p><strong>WhatsApp:</strong> <a href="https://wa.me/51969392189" target="_blank" rel="noopener">+51 969 392 189</a></p>
-              <p><strong>Email:</strong> <a href="mailto:ictioscusco@gmail.com">ictioscusco@gmail.com</a></p>
-            </div>
-
-            <div class="donate-panel" style="margin-top:18px;">
-              <h5>¿Por qué donar?</h5>
-              <ul>
-                <li>Financiar muestreos de campo y redes de monitoreo.</li>
-                <li>Soportar análisis genéticos y conservación de hábitat.</li>
-                <li>Programas educativos con escuelas locales.</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- FOOTER (igual al index, con FB e IG) -->
-    <footer class="ftco-footer ftco-section img">
-      <div class="overlay"></div>
-      <div class="container">
-        <div class="row mb-5">
-          <div class="col-md-3">
-            <div class="ftco-footer-widget mb-4">
-              <h2 class="ftco-heading-2">Sobre IcTiosCusco</h2>
-              <p>Grupo de investigación dedicado a la conservación y estudio de peces andinos (Orestias) en la región de Cusco.</p>
-              <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
-                <li class="ftco-animate">
-                  <a href="https://www.facebook.com/ConGeniusRockie" target="_blank" rel="noopener" aria-label="Facebook">
-                    <span class="icon-facebook"></span>
-                  </a>
-                </li>
-                <li class="ftco-animate">
-                  <a href="https://www.instagram.com/ictioscusco?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener" aria-label="Instagram">
-                    <span class="icon-instagram"></span>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="ftco-footer-widget mb-4">
-              <h2 class="ftco-heading-2">Publicaciones recientes</h2>
-              <div class="block-21 mb-4 d-flex">
-                <a class="blog-img mr-4" style="background-image: url(images/noticia_1.jpg);"></a>
-                <div class="text">
-                  <h3 class="heading"><a href="#">Resultados preliminares de Huaypo</a></h3>
-                  <div class="meta">
-                    <div><a href="#"><span class="icon-calendar"></span> Sept 10, 2024</a></div>
-                    <div><a href="#"><span class="icon-person"></span> IcTiosCusco</a></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-2">
-            <div class="ftco-footer-widget mb-4 ml-md-4">
-              <h2 class="ftco-heading-2">Enlaces</h2>
-              <ul class="list-unstyled">
-                <li><a href="index.html" class="py-2 d-block">Inicio</a></li>
-                <li><a href="about.html" class="py-2 d-block">Quiénes somos</a></li>
-                <li><a href="donate.html" class="py-2 d-block">Donación</a></li>
-                <li><a href="causes.html" class="py-2 d-block">Proyectos</a></li>
-                <li><a href="event.html" class="py-2 d-block">Miembros</a></li>
-                <li><a href="blog.html" class="py-2 d-block">Noticias</a></li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="col-md-3">
-            <div class="ftco-footer-widget mb-4">
-              <h2 class="ftco-heading-2">¿Tienes preguntas?</h2>
-              <div class="block-23 mb-3">
-                <ul>
-                  <li><span class="icon icon-map-marker"></span><span class="text">Cusco, Perú</span></li>
-                  <li><a href="tel:+51969392189"><span class="icon icon-phone"></span><span class="text">+51 969 392 189</span></a></li>
-                  <li><a href="mailto:ictioscusco@gmail.com"><span class="icon icon-envelope"></span><span class="text">ictioscusco@gmail.com</span></a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        <div class="row">
-          <div class="col-md-12 text-center">
-            <p>Copyright &copy;<script>document.write(new Date().getFullYear());</script> IcTiosCusco. Todos los derechos reservados.</p>
-          </div>
-        </div>
-      </div>
-    </footer>
-
-    <!-- loader -->
-    <div id="ftco-loader" class="show fullscreen">
-      <svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg>
-    </div>
-
-    <!-- SCRIPTS -->
-    <script src="js/jquery.min.js"></script>
-    <script src="js/jquery-migrate-3.0.1.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/jquery.easing.1.3.js"></script>
-    <script src="js/jquery.waypoints.min.js"></script>
-    <script src="js/jquery.stellar.min.js"></script>
-    <script src="js/owl.carousel.min.js"></script>
-    <script src="js/jquery.magnific-popup.min.js"></script>
-    <script src="js/aos.js"></script>
-    <script src="js/jquery.animateNumber.min.js"></script>
-    <script src="js/bootstrap-datepicker.js"></script>
-    <script src="js/jquery.timepicker.min.js"></script>
-    <script src="js/scrollax.min.js"></script>
-    <script src="js/google-map.js"></script>
-    <script src="js/main.js"></script>
+    <!-- PayPal SDK (client-id: deja el tuyo o usa sandbox) -->
+    <script src="https://www.paypal.com/sdk/js?client-id=AWMIl1fVzTcslis3zlHjT&currency=USD"></script>
 
     <script>
+      document.getElementById('year').innerText = new Date().getFullYear();
+
       document.addEventListener('DOMContentLoaded', function () {
-        // Navbar scrolled behavior (igual que en index)
-        var navbar = document.getElementById('ftco-navbar');
-        var navCollapse = $('#ftco-nav');
-        function checkScroll(){ if(window.scrollY>50) navbar.classList.add('scrolled'); else navbar.classList.remove('scrolled'); }
-        checkScroll();
-        window.addEventListener('scroll', checkScroll, { passive: true });
-        if (navCollapse.length) {
-          navCollapse.on('shown.bs.collapse', function () { navbar.classList.add('scrolled'); });
-          navCollapse.on('hidden.bs.collapse', function () { if (window.scrollY <= 50) navbar.classList.remove('scrolled'); });
-        }
-
-        /* ---------------------------
-           UTIL: crear input hidden para formularios PayPal
-           --------------------------- */
-        function createHidden(name, value) {
-          const inp = document.createElement('input');
-          inp.type = 'hidden';
-          inp.name = name;
-          inp.value = value;
-          return inp;
-        }
-
-        /* ---------------------------
-           PAYPAL CONFIG (Sandbox / Live switch)
-           --------------------------- */
-        // MODO PRUEBAS: setea true para usar sandbox
-        const USE_SANDBOX = false; // <- Cambia a true para pruebas en sandbox
-        // Correo sandbox (obténlo en developer.paypal.com si pruebas)
-        const PAYPAL_SANDBOX_EMAIL = 'sb-opca146972674@business.example.com'; // ejemplo sandbox
-        // Correo live (tu cuenta real de negocio)
-        const PAYPAL_LIVE_EMAIL = 'ictioscusco@gmail.com'; // ya lo pusiste
-        // Currency: ahora en USD
+        // CONFIG
+        const USE_SANDBOX = false; // true para pruebas sandbox
+        const PAYPAL_SANDBOX_EMAIL = 'sb-opca146972674@business.example.com'; // sandbox example
+        const PAYPAL_LIVE_EMAIL = 'ictioscusco@gmail.com';
         let PAYPAL_CURRENCY = 'USD';
         const PAYPAL_BUSINESS = USE_SANDBOX ? PAYPAL_SANDBOX_EMAIL : PAYPAL_LIVE_EMAIL;
         const PAYPAL_ENDPOINT = USE_SANDBOX ? 'https://www.sandbox.paypal.com/cgi-bin/webscr' : 'https://www.paypal.com/cgi-bin/webscr';
+        if (USE_SANDBOX && document.getElementById('sandbox-note')) document.getElementById('sandbox-note').style.display='block';
 
-        // Mostrar banner sandbox si está activo
-        if (USE_SANDBOX && document.getElementById('sandbox-note')) {
-          document.getElementById('sandbox-note').style.display = 'block';
-        }
+        // Util
+        function escapeHtml(text) { return (''+text).replace(/[&<>"']/g, function (m) { return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#039;"})[m]; }); }
 
-        // abrir ventana nueva sin URL primero para reducir bloqueo de popup
-        function submitFormToNewWindow(form) {
-          const win = window.open('', 'paypalWindow' + Math.floor(Math.random()*100000));
-          if(!win) {
-            alert('Tu navegador bloqueó la apertura de ventanas. Permite popups para este sitio e inténtalo de nuevo.');
-            return false;
-          }
-          form.target = win.name;
-          document.body.appendChild(form);
-          form.submit();
-          form.remove();
-          return true;
-        }
-
-        // Abrir pago por donación simple (single)
-        function openPaypalSingle(amount) {
-          if (!PAYPAL_BUSINESS) {
-            alert('No está configurado el correo de PayPal. Revisa el código.');
-            return;
-          }
-          const form = document.createElement('form');
-          form.method = 'post';
-          form.action = PAYPAL_ENDPOINT;
-          form.style.display = 'none';
-
-          // cmd _donations para botones de donación
-          form.appendChild(createHidden('cmd', '_donations'));
-          form.appendChild(createHidden('business', PAYPAL_BUSINESS));
-          form.appendChild(createHidden('item_name', 'Donación a IcTiosCusco'));
-          form.appendChild(createHidden('amount', Number(amount).toFixed(2)));
-          form.appendChild(createHidden('currency_code', PAYPAL_CURRENCY));
-          form.appendChild(createHidden('return', window.location.href));
-          form.appendChild(createHidden('cancel_return', window.location.href));
-
-          const ok = submitFormToNewWindow(form);
-          if(!ok) {
-            // fallback: abrir URL construida (menos parámetros, pero útil)
-            const url = PAYPAL_ENDPOINT + '?cmd=_donations&business=' + encodeURIComponent(PAYPAL_BUSINESS) + '&amount=' + encodeURIComponent(Number(amount).toFixed(2)) + '&currency_code=' + encodeURIComponent(PAYPAL_CURRENCY);
-            window.open(url, '_blank', 'noopener');
-          }
-        }
-
-        /* ---------------------------
-           MERCH CART (cliente)
-           --------------------------- */
-        const cart = {}; // { id: {id,name,price,qty} }
-
+        // CART logic (same as before)
+        const cart = {};
         function addToCart(id, name, price, qty) {
           qty = Number(qty) || 1;
           if (cart[id]) cart[id].qty += qty;
           else cart[id] = { id, name, price: Number(price), qty };
           renderCart();
         }
-
-        function removeFromCart(id) {
-          delete cart[id];
-          renderCart();
-        }
-
+        function removeFromCart(id) { delete cart[id]; renderCart(); }
         function renderCart() {
           const rows = document.getElementById('cart-rows');
           rows.innerHTML = '';
@@ -527,22 +280,10 @@
             rows.appendChild(div);
           });
           document.getElementById('cart-total').innerText = 'Total: $ ' + total.toFixed(2);
-
-          // bind remove buttons
           document.querySelectorAll('.remove-cart').forEach(function (b) {
-            b.addEventListener('click', function () {
-              const id = this.getAttribute('data-id');
-              removeFromCart(id);
-            });
+            b.addEventListener('click', function () { removeFromCart(this.getAttribute('data-id')); });
           });
         }
-
-        // escape helper
-        function escapeHtml(text) {
-          return (''+text).replace(/[&<>"']/g, function (m) { return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#039;"})[m]; });
-        }
-
-        // add-to-cart handlers
         document.querySelectorAll('.add-to-cart').forEach(function (btn) {
           btn.addEventListener('click', function () {
             const id = this.getAttribute('data-id');
@@ -554,145 +295,141 @@
           });
         });
 
-        /* ---------------------------
-           CHECKOUT CART -> PAYPAL
-           - abre ventana new window para evitar popup blocking
-           --------------------------- */
-        function checkoutPaypalCart(cartObj) {
-          if (!PAYPAL_BUSINESS) {
-            alert('Por favor configura PAYPAL_BUSINESS en el código para habilitar checkout.');
-            return;
-          }
-          const form = document.createElement('form');
-          form.method = 'post';
-          form.action = PAYPAL_ENDPOINT;
-          form.style.display = 'none';
+        // ---------- PayPal Buttons (SDK) ----------
+        if (typeof paypal !== 'undefined' && paypal.Buttons) {
+          paypal.Buttons({
+            style: { layout: 'vertical', color: 'gold', shape: 'rect', label: 'donate' },
+            createOrder: function (data, actions) {
+              const raw = Number(document.getElementById('custom-amount').value || 0);
+              if (!raw || raw <= 0) { alert('Ingrese un monto válido para donar.'); throw new Error('Monto inválido'); }
+              return actions.order.create({
+                purchase_units: [{
+                  amount: { currency_code: PAYPAL_CURRENCY, value: raw.toFixed(2) },
+                  payee: { email_address: PAYPAL_BUSINESS },
+                  description: 'Donación a IcTiosCusco'
+                }]
+              });
+            },
+            onApprove: function (data, actions) {
+              return actions.order.capture().then(function (details) {
+                alert('Gracias por tu donación, ' + (details.payer.name?.given_name || '') + '!');
+                document.getElementById('custom-amount').value = '';
+              });
+            },
+            onError: function (err) {
+              console.error('PayPal donate error:', err);
+              alert('Ocurrió un error con PayPal. Revisa la consola para más detalles.');
+            }
+          }).render('#paypal-donate-button');
 
-          form.appendChild(createHidden('cmd', '_cart'));
-          form.appendChild(createHidden('upload', '1'));
-          form.appendChild(createHidden('business', PAYPAL_BUSINESS));
-          form.appendChild(createHidden('currency_code', PAYPAL_CURRENCY));
-
-          let i = 1;
-          Object.values(cartObj).forEach(function (it) {
-            form.appendChild(createHidden('item_name_' + i, it.name));
-            form.appendChild(createHidden('amount_' + i, it.price.toFixed(2)));
-            form.appendChild(createHidden('quantity_' + i, it.qty));
-            i++;
-          });
-
-          form.appendChild(createHidden('return', window.location.href));
-          form.appendChild(createHidden('cancel_return', window.location.href));
-
-          const ok = submitFormToNewWindow(form);
-          if(!ok) {
-            alert('Tu navegador bloqueó la ventana de pago. Revisa tu bloqueador de popups o intenta pagar directamente en PayPal.');
-            document.body.appendChild(form);
-            form.submit();
-            form.remove();
-          }
+          // Cart checkout button via SDK (optional)
+          paypal.Buttons({
+            style: { layout: 'horizontal', color: 'blue', shape: 'rect', label: 'checkout' },
+            createOrder: function (data, actions) {
+              const items = Object.values(cart);
+              if (!items.length) { alert('El carrito está vacío.'); throw new Error('Carrito vacío'); }
+              let itemTotal = 0;
+              const purchaseItems = items.map(function (it) {
+                const unit = Number(it.price).toFixed(2);
+                itemTotal += Number(unit) * Number(it.qty);
+                return { name: it.name, unit_amount: { currency_code: PAYPAL_CURRENCY, value: unit }, quantity: String(it.qty) };
+              });
+              return actions.order.create({
+                purchase_units: [{
+                  amount: {
+                    currency_code: PAYPAL_CURRENCY,
+                    value: itemTotal.toFixed(2),
+                    breakdown: { item_total: { currency_code: PAYPAL_CURRENCY, value: itemTotal.toFixed(2) } }
+                  },
+                  items: purchaseItems,
+                  payee: { email_address: PAYPAL_BUSINESS },
+                  description: 'Compra tienda IcTiosCusco'
+                }]
+              });
+            },
+            onApprove: function (data, actions) {
+              return actions.order.capture().then(function (details) {
+                alert('Pago completado. ¡Gracias por tu compra, ' + (details.payer.name?.given_name || '') + '!');
+                Object.keys(cart).forEach(k => delete cart[k]); renderCart();
+              });
+            },
+            onError: function (err) {
+              console.error('PayPal cart error:', err);
+              alert('Error en PayPal. Revisa la consola.');
+            }
+          }).render('#paypal-cart-button');
         }
 
-        // Bind quick amount buttons
-        document.querySelectorAll('.donate-amounts button').forEach(function (btn) {
-          btn.addEventListener('click', function () {
-            document.getElementById('custom-amount').value = btn.getAttribute('data-amount');
-          });
-        });
-
-        // Donate with PayPal button
+        // fallback donate button (old flow) - opens classic PayPal donations
+        function createHidden(name, value) {
+          const inp = document.createElement('input'); inp.type='hidden'; inp.name=name; inp.value=value; return inp;
+        }
+        function submitFormToNewWindow(form) {
+          const win = window.open('', 'paypalWindow' + Math.floor(Math.random()*100000));
+          if(!win) { alert('Tu navegador bloqueó la apertura de ventanas. Permite popups para este sitio e inténtalo de nuevo.'); return false; }
+          form.target = win.name; document.body.appendChild(form); form.submit(); form.remove(); return true;
+        }
         document.getElementById('donate-paypal').addEventListener('click', function () {
           const val = Number(document.getElementById('custom-amount').value || 0);
           if (!val || val <= 0) { alert('Ingresa un monto válido.'); return; }
-          openPaypalSingle(val.toFixed(2));
+          const form = document.createElement('form'); form.method='post'; form.action=PAYPAL_ENDPOINT; form.style.display='none';
+          form.appendChild(createHidden('cmd','_donations'));
+          form.appendChild(createHidden('business', PAYPAL_BUSINESS));
+          form.appendChild(createHidden('item_name','Donación a IcTiosCusco'));
+          form.appendChild(createHidden('amount', val.toFixed(2)));
+          form.appendChild(createHidden('currency_code', PAYPAL_CURRENCY));
+          form.appendChild(createHidden('return', window.location.href));
+          form.appendChild(createHidden('cancel_return', window.location.href));
+          if (!submitFormToNewWindow(form)) {
+            const url = PAYPAL_ENDPOINT + '?cmd=_donations&business=' + encodeURIComponent(PAYPAL_BUSINESS) + '&amount=' + encodeURIComponent(val.toFixed(2)) + '&currency_code=' + encodeURIComponent(PAYPAL_CURRENCY);
+            window.open(url, '_blank', 'noopener');
+          }
         });
 
-        // Checkout cart PayPal
+        // Cart fallback checkout (classic)
         document.getElementById('checkout-paypal').addEventListener('click', function () {
           if (!Object.keys(cart).length) { alert('El carrito está vacío. Agrega productos antes de pagar.'); return; }
-          checkoutPaypalCart(cart);
+          const form = document.createElement('form'); form.method='post'; form.action=PAYPAL_ENDPOINT; form.style.display='none';
+          form.appendChild(createHidden('cmd','_cart')); form.appendChild(createHidden('upload','1')); form.appendChild(createHidden('business',PAYPAL_BUSINESS)); form.appendChild(createHidden('currency_code',PAYPAL_CURRENCY));
+          let i=1; Object.values(cart).forEach(function(it){ form.appendChild(createHidden('item_name_'+i,it.name)); form.appendChild(createHidden('amount_'+i,it.price.toFixed(2))); form.appendChild(createHidden('quantity_'+i,it.qty)); i++; });
+          form.appendChild(createHidden('return', window.location.href)); form.appendChild(createHidden('cancel_return', window.location.href));
+          if (!submitFormToNewWindow(form)) { document.body.appendChild(form); form.submit(); form.remove(); }
         });
 
-        /* ---------------------------
-           Order by email (Formspree) — fallback for customers without PayPal
-           --------------------------- */
+        // Order by email (Formspree)
         const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xqalnaaj';
         document.getElementById('order-mail').addEventListener('click', function () {
           if (!Object.keys(cart).length) { alert('El carrito está vacío. Agrega productos antes de enviar pedido.'); return; }
-          const name = prompt('Nombre para el pedido (obligatorio):');
-          if (!name) return alert('Nombre requerido.');
-          const email = prompt('Correo electrónico de contacto (obligatorio):');
-          if (!email) return alert('Correo requerido.');
-          let msg = 'Pedido tienda IcTiosCusco:\n\n';
-          let total = 0;
-          Object.values(cart).forEach(function (it) {
-            msg += `${it.name} — $ ${it.price.toFixed(2)} x ${it.qty}\n`;
-            total += it.price * it.qty;
-          });
+          const name = prompt('Nombre para el pedido (obligatorio):'); if (!name) return alert('Nombre requerido.');
+          const email = prompt('Correo electrónico de contacto (obligatorio):'); if (!email) return alert('Correo requerido.');
+          let msg = 'Pedido tienda IcTiosCusco:\n\n'; let total=0;
+          Object.values(cart).forEach(function(it){ msg += `${it.name} — $ ${it.price.toFixed(2)} x ${it.qty}\n`; total += it.price * it.qty; });
           msg += `\nTotal aproximado: $ ${total.toFixed(2)}\n\nPor favor indicar método de pago y datos de envío.`;
-          const data = new FormData();
-          data.append('name', name);
-          data.append('email', email);
-          data.append('subject', 'Pedido tienda — ' + name);
-          data.append('message', msg);
-
-          fetch(FORMSPREE_ENDPOINT, {
-            method: 'POST',
-            headers: { 'Accept': 'application/json' },
-            body: data
-          }).then(function (resp) {
-            if (resp.ok) {
-              alert('Pedido enviado. Te contactaremos por correo para coordinar pago/envío.');
-              Object.keys(cart).forEach(k => delete cart[k]);
-              renderCart();
-            } else {
-              alert('No se pudo enviar el pedido. Intenta luego o escríbenos a ictioscusco@gmail.com.');
-            }
-          }).catch(function () {
-            alert('Error de conexión. Intenta luego o escríbenos a ictioscusco@gmail.com.');
-          });
+          const data = new FormData(); data.append('name', name); data.append('email', email); data.append('subject', 'Pedido tienda — ' + name); data.append('message', msg);
+          fetch(FORMSPREE_ENDPOINT, { method:'POST', headers:{ 'Accept':'application/json' }, body: data }).then(function (resp) {
+            if (resp.ok) { alert('Pedido enviado. Te contactaremos por correo.'); Object.keys(cart).forEach(k => delete cart[k]); renderCart(); }
+            else { alert('No se pudo enviar el pedido. Intenta luego o escríbenos a ictioscusco@gmail.com.'); }
+          }).catch(function(){ alert('Error de conexión. Intenta luego o escríbenos a ictioscusco@gmail.com.'); });
         });
 
-        /* ---------------------------
-           Donation / contact form (right column)
-           --------------------------- */
-        const donateForm = document.getElementById('donation-contact-form');
-        const donateResp = document.getElementById('don-form-response');
-        if (donateForm) {
-          function showFormMessage(text, success=true) {
-            donateResp.style.display = 'block';
-            donateResp.style.color = success ? '#155724' : '#721c24';
-            donateResp.style.background = success ? 'rgba(40,167,69,0.08)' : 'rgba(220,53,69,0.06)';
-            donateResp.style.border = success ? '1px solid rgba(40,167,69,0.12)' : '1px solid rgba(220,53,69,0.12)';
-            donateResp.innerText = text;
-            if (success) setTimeout(()=> donateResp.style.display='none', 6000);
-          }
+        // Contact form submit
+        document.getElementById('donation-contact-form').addEventListener('submit', function (e) {
+          e.preventDefault();
+          const data = new FormData(this);
+          fetch(FORMSPREE_ENDPOINT, { method:'POST', headers:{ 'Accept':'application/json' }, body: data }).then(function (resp) {
+            if (resp.ok) { alert('Consulta enviada. Gracias, te contactaremos pronto.'); e.target.reset(); }
+            else { alert('No se pudo enviar. Intenta nuevamente.'); }
+          }).catch(function () { alert('Error de conexión. Intenta luego.'); });
+        });
 
-          donateForm.addEventListener('submit', function (e) {
-            e.preventDefault();
-            const data = new FormData(donateForm);
-            fetch(FORMSPREE_ENDPOINT, {
-              method: 'POST',
-              headers: { 'Accept': 'application/json' },
-              body: data
-            }).then(function (resp) {
-              if (resp.ok) {
-                showFormMessage('Consulta enviada. Gracias, te contactaremos pronto.', true);
-                donateForm.reset();
-              } else {
-                showFormMessage('Ocurrió un error al enviar. Intenta nuevamente.', false);
-              }
-            }).catch(function () {
-              showFormMessage('No se pudo enviar. Verifica tu conexión a Internet.', false);
-            });
-          });
-        }
+        // quick amount buttons set value
+        document.querySelectorAll('.quick-amount').forEach(function (b) { b.addEventListener('click', function () { document.getElementById('custom-amount').value = this.getAttribute('data-amount'); }); });
 
-        // Inicializar estado del carrito visual
+        // init cart UI
         renderCart();
-
-      }); // DOMContentLoaded
+      });
     </script>
+
   </body>
 </html>
 
