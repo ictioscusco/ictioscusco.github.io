@@ -143,15 +143,15 @@
 
               <div class="donate-quick">
                 <div class="donate-amounts" role="group" aria-label="Montos rápidos">
-                  <button class="btn btn-outline-primary" data-amount="10">S/ 10</button>
-                  <button class="btn btn-outline-primary" data-amount="25">S/ 25</button>
-                  <button class="btn btn-outline-primary" data-amount="50">S/ 50</button>
-                  <button class="btn btn-outline-primary" data-amount="100">S/ 100</button>
+                  <button class="btn btn-outline-primary" data-amount="10">$ 10</button>
+                  <button class="btn btn-outline-primary" data-amount="25">$ 25</button>
+                  <button class="btn btn-outline-primary" data-amount="50">$ 50</button>
+                  <button class="btn btn-outline-primary" data-amount="100">$ 100</button>
                 </div>
 
                 <div style="display:flex; gap:10px; align-items:center; margin-bottom:10px;">
                   <label for="custom-amount" class="sr-only">Monto personalizado</label>
-                  <input id="custom-amount" type="number" min="1" step="1" class="form-control" placeholder="Otro monto (S/)" style="max-width:200px">
+                  <input id="custom-amount" type="number" min="1" step="1" class="form-control" placeholder="Otro monto (USD)" style="max-width:200px">
                   <button id="donate-paypal" class="btn btn-primary">Donar con PayPal</button>
                 </div>
 
@@ -167,7 +167,7 @@
                 <strong>Banco:</strong> Banco de Ejemplo (REEMPLAZAR)<br>
                 <strong>Titular:</strong> IcTiosCusco (REEMPLAZAR)<br>
                 <strong>Cuenta:</strong> 123-456-789 (REEMPLAZAR)<br>
-                <strong>CCI / IBAN:</strong> 00123456789012345678 (REEMPLAZAR)<br>
+                <strong>IBAN/Referencia:</strong> 00123456789012345678 (REEMPLAZAR)<br>
                 <small class="muted-small">Envía el comprobante a <a href="mailto:ictioscusco@gmail.com">ictioscusco@gmail.com</a> para validar la donación.</small>
               </div>
             </div>
@@ -185,12 +185,12 @@
                     <div>
                       <h4>Polo IcTiosCusco</h4>
                       <p>Camiseta de algodón con logo — Tallas S/M/L/XL.</p>
-                      <strong>S/ 60</strong>
+                      <strong>$ 16</strong>
                     </div>
                     <div style="display:flex; gap:8px; align-items:center; margin-top:6px;">
                       <label style="margin:0;">Cant</label>
                       <input type="number" class="form-control merch-qty" data-id="polo" value="1" min="1" style="width:80px;">
-                      <button class="btn btn-outline-primary btn-sm add-to-cart" data-id="polo" data-name="Polo IcTiosCusco" data-price="60">Agregar</button>
+                      <button class="btn btn-outline-primary btn-sm add-to-cart" data-id="polo" data-name="Polo IcTiosCusco" data-price="16">Agregar</button>
                     </div>
                   </div>
                 </div>
@@ -202,12 +202,12 @@
                     <div>
                       <h4>Tomatodo (Botella)</h4>
                       <p>Botella térmica con logo — 500 ml.</p>
-                      <strong>S/ 40</strong>
+                      <strong>$ 11</strong>
                     </div>
                     <div style="display:flex; gap:8px; align-items:center; margin-top:6px;">
                       <label style="margin:0;">Cant</label>
                       <input type="number" class="form-control merch-qty" data-id="botella" value="1" min="1" style="width:80px;">
-                      <button class="btn btn-outline-primary btn-sm add-to-cart" data-id="botella" data-name="Tomatodo IcTiosCusco" data-price="40">Agregar</button>
+                      <button class="btn btn-outline-primary btn-sm add-to-cart" data-id="botella" data-name="Tomatodo IcTiosCusco" data-price="11">Agregar</button>
                     </div>
                   </div>
                 </div>
@@ -219,12 +219,12 @@
                     <div>
                       <h4>Fotografía encuadrada</h4>
                       <p>Impresión 20x30 cm enmarcada — edición limitada.</p>
-                      <strong>S/ 120</strong>
+                      <strong>$ 32</strong>
                     </div>
                     <div style="display:flex; gap:8px; align-items:center; margin-top:6px;">
                       <label style="margin:0;">Cant</label>
                       <input type="number" class="form-control merch-qty" data-id="foto" value="1" min="1" style="width:80px;">
-                      <button class="btn btn-outline-primary btn-sm add-to-cart" data-id="foto" data-name="Foto encuadrada IcTiosCusco" data-price="120">Agregar</button>
+                      <button class="btn btn-outline-primary btn-sm add-to-cart" data-id="foto" data-name="Foto encuadrada IcTiosCusco" data-price="32">Agregar</button>
                     </div>
                   </div>
                 </div>
@@ -237,7 +237,7 @@
                   <div id="cart-rows">
                     <p class="muted-small">No hay artículos en el carrito.</p>
                   </div>
-                  <div class="cart-total" id="cart-total">Total: S/ 0</div>
+                  <div class="cart-total" id="cart-total">Total: $ 0</div>
 
                   <div style="display:flex; gap:8px; margin-top:12px;">
                     <button id="checkout-paypal" class="btn btn-primary">Pagar con PayPal</button>
@@ -377,10 +377,7 @@
 
     <!-- loader -->
     <div id="ftco-loader" class="show fullscreen">
-      <svg class="circular" width="48px" height="48px">
-        <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" />
-        <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00" />
-      </svg>
+      <svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg>
     </div>
 
     <!-- SCRIPTS -->
@@ -427,16 +424,15 @@
 
         /* ---------------------------
            PAYPAL CONFIG (Sandbox / Live switch)
-           Versión robusta completa
            --------------------------- */
         // MODO PRUEBAS: setea true para usar sandbox
         const USE_SANDBOX = false; // <- Cambia a true para pruebas en sandbox
         // Correo sandbox (obténlo en developer.paypal.com si pruebas)
-        const PAYPAL_SANDBOX_EMAIL = 'ictioscusco@gmail.com'; // reemplaza si usas sandbox
+        const PAYPAL_SANDBOX_EMAIL = 'sb-opca146972674@business.example.com'; // ejemplo sandbox
         // Correo live (tu cuenta real de negocio)
-        const PAYPAL_LIVE_EMAIL = 'ictioscusco@gmail.com'; // reemplaza por tu email real si vas a producción
-        // Currency (usa 'USD' si PEN da problemas)
-        let PAYPAL_CURRENCY = 'PEN';
+        const PAYPAL_LIVE_EMAIL = 'ictioscusco@gmail.com'; // ya lo pusiste
+        // Currency: ahora en USD
+        let PAYPAL_CURRENCY = 'USD';
         const PAYPAL_BUSINESS = USE_SANDBOX ? PAYPAL_SANDBOX_EMAIL : PAYPAL_LIVE_EMAIL;
         const PAYPAL_ENDPOINT = USE_SANDBOX ? 'https://www.sandbox.paypal.com/cgi-bin/webscr' : 'https://www.paypal.com/cgi-bin/webscr';
 
@@ -510,7 +506,7 @@
           const keys = Object.keys(cart);
           if (!keys.length) {
             rows.innerHTML = '<p class="muted-small">No hay artículos en el carrito.</p>';
-            document.getElementById('cart-total').innerText = 'Total: S/ 0';
+            document.getElementById('cart-total').innerText = 'Total: $ 0';
             return;
           }
           let total = 0;
@@ -522,7 +518,7 @@
             div.innerHTML = `
               <div>
                 <strong>${escapeHtml(it.name)}</strong><br>
-                <small>S/ ${it.price.toFixed(2)} x ${it.qty}</small>
+                <small>$ ${it.price.toFixed(2)} x ${it.qty}</small>
               </div>
               <div>
                 <button class="btn btn-sm btn-outline-danger remove-cart" data-id="${it.id}">Quitar</button>
@@ -530,7 +526,7 @@
             `;
             rows.appendChild(div);
           });
-          document.getElementById('cart-total').innerText = 'Total: S/ ' + total.toFixed(2);
+          document.getElementById('cart-total').innerText = 'Total: $ ' + total.toFixed(2);
 
           // bind remove buttons
           document.querySelectorAll('.remove-cart').forEach(function (b) {
@@ -608,16 +604,12 @@
         document.getElementById('donate-paypal').addEventListener('click', function () {
           const val = Number(document.getElementById('custom-amount').value || 0);
           if (!val || val <= 0) { alert('Ingresa un monto válido.'); return; }
-          // Si PEN falla por configuración de cuenta, prueba con USD:
-          // PAYPAL_CURRENCY = 'USD';
           openPaypalSingle(val.toFixed(2));
         });
 
         // Checkout cart PayPal
         document.getElementById('checkout-paypal').addEventListener('click', function () {
           if (!Object.keys(cart).length) { alert('El carrito está vacío. Agrega productos antes de pagar.'); return; }
-          // Si PEN da problemas con tu cuenta, prueba temporalmente:
-          // PAYPAL_CURRENCY = 'USD';
           checkoutPaypalCart(cart);
         });
 
@@ -634,10 +626,10 @@
           let msg = 'Pedido tienda IcTiosCusco:\n\n';
           let total = 0;
           Object.values(cart).forEach(function (it) {
-            msg += `${it.name} — S/ ${it.price.toFixed(2)} x ${it.qty}\n`;
+            msg += `${it.name} — $ ${it.price.toFixed(2)} x ${it.qty}\n`;
             total += it.price * it.qty;
           });
-          msg += `\nTotal aproximado: S/ ${total.toFixed(2)}\n\nPor favor indicar método de pago y datos de envío.`;
+          msg += `\nTotal aproximado: $ ${total.toFixed(2)}\n\nPor favor indicar método de pago y datos de envío.`;
           const data = new FormData();
           data.append('name', name);
           data.append('email', email);
@@ -696,7 +688,11 @@
           });
         }
 
+        // Inicializar estado del carrito visual
+        renderCart();
+
       }); // DOMContentLoaded
     </script>
   </body>
 </html>
+
