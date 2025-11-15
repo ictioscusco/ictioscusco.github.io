@@ -39,8 +39,24 @@
       #ftco-navbar.scrolled .navbar-toggler { color: #222222 !important; border-color: rgba(0,0,0,0.12) !important; }
       #ftco-nav.collapse.show .nav-link { color: #222222 !important; }
 
-      /* Galería: mini-leyenda de autor + aspecto editorial */
-      .ftco-gallery .gallery { min-height: 220px; background-size: cover; background-position: center center; position: relative; overflow: hidden; }
+      /* Galería: mini-leyenda de autor + aspecto editorial
+         -> modifiqué SOLO esta regla para que la miniatura muestre la imagen completa
+         (sin recortarla): uso background-size: contain y centrar; añadí background-color
+         para evitar que se vea vacío en proporciones diferentes. */
+      .ftco-gallery .gallery {
+        min-height: 220px;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        /* <-- cambio clave: mostrar la imagen completa en la miniatura (no cover) */
+        background-size: contain !important;
+        background-position: center center !important;
+        background-repeat: no-repeat;
+        background-color: #08121a; /* fondo neutro cuando la imagen no llena todo */
+      }
       @media(min-width: 768px) { .ftco-gallery .gallery { min-height: 260px; } }
 
       .ftco-gallery .overlay-caption {
@@ -418,3 +434,4 @@
 
   </body>
 </html>
+
