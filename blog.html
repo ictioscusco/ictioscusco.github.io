@@ -30,8 +30,8 @@
     <link rel="stylesheet" href="css/style.css">
 
     <style>
-      /* Reset básico */
-      html, body { margin:0; padding:0; font-family: "Overpass", "Dosis", sans-serif; }
+      /* Reset básico y fuente global: igual que Gallery (Overpass para cuerpo) */
+      html, body { margin:0; padding:0; font-family: "Overpass", "Dosis", sans-serif; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 
       /* Usar los mismos colores y tipografía que en la GALERÍA:
          - texto del hero y breadcrumbs en blanco
@@ -50,7 +50,8 @@
       #ftco-navbar.scrolled .navbar-toggler { color: #222222 !important; border-color: rgba(0,0,0,0.12) !important; }
       #ftco-nav.collapse.show .nav-link { color: #222222 !important; }
 
-      /* HERO: fondo y texto en blanco para coincidir con GALERÍA */
+      /* HERO: fondo y texto en blanco para coincidir con GALERÍA.
+         Ajuste principal: usar la misma tipografía que la galería para el título (Dosis ligera) */
       .hero-wrap {
         position:relative;
         width:100%;
@@ -60,13 +61,26 @@
         background-size:cover;
         background-position:center center;
         background-repeat:no-repeat;
-        height: calc(var(--vh, 1vh) * 60); /* por seguridad, no ocupar toda la pantalla */
+        height: calc(var(--vh, 1vh) * 60);
         min-height: 320px;
         display:block;
       }
       .hero-wrap .overlay { position:absolute; inset:0; background: linear-gradient(180deg, rgba(0,0,0,0.30) 0%, rgba(0,0,0,0.48) 60%); z-index:2; }
       .hero-wrap .hero-content { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:3; color:#fff; text-align:center; padding:0 18px; }
-      .hero-wrap .hero-content h1{ font-size:3rem; margin:0 0 8px; font-family:'Overpass', sans-serif; font-weight:600; color:#fff; text-shadow:0 6px 18px rgba(0,0,0,0.32); }
+
+      /* <-- IMPORTANT: match Gallery font style for the main title -->
+         Use Dosis with a light weight to avoid the "too bold" look the user complained about.
+         Keep text-shadow and sizing similar to gallery so it visually matches. */
+      .hero-wrap .hero-content h1{
+        font-family: 'Dosis', 'Overpass', sans-serif;
+        font-weight: 300;       /* lighter weight like gallery */
+        letter-spacing: 0.6px;
+        font-size: 3rem;
+        margin:0 0 8px;
+        color:#fff;
+        text-shadow: 0 6px 18px rgba(0,0,0,0.32);
+      }
+
       .hero-wrap .hero-content p { color: rgba(255,255,255,0.92); margin:0; font-size:1.05rem; }
 
       /* Breadcrumbs estilo gallery: texto claro y pequeño acento */
@@ -382,4 +396,3 @@
   </script>
   </body>
 </html>
-
