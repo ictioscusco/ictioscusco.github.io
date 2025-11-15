@@ -33,10 +33,6 @@
       /* Reset básico y fuente global: igual que Gallery (Overpass para cuerpo) */
       html, body { margin:0; padding:0; font-family: "Overpass", "Dosis", sans-serif; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
 
-      /* Usar los mismos colores y tipografía que en la GALERÍA:
-         - texto del hero y breadcrumbs en blanco
-         - navbar con links blancos sobre la imagen y oscuros al scrollear (igual que gallery) */
-
       .navbar-brand.d-flex { display:inline-flex; align-items:center; }
       .navbar-brand img { height:56px; width:auto; margin-right:12px; }
       .navbar-brand span { font-family:'Overpass','Dosis',sans-serif; font-weight:600; font-size:1.05rem; color:#fff; }
@@ -68,12 +64,9 @@
       .hero-wrap .overlay { position:absolute; inset:0; background: linear-gradient(180deg, rgba(0,0,0,0.30) 0%, rgba(0,0,0,0.48) 60%); z-index:2; }
       .hero-wrap .hero-content { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:3; color:#fff; text-align:center; padding:0 18px; }
 
-      /* <-- IMPORTANT: match Gallery font style for the main title -->
-         Use Dosis with a light weight to avoid the "too bold" look the user complained about.
-         Keep text-shadow and sizing similar to gallery so it visually matches. */
       .hero-wrap .hero-content h1{
         font-family: 'Dosis', 'Overpass', sans-serif;
-        font-weight: 300;       /* lighter weight like gallery */
+        font-weight: 300;
         letter-spacing: 0.6px;
         font-size: 3rem;
         margin:0 0 8px;
@@ -83,7 +76,6 @@
 
       .hero-wrap .hero-content p { color: rgba(255,255,255,0.92); margin:0; font-size:1.05rem; }
 
-      /* Breadcrumbs estilo gallery: texto claro y pequeño acento */
       .breadcrumbs { margin-bottom:12px; }
       .breadcrumbs a { color: rgba(255,255,255,0.85); text-decoration:none; font-size:0.9rem; letter-spacing:1px; }
       .breadcrumbs span { color: rgba(255,255,255,0.7); font-size:0.9rem; }
@@ -93,18 +85,20 @@
       .posts-grid { display:grid; gap:24px; grid-template-columns: repeat(3, 1fr); }
 
       .blog-entry { background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 8px 22px rgba(10,25,35,0.06); display:flex; flex-direction:column; }
-      .block-20 { display:block; height:220px; background-size:cover; background-position:center; }
-      .text { padding:16px; flex:1 1 auto; display:flex; flex-direction:column; }
-      .meta { color:#9aa6ad; font-size:0.9rem; display:flex; gap:10px; align-items:center; }
-      .heading { margin:10px 0 12px; font-size:1.05rem; color:#0e2a39; font-family:'Overpass',sans-serif; font-weight:600; }
-      .excerpt { color:#4b5560; flex:1 1 auto; }
+      .block-20 { display:block; height:260px; background-size:cover; background-position:center; }
+      .text { padding:20px; flex:1 1 auto; display:flex; flex-direction:column; }
+      .meta { color:#9aa6ad; font-size:0.9rem; display:flex; gap:10px; align-items:center; margin-bottom:8px; }
+      .heading { margin:6px 0 12px; font-size:1.15rem; color:#0e2a39; font-family:'Overpass',sans-serif; font-weight:600; }
+      .excerpt { color:#4b5560; flex:1 1 auto; line-height:1.45; margin-bottom:12px; }
 
-      /* Share toolbar */
-      .share-row { display:flex; gap:8px; align-items:center; margin-top:12px; }
+      /* News date style (prominent) */
+      .news-date { color:#f47b2b; font-weight:700; letter-spacing:0.6px; margin-bottom:8px; }
+
+      /* Share toolbar (kept in case you want sharing) */
+      .share-row { display:flex; gap:8px; align-items:center; margin-top:8px; }
       .share-btn { display:inline-flex; align-items:center; gap:8px; padding:8px 10px; border-radius:8px; border:1px solid rgba(6,50,58,0.08); background:#f3fafb; color:#06323a; font-weight:600; text-decoration:none; cursor:pointer; }
       .share-btn:hover { transform:translateY(-2px); box-shadow:0 8px 18px rgba(6,50,58,0.06); }
 
-      /* Footer small fix */
       .ftco-footer { position:relative; z-index:1; }
 
       @media (max-width: 991.98px) {
@@ -113,14 +107,14 @@
       }
       @media (max-width: 575.98px) {
         .posts-grid { grid-template-columns: 1fr; }
-        .block-20 { height: 260px; }
+        .block-20 { height: 200px; }
         .hero-wrap { height: calc(var(--vh, 1vh) * 40); }
       }
     </style>
   </head>
   <body>
 
-  <!-- Navbar: usar la misma clase y comportamiento visual que en gallery -->
+  <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar" role="navigation" aria-label="Menú principal">
     <div class="container">
       <a class="navbar-brand d-flex align-items-center" href="index.html">
@@ -161,88 +155,84 @@
     </div>
   </div>
 
-  <!-- POSTS -->
+  <!-- POSTS (solo 3 noticias, sin redirecciones) -->
   <section class="ftco-section">
     <div class="container">
       <div class="posts-grid" role="list">
 
-        <!-- Post 1 (ejemplo) -->
-        <article class="blog-entry" role="listitem" aria-label="Noticia: Resultados preliminares de Huaypo" data-url="/noticias/resultados-preliminares-huaypo" data-title="Resultados preliminares de Huaypo" data-excerpt="Resumen breve de los hallazgos en la laguna Huaypo" data-image="/images/noticia_1.jpg">
-          <a class="block-20" href="blog-single.html" style="background-image: url('images/noticia_1.jpg');" aria-label="Imagen noticia"></a>
+        <!-- Noticia 1 -->
+        <article class="blog-entry" role="listitem" aria-label="Noticia MONFU 2025" data-url="">
+          <div class="block-20" style="background-image: url('images/noticia_monfu.jpg');" aria-hidden="true"></div>
           <div class="text">
+            <div class="news-date">24 de octubre de 2025</div>
+            <h3 class="heading">Participación de IcTiosCusco en el VIII Simposio Internacional “Las Montañas, Nuestro Futuro” (MONFU 2025)</h3>
             <div class="meta">
-              <div><a href="#">Sept 10, 2024</a></div>
-              <div><a href="#">IcTiosCusco</a></div>
+              <div>IcTiosCusco</div>
             </div>
-            <h3 class="heading"><a href="blog-single.html">Resultados preliminares de Huaypo</a></h3>
-            <p class="excerpt">Presentamos resultados preliminares sobre la abundancia y estructura de la comunidad de Orestias en la laguna Huaypo.</p>
+            <p class="excerpt">
+              El 24 de octubre de 2025, el equipo de IcTiosCusco participó en el VIII Simposio Internacional MONFU 2025, organizado por el INAIGEM en la ciudad del Cusco. La presentación del grupo estuvo a cargo de Nayely Polanco, con el apoyo de Getsemaní Chirau, y versó sobre la variación morfológica de especies del género <em>Orestias</em> en lagunas altoandinas.
+            </p>
+            <p class="excerpt">
+              Autores: Jack Malon Rodríguez, Alex Ttito, Nayely Polanco y Rolando Chaparrea. Durante la ponencia se expusieron resultados preliminares que destacan la adaptación de estas especies a ambientes extremos y su relevancia ecológica para los sistemas de altura. Esta participación reafirma el compromiso de IcTiosCusco con la investigación, conservación y difusión del conocimiento sobre la ictiofauna altoandina.
+            </p>
 
             <div class="share-row" aria-hidden="false">
               <button class="share-btn" data-share="web" aria-label="Compartir (web)">Compartir</button>
               <a class="share-btn" data-share="facebook" aria-label="Compartir en Facebook">Facebook</a>
               <a class="share-btn" data-share="whatsapp" aria-label="Compartir en WhatsApp">WhatsApp</a>
-              <button class="share-btn" data-share="copy" aria-label="Copiar enlace">Copiar enlace</button>
             </div>
           </div>
         </article>
 
-        <!-- Post 2 -->
-        <article class="blog-entry" role="listitem" aria-label="Noticia: Campaña de monitoreo 2024" data-url="/noticias/campana-monitoreo-2024" data-title="Campaña de monitoreo 2024" data-excerpt="Descripción de las actividades de monitoreo realizadas durante 2024" data-image="/images/noticia_2.jpg">
-          <a class="block-20" href="blog-single.html" style="background-image: url('images/noticia_2.jpg');" aria-label="Imagen noticia"></a>
+        <!-- Noticia 2 -->
+        <article class="blog-entry" role="listitem" aria-label="Noticia EXPOBIO 2025" data-url="">
+          <div class="block-20" style="background-image: url('images/noticia_expobio.jpg');" aria-hidden="true"></div>
           <div class="text">
+            <div class="news-date">30 de octubre de 2025</div>
+            <h3 class="heading">IcTiosCusco obtiene el segundo lugar en ponencia oral — EXPOBIO 2025</h3>
             <div class="meta">
-              <div><a href="#">Ago 21, 2024</a></div>
-              <div><a href="#">IcTiosCusco</a></div>
+              <div>IcTiosCusco</div>
             </div>
-            <h3 class="heading"><a href="blog-single.html">Campaña de monitoreo 2024</a></h3>
-            <p class="excerpt">Resumen de la campaña de muestreo realizada en lagunas altoandinas con participación comunitaria.</p>
+            <p class="excerpt">
+              En la V Convención Anual de Estudiantes de Biología del Cusco (EXPOBIO 2025), realizada el 30 de octubre de 2025, IcTiosCusco obtuvo el segundo lugar en la categoría de ponencia oral — Zoología. La ponencia fue presentada por Getsamaní Lucía Pérez Chirau.
+            </p>
+            <p class="excerpt">
+              Título del trabajo: <em>Caracterización de las poblaciones de <strong>Trichomycterus</strong> sp. procedentes de diferentes localidades andinas mediante análisis morfométricos lineales y geométricos</em>. Felicitamos también a los colaboradores Nayely Polanco Acostupa, Deysi Ccala, Edmar Soria, Libertad Palomino y Jack Malon Rodríguez por su destacada participación.
+            </p>
 
             <div class="share-row">
               <button class="share-btn" data-share="web">Compartir</button>
               <a class="share-btn" data-share="facebook">Facebook</a>
               <a class="share-btn" data-share="whatsapp">WhatsApp</a>
-              <button class="share-btn" data-share="copy">Copiar enlace</button>
             </div>
           </div>
         </article>
 
-        <!-- Post 3 -->
-        <article class="blog-entry" role="listitem" aria-label="Noticia: Taller comunitario" data-url="/noticias/taller-comunitario" data-title="Taller comunitario" data-excerpt="Talleres de educación ambiental con escuelas locales" data-image="/images/noticia_3.jpg">
-          <a class="block-20" href="blog-single.html" style="background-image: url('images/noticia_3.jpg');" aria-label="Imagen noticia"></a>
+        <!-- Noticia 3 -->
+        <article class="blog-entry" role="listitem" aria-label="Noticia Congreso Bolivia" data-url="">
+          <div class="block-20" style="background-image: url('images/noticia_bolivia.jpg');" aria-hidden="true"></div>
           <div class="text">
+            <div class="news-date">22–25 de noviembre de 2025 (eventos)</div>
+            <h3 class="heading">IcTiosCusco participará en el III Congreso Boliviano de Ictiología y en el curso precongreso</h3>
             <div class="meta">
-              <div><a href="#">Jul 05, 2024</a></div>
-              <div><a href="#">IcTiosCusco</a></div>
+              <div>IcTiosCusco</div>
             </div>
-            <h3 class="heading"><a href="blog-single.html">Taller comunitario</a></h3>
-            <p class="excerpt">Actividades educativas y participación de estudiantes en proyectos de conservación.</p>
+            <p class="excerpt">
+              Los miembros de IcTiosCusco participarán en el III Congreso Boliviano de Ictiología (La Paz) y en el curso teórico-práctico precongreso: <strong>Introducción al análisis filogenético y filogeográfico</strong>, que se llevará a cabo los días 22, 24 y 25 de noviembre en La Paz, Bolivia.
+            </p>
+            <p class="excerpt">
+              Instructores del curso: Dr. Marco A. Méndez Torres y MSc. Viviana Araya Enero (Universidad de Chile). IcTiosCusco presentará ponencias orales a cargo de Jack Malon Rodríguez Pumaccajía y Getsemaní Pérez Chirau.
+            </p>
 
             <div class="share-row">
               <button class="share-btn" data-share="web">Compartir</button>
               <a class="share-btn" data-share="facebook">Facebook</a>
               <a class="share-btn" data-share="whatsapp">WhatsApp</a>
-              <button class="share-btn" data-share="copy">Copiar enlace</button>
             </div>
           </div>
         </article>
 
       </div>
-
-      <!-- Pagination -->
-      <div class="row mt-5">
-        <div class="col text-center">
-          <div class="block-27">
-            <ul>
-              <li><a href="#">&lt;</a></li>
-              <li class="active"><span>1</span></li>
-              <li><a href="#">2</a></li>
-              <li><a href="#">3</a></li>
-              <li><a href="#">&gt;</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
     </div>
   </section>
 
@@ -265,11 +255,11 @@
           <div class="ftco-footer-widget mb-4">
             <h2 class="ftco-heading-2">Publicaciones recientes</h2>
             <div class="block-21 mb-4 d-flex">
-              <a class="blog-img mr-4" style="background-image: url(images/noticia_1.jpg);"></a>
+              <a class="blog-img mr-4" style="background-image: url(images/noticia_monfu.jpg);"></a>
               <div class="text">
-                <h3 class="heading"><a href="#">Resultados preliminares de Huaypo</a></h3>
+                <h3 class="heading">Participación en MONFU 2025</h3>
                 <div class="meta">
-                  <div><a href="#"><span class="icon-calendar"></span> Sept 10, 2024</a></div>
+                  <div><a href="#"><span class="icon-calendar"></span> Oct 24, 2025</a></div>
                   <div><a href="#"><span class="icon-person"></span> IcTiosCusco</a></div>
                 </div>
               </div>
@@ -343,14 +333,14 @@
       checkScroll(); window.addEventListener('scroll', checkScroll, {passive:true});
       if(navCollapse.length){ navCollapse.on('shown.bs.collapse', function(){ navbar.classList.add('scrolled'); }); navCollapse.on('hidden.bs.collapse', function(){ if(window.scrollY<=60) navbar.classList.remove('scrolled'); }); }
 
+      // Manejador de compartir (usa data-url del artículo; artículos no redirigen)
       document.querySelectorAll('.share-btn').forEach(function(btn){
         btn.addEventListener('click', function(e){
           var article = e.target.closest('.blog-entry');
           if(!article) return;
-          var url = new URL(article.getAttribute('data-url') || window.location.pathname, window.location.origin).href;
-          var title = article.getAttribute('data-title') || document.title;
-          var excerpt = article.getAttribute('data-excerpt') || '';
-          var image = article.getAttribute('data-image') || '';
+          var url = new URL(article.getAttribute('data-url') || window.location.href + '#', window.location.origin).href;
+          var title = article.getAttribute('data-title') || article.querySelector('.heading')?.innerText || document.title;
+          var excerpt = article.getAttribute('data-excerpt') || article.querySelector('.excerpt')?.innerText || '';
           var action = btn.getAttribute('data-share');
 
           if(action === 'web'){
