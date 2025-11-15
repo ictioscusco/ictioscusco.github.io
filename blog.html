@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" href="css/owl.carousel.min.css">
     <link rel="stylesheet" href="css/owl.theme.default.min.css">
-    <link rel="stylesheet" href="css/magnific-popup.css">
+    <link rel="stylesheet" href="css/magnific-popup.css"><!-- ya lo tenías -->
     <link rel="stylesheet" href="css/aos.css">
     <link rel="stylesheet" href="css/ionicons.min.css">
     <link rel="stylesheet" href="css/bootstrap-datepicker.css">
@@ -88,6 +88,11 @@
       .share-row { display:flex; gap:8px; align-items:center; margin-top:12px; }
       .share-btn { display:inline-flex; align-items:center; gap:8px; padding:8px 10px; border-radius:6px; border:1px solid rgba(6,50,58,0.08); background:#f3fafb; color:#06323a; font-weight:600; text-decoration:none; cursor:pointer; font-size:0.92rem; }
 
+      /* Cursor visual para elementos clicables que abren imagen */
+      .image-popup .front-media,
+      .image-popup .side-thumb,
+      .image-popup.blog-img { cursor: zoom-in; }
+
       @media (max-width: 1100px) { .news-front { grid-template-columns: 1fr 320px; } .front-media { min-height:360px; } }
       @media (max-width: 900px) { .news-front { grid-template-columns: 1fr; } .side-column { order:2; } .front-article { order:1; } }
       @media (max-width: 575px) { .front-media { min-height:240px; } .side-thumb{ flex:0 0 72px; height:72px; } .front-title { font-size:1.45rem; } }
@@ -146,11 +151,14 @@
 
       <div class="news-front" role="list">
 
-        <!-- Artículo principal: Congreso Bolivia (contenido tal cual estaba en tu HTML original) -->
-        <article class="front-article" role="listitem" aria-label="Noticia principal: Congreso Bolivia" data-url="">
-          <div class="front-media" style="background-image:url('images/noticia_bolivia.jpg');" aria-hidden="true">
-            <div class="front-overlay" aria-hidden="true"></div>
-          </div>
+        <!-- Artículo principal: Congreso Bolivia (ahora el div de imagen está envuelto en un <a> clicable) -->
+        <article class="front-article" role="listitem" aria-label="Noticia principal: Congreso Bolivia" data-url="" data-title="IcTiosCusco participará en el III Congreso Boliviano de Ictiología">
+          <!-- Enlazar a la versión grande de la imagen (por ejemplo noticia_bolivia_large.jpg) -->
+          <a href="images/noticia_bolivia_large.jpg" class="image-popup" data-title="IcTiosCusco participará en el III Congreso Boliviano de Ictiología" aria-label="Abrir imagen principal en grande" tabindex="0">
+            <div class="front-media" style="background-image:url('images/noticia_bolivia.jpg');" aria-hidden="true">
+              <div class="front-overlay" aria-hidden="true"></div>
+            </div>
+          </a>
 
           <div class="front-content">
             <div class="masthead">PORTADA — Ciencias &amp; Congresos</div>
@@ -187,34 +195,40 @@
           </div>
         </article>
 
-        <!-- Columna lateral: las otras 3 noticias que ya estaban en tu HTML original -->
+        <!-- Columna lateral: las otras 3 noticias (miniaturas también clicables) -->
         <aside class="side-column" aria-label="Noticias destacadas">
 
           <div class="side-card" role="listitem" aria-label="EXPOBIO 2025: Segundo lugar">
-            <div class="side-thumb" style="background-image:url('images/noticia_expobio.jpg');" aria-hidden="true"></div>
-            <div class="side-info">
-              <div class="date">30 de octubre de 2025</div>
-              <div class="title">IcTiosCusco: segundo lugar en ponencia oral — EXPOBIO 2025</div>
-              <div class="brief">En la V Convención Anual de Estudiantes de Biología del Cusco (EXPOBIO 2025) obtuvimos el segundo lugar en la categoría de ponencia oral — Zoología. La exposición estuvo a cargo de Getsemaní Lucía Pérez Chirau con el trabajo: "Caracterización de las poblaciones de <strong>Trichomycterus</strong> sp. procedentes de diferentes localidades andinas mediante análisis morfométricos lineales y geométricos."</div>
-            </div>
+            <a href="images/noticia_expobio_large.jpg" class="image-popup" data-title="EXPOBIO 2025: Segundo lugar — IcTiosCusco" aria-label="Abrir imagen EXPOBIO 2025" tabindex="0" style="display:flex; gap:12px; align-items:flex-start;">
+              <div class="side-thumb" style="background-image:url('images/noticia_expobio.jpg');" aria-hidden="true"></div>
+              <div class="side-info">
+                <div class="date">30 de octubre de 2025</div>
+                <div class="title">IcTiosCusco: segundo lugar en ponencia oral — EXPOBIO 2025</div>
+                <div class="brief">En la V Convención Anual de Estudiantes de Biología del Cusco (EXPOBIO 2025) obtuvimos el segundo lugar en la categoría de ponencia oral — Zoología. La exposición estuvo a cargo de Getsemaní Lucía Pérez Chirau con el trabajo: "Caracterización de las poblaciones de <strong>Trichomycterus</strong> sp. procedentes de diferentes localidades andinas mediante análisis morfométricos lineales y geométricos."</div>
+              </div>
+            </a>
           </div>
 
           <div class="side-card" role="listitem" aria-label="MONFU 2025">
-            <div class="side-thumb" style="background-image:url('images/noticia_monfu.jpg');" aria-hidden="true"></div>
-            <div class="side-info">
-              <div class="date">24 de octubre de 2025</div>
-              <div class="title">Participación de IcTiosCusco en MONFU 2025 — "Las Montañas, Nuestro Futuro"</div>
-              <div class="brief">El equipo participó en el VIII Simposio Internacional MONFU 2025 (INAIGEM, Cusco). La ponencia estuvo a cargo de Nayely Polanco, con el apoyo de Getsemaní Chirau, sobre la variación morfológica de especies del género <em>Orestias</em>. Autores: Jack Malon Rodríguez, Alex Ttito, Nayely Polanco y Rolando Chaparrea.</div>
-            </div>
+            <a href="images/noticia_monfu_large.jpg" class="image-popup" data-title="MONFU 2025 — IcTiosCusco" aria-label="Abrir imagen MONFU 2025" tabindex="0" style="display:flex; gap:12px; align-items:flex-start;">
+              <div class="side-thumb" style="background-image:url('images/noticia_monfu.jpg');" aria-hidden="true"></div>
+              <div class="side-info">
+                <div class="date">24 de octubre de 2025</div>
+                <div class="title">Participación de IcTiosCusco en MONFU 2025 — "Las Montañas, Nuestro Futuro"</div>
+                <div class="brief">El equipo participó en el VIII Simposio Internacional MONFU 2025 (INAIGEM, Cusco). La ponencia estuvo a cargo de Nayely Polanco, con el apoyo de Getsemaní Chirau, sobre la variación morfológica de especies del género <em>Orestias</em>. Autores: Jack Malon Rodríguez, Alex Ttito, Nayely Polanco y Rolando Chaparrea.</div>
+              </div>
+            </a>
           </div>
 
           <div class="side-card" role="listitem" aria-label="Ornitologia: apoyo">
-            <div class="side-thumb" style="background-image:url('images/noticia_ornitologia.jpg');" aria-hidden="true"></div>
-            <div class="side-info">
-              <div class="date">Próximamente</div>
-              <div class="title">IcTiosCusco: apoyo activo en el XV Congreso Peruano de Ornitología</div>
-              <div class="brief">IcTiosCusco será apoyo activo en la organización del XV Congreso Peruano de Ornitología, que se realizará en Madre de Dios. La coordinación y nexo institucional está a cargo de nuestro miembro Rolando Chaparrea Cárdenas. Informaremos fechas definitivas y programa en nuestras redes y sitio web.</div>
-            </div>
+            <a href="images/noticia_ornitologia_large.jpg" class="image-popup" data-title="Apoyo: Congreso Peruano de Ornitología — IcTiosCusco" aria-label="Abrir imagen Ornitología" tabindex="0" style="display:flex; gap:12px; align-items:flex-start;">
+              <div class="side-thumb" style="background-image:url('images/noticia_ornitologia.jpg');" aria-hidden="true"></div>
+              <div class="side-info">
+                <div class="date">Próximamente</div>
+                <div class="title">IcTiosCusco: apoyo activo en el XV Congreso Peruano de Ornitología</div>
+                <div class="brief">IcTiosCusco será apoyo activo en la organización del XV Congreso Peruano de Ornitología, que se realizará en Madre de Dios. La coordinación y nexo institucional está a cargo de nuestro miembro Rolando Chaparrea Cárdenas. Informaremos fechas definitivas y programa en nuestras redes y sitio web.</div>
+              </div>
+            </a>
           </div>
 
         </aside>
@@ -244,7 +258,8 @@
           <div class="ftco-footer-widget mb-4">
             <h2 class="ftco-heading-2">Publicaciones recientes</h2>
             <div class="block-21 mb-4 d-flex">
-              <a class="blog-img mr-4" style="background-image: url(images/noticia_monfu.jpg);"></a>
+              <!-- footer: hacer clic y abrir versión grande -->
+              <a class="blog-img mr-4 image-popup" href="images/noticia_monfu_large.jpg" style="background-image: url(images/noticia_monfu.jpg);" aria-label="Abrir imagen MONFU 2025"></a>
               <div class="text">
                 <h3 class="heading">Participación en MONFU 2025</h3>
                 <div class="meta">
@@ -300,7 +315,7 @@
   <script src="js/jquery.waypoints.min.js"></script>
   <script src="js/jquery.stellar.min.js"></script>
   <script src="js/owl.carousel.min.js"></script>
-  <script src="js/jquery.magnific-popup.min.js"></script>
+  <script src="js/jquery.magnific-popup.min.js"></script><!-- ya lo tenías -->
   <script src="js/aos.js"></script>
   <script src="js/jquery.animateNumber.min.js"></script>
   <script src="js/bootstrap-datepicker.js"></script>
@@ -368,6 +383,34 @@
               var ta = document.createElement('textarea'); ta.value = url; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); alert('Enlace copiado al portapapeles'); }catch(e){ prompt('Copia este enlace:', url); } ta.remove();
             }
             return;
+          }
+        });
+      });
+
+      // Inicializar Magnific Popup para todas las imágenes con la clase .image-popup
+      if(typeof $.fn.magnificPopup === 'function'){
+        $('.image-popup').magnificPopup({
+          type: 'image',
+          closeOnContentClick: true,
+          mainClass: 'mfp-img-mobile',
+          image: {
+            verticalFit: true,
+            titleSrc: function(item) {
+              return item.el.attr('data-title') || '';
+            }
+          },
+          gallery: {
+            enabled: true // permite navegar entre imágenes abiertas
+          }
+        });
+      }
+
+      // Permitir abrir lightbox con Enter cuando el <a> tiene focus (accesible)
+      document.querySelectorAll('a.image-popup').forEach(function(a){
+        a.addEventListener('keydown', function(e){
+          if(e.key === 'Enter' || e.keyCode === 13) {
+            e.preventDefault();
+            $(a).trigger('click');
           }
         });
       });
