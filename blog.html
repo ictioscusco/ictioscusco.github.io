@@ -31,40 +31,58 @@
 
     <style>
       /* Reset básico */
-      html, body { margin:0; padding:0; }
+      html, body { margin:0; padding:0; font-family: "Overpass", "Dosis", sans-serif; }
 
-      /* Navbar (IcTiosCusco) */
+      /* Usar los mismos colores y tipografía que en la GALERÍA:
+         - texto del hero y breadcrumbs en blanco
+         - navbar con links blancos sobre la imagen y oscuros al scrollear (igual que gallery) */
+
       .navbar-brand.d-flex { display:inline-flex; align-items:center; }
       .navbar-brand img { height:56px; width:auto; margin-right:12px; }
       .navbar-brand span { font-family:'Overpass','Dosis',sans-serif; font-weight:600; font-size:1.05rem; color:#fff; }
 
-      #ftco-navbar {
-        position: absolute; top:0; left:0; right:0; z-index:1050;
-        background-color: transparent; transition: background-color .25s ease;
-      }
-      #ftco-navbar.scrolled { position:fixed; background-color: rgba(255,255,255,0.98) !important; box-shadow:0 2px 8px rgba(0,0,0,0.06); }
-      #ftco-navbar .nav-link, #ftco-navbar .navbar-brand span { color:#fff !important; }
-      #ftco-navbar.scrolled .nav-link, #ftco-navbar.scrolled .navbar-brand span { color:#222 !important; }
+      /* Mantener comportamiento visual del navbar como en gallery */
+      #ftco-navbar { background-color: transparent; transition: background-color 0.25s ease; }
+      #ftco-navbar.scrolled { background-color: rgba(255,255,255,0.98) !important; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+      #ftco-navbar .nav-link, #ftco-navbar .navbar-brand span { color: #ffffff !important; transition: color 0.25s ease; }
+      #ftco-navbar.scrolled .nav-link, #ftco-navbar.scrolled .navbar-brand span { color: #222222 !important; }
+      #ftco-navbar .navbar-toggler { color: #ffffff !important; border-color: rgba(255,255,255,0.18) !important; }
+      #ftco-navbar.scrolled .navbar-toggler { color: #222222 !important; border-color: rgba(0,0,0,0.12) !important; }
+      #ftco-nav.collapse.show .nav-link { color: #222222 !important; }
 
-      /* HERO: background full-screen on mobile (uses --vh variable) */
+      /* HERO: fondo y texto en blanco para coincidir con GALERÍA */
       .hero-wrap {
-        position:relative; width:100%; overflow:hidden; margin:0;
-        background-image: url('images/news_hero.jpg'); background-size:cover; background-position:center center; background-repeat:no-repeat;
-        height: calc(var(--vh, 1vh) * 100); min-height: 320px; display:block;
+        position:relative;
+        width:100%;
+        overflow:hidden;
+        margin:0;
+        background-image: url('images/news_hero.jpg');
+        background-size:cover;
+        background-position:center center;
+        background-repeat:no-repeat;
+        height: calc(var(--vh, 1vh) * 60); /* por seguridad, no ocupar toda la pantalla */
+        min-height: 320px;
+        display:block;
       }
-      .hero-wrap .overlay { position:absolute; inset:0; background: linear-gradient(180deg, rgba(0,0,0,0.22) 0%, rgba(0,0,0,0.36) 60%); z-index:2; }
+      .hero-wrap .overlay { position:absolute; inset:0; background: linear-gradient(180deg, rgba(0,0,0,0.30) 0%, rgba(0,0,0,0.48) 60%); z-index:2; }
       .hero-wrap .hero-content { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:3; color:#fff; text-align:center; padding:0 18px; }
-      .hero-wrap .hero-content h1{ font-size:3rem; margin:0 0 8px; }
+      .hero-wrap .hero-content h1{ font-size:3rem; margin:0 0 8px; font-family:'Overpass', sans-serif; font-weight:600; color:#fff; text-shadow:0 6px 18px rgba(0,0,0,0.32); }
+      .hero-wrap .hero-content p { color: rgba(255,255,255,0.92); margin:0; font-size:1.05rem; }
+
+      /* Breadcrumbs estilo gallery: texto claro y pequeño acento */
+      .breadcrumbs { margin-bottom:12px; }
+      .breadcrumbs a { color: rgba(255,255,255,0.85); text-decoration:none; font-size:0.9rem; letter-spacing:1px; }
+      .breadcrumbs span { color: rgba(255,255,255,0.7); font-size:0.9rem; }
 
       /* Grid de noticias */
       section.ftco-section { padding: 48px 0; }
-      .members-grid, .posts-grid { display:grid; gap:24px; grid-template-columns: repeat(3, 1fr); }
+      .posts-grid { display:grid; gap:24px; grid-template-columns: repeat(3, 1fr); }
 
       .blog-entry { background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 8px 22px rgba(10,25,35,0.06); display:flex; flex-direction:column; }
       .block-20 { display:block; height:220px; background-size:cover; background-position:center; }
       .text { padding:16px; flex:1 1 auto; display:flex; flex-direction:column; }
       .meta { color:#9aa6ad; font-size:0.9rem; display:flex; gap:10px; align-items:center; }
-      .heading { margin:10px 0 12px; font-size:1.05rem; color:#0e2a39; }
+      .heading { margin:10px 0 12px; font-size:1.05rem; color:#0e2a39; font-family:'Overpass',sans-serif; font-weight:600; }
       .excerpt { color:#4b5560; flex:1 1 auto; }
 
       /* Share toolbar */
@@ -82,12 +100,14 @@
       @media (max-width: 575.98px) {
         .posts-grid { grid-template-columns: 1fr; }
         .block-20 { height: 260px; }
+        .hero-wrap { height: calc(var(--vh, 1vh) * 40); }
       }
     </style>
   </head>
   <body>
 
-  <nav class="navbar navbar-expand-lg ftco_navbar ftco-navbar-light" id="ftco-navbar" role="navigation" aria-label="Menú principal">
+  <!-- Navbar: usar la misma clase y comportamiento visual que en gallery -->
+  <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar" role="navigation" aria-label="Menú principal">
     <div class="container">
       <a class="navbar-brand d-flex align-items-center" href="index.html">
         <img src="images/logo.png" alt="IcTiosCusco logo">
@@ -273,11 +293,10 @@
     </div>
   </footer>
 
-
   <!-- loader -->
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
 
-
+  <!-- SCRIPTS -->
   <script src="js/jquery.min.js"></script>
   <script src="js/jquery-migrate-3.0.1.min.js"></script>
   <script src="js/popper.min.js"></script>
@@ -302,7 +321,7 @@
       window.addEventListener('resize', setVhVar); window.addEventListener('orientationchange', setVhVar); setVhVar();
     })();
 
-    // Navbar behaviour
+    // Navbar behaviour y botones compartir (igual que antes)
     document.addEventListener('DOMContentLoaded', function () {
       var navbar = document.getElementById('ftco-navbar');
       var navCollapse = $('#ftco-nav');
@@ -310,7 +329,6 @@
       checkScroll(); window.addEventListener('scroll', checkScroll, {passive:true});
       if(navCollapse.length){ navCollapse.on('shown.bs.collapse', function(){ navbar.classList.add('scrolled'); }); navCollapse.on('hidden.bs.collapse', function(){ if(window.scrollY<=60) navbar.classList.remove('scrolled'); }); }
 
-      // Compartir: maneja clicks en botones .share-btn
       document.querySelectorAll('.share-btn').forEach(function(btn){
         btn.addEventListener('click', function(e){
           var article = e.target.closest('.blog-entry');
@@ -321,13 +339,11 @@
           var image = article.getAttribute('data-image') || '';
           var action = btn.getAttribute('data-share');
 
-          // Web Share API (móvil / soportado)
           if(action === 'web'){
             if(navigator.share){
               navigator.share({ title: title, text: excerpt, url: url }).catch(function(err){});
             } else {
-              // Fallback: abrir diálogo de Facebook + Twitter
-              alert('Tu navegador no soporta el menú nativo de compartir. Usa los botones de Facebook/WhatsApp o copia el enlace.');
+              alert('Tu navegador no soporta el menú nativo de compartir. Usa Facebook/WhatsApp o copia el enlace.');
             }
             return;
           }
@@ -355,12 +371,10 @@
             if(navigator.clipboard && window.isSecureContext){
               navigator.clipboard.writeText(url).then(function(){ alert('Enlace copiado al portapapeles'); });
             } else {
-              // fallback simple
               var ta = document.createElement('textarea'); ta.value = url; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); alert('Enlace copiado al portapapeles'); }catch(e){ prompt('Copia este enlace:', url); } ta.remove();
             }
             return;
           }
-
         });
       });
 
@@ -368,3 +382,4 @@
   </script>
   </body>
 </html>
+
