@@ -415,25 +415,8 @@
         }
 
         /* ---------------------------
-           PAYPAL CONFIG (Sandbox / Live switch)
+           UTIL: crear input hidden para formularios PayPal
            --------------------------- */
-        // MODO PRUEBAS: setea true para usar el correo sandbox (no dinero real)
-        const USE_SANDBOX = false;
-
-        // Correo sandbox (proporcionado por ti); NO pongas contraseñas/secretos aquí
-        const PAYPAL_SANDBOX_EMAIL = 'sb-ao5ns45348107@business.example.com';
-        // Correo live (tu cuenta real): sustituye si deseas usar producción
-        const PAYPAL_LIVE_EMAIL = 'ictioscusco@gmail.com';
-
-        const PAYPAL_BUSINESS = USE_SANDBOX ? PAYPAL_SANDBOX_EMAIL : PAYPAL_LIVE_EMAIL;
-        const PAYPAL_CURRENCY = 'PEN'; // usa 'USD' si prefieres
-        const PAYPAL_ENDPOINT = USE_SANDBOX ? 'https://www.sandbox.paypal.com/cgi-bin/webscr' : 'https://www.paypal.com/cgi-bin/webscr';
-
-        // Mostrar banner sandbox si está activo
-        if (USE_SANDBOX) {
-          document.getElementById('sandbox-note').style.display = 'block';
-        }
-
         function createHidden(name, value) {
           const inp = document.createElement('input');
           inp.type = 'hidden';
@@ -442,6 +425,41 @@
           return inp;
         }
 
+        /* ---------------------------
+           PAYPAL CONFIG (Sandbox / Live switch)
+           Versión robusta completa
+           --------------------------- */
+        // MODO PRUEBAS: setea true para usar sandbox
+        const USE_SANDBOX = false; // <- Cambia a true para pruebas en sandbox
+        // Correo sandbox (obténlo en developer.paypal.com si pruebas)
+        const PAYPAL_SANDBOX_EMAIL = 'sb-xxxxxxxxxx@business.sandbox.example.com'; // reemplaza si usas sandbox
+        // Correo live (tu cuenta real de negocio)
+        const PAYPAL_LIVE_EMAIL = 'ictioscusco@gmail.com'; // reemplaza por tu email real si vas a producción
+        // Currency (usa 'USD' si PEN da problemas)
+        let PAYPAL_CURRENCY = 'PEN';
+        const PAYPAL_BUSINESS = USE_SANDBOX ? PAYPAL_SANDBOX_EMAIL : PAYPAL_LIVE_EMAIL;
+        const PAYPAL_ENDPOINT = USE_SANDBOX ? 'https://www.sandbox.paypal.com/cgi-bin/webscr' : 'https://www.paypal.com/cgi-bin/webscr';
+
+        // Mostrar banner sandbox si está activo
+        if (USE_SANDBOX && document.getElementById('sandbox-note')) {
+          document.getElementById('sandbox-note').style.display = 'block';
+        }
+
+        // abrir ventana nueva sin URL primero para reducir bloqueo de popup
+        function submitFormToNewWindow(form) {
+          const win = window.open('', 'paypalWindow' + Math.floor(Math.random()*100000));
+          if(!win) {
+            alert('Tu navegador bloqueó la apertura de ventanas. Permite popups para este sitio e inténtalo de nuevo.');
+            return false;
+          }
+          form.target = win.name;
+          document.body.appendChild(form);
+          form.submit();
+          form.remove();
+          return true;
+        }
+
+        // Abrir pago por donación simple (single)
         function openPaypalSingle(amount) {
           if (!PAYPAL_BUSINESS) {
             alert('No está configurado el correo de PayPal. Revisa el código.');
@@ -450,34 +468,24 @@
           const form = document.createElement('form');
           form.method = 'post';
           form.action = PAYPAL_ENDPOINT;
-          form.target = '_blank';
           form.style.display = 'none';
 
-          // Para donaciones es recomendable usar cmd _donations, pero dejamos _xclick para "compra" rápida
-          form.appendChild(createHidden('cmd', '_xclick'));
+          // cmd _donations para botones de donación
+          form.appendChild(createHidden('cmd', '_donations'));
           form.appendChild(createHidden('business', PAYPAL_BUSINESS));
           form.appendChild(createHidden('item_name', 'Donación a IcTiosCusco'));
-          form.appendChild(createHidden('amount', amount));
+          form.appendChild(createHidden('amount', Number(amount).toFixed(2)));
           form.appendChild(createHidden('currency_code', PAYPAL_CURRENCY));
           form.appendChild(createHidden('return', window.location.href));
           form.appendChild(createHidden('cancel_return', window.location.href));
-          document.body.appendChild(form);
-          form.submit();
-          form.remove();
+
+          const ok = submitFormToNewWindow(form);
+          if(!ok) {
+            // fallback: abrir URL construida (menos parámetros, pero útil)
+            const url = PAYPAL_ENDPOINT + '?cmd=_donations&business=' + encodeURIComponent(PAYPAL_BUSINESS) + '&amount=' + encodeURIComponent(Number(amount).toFixed(2)) + '&currency_code=' + encodeURIComponent(PAYPAL_CURRENCY);
+            window.open(url, '_blank', 'noopener');
+          }
         }
-
-        // quick amount buttons
-        document.querySelectorAll('.donate-amounts button').forEach(function (btn) {
-          btn.addEventListener('click', function () {
-            document.getElementById('custom-amount').value = btn.getAttribute('data-amount');
-          });
-        });
-
-        document.getElementById('donate-paypal').addEventListener('click', function () {
-          const val = Number(document.getElementById('custom-amount').value || 0);
-          if (!val || val <= 0) { alert('Ingresa un monto válido.'); return; }
-          openPaypalSingle(val.toFixed(2));
-        });
 
         /* ---------------------------
            MERCH CART (cliente)
@@ -544,16 +552,17 @@
             const id = this.getAttribute('data-id');
             const name = this.getAttribute('data-name');
             const price = this.getAttribute('data-price');
-            // find qty input with same data-id
             const qtyInput = document.querySelector('.merch-qty[data-id="' + id + '"]');
             const qty = qtyInput ? Number(qtyInput.value || 1) : 1;
             addToCart(id, name, price, qty);
           });
         });
 
-        // Checkout to PayPal (cart upload)
-        document.getElementById('checkout-paypal').addEventListener('click', function () {
-          if (!Object.keys(cart).length) { alert('El carrito está vacío. Agrega productos antes de pagar.'); return; }
+        /* ---------------------------
+           CHECKOUT CART -> PAYPAL
+           - abre ventana new window para evitar popup blocking
+           --------------------------- */
+        function checkoutPaypalCart(cartObj) {
           if (!PAYPAL_BUSINESS) {
             alert('Por favor configura PAYPAL_BUSINESS en el código para habilitar checkout.');
             return;
@@ -561,7 +570,6 @@
           const form = document.createElement('form');
           form.method = 'post';
           form.action = PAYPAL_ENDPOINT;
-          form.target = '_blank';
           form.style.display = 'none';
 
           form.appendChild(createHidden('cmd', '_cart'));
@@ -569,9 +577,8 @@
           form.appendChild(createHidden('business', PAYPAL_BUSINESS));
           form.appendChild(createHidden('currency_code', PAYPAL_CURRENCY));
 
-          // Add items item_name_1, amount_1, quantity_1 ...
           let i = 1;
-          Object.values(cart).forEach(function (it) {
+          Object.values(cartObj).forEach(function (it) {
             form.appendChild(createHidden('item_name_' + i, it.name));
             form.appendChild(createHidden('amount_' + i, it.price.toFixed(2)));
             form.appendChild(createHidden('quantity_' + i, it.qty));
@@ -581,12 +588,42 @@
           form.appendChild(createHidden('return', window.location.href));
           form.appendChild(createHidden('cancel_return', window.location.href));
 
-          document.body.appendChild(form);
-          form.submit();
-          form.remove();
+          const ok = submitFormToNewWindow(form);
+          if(!ok) {
+            alert('Tu navegador bloqueó la ventana de pago. Revisa tu bloqueador de popups o intenta pagar directamente en PayPal.');
+            document.body.appendChild(form);
+            form.submit();
+            form.remove();
+          }
+        }
+
+        // Bind quick amount buttons
+        document.querySelectorAll('.donate-amounts button').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            document.getElementById('custom-amount').value = btn.getAttribute('data-amount');
+          });
         });
 
-        // Order by email (Formspree) — fallback for customers without PayPal
+        // Donate with PayPal button
+        document.getElementById('donate-paypal').addEventListener('click', function () {
+          const val = Number(document.getElementById('custom-amount').value || 0);
+          if (!val || val <= 0) { alert('Ingresa un monto válido.'); return; }
+          // Si PEN falla por configuración de cuenta, prueba con USD:
+          // PAYPAL_CURRENCY = 'USD';
+          openPaypalSingle(val.toFixed(2));
+        });
+
+        // Checkout cart PayPal
+        document.getElementById('checkout-paypal').addEventListener('click', function () {
+          if (!Object.keys(cart).length) { alert('El carrito está vacío. Agrega productos antes de pagar.'); return; }
+          // Si PEN da problemas con tu cuenta, prueba temporalmente:
+          // PAYPAL_CURRENCY = 'USD';
+          checkoutPaypalCart(cart);
+        });
+
+        /* ---------------------------
+           Order by email (Formspree) — fallback for customers without PayPal
+           --------------------------- */
         const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xqalnaaj';
         document.getElementById('order-mail').addEventListener('click', function () {
           if (!Object.keys(cart).length) { alert('El carrito está vacío. Agrega productos antes de enviar pedido.'); return; }
@@ -594,7 +631,6 @@
           if (!name) return alert('Nombre requerido.');
           const email = prompt('Correo electrónico de contacto (obligatorio):');
           if (!email) return alert('Correo requerido.');
-          // build message
           let msg = 'Pedido tienda IcTiosCusco:\n\n';
           let total = 0;
           Object.values(cart).forEach(function (it) {
@@ -602,7 +638,6 @@
             total += it.price * it.qty;
           });
           msg += `\nTotal aproximado: S/ ${total.toFixed(2)}\n\nPor favor indicar método de pago y datos de envío.`;
-          // Submit to Formspree
           const data = new FormData();
           data.append('name', name);
           data.append('email', email);
@@ -616,7 +651,6 @@
           }).then(function (resp) {
             if (resp.ok) {
               alert('Pedido enviado. Te contactaremos por correo para coordinar pago/envío.');
-              // empty cart
               Object.keys(cart).forEach(k => delete cart[k]);
               renderCart();
             } else {
