@@ -80,23 +80,6 @@
       /* pequeño ajuste responsive */
       .ftco-gallery .gallery { transition: transform .18s ease; }
       .ftco-gallery .gallery:hover { transform: scale(1.01); }
-
-      /* === CAMBIO SOLICITADO: texto negro en el hero === */
-      /* Hacemos el texto negro y sin sombra, y aseguramos que los enlaces del breadcrumb también sean negros */
-      .hero-wrap .breadcrumbs,
-      .hero-wrap .bread,
-      .hero-wrap h1,
-      .hero-wrap p {
-        color: #000 !important;
-        text-shadow: none !important;
-      }
-      .hero-wrap .breadcrumbs a {
-        color: #000 !important;
-      }
-      /* Ajuste responsive para títulos en móvil */
-      @media (max-width: 576px) {
-        .hero-wrap h1 { font-size: 1.6rem; }
-      }
     </style>
   </head>
 
@@ -130,8 +113,7 @@
   <!-- END nav -->
 
   <div class="hero-wrap" style="background-image: url('images/telma.jpg');" data-stellar-background-ratio="0.5">
-    <!-- Overlay: aclarada para que el texto negro se lea en fotos claras -->
-    <div class="overlay" style="background: linear-gradient(rgba(255,255,255,0.55), rgba(255,255,255,0.25));"></div>
+    <div class="overlay"></div>
     <div class="container">
       <div class="row no-gutters slider-text align-items-center justify-content-center" data-scrollax-parent="true">
         <div class="col-md-7 ftco-animate text-center" data-scrollax=" properties: { translateY: '70%' }">
