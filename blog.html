@@ -6,13 +6,6 @@
     <title>Noticias — IcTiosCusco</title>
     <meta name="description" content="Noticias y comunicados de IcTiosCusco: investigación, conservación y monitoreo del género Orestias en Cusco.">
 
-    <!-- Open Graph básicos (para la página principal de noticias). Cada artículo debe tener sus propios OG en blog-single.html -->
-    <meta property="og:site_name" content="IcTiosCusco">
-    <meta property="og:title" content="Noticias — IcTiosCusco">
-    <meta property="og:description" content="Últimas noticias, resultados y comunicados del grupo IcTiosCusco.">
-    <meta property="og:image" content="/images/og_news.jpg">
-    <meta property="og:type" content="website">
-
     <link href="https://fonts.googleapis.com/css?family=Dosis:200,300,400,500,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Overpass:300,400,400i,600,700" rel="stylesheet">
 
@@ -30,102 +23,127 @@
     <link rel="stylesheet" href="css/style.css">
 
     <style>
-      /* Reset básico y fuente global: igual que Gallery (Overpass para cuerpo) */
-      html, body { margin:0; padding:0; font-family: "Overpass", "Dosis", sans-serif; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+      /* Fuente global y reset (igual que gallery) */
+      html, body { margin:0; padding:0; font-family: "Overpass", "Dosis", sans-serif; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; color:#0e2a39; background:#fff; }
 
+      /* Navbar: mismo comportamiento y colores que Gallery */
       .navbar-brand.d-flex { display:inline-flex; align-items:center; }
       .navbar-brand img { height:56px; width:auto; margin-right:12px; }
       .navbar-brand span { font-family:'Overpass','Dosis',sans-serif; font-weight:600; font-size:1.05rem; color:#fff; }
 
-      /* Mantener comportamiento visual del navbar como en gallery */
       #ftco-navbar { background-color: transparent; transition: background-color 0.25s ease; }
       #ftco-navbar.scrolled { background-color: rgba(255,255,255,0.98) !important; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
       #ftco-navbar .nav-link, #ftco-navbar .navbar-brand span { color: #ffffff !important; transition: color 0.25s ease; }
       #ftco-navbar.scrolled .nav-link, #ftco-navbar.scrolled .navbar-brand span { color: #222222 !important; }
       #ftco-navbar .navbar-toggler { color: #ffffff !important; border-color: rgba(255,255,255,0.18) !important; }
       #ftco-navbar.scrolled .navbar-toggler { color: #222222 !important; border-color: rgba(0,0,0,0.12) !important; }
-      #ftco-nav.collapse.show .nav-link { color: #222222 !important; }
 
-      /* HERO: fondo y texto en blanco para coincidir con GALERÍA.
-         Ajuste principal: usar la misma tipografía que la galería para el título (Dosis ligera) */
+      /* HERO: igual formato grande que en gallery (cover, alto) */
       .hero-wrap {
         position:relative;
         width:100%;
         overflow:hidden;
         margin:0;
         background-image: url('images/news_hero.jpg');
-        background-size:cover;
-        background-position:center center;
-        background-repeat:no-repeat;
-        height: calc(var(--vh, 1vh) * 60);
-        min-height: 320px;
+        background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;
+        height: calc(var(--vh, 1vh) * 70); /* grande como gallery */
+        min-height: 420px;
         display:block;
       }
-      .hero-wrap .overlay { position:absolute; inset:0; background: linear-gradient(180deg, rgba(0,0,0,0.30) 0%, rgba(0,0,0,0.48) 60%); z-index:2; }
-      .hero-wrap .hero-content { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:3; color:#fff; text-align:center; padding:0 18px; }
-
+      .hero-wrap .overlay { position:absolute; inset:0; background: linear-gradient(180deg, rgba(0,0,0,0.28) 0%, rgba(0,0,0,0.5) 70%); z-index:2; }
+      .hero-wrap .hero-content { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:3; color:#fff; text-align:center; padding:0 18px; width:100%; max-width:960px; }
       .hero-wrap .hero-content h1{
         font-family: 'Dosis', 'Overpass', sans-serif;
         font-weight: 300;
         letter-spacing: 0.6px;
-        font-size: 3rem;
+        font-size: 3.2rem;
         margin:0 0 8px;
         color:#fff;
         text-shadow: 0 6px 18px rgba(0,0,0,0.32);
       }
-
-      .hero-wrap .hero-content p { color: rgba(255,255,255,0.92); margin:0; font-size:1.05rem; }
+      .hero-wrap .hero-content p { color: rgba(255,255,255,0.94); margin:0; font-size:1.05rem; }
 
       .breadcrumbs { margin-bottom:12px; }
-      .breadcrumbs a { color: rgba(255,255,255,0.85); text-decoration:none; font-size:0.9rem; letter-spacing:1px; }
-      .breadcrumbs span { color: rgba(255,255,255,0.7); font-size:0.9rem; }
+      .breadcrumbs a { color: rgba(255,255,255,0.85); text-decoration:none; font-size:0.95rem; letter-spacing:1px; }
+      .breadcrumbs span { color: rgba(255,255,255,0.72); font-size:0.95rem; }
 
-      /* Grid de noticias */
+      /* Contenedor principal de noticias: diseño horizontal (fila) */
       section.ftco-section { padding: 48px 0; }
-      .posts-grid { display:grid; gap:24px; grid-template-columns: repeat(2, 1fr); }
+      .posts-grid { display:flex; flex-direction:column; gap:24px; }
 
-      .blog-entry { background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 8px 22px rgba(10,25,35,0.06); display:flex; flex-direction:column; }
-      .block-20 { display:block; height:300px; background-size:cover; background-position:center; }
-      .text { padding:20px; flex:1 1 auto; display:flex; flex-direction:column; }
-      .meta { color:#9aa6ad; font-size:0.9rem; display:flex; gap:10px; align-items:center; margin-bottom:8px; }
+      .blog-entry {
+        display:flex;
+        gap:0;
+        background:#fff;
+        border-radius:10px;
+        overflow:hidden;
+        box-shadow:0 8px 22px rgba(10,25,35,0.06);
+        align-items:stretch;
+        min-height: 220px;
+      }
+
+      /* Lado imagen (izquierda) */
+      .entry-media {
+        flex: 0 0 44%; /* imagen ocupa 44% ancho en desktop */
+        min-width: 260px;
+        background-size: cover;
+        background-position: center center;
+      }
+
+      /* Lado texto (derecha) */
+      .entry-body {
+        flex: 1 1 auto;
+        padding: 22px;
+        display:flex;
+        flex-direction:column;
+        justify-content:space-between;
+      }
+
+      .news-date { color:#f47b2b; font-weight:700; letter-spacing:0.6px; margin-bottom:8px; font-size:0.95rem; }
       .heading { margin:6px 0 12px; font-size:1.15rem; color:#0e2a39; font-family:'Overpass',sans-serif; font-weight:600; }
-      .excerpt { color:#4b5560; flex:1 1 auto; line-height:1.45; margin-bottom:12px; }
+      .meta { color:#9aa6ad; font-size:0.9rem; margin-bottom:10px; display:flex; gap:10px; align-items:center; }
+      .excerpt { color:#4b5560; line-height:1.45; }
 
-      /* News date style (prominent) */
-      .news-date { color:#f47b2b; font-weight:700; letter-spacing:0.6px; margin-bottom:8px; }
-
-      /* Schedule box for Bolivia (clear) */
+      /* Schedule / program / link */
       .schedule {
         background:#fff8f2;
         border:1px solid rgba(244,123,43,0.12);
         padding:10px 12px;
         border-radius:8px;
-        margin-bottom:12px;
         color:#0e2a39;
         font-weight:600;
+        margin-bottom:12px;
       }
       .schedule small { display:block; font-weight:400; color:#345; margin-top:6px; font-size:0.92rem; }
 
-      /* Link style for program */
-      .program-link { display:inline-block; margin-bottom:10px; color:#06323a; background:#fff; padding:8px 10px; border-radius:8px; text-decoration:none; border:1px solid rgba(6,50,58,0.06); }
+      .program-link { display:inline-block; margin-bottom:12px; color:#06323a; background:#fff; padding:8px 10px; border-radius:8px; text-decoration:none; border:1px solid rgba(6,50,58,0.06); }
 
-      /* Share toolbar (kept in case you want sharing) */
-      .share-row { display:flex; gap:8px; align-items:center; margin-top:8px; }
+      /* Share-row alineado abajo para que todas las tarjetas terminen igual */
+      .share-row { display:flex; gap:8px; align-items:center; margin-top:12px; }
       .share-btn { display:inline-flex; align-items:center; gap:8px; padding:8px 10px; border-radius:8px; border:1px solid rgba(6,50,58,0.08); background:#f3fafb; color:#06323a; font-weight:600; text-decoration:none; cursor:pointer; }
-      .share-btn:hover { transform:translateY(-2px); box-shadow:0 8px 18px rgba(6,50,58,0.06); }
 
+      /* Footer small fix */
       .ftco-footer { position:relative; z-index:1; }
 
+      /* Responsive: en móvil las entradas apilan imagen arriba y texto abajo */
       @media (max-width: 991.98px) {
-        .posts-grid { grid-template-columns: 1fr; }
-        .hero-wrap .hero-content h1{ font-size:2.2rem; }
-        .block-20 { height:220px; }
+        .entry-media { flex: 0 0 40%; min-width:170px; }
+        .hero-wrap .hero-content h1{ font-size:2.4rem; }
+      }
+      @media (max-width: 767.98px) {
+        .blog-entry { flex-direction:column; }
+        .entry-media { width:100%; flex: 0 0 auto; height: 220px; min-width: auto; }
+        .entry-body { padding:16px; }
+        .posts-grid { gap:18px; }
+        .hero-wrap { height: calc(var(--vh, 1vh) * 50); min-height: 300px; }
       }
     </style>
   </head>
   <body>
 
-  <!-- Navbar -->
+  <!-- NAVBAR -->
   <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar" role="navigation" aria-label="Menú principal">
     <div class="container">
       <a class="navbar-brand d-flex align-items-center" href="index.html">
@@ -152,7 +170,7 @@
     </div>
   </nav>
 
-  <!-- HERO -->
+  <!-- HERO (igual formato grande que gallery) -->
   <div class="hero-wrap" role="img" aria-label="Noticias IcTiosCusco">
     <div class="overlay"></div>
     <div class="hero-content container">
@@ -166,93 +184,46 @@
     </div>
   </div>
 
-  <!-- POSTS (ordenados por fecha: Bolivia primero) -->
+  <!-- POSTS: horizontal layout -->
   <section class="ftco-section">
     <div class="container">
       <div class="posts-grid" role="list">
 
-        <!-- Noticia 1: Bolivia (PROGRAM + HORARIO destacado) -->
+        <!-- 1) Bolivia (mostramos programa y horarios primero) -->
         <article class="blog-entry" role="listitem" aria-label="Noticia Congreso Bolivia" data-url="">
-          <div class="block-20" style="background-image: url('images/noticia_bolivia.jpg');" aria-hidden="true"></div>
-          <div class="text">
-            <div class="news-date">27 de noviembre de 2025 — La Paz, Bolivia</div>
+          <div class="entry-media" style="background-image:url('images/noticia_bolivia.jpg');" aria-hidden="true"></div>
+          <div class="entry-body">
+            <div>
+              <div class="news-date">27 de noviembre de 2025 — Sala TAMBAQUI, La Paz</div>
 
-            <!-- Programa / horario destacado con enlace al PDF que enviaste -->
-            <a class="program-link" href="https://drive.google.com/file/d/1VGunO5nnJ-WTI3Ru20orvKLlwd9HIV8Y/view?fbclid=IwY2xjawOFmq5leHRuA2FlbQIxMABicmlkETFydUNJR05ZcTlQYkU4b0xrc3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MghjYWxsc2l0ZQEyAAEeWFqNacswg5eRqfYw2ocW_ir5cuR3hrAyaOzbtUQYhEjKdOv2EofUpMQq3QA_aem_iA0fsuiopXJ74buAZsJ1lA" target="_blank" rel="noopener">Programa y horarios (PDF)</a>
+              <a class="program-link" href="https://drive.google.com/file/d/1VGunO5nnJ-WTI3Ru20orvKLlwd9HIV8Y/view?fbclid=IwY2xjawOFmq5leHRuA2FlbQIxMABicmlkETFydUNJR05ZcTlQYkU4b0xrc3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MghjYWxsc2l0ZQEyAAEeWFqNacswg5eRqfYw2ocW_ir5cuR3hrAyaOzbtUQYhEjKdOv2EofUpMQq3QA_aem_iA0fsuiopXJ74buAZsJ1lA" target="_blank" rel="noopener">Ver programa y horarios (PDF)</a>
 
-            <h3 class="heading">IcTiosCusco en el III Congreso Boliviano de Ictiología — ponencias y curso precongreso</h3>
-            <div class="meta">
-              <div>IcTiosCusco</div>
-            </div>
+              <h3 class="heading">IcTiosCusco participará en el III Congreso Boliviano de Ictiología y curso precongreso</h3>
+              <div class="meta">IcTiosCusco</div>
 
-            <!-- Horarios puntuales tal como pediste (mostrados primero) -->
-            <div class="schedule">
-              <strong>Horario de nuestras ponencias y actividad (jueves 27 de noviembre de 2025)</strong>
-              <small>Sala TAMBAQUI — Programa oficial (ver enlace arriba)</small>
-              <div style="margin-top:8px;">
-                <div>15:30 &nbsp; — &nbsp; <strong>Getsemaní Pérez</strong><br>
-                  <em>Caracterización de las poblaciones de <strong>Trichomycterus</strong> sp. procedentes de Ancahuasi, Cachimayo, Ccorca, Enaco, Languilayo, Pillao Matao y Huasao, mediante análisis morfométricos lineales.</em>
-                </div>
-                <div style="margin-top:8px;">17:15 &nbsp; — &nbsp; <strong>Dr. Marco A. Méndez</strong><br>
-                  <em>Ponencia magistral C4: "Integrando perspectivas para estudiar la divergencia de las especies del Altiplano".</em>
-                </div>
-                <div style="margin-top:8px;">17:30 &nbsp; — &nbsp; <strong>Jack Malon Rodríguez</strong><br>
-                  <em>Variabilidad morfológica en poblaciones del género <strong>Orestias</strong> (Teleostei: Cyprinodontidae) en lagunas altoandinas del departamento del Cusco.</em>
+              <div class="schedule">
+                <strong>Horario de intervenciones (misma jornada)</strong>
+                <small>Jueves, 27 de noviembre de 2025 — Sala TAMBAQUI</small>
+
+                <div style="margin-top:8px;">
+                  <div><strong>15:30</strong> — Getsemaní Pérez<br>
+                    <em>Caracterización de poblaciones de <strong>Trichomycterus</strong> sp. (Ancahuasi, Cachimayo, Ccorca, Enaco, Languilayo, Pillao Matao, Huasao).</em>
+                  </div>
+
+                  <div style="margin-top:8px;"><strong>17:15</strong> — Dr. Marco A. Méndez<br>
+                    <em>Ponencia magistral C4: "Integrando perspectivas para estudiar la divergencia de las especies del Altiplano".</em>
+                  </div>
+
+                  <div style="margin-top:8px;"><strong>17:30</strong> — Jack Malon Rodríguez<br>
+                    <em>Variabilidad morfológica en poblaciones del género <strong>Orestias</strong> en lagunas altoandinas del Cusco.</em>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <p class="excerpt">
-              IcTiosCusco participará en La Paz con presentaciones orales y actividades académicas. Además del curso precongreso "Introducción al análisis filogenético y filogeográfico", el equipo presentará resultados sobre variación morfológica y conservación de especies altoandinas. Invitamos a revisar el programa oficial (enlace) para confirmar salas y horarios.
-            </p>
-
-            <div class="share-row">
-              <button class="share-btn" data-share="web">Compartir</button>
-              <a class="share-btn" data-share="facebook">Facebook</a>
-              <a class="share-btn" data-share="whatsapp">WhatsApp</a>
+              <p class="excerpt">
+                Además del curso precongreso "Introducción al análisis filogenético y filogeográfico" (22, 24 y 25 de noviembre), el equipo presentará ponencias orales y participará en sesiones técnicas. Instructores del curso: Dr. Marco A. Méndez Torres y MSc. Viviana Araya Enero (Universidad de Chile).
+              </p>
             </div>
-          </div>
-        </article>
-
-        <!-- Noticia 2: EXPOBIO 2025 (30 Oct 2025) -->
-        <article class="blog-entry" role="listitem" aria-label="Noticia EXPOBIO 2025" data-url="">
-          <div class="block-20" style="background-image: url('images/noticia_expobio.jpg');" aria-hidden="true"></div>
-          <div class="text">
-            <div class="news-date">30 de octubre de 2025</div>
-            <h3 class="heading">IcTiosCusco obtiene el segundo lugar en ponencia oral — EXPOBIO 2025</h3>
-            <div class="meta">
-              <div>IcTiosCusco</div>
-            </div>
-            <p class="excerpt">
-              En la V Convención Anual de Estudiantes de Biología del Cusco (EXPOBIO 2025) nuestro equipo obtuvo el segundo lugar en la categoría de ponencia oral — Zoología. La exposición estuvo a cargo de Getsemaní Lucía Pérez Chirau con el trabajo <em>"Caracterización de las poblaciones de <strong>Trichomycterus</strong> sp. procedentes de diferentes localidades andinas mediante análisis morfométricos lineales y geométricos."</em>
-            </p>
-            <p class="excerpt">
-              Felicitamos a los colaboradores Nayely Polanco Acostupa, Deysi Ccala, Edmar Soria, Libertad Palomino y Jack Malon Rodríguez por su aporte y compromiso con la investigación ictiológica en Cusco.
-            </p>
-
-            <div class="share-row">
-              <button class="share-btn" data-share="web">Compartir</button>
-              <a class="share-btn" data-share="facebook">Facebook</a>
-              <a class="share-btn" data-share="whatsapp">WhatsApp</a>
-            </div>
-          </div>
-        </article>
-
-        <!-- Noticia 3: MONFU 2025 (24 Oct 2025) -->
-        <article class="blog-entry" role="listitem" aria-label="Noticia MONFU 2025" data-url="">
-          <div class="block-20" style="background-image: url('images/noticia_monfu.jpg');" aria-hidden="true"></div>
-          <div class="text">
-            <div class="news-date">24 de octubre de 2025</div>
-            <h3 class="heading">Participación de IcTiosCusco en MONFU 2025 — "Las Montañas, Nuestro Futuro"</h3>
-            <div class="meta">
-              <div>IcTiosCusco</div>
-            </div>
-            <p class="excerpt">
-              El 24 de octubre de 2025 el equipo de IcTiosCusco participó en el VIII Simposio Internacional MONFU 2025, organizado por el INAIGEM en Cusco. La ponencia fue presentada por Nayely Polanco, con apoyo de Getsemaní Chirau, y abordó la variación morfológica de especies del género <em>Orestias</em> en lagunas altoandinas.
-            </p>
-            <p class="excerpt">
-              Autoría: Jack Malon Rodríguez, Alex Ttito, Nayely Polanco y Rolando Chaparrea. Los resultados enfatizan la adaptación de estas especies a ambientes extremos y su importancia ecológica para los sistemas de altura.
-            </p>
 
             <div class="share-row" aria-hidden="false">
               <button class="share-btn" data-share="web">Compartir</button>
@@ -262,21 +233,79 @@
           </div>
         </article>
 
-        <!-- Noticia 4: Apoyo en Congreso Peruano de Ornitología (próximamente) -->
-        <article class="blog-entry" role="listitem" aria-label="Noticia Congreso Peruano de Ornitologia" data-url="">
-          <div class="block-20" style="background-image: url('images/noticia_ornitologia.jpg');" aria-hidden="true"></div>
-          <div class="text">
-            <div class="news-date">Fecha por confirmar</div>
-            <h3 class="heading">IcTiosCusco como apoyo activo en la organización del XV Congreso Peruano de Ornitología</h3>
-            <div class="meta">
-              <div>IcTiosCusco</div>
+        <!-- 2) EXPOBIO 2025 -->
+        <article class="blog-entry" role="listitem" aria-label="Noticia EXPOBIO 2025" data-url="">
+          <div class="entry-media" style="background-image:url('images/noticia_expobio.jpg');" aria-hidden="true"></div>
+          <div class="entry-body">
+            <div>
+              <div class="news-date">30 de octubre de 2025</div>
+              <h3 class="heading">IcTiosCusco: segundo lugar en ponencia oral — EXPOBIO 2025</h3>
+              <div class="meta">IcTiosCusco</div>
+
+              <p class="excerpt">
+                En la V Convención Anual de Estudiantes de Biología del Cusco (EXPOBIO 2025) obtuvimos el segundo lugar en la categoría de ponencia oral — Zoología. La exposición estuvo a cargo de Getsemaní Lucía Pérez Chirau con el trabajo:
+              </p>
+
+              <p class="excerpt" style="font-style:italic; margin-top:6px;">
+                "Caracterización de las poblaciones de <strong>Trichomycterus</strong> sp. procedentes de diferentes localidades andinas mediante análisis morfométricos lineales y geométricos."
+              </p>
+
+              <p class="excerpt">
+                Agradecemos la contribución de Nayely Polanco Acostupa, Deysi Ccala, Edmar Soria, Libertad Palomino y Jack Malon Rodríguez por su participación y compromiso con la investigación ictiológica en Cusco.
+              </p>
             </div>
-            <p class="excerpt">
-              IcTiosCusco participará como apoyo activo en la organización del XV Congreso Peruano de Ornitología, que se llevará a cabo en Madre de Dios. El nexo y coordinación del evento está a cargo de nuestro miembro Rolando Chaparrea Cárdenas, quien trabajará con las instituciones locales para la logística y convocatoria.
-            </p>
-            <p class="excerpt">
-              Más información sobre fechas y programa será comunicada próximamente en nuestras redes y sitio web.
-            </p>
+
+            <div class="share-row">
+              <button class="share-btn" data-share="web">Compartir</button>
+              <a class="share-btn" data-share="facebook">Facebook</a>
+              <a class="share-btn" data-share="whatsapp">WhatsApp</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- 3) MONFU 2025 -->
+        <article class="blog-entry" role="listitem" aria-label="Noticia MONFU 2025" data-url="">
+          <div class="entry-media" style="background-image:url('images/noticia_monfu.jpg');" aria-hidden="true"></div>
+          <div class="entry-body">
+            <div>
+              <div class="news-date">24 de octubre de 2025</div>
+              <h3 class="heading">Participación de IcTiosCusco en MONFU 2025 — "Las Montañas, Nuestro Futuro"</h3>
+              <div class="meta">IcTiosCusco</div>
+
+              <p class="excerpt">
+                El equipo participó en el VIII Simposio Internacional MONFU 2025 (INAIGEM, Cusco). La ponencia estuvo a cargo de Nayely Polanco, con el apoyo de Getsemaní Chirau, sobre la variación morfológica de especies del género <em>Orestias</em> en lagunas altoandinas.
+              </p>
+
+              <p class="excerpt">
+                Autores: Jack Malon Rodríguez, Alex Ttito, Nayely Polanco y Rolando Chaparrea. Los resultados resaltan la adaptación de estas especies a ambientes extremos y su importancia ecológica.
+              </p>
+            </div>
+
+            <div class="share-row">
+              <button class="share-btn" data-share="web">Compartir</button>
+              <a class="share-btn" data-share="facebook">Facebook</a>
+              <a class="share-btn" data-share="whatsapp">WhatsApp</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- 4) Ornitología (apoyo organización) -->
+        <article class="blog-entry" role="listitem" aria-label="Noticia Congreso Peruano de Ornitologia" data-url="">
+          <div class="entry-media" style="background-image:url('images/noticia_ornitologia.jpg');" aria-hidden="true"></div>
+          <div class="entry-body">
+            <div>
+              <div class="news-date">Próximamente — Madre de Dios</div>
+              <h3 class="heading">IcTiosCusco: apoyo activo en el XV Congreso Peruano de Ornitología</h3>
+              <div class="meta">IcTiosCusco</div>
+
+              <p class="excerpt">
+                IcTiosCusco será apoyo activo en la organización del XV Congreso Peruano de Ornitología, que se realizará en Madre de Dios. La coordinación y nexo institucional está a cargo de nuestro miembro Rolando Chaparrea Cárdenas.
+              </p>
+
+              <p class="excerpt">
+                Informaremos fechas definitivas, programa y oportunidades de participación en nuestras redes y en el sitio web.
+              </p>
+            </div>
 
             <div class="share-row">
               <button class="share-btn" data-share="web">Compartir</button>
@@ -287,12 +316,10 @@
         </article>
 
       </div>
-
-      <!-- Opcional: Pagination (oculto porque solo mostramos noticias puntuales) -->
     </div>
   </section>
 
-  <!-- FOOTER -->
+  <!-- FOOTER (igual que antes) -->
   <footer class="ftco-footer ftco-section img">
     <div class="overlay"></div>
     <div class="container">
@@ -307,6 +334,7 @@
             </ul>
           </div>
         </div>
+
         <div class="col-md-4">
           <div class="ftco-footer-widget mb-4">
             <h2 class="ftco-heading-2">Publicaciones recientes</h2>
@@ -322,6 +350,7 @@
             </div>
           </div>
         </div>
+
         <div class="col-md-2">
           <div class="ftco-footer-widget mb-4 ml-md-4">
             <h2 class="ftco-heading-2">Enlaces</h2>
@@ -335,6 +364,7 @@
             </ul>
           </div>
         </div>
+
         <div class="col-md-3">
           <div class="ftco-footer-widget mb-4">
             <h2 class="ftco-heading-2">¿Tienes preguntas?</h2>
@@ -381,7 +411,7 @@
       window.addEventListener('resize', setVhVar); window.addEventListener('orientationchange', setVhVar); setVhVar();
     })();
 
-    // Navbar behaviour y botones compartir (igual que antes)
+    // Navbar behaviour y botones compartir
     document.addEventListener('DOMContentLoaded', function () {
       var navbar = document.getElementById('ftco-navbar');
       var navCollapse = $('#ftco-nav');
@@ -389,7 +419,6 @@
       checkScroll(); window.addEventListener('scroll', checkScroll, {passive:true});
       if(navCollapse.length){ navCollapse.on('shown.bs.collapse', function(){ navbar.classList.add('scrolled'); }); navCollapse.on('hidden.bs.collapse', function(){ if(window.scrollY<=60) navbar.classList.remove('scrolled'); }); }
 
-      // Manejador de compartir (usa data-url del artículo; artículos no redirigen)
       document.querySelectorAll('.share-btn').forEach(function(btn){
         btn.addEventListener('click', function(e){
           var article = e.target.closest('.blog-entry');
