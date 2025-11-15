@@ -82,10 +82,10 @@
 
       /* Grid de noticias */
       section.ftco-section { padding: 48px 0; }
-      .posts-grid { display:grid; gap:24px; grid-template-columns: repeat(3, 1fr); }
+      .posts-grid { display:grid; gap:24px; grid-template-columns: repeat(2, 1fr); }
 
       .blog-entry { background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 8px 22px rgba(10,25,35,0.06); display:flex; flex-direction:column; }
-      .block-20 { display:block; height:260px; background-size:cover; background-position:center; }
+      .block-20 { display:block; height:300px; background-size:cover; background-position:center; }
       .text { padding:20px; flex:1 1 auto; display:flex; flex-direction:column; }
       .meta { color:#9aa6ad; font-size:0.9rem; display:flex; gap:10px; align-items:center; margin-bottom:8px; }
       .heading { margin:6px 0 12px; font-size:1.15rem; color:#0e2a39; font-family:'Overpass',sans-serif; font-weight:600; }
@@ -93,6 +93,21 @@
 
       /* News date style (prominent) */
       .news-date { color:#f47b2b; font-weight:700; letter-spacing:0.6px; margin-bottom:8px; }
+
+      /* Schedule box for Bolivia (clear) */
+      .schedule {
+        background:#fff8f2;
+        border:1px solid rgba(244,123,43,0.12);
+        padding:10px 12px;
+        border-radius:8px;
+        margin-bottom:12px;
+        color:#0e2a39;
+        font-weight:600;
+      }
+      .schedule small { display:block; font-weight:400; color:#345; margin-top:6px; font-size:0.92rem; }
+
+      /* Link style for program */
+      .program-link { display:inline-block; margin-bottom:10px; color:#06323a; background:#fff; padding:8px 10px; border-radius:8px; text-decoration:none; border:1px solid rgba(6,50,58,0.06); }
 
       /* Share toolbar (kept in case you want sharing) */
       .share-row { display:flex; gap:8px; align-items:center; margin-top:8px; }
@@ -102,13 +117,9 @@
       .ftco-footer { position:relative; z-index:1; }
 
       @media (max-width: 991.98px) {
-        .posts-grid { grid-template-columns: repeat(2,1fr); }
-        .hero-wrap .hero-content h1{ font-size:2.2rem; }
-      }
-      @media (max-width: 575.98px) {
         .posts-grid { grid-template-columns: 1fr; }
-        .block-20 { height: 200px; }
-        .hero-wrap { height: calc(var(--vh, 1vh) * 40); }
+        .hero-wrap .hero-content h1{ font-size:2.2rem; }
+        .block-20 { height:220px; }
       }
     </style>
   </head>
@@ -155,49 +166,44 @@
     </div>
   </div>
 
-  <!-- POSTS (solo 3 noticias, sin redirecciones) -->
+  <!-- POSTS (ordenados por fecha: Bolivia primero) -->
   <section class="ftco-section">
     <div class="container">
       <div class="posts-grid" role="list">
 
-        <!-- Noticia 1 -->
-        <article class="blog-entry" role="listitem" aria-label="Noticia MONFU 2025" data-url="">
-          <div class="block-20" style="background-image: url('images/noticia_monfu.jpg');" aria-hidden="true"></div>
+        <!-- Noticia 1: Bolivia (PROGRAM + HORARIO destacado) -->
+        <article class="blog-entry" role="listitem" aria-label="Noticia Congreso Bolivia" data-url="">
+          <div class="block-20" style="background-image: url('images/noticia_bolivia.jpg');" aria-hidden="true"></div>
           <div class="text">
-            <div class="news-date">24 de octubre de 2025</div>
-            <h3 class="heading">Participación de IcTiosCusco en el VIII Simposio Internacional “Las Montañas, Nuestro Futuro” (MONFU 2025)</h3>
+            <div class="news-date">27 de noviembre de 2025 — La Paz, Bolivia</div>
+
+            <!-- Programa / horario destacado con enlace al PDF que enviaste -->
+            <a class="program-link" href="https://drive.google.com/file/d/1VGunO5nnJ-WTI3Ru20orvKLlwd9HIV8Y/view?fbclid=IwY2xjawOFmq5leHRuA2FlbQIxMABicmlkETFydUNJR05ZcTlQYkU4b0xrc3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MghjYWxsc2l0ZQEyAAEeWFqNacswg5eRqfYw2ocW_ir5cuR3hrAyaOzbtUQYhEjKdOv2EofUpMQq3QA_aem_iA0fsuiopXJ74buAZsJ1lA" target="_blank" rel="noopener">Programa y horarios (PDF)</a>
+
+            <h3 class="heading">IcTiosCusco en el III Congreso Boliviano de Ictiología — ponencias y curso precongreso</h3>
             <div class="meta">
               <div>IcTiosCusco</div>
             </div>
-            <p class="excerpt">
-              El 24 de octubre de 2025, el equipo de IcTiosCusco participó en el VIII Simposio Internacional MONFU 2025, organizado por el INAIGEM en la ciudad del Cusco. La presentación del grupo estuvo a cargo de Nayely Polanco, con el apoyo de Getsemaní Chirau, y versó sobre la variación morfológica de especies del género <em>Orestias</em> en lagunas altoandinas.
-            </p>
-            <p class="excerpt">
-              Autores: Jack Malon Rodríguez, Alex Ttito, Nayely Polanco y Rolando Chaparrea. Durante la ponencia se expusieron resultados preliminares que destacan la adaptación de estas especies a ambientes extremos y su relevancia ecológica para los sistemas de altura. Esta participación reafirma el compromiso de IcTiosCusco con la investigación, conservación y difusión del conocimiento sobre la ictiofauna altoandina.
-            </p>
 
-            <div class="share-row" aria-hidden="false">
-              <button class="share-btn" data-share="web" aria-label="Compartir (web)">Compartir</button>
-              <a class="share-btn" data-share="facebook" aria-label="Compartir en Facebook">Facebook</a>
-              <a class="share-btn" data-share="whatsapp" aria-label="Compartir en WhatsApp">WhatsApp</a>
+            <!-- Horarios puntuales tal como pediste (mostrados primero) -->
+            <div class="schedule">
+              <strong>Horario de nuestras ponencias y actividad (jueves 27 de noviembre de 2025)</strong>
+              <small>Sala TAMBAQUI — Programa oficial (ver enlace arriba)</small>
+              <div style="margin-top:8px;">
+                <div>15:30 &nbsp; — &nbsp; <strong>Getsemaní Pérez</strong><br>
+                  <em>Caracterización de las poblaciones de <strong>Trichomycterus</strong> sp. procedentes de Ancahuasi, Cachimayo, Ccorca, Enaco, Languilayo, Pillao Matao y Huasao, mediante análisis morfométricos lineales.</em>
+                </div>
+                <div style="margin-top:8px;">17:15 &nbsp; — &nbsp; <strong>Dr. Marco A. Méndez</strong><br>
+                  <em>Ponencia magistral C4: "Integrando perspectivas para estudiar la divergencia de las especies del Altiplano".</em>
+                </div>
+                <div style="margin-top:8px;">17:30 &nbsp; — &nbsp; <strong>Jack Malon Rodríguez</strong><br>
+                  <em>Variabilidad morfológica en poblaciones del género <strong>Orestias</strong> (Teleostei: Cyprinodontidae) en lagunas altoandinas del departamento del Cusco.</em>
+                </div>
+              </div>
             </div>
-          </div>
-        </article>
 
-        <!-- Noticia 2 -->
-        <article class="blog-entry" role="listitem" aria-label="Noticia EXPOBIO 2025" data-url="">
-          <div class="block-20" style="background-image: url('images/noticia_expobio.jpg');" aria-hidden="true"></div>
-          <div class="text">
-            <div class="news-date">30 de octubre de 2025</div>
-            <h3 class="heading">IcTiosCusco obtiene el segundo lugar en ponencia oral — EXPOBIO 2025</h3>
-            <div class="meta">
-              <div>IcTiosCusco</div>
-            </div>
             <p class="excerpt">
-              En la V Convención Anual de Estudiantes de Biología del Cusco (EXPOBIO 2025), realizada el 30 de octubre de 2025, IcTiosCusco obtuvo el segundo lugar en la categoría de ponencia oral — Zoología. La ponencia fue presentada por Getsamaní Lucía Pérez Chirau.
-            </p>
-            <p class="excerpt">
-              Título del trabajo: <em>Caracterización de las poblaciones de <strong>Trichomycterus</strong> sp. procedentes de diferentes localidades andinas mediante análisis morfométricos lineales y geométricos</em>. Felicitamos también a los colaboradores Nayely Polanco Acostupa, Deysi Ccala, Edmar Soria, Libertad Palomino y Jack Malon Rodríguez por su destacada participación.
+              IcTiosCusco participará en La Paz con presentaciones orales y actividades académicas. Además del curso precongreso "Introducción al análisis filogenético y filogeográfico", el equipo presentará resultados sobre variación morfológica y conservación de especies altoandinas. Invitamos a revisar el programa oficial (enlace) para confirmar salas y horarios.
             </p>
 
             <div class="share-row">
@@ -208,20 +214,68 @@
           </div>
         </article>
 
-        <!-- Noticia 3 -->
-        <article class="blog-entry" role="listitem" aria-label="Noticia Congreso Bolivia" data-url="">
-          <div class="block-20" style="background-image: url('images/noticia_bolivia.jpg');" aria-hidden="true"></div>
+        <!-- Noticia 2: EXPOBIO 2025 (30 Oct 2025) -->
+        <article class="blog-entry" role="listitem" aria-label="Noticia EXPOBIO 2025" data-url="">
+          <div class="block-20" style="background-image: url('images/noticia_expobio.jpg');" aria-hidden="true"></div>
           <div class="text">
-            <div class="news-date">22–25 de noviembre de 2025 (eventos)</div>
-            <h3 class="heading">IcTiosCusco participará en el III Congreso Boliviano de Ictiología y en el curso precongreso</h3>
+            <div class="news-date">30 de octubre de 2025</div>
+            <h3 class="heading">IcTiosCusco obtiene el segundo lugar en ponencia oral — EXPOBIO 2025</h3>
             <div class="meta">
               <div>IcTiosCusco</div>
             </div>
             <p class="excerpt">
-              Los miembros de IcTiosCusco participarán en el III Congreso Boliviano de Ictiología (La Paz) y en el curso teórico-práctico precongreso: <strong>Introducción al análisis filogenético y filogeográfico</strong>, que se llevará a cabo los días 22, 24 y 25 de noviembre en La Paz, Bolivia.
+              En la V Convención Anual de Estudiantes de Biología del Cusco (EXPOBIO 2025) nuestro equipo obtuvo el segundo lugar en la categoría de ponencia oral — Zoología. La exposición estuvo a cargo de Getsemaní Lucía Pérez Chirau con el trabajo <em>"Caracterización de las poblaciones de <strong>Trichomycterus</strong> sp. procedentes de diferentes localidades andinas mediante análisis morfométricos lineales y geométricos."</em>
             </p>
             <p class="excerpt">
-              Instructores del curso: Dr. Marco A. Méndez Torres y MSc. Viviana Araya Enero (Universidad de Chile). IcTiosCusco presentará ponencias orales a cargo de Jack Malon Rodríguez Pumaccajía y Getsemaní Pérez Chirau.
+              Felicitamos a los colaboradores Nayely Polanco Acostupa, Deysi Ccala, Edmar Soria, Libertad Palomino y Jack Malon Rodríguez por su aporte y compromiso con la investigación ictiológica en Cusco.
+            </p>
+
+            <div class="share-row">
+              <button class="share-btn" data-share="web">Compartir</button>
+              <a class="share-btn" data-share="facebook">Facebook</a>
+              <a class="share-btn" data-share="whatsapp">WhatsApp</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Noticia 3: MONFU 2025 (24 Oct 2025) -->
+        <article class="blog-entry" role="listitem" aria-label="Noticia MONFU 2025" data-url="">
+          <div class="block-20" style="background-image: url('images/noticia_monfu.jpg');" aria-hidden="true"></div>
+          <div class="text">
+            <div class="news-date">24 de octubre de 2025</div>
+            <h3 class="heading">Participación de IcTiosCusco en MONFU 2025 — "Las Montañas, Nuestro Futuro"</h3>
+            <div class="meta">
+              <div>IcTiosCusco</div>
+            </div>
+            <p class="excerpt">
+              El 24 de octubre de 2025 el equipo de IcTiosCusco participó en el VIII Simposio Internacional MONFU 2025, organizado por el INAIGEM en Cusco. La ponencia fue presentada por Nayely Polanco, con apoyo de Getsemaní Chirau, y abordó la variación morfológica de especies del género <em>Orestias</em> en lagunas altoandinas.
+            </p>
+            <p class="excerpt">
+              Autoría: Jack Malon Rodríguez, Alex Ttito, Nayely Polanco y Rolando Chaparrea. Los resultados enfatizan la adaptación de estas especies a ambientes extremos y su importancia ecológica para los sistemas de altura.
+            </p>
+
+            <div class="share-row" aria-hidden="false">
+              <button class="share-btn" data-share="web">Compartir</button>
+              <a class="share-btn" data-share="facebook">Facebook</a>
+              <a class="share-btn" data-share="whatsapp">WhatsApp</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Noticia 4: Apoyo en Congreso Peruano de Ornitología (próximamente) -->
+        <article class="blog-entry" role="listitem" aria-label="Noticia Congreso Peruano de Ornitologia" data-url="">
+          <div class="block-20" style="background-image: url('images/noticia_ornitologia.jpg');" aria-hidden="true"></div>
+          <div class="text">
+            <div class="news-date">Fecha por confirmar</div>
+            <h3 class="heading">IcTiosCusco como apoyo activo en la organización del XV Congreso Peruano de Ornitología</h3>
+            <div class="meta">
+              <div>IcTiosCusco</div>
+            </div>
+            <p class="excerpt">
+              IcTiosCusco participará como apoyo activo en la organización del XV Congreso Peruano de Ornitología, que se llevará a cabo en Madre de Dios. El nexo y coordinación del evento está a cargo de nuestro miembro Rolando Chaparrea Cárdenas, quien trabajará con las instituciones locales para la logística y convocatoria.
+            </p>
+            <p class="excerpt">
+              Más información sobre fechas y programa será comunicada próximamente en nuestras redes y sitio web.
             </p>
 
             <div class="share-row">
@@ -233,6 +287,8 @@
         </article>
 
       </div>
+
+      <!-- Opcional: Pagination (oculto porque solo mostramos noticias puntuales) -->
     </div>
   </section>
 
