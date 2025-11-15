@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" href="css/owl.carousel.min.css">
     <link rel="stylesheet" href="css/owl.theme.default.min.css">
-    <link rel="stylesheet" href="css/magnific-popup.css"><!-- necesario -->
+    <link rel="stylesheet" href="css/magnific-popup.css">
     <link rel="stylesheet" href="css/aos.css">
     <link rel="stylesheet" href="css/ionicons.min.css">
     <link rel="stylesheet" href="css/bootstrap-datepicker.css">
@@ -23,30 +23,69 @@
     <link rel="stylesheet" href="css/style.css">
 
     <style>
-      /* --- estilos previos resumidos --- */
-      html, body { margin:0; padding:0; font-family: "Overpass", "Dosis", sans-serif; color:#0e2a39; background:#fff; }
-      /* ... (mantén el CSS anterior que ya tenías) ... */
+      /* ---------- Global / Reset ---------- */
+      html, body { margin:0; padding:0; font-family: "Overpass", "Dosis", sans-serif; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; color:#0e2a39; background:#fff; }
 
-      /* CURSOR: sólo mostrar lupa (zoom-in) cuando el puntero esté sobre la IMAGEN, no sobre el texto */
-      /* aplicamos cursor a los contenedores de imagen que estarán dentro de <a.image-popup> */
+      /* Navbar */
+      .navbar-brand.d-flex { display:inline-flex; align-items:center; }
+      .navbar-brand img { height:56px; width:auto; margin-right:12px; }
+      .navbar-brand span { font-family:'Overpass','Dosis',sans-serif; font-weight:600; font-size:1.05rem; color:#fff; }
+
+      #ftco-navbar { background-color: transparent; transition: background-color 0.25s ease; }
+      #ftco-navbar.scrolled { background-color: rgba(255,255,255,0.98) !important; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+      #ftco-navbar .nav-link, #ftco-navbar .navbar-brand span { color: #ffffff !important; transition: color 0.25s ease; }
+      #ftco-navbar.scrolled .nav-link, #ftco-navbar.scrolled .navbar-brand span { color: #222222 !important; }
+
+      /* HERO */
+      .hero-wrap { position:relative; width:100%; overflow:hidden; margin:0; background-image: url('images/news_hero.jpg'); background-size: cover; background-position: center center; height: calc(var(--vh, 1vh) * 70); min-height: 420px; display:block; }
+      .hero-wrap .overlay { position:absolute; inset:0; background: linear-gradient(180deg, rgba(0,0,0,0.28) 0%, rgba(0,0,0,0.5) 70%); z-index:2; }
+      .hero-wrap .hero-content { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:3; color:#fff; text-align:center; padding:0 18px; width:100%; max-width:960px; }
+      .hero-wrap h1{ font-family: 'Dosis', 'Overpass'; font-weight:300; font-size:3.2rem; margin:0; color:#fff; text-shadow:0 6px 18px rgba(0,0,0,0.32); }
+
+      section.ftco-section { padding: 36px 0; }
+      .news-wrap { max-width:1200px; margin:0 auto; }
+      .news-front { display:grid; grid-template-columns: 1fr 360px; gap:22px; align-items:start; }
+
+      .front-article { background:#fff; border-radius:6px; overflow:hidden; box-shadow:0 14px 34px rgba(10,25,35,0.06); display:flex; flex-direction:column; }
+      .front-media { background-size:cover; background-position:center; min-height:420px; position:relative; }
+      .front-overlay { position:absolute; inset:0; background:linear-gradient(180deg, rgba(6,50,58,0.06), rgba(0,0,0,0.30)); }
+      .front-content { padding:26px 28px; }
+      .masthead { color:#f47b2b; font-weight:700; letter-spacing:1.6px; font-family:'Dosis',sans-serif; font-size:0.95rem; }
+      .front-title { font-family:'Dosis', 'Overpass',sans-serif; font-weight:700; font-size:2.1rem; line-height:1.05; margin:8px 0 10px; color:#07292e; }
+      .lede { font-size:1.05rem; line-height:1.5; color:#23333a; }
+
+      .side-column { display:flex; flex-direction:column; gap:16px; }
+      .side-card { background:#fff; border-radius:6px; overflow:hidden; box-shadow:0 6px 18px rgba(10,25,35,0.04); display:flex; gap:12px; padding:12px; align-items:flex-start; }
+      .side-thumb { flex:0 0 84px; height:84px; background-size:cover; background-position:center; border-radius:6px; }
+      .side-info { flex:1; }
+      .side-info .title { font-weight:700; font-size:0.98rem; margin-bottom:6px; color:#0e2a39; }
+      .side-info .date { color:#f47b2b; font-weight:700; font-size:0.82rem; margin-bottom:6px; }
+      .side-info .brief { color:#55686f; font-size:0.9rem; line-height:1.3; }
+
+      .front-article .lede:first-letter { float:left; font-size:3.2rem; line-height:0.72; padding-right:8px; padding-left:2px; font-weight:700; color:#06323a; }
+
+      .share-row { display:flex; gap:8px; align-items:center; margin-top:12px; }
+      .share-btn { display:inline-flex; align-items:center; gap:8px; padding:8px 10px; border-radius:6px; border:1px solid rgba(6,50,58,0.08); background:#f3fafb; color:#06323a; font-weight:600; text-decoration:none; cursor:pointer; font-size:0.92rem; }
+
+      /* --- CURSOR: lupa (zoom-in) SOLO cuando el puntero esté sobre la IMAGEN --- */
       a.image-popup .front-media,
       a.image-popup .side-thumb,
       a.image-popup.blog-img {
-        cursor: zoom-in; /* lupa */
+        cursor: zoom-in;
       }
+      /* Asegurarnos que el enlace no cambie cursor cuando el puntero está sobre el texto */
+      a.image-popup { display:inline-block; text-decoration:none; color:inherit; }
 
-      /* Asegurarnos que si el enlace rodea otros elementos no se muestre lupa en el texto */
-      a.image-popup { text-decoration: none; color: inherit; } /* no afecta el cursor */
-      a.image-popup:focus { outline: 2px solid rgba(4,98,106,0.18); outline-offset: 2px; }
+      @media (max-width:1100px) { .news-front { grid-template-columns: 1fr 320px; } .front-media { min-height:360px; } }
+      @media (max-width:900px) { .news-front { grid-template-columns:1fr; } .side-column { order:2; } .front-article { order:1; } }
+      @media (max-width:575px) { .front-media { min-height:240px; } .side-thumb { flex:0 0 72px; height:72px; } .front-title { font-size:1.45rem; } }
 
-      /* Si antes envolvías todo el card y querías que no afecte al texto, evita estilos de cursor en el anchor */
-      /* (hemos movido el anchor para que sólo envuelva la imagen en el HTML) */
-
+      .blog-entry { display:block; }
     </style>
   </head>
-  <body>
 
-  <!-- NAVBAR (igual que antes) -->
+  <body>
+  <!-- NAVBAR -->
   <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar" role="navigation" aria-label="Menú principal">
     <div class="container">
       <a class="navbar-brand d-flex align-items-center" href="index.html">
@@ -56,7 +95,6 @@
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="oi oi-menu"></span> Menu
       </button>
-
       <div class="collapse navbar-collapse" id="ftco-nav">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item"><a href="index.html" class="nav-link">Inicio</a></li>
@@ -87,13 +125,14 @@
     </div>
   </div>
 
-  <!-- CONTENIDO (cambios importantes: solo la imagen está envuelta en <a class="image-popup">) -->
+  <!-- CONTENIDO: todas tus noticias intactas; anchors SOLO en las imágenes -->
   <section class="ftco-section">
     <div class="container news-wrap">
       <div class="news-front" role="list">
 
+        <!-- Artículo principal -->
         <article class="front-article" role="listitem" aria-label="Noticia principal: Congreso Bolivia" data-url="" data-title="IcTiosCusco participará en el III Congreso Boliviano de Ictiología">
-          <!-- Anchor solo alrededor de la imagen -->
+          <!-- Anchor envuelve solo la imágen -->
           <a href="images/noticia_bolivia_large.jpg" class="image-popup" data-title="IcTiosCusco participará en el III Congreso Boliviano de Ictiología" aria-label="Abrir imagen principal en grande" tabindex="0">
             <div class="front-media" style="background-image:url('images/noticia_bolivia.jpg');" aria-hidden="true">
               <div class="front-overlay" aria-hidden="true"></div>
@@ -117,9 +156,9 @@
                 <strong>Horario de intervenciones</strong>
                 <small style="display:block; margin-top:6px;">Jueves, 27 de noviembre de 2025 — Sala TAMBAQUI</small>
                 <div style="margin-top:10px; font-size:0.96rem; color:#21363a;">
-                  <div><strong>15:30</strong> — Getsemaní Pérez — <em>Caracterización de poblaciones...</em></div>
-                  <div style="margin-top:8px;"><strong>17:15</strong> — Dr. Marco A. Méndez — <em>Ponencia magistral...</em></div>
-                  <div style="margin-top:8px;"><strong>17:30</strong> — Jack Malon Rodríguez — <em>Variabilidad morfológica...</em></div>
+                  <div><strong>15:30</strong> — Getsemaní Pérez — <em>Caracterización de poblaciones de <strong>Trichomycterus</strong> sp. (Ancahuasi, Cachimayo, Ccorca, Enaco, Languilayo, Pillao Matao, Huasao).</em></div>
+                  <div style="margin-top:8px;"><strong>17:15</strong> — Dr. Marco A. Méndez — <em>Ponencia magistral C4: "Integrando perspectivas para estudiar la divergencia de las especies del Altiplano".</em></div>
+                  <div style="margin-top:8px;"><strong>17:30</strong> — Jack Malon Rodríguez — <em>Variabilidad morfológica en poblaciones del género <strong>Orestias</strong> en lagunas altoandinas del Cusco.</em></div>
                 </div>
               </div>
             </div>
@@ -132,18 +171,19 @@
           </div>
         </article>
 
-        <!-- SIDE COLUMN: anchor SOLO en la miniatura, no en todo el card -->
+        <!-- Columna lateral -->
         <aside class="side-column" aria-label="Noticias destacadas">
 
           <div class="side-card" role="listitem" aria-label="EXPOBIO 2025: Segundo lugar">
             <div style="display:flex; gap:12px; align-items:flex-start;">
+              <!-- anchor solo en miniatura -->
               <a href="images/noticia_expobio_large.jpg" class="image-popup" data-title="EXPOBIO 2025: Segundo lugar — IcTiosCusco" aria-label="Abrir imagen EXPOBIO 2025" tabindex="0" style="flex:0 0 auto;">
                 <div class="side-thumb" style="background-image:url('images/noticia_expobio.jpg');" aria-hidden="true"></div>
               </a>
               <div class="side-info">
                 <div class="date">30 de octubre de 2025</div>
                 <div class="title">IcTiosCusco: segundo lugar en ponencia oral — EXPOBIO 2025</div>
-                <div class="brief">En la V Convención Anual ...</div>
+                <div class="brief">En la V Convención Anual de Estudiantes de Biología del Cusco (EXPOBIO 2025) obtuvimos el segundo lugar en la categoría de ponencia oral — Zoología. La exposición estuvo a cargo de Getsemaní Lucía Pérez Chirau con el trabajo: "Caracterización de las poblaciones de <strong>Trichomycterus</strong> sp. procedentes de diferentes localidades andinas mediante análisis morfométricos lineales y geométricos."</div>
               </div>
             </div>
           </div>
@@ -155,8 +195,8 @@
               </a>
               <div class="side-info">
                 <div class="date">24 de octubre de 2025</div>
-                <div class="title">Participación de IcTiosCusco en MONFU 2025</div>
-                <div class="brief">El equipo participó ...</div>
+                <div class="title">Participación de IcTiosCusco en MONFU 2025 — "Las Montañas, Nuestro Futuro"</div>
+                <div class="brief">El equipo participó en el VIII Simposio Internacional MONFU 2025 (INAIGEM, Cusco). La ponencia estuvo a cargo de Nayely Polanco, con el apoyo de Getsemaní Chirau, sobre la variación morfológica de especies del género <em>Orestias</em>. Autores: Jack Malon Rodríguez, Alex Ttito, Nayely Polanco y Rolando Chaparrea.</div>
               </div>
             </div>
           </div>
@@ -169,7 +209,7 @@
               <div class="side-info">
                 <div class="date">Próximamente</div>
                 <div class="title">IcTiosCusco: apoyo activo en el XV Congreso Peruano de Ornitología</div>
-                <div class="brief">IcTiosCusco será apoyo activo ...</div>
+                <div class="brief">IcTiosCusco será apoyo activo en la organización del XV Congreso Peruano de Ornitología, que se realizará en Madre de Dios. La coordinación y nexo institucional está a cargo de nuestro miembro Rolando Chaparrea Cárdenas. Informaremos fechas definitivas y programa en nuestras redes y sitio web.</div>
               </div>
             </div>
           </div>
@@ -180,22 +220,69 @@
     </div>
   </section>
 
-  <!-- FOOTER (mantengo la miniatura clicable) -->
+  <!-- FOOTER -->
   <footer class="ftco-footer ftco-section img">
     <div class="overlay"></div>
     <div class="container">
-      <!-- ... footer content ... -->
-      <div class="block-21 mb-4 d-flex">
-        <a class="blog-img mr-4 image-popup" href="images/noticia_monfu_large.jpg" style="background-image: url(images/noticia_monfu.jpg);" aria-label="Abrir imagen MONFU 2025"></a>
-        <div class="text">
-          <h3 class="heading">Participación en MONFU 2025</h3>
-          <div class="meta"><div><a href="#"><span class="icon-calendar"></span> Oct 24, 2025</a></div></div>
+      <div class="row mb-5">
+        <div class="col-md-3">
+          <div class="ftco-footer-widget mb-4">
+            <h2 class="ftco-heading-2">Sobre IcTiosCusco</h2>
+            <p>Grupo de investigación dedicado a la conservación y estudio de peces andinos (Orestias) en la región de Cusco.</p>
+            <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
+              <li class="ftco-animate"><a href="https://www.facebook.com/ConGeniusRockie" target="_blank" rel="noopener noreferrer" aria-label="Facebook IcTiosCusco"><span class="icon-facebook"></span></a></li>
+              <li class="ftco-animate"><a href="https://www.instagram.com/ictioscusco" target="_blank" rel="noopener noreferrer" aria-label="Instagram IcTiosCusco"><span class="icon-instagram"></span></a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="ftco-footer-widget mb-4">
+            <h2 class="ftco-heading-2">Publicaciones recientes</h2>
+            <div class="block-21 mb-4 d-flex">
+              <a class="blog-img mr-4 image-popup" href="images/noticia_monfu_large.jpg" style="background-image: url(images/noticia_monfu.jpg);" aria-label="Abrir imagen MONFU 2025" tabindex="0"></a>
+              <div class="text">
+                <h3 class="heading">Participación en MONFU 2025</h3>
+                <div class="meta"><div><a href="#"><span class="icon-calendar"></span> Oct 24, 2025</a></div><div><a href="#"><span class="icon-person"></span> IcTiosCusco</a></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-2">
+          <div class="ftco-footer-widget mb-4 ml-md-4">
+            <h2 class="ftco-heading-2">Enlaces</h2>
+            <ul class="list-unstyled">
+              <li><a href="index.html" class="py-2 d-block">Inicio</a></li>
+              <li><a href="about.html" class="py-2 d-block">Quiénes somos</a></li>
+              <li><a href="donate.html" class="py-2 d-block">Donación</a></li>
+              <li><a href="causes.html" class="py-2 d-block">Proyectos</a></li>
+              <li><a href="event.html" class="py-2 d-block">Miembros</a></li>
+              <li><a href="blog.html" class="py-2 d-block">Noticias</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="ftco-footer-widget mb-4">
+            <h2 class="ftco-heading-2">¿Tienes preguntas?</h2>
+            <div class="block-23 mb-3">
+              <ul>
+                <li><span class="icon icon-map-marker"></span><span class="text">Cusco, Perú</span></li>
+                <li><a href="tel:+51969392189"><span class="icon icon-phone"></span><span class="text">+51 969 392 189</span></a></li>
+                <li><a href="mailto:ictioscusco@gmail.com"><span class="icon icon-envelope"></span><span class="text">ictioscusco@gmail.com</span></a></li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="row"><div class="col-md-12 text-center"><p>Copyright &copy;<script>document.write(new Date().getFullYear());</script> IcTiosCusco. Todos los derechos reservados.</p></div></div>
     </div>
   </footer>
+
+  <!-- loader -->
+  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
 
   <!-- SCRIPTS -->
   <script src="js/jquery.min.js"></script>
@@ -216,21 +303,21 @@
   <script src="js/main.js"></script>
 
   <script>
-    // --vh fix para móviles (igual que antes)
+    // --vh fix para móviles
     (function(){
       function setVhVar(){ var vh = window.innerHeight * 0.01; document.documentElement.style.setProperty('--vh', vh + 'px'); }
       window.addEventListener('resize', setVhVar); window.addEventListener('orientationchange', setVhVar); setVhVar();
     })();
 
     document.addEventListener('DOMContentLoaded', function () {
-      // navbar behaviour (igual que antes)...
+      // navbar behaviour
       var navbar = document.getElementById('ftco-navbar');
       var navCollapse = $('#ftco-nav');
       function checkScroll(){ if(window.scrollY>60) navbar.classList.add('scrolled'); else navbar.classList.remove('scrolled'); }
       checkScroll(); window.addEventListener('scroll', checkScroll, {passive:true});
       if(navCollapse.length){ navCollapse.on('shown.bs.collapse', function(){ navbar.classList.add('scrolled'); }); navCollapse.on('hidden.bs.collapse', function(){ if(window.scrollY<=60) navbar.classList.remove('scrolled'); }); }
 
-      // Compartir (igual que antes)
+      // compartir (igual que antes)
       document.querySelectorAll('.share-btn').forEach(function(btn){
         btn.addEventListener('click', function(e){
           var article = e.target.closest('article') || e.target.closest('.side-card');
@@ -240,90 +327,74 @@
           var excerpt = article.getAttribute('data-excerpt') || article.querySelector('p')?.innerText || '';
           var action = btn.getAttribute('data-share');
           if(action === 'web'){
-            if(navigator.share){
-              navigator.share({ title: title, text: excerpt, url: url }).catch(function(err){});
-            } else {
-              alert('Tu navegador no soporta el menú nativo de compartir. Usa Facebook/WhatsApp o copia el enlace.');
-            }
+            if(navigator.share){ navigator.share({ title: title, text: excerpt, url: url }).catch(function(err){}); } else { alert('Tu navegador no soporta el menú nativo de compartir. Usa Facebook/WhatsApp o copia el enlace.'); }
             return;
           }
           if(action === 'facebook'){ window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url), '_blank', 'noopener'); return; }
-          if(action === 'twitter'){ window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(title + ' - ' + excerpt) + '&url=' + encodeURIComponent(url), '_blank', 'noopener'); return; }
           if(action === 'whatsapp'){ window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(title + '\n' + excerpt + '\n' + url), '_blank', 'noopener'); return; }
           if(action === 'copy'){
-            if(navigator.clipboard && window.isSecureContext){
-              navigator.clipboard.writeText(url).then(function(){ alert('Enlace copiado al portapapeles'); });
-            } else {
-              var ta = document.createElement('textarea'); ta.value = url; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); alert('Enlace copiado al portapapeles'); }catch(e){ prompt('Copia este enlace:', url); } ta.remove();
-            }
+            if(navigator.clipboard && window.isSecureContext){ navigator.clipboard.writeText(url).then(function(){ alert('Enlace copiado al portapapeles'); }); }
+            else { var ta = document.createElement('textarea'); ta.value = url; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); alert('Enlace copiado al portapapeles'); }catch(e){ prompt('Copia este enlace:', url); } ta.remove(); }
             return;
           }
         });
       });
 
-      // Inicializar Magnific Popup (para llamadas directas)
-      if(typeof $.fn.magnificPopup === 'function'){
-        // No modificar: usaremos la llamada manual en el handler para gestionar fallback
+      // Handler robusto para abrir imágenes: intenta precargar la "large", si falla usa background-image como fallback
+      function openImageWithMagnific(url, title){
+        if(typeof $.fn.magnificPopup === 'function'){
+          $.magnificPopup.open({
+            items: { src: url },
+            type: 'image',
+            image: { titleSrc: function(){ return title || ''; }, verticalFit: true },
+            closeOnContentClick: true,
+            mainClass: 'mfp-img-mobile'
+          });
+        } else {
+          window.open(url, '_blank', 'noopener');
+        }
       }
 
-      // Handler: al hacer click en un <a.image-popup> comprobamos la URL antes de abrir
       document.querySelectorAll('a.image-popup').forEach(function(a){
         a.addEventListener('click', function(e){
           e.preventDefault();
           var href = a.getAttribute('href') || '';
           var title = a.getAttribute('data-title') || '';
-          // función que abre la imagen con Magnific
-          function openWithMagnific(url){
-            if(typeof $.fn.magnificPopup === 'function'){
-              $.magnificPopup.open({
-                items: { src: url },
-                type: 'image',
-                image: { titleSrc: function(){ return title; }, verticalFit: true },
-                closeOnContentClick: true,
-                mainClass: 'mfp-img-mobile'
-              });
-            } else {
-              // fallback simple: abrir en nueva pestaña
-              window.open(url, '_blank', 'noopener');
-            }
-          }
-
           if(!href){
-            // si no hay href, extraer background-image del hijo
-            var bgElem = a.querySelector('.front-media, .side-thumb, .blog-img');
-            if(bgElem){
-              var bg = bgElem.style.backgroundImage || '';
+            // fallback: sacar background-image
+            var bgEl = a.querySelector('.front-media, .side-thumb, .blog-img');
+            if(bgEl){
+              var bg = bgEl.style.backgroundImage || '';
               var m = bg.match(/url\(["']?(.+?)["']?\)/);
-              if(m && m[1]) { openWithMagnific(m[1]); return; }
+              if(m && m[1]) { openImageWithMagnific(m[1], title); return; }
             }
             return;
           }
-
-          // intentamos precargar la imagen grande; si carga, abrimos; si falla, buscamos la miniatura en background y abrimos esa
+          // precargar href
           var img = new Image();
           var opened = false;
-          img.onload = function(){ opened = true; openWithMagnific(href); };
+          img.onload = function(){ opened = true; openImageWithMagnific(href, title); };
           img.onerror = function(){
-            // fallback: buscar background-image del elemento (thumbnail)
-            var bgElem = a.querySelector('.front-media, .side-thumb, .blog-img');
-            if(bgElem){
-              var bg = bgElem.style.backgroundImage || '';
+            // fallback: open background image if exists
+            var bgEl = a.querySelector('.front-media, .side-thumb, .blog-img');
+            if(bgEl){
+              var bg = bgEl.style.backgroundImage || '';
               var m = bg.match(/url\(["']?(.+?)["']?\)/);
-              if(m && m[1]) { openWithMagnific(m[1]); return; }
+              if(m && m[1]) { openImageWithMagnific(m[1], title); return; }
             }
-            // último recurso: abrir href en nueva pestaña (aunque falle)
-            openWithMagnific(href);
+            // si todo falla, abrir href de todas formas
+            openImageWithMagnific(href, title);
           };
           img.src = href;
         });
 
-        // accesibilidad: abrir con Enter
+        // accesibilidad: Enter para abrir
         a.addEventListener('keydown', function(e){
           if(e.key === 'Enter' || e.keyCode === 13){ e.preventDefault(); a.click(); }
         });
       });
 
-    });
+    }); // DOMContentLoaded
   </script>
   </body>
 </html>
