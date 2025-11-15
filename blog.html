@@ -1,378 +1,734 @@
 <!DOCTYPE html>
 <html lang="es">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Noticias — IcTiosCusco</title>
-    <meta name="description" content="Noticias y comunicados de IcTiosCusco: investigación, conservación y monitoreo del género Orestias en Cusco.">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>IcTiosCusco — Donaciones</title>
+    <meta name="description" content="Apoya a IcTiosCusco: dona para investigación, compra merch y ayuda a conservar Orestias y lagunas altoandinas." />
 
-    <link href="https://fonts.googleapis.com/css?family=Dosis:200,300,400,500,700" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Overpass:300,400,400i,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Dosis:200,300,400,500,700" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Overpass:300,400,400i,600,700" rel="stylesheet" />
 
-    <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
-    <link rel="stylesheet" href="css/animate.css">
-    <link rel="stylesheet" href="css/owl.carousel.min.css">
-    <link rel="stylesheet" href="css/owl.theme.default.min.css">
-    <link rel="stylesheet" href="css/magnific-popup.css">
-    <link rel="stylesheet" href="css/aos.css">
-    <link rel="stylesheet" href="css/ionicons.min.css">
-    <link rel="stylesheet" href="css/bootstrap-datepicker.css">
-    <link rel="stylesheet" href="css/jquery.timepicker.css">
-    <link rel="stylesheet" href="css/flaticon.css">
-    <link rel="stylesheet" href="css/icomoon.css">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css" />
+    <link rel="stylesheet" href="css/animate.css" />
+    <link rel="stylesheet" href="css/owl.carousel.min.css" />
+    <link rel="stylesheet" href="css/owl.theme.default.min.css" />
+    <link rel="stylesheet" href="css/magnific-popup.css" />
+    <link rel="stylesheet" href="css/aos.css" />
+    <link rel="stylesheet" href="css/ionicons.min.css" />
+    <link rel="stylesheet" href="css/bootstrap-datepicker.css" />
+    <link rel="stylesheet" href="css/jquery.timepicker.css" />
+    <link rel="stylesheet" href="css/flaticon.css" />
+    <link rel="stylesheet" href="css/icomoon.css" />
+    <link rel="stylesheet" href="css/style.css" />
 
     <style>
-      /* ---------- Global / Reset (igual que gallery) ---------- */
-      html, body { margin:0; padding:0; font-family: "Overpass", "Dosis", sans-serif; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; color:#0e2a39; background:#fff; }
+      /* Alineación visual con el index */
+      .navbar-brand.d-flex { display: inline-flex; align-items: center; }
+      .navbar-brand img { height: 56px; width: auto; margin-right: 12px; }
+      .navbar-brand span { font-family: 'Overpass', 'Dosis', sans-serif !important; font-weight: 600; font-size: 1.05rem; color: #fff; }
 
-      /* Navbar: mismo comportamiento y colores que Gallery */
-      .navbar-brand.d-flex { display:inline-flex; align-items:center; }
-      .navbar-brand img { height:56px; width:auto; margin-right:12px; }
-      .navbar-brand span { font-family:'Overpass','Dosis',sans-serif; font-weight:600; font-size:1.05rem; color:#fff; }
+      .hero-wrap h1 { text-shadow: 0 6px 18px rgba(0,0,0,0.18); }
 
-      #ftco-navbar { background-color: transparent; transition: background-color 0.25s ease; }
-      #ftco-navbar.scrolled { background-color: rgba(255,255,255,0.98) !important; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-      #ftco-navbar .nav-link, #ftco-navbar .navbar-brand span { color: #ffffff !important; transition: color 0.25s ease; }
-      #ftco-navbar.scrolled .nav-link, #ftco-navbar.scrolled .navbar-brand span { color: #222222 !important; }
-      #ftco-navbar .navbar-toggler { color: #ffffff !important; border-color: rgba(255,255,255,0.18) !important; }
-      #ftco-navbar.scrolled .navbar-toggler { color: #222222 !important; border-color: rgba(0,0,0,0.12) !important; }
-
-      /* HERO: igual formato grande que gallery (cover, alto) */
-      .hero-wrap {
-        position:relative;
-        width:100%;
-        overflow:hidden;
-        margin:0;
-        background-image: url('images/news_hero.jpg');
-        background-size: cover;
-        background-position: center center;
-        background-repeat: no-repeat;
-        height: calc(var(--vh, 1vh) * 70);
-        min-height: 420px;
-        display:block;
+      /* Donación: bloque principal */
+      .donate-panel {
+        background: #fff;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 10px 30px rgba(16,24,40,0.06);
+        margin-bottom: 28px;
       }
-      .hero-wrap .overlay { position:absolute; inset:0; background: linear-gradient(180deg, rgba(0,0,0,0.28) 0%, rgba(0,0,0,0.5) 70%); z-index:2; }
-      .hero-wrap .hero-content { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:3; color:#fff; text-align:center; padding:0 18px; width:100%; max-width:960px; }
-      .hero-wrap .hero-content h1{ font-family: 'Dosis', 'Overpass', sans-serif; font-weight: 300; letter-spacing: 0.6px; font-size: 3.2rem; margin:0 0 8px; color:#fff; text-shadow: 0 6px 18px rgba(0,0,0,0.32); }
-      .hero-wrap .hero-content p { color: rgba(255,255,255,0.94); margin:0; font-size:1.05rem; }
+      .donate-amounts { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px; }
+      .donate-amounts button { min-width:110px; }
+      .donate-quick { margin-bottom: 12px; }
 
-      .breadcrumbs { margin-bottom:12px; }
-      .breadcrumbs a { color: rgba(255,255,255,0.85); text-decoration:none; font-size:0.95rem; letter-spacing:1px; }
-      .breadcrumbs span { color: rgba(255,255,255,0.72); font-size:0.95rem; }
+      /* Merch grid */
+      .merch-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap:18px; }
+      .merch-card {
+        background:#fff;
+        border-radius:10px;
+        overflow:hidden;
+        box-shadow: 0 8px 24px rgba(16,24,40,0.06);
+        display:flex;
+        flex-direction:column;
+      }
+      .merch-card img { width:100%; height:220px; object-fit:cover; display:block; }
+      .merch-card .body { padding:14px; display:flex; flex-direction:column; gap:8px; }
+      .merch-card h4 { margin:0; font-size:1.05rem; }
+      .merch-card p { margin:0; color:#555; font-size:.95rem; }
 
-      /* ---------- Estilo 'portada de periódico' (ajustado sólo con tus noticias) ---------- */
-      section.ftco-section { padding: 36px 0; }
-      .news-wrap { max-width:1200px; margin:0 auto; }
-      .news-front { display:grid; grid-template-columns: 1fr 360px; gap:22px; align-items:start; }
+      /* Carrito */
+      .cart {
+        background:#fff;
+        border-radius:10px;
+        padding:14px;
+        box-shadow: 0 8px 24px rgba(16,24,40,0.04);
+      }
+      .cart-row { display:flex; justify-content:space-between; gap:10px; align-items:center; margin-bottom:8px; }
+      .cart-row small { color:#666; }
+      .cart-total { font-weight:700; font-size:1.05rem; margin-top:10px; text-align:right; }
 
-      .front-article { background:#fff; border-radius:6px; overflow:hidden; box-shadow:0 14px 34px rgba(10,25,35,0.06); display:flex; flex-direction:column; }
-      .front-media { background-size:cover; background-position:center; min-height:420px; position:relative; }
-      .front-overlay { position:absolute; inset:0; background:linear-gradient(180deg, rgba(6,50,58,0.06), rgba(0,0,0,0.30)); }
-      .front-content { padding:26px 28px; }
-      .masthead { color:#f47b2b; font-weight:700; letter-spacing:1.6px; font-family:'Dosis',sans-serif; font-size:0.95rem; }
-      .front-title { font-family:'Dosis', 'Overpass',sans-serif; font-weight:700; font-size:2.1rem; line-height:1.05; margin:8px 0 10px; color:#07292e; }
-      .byline { color:#67727a; font-size:0.92rem; margin-bottom:16px; }
-      .lede { font-size:1.05rem; line-height:1.5; color:#23333a; }
+      /* Bank details */
+      .bank-box { background:rgba(2,62,138,0.03); padding:12px; border-radius:8px; color:#053069; margin-bottom:12px; }
 
-      .side-column { display:flex; flex-direction:column; gap:16px; }
-      .side-card { background:#fff; border-radius:6px; overflow:hidden; box-shadow:0 6px 18px rgba(10,25,35,0.04); display:flex; gap:12px; padding:12px; align-items:flex-start; }
-      .side-thumb { flex:0 0 84px; height:84px; background-size:cover; background-position:center; border-radius:6px; }
-      .side-info { flex:1; }
-      .side-info .title { font-weight:700; font-size:0.98rem; margin-bottom:6px; color:#0e2a39; }
-      .side-info .date { color:#f47b2b; font-weight:700; font-size:0.82rem; margin-bottom:6px; }
-      .side-info .brief { color:#55686f; font-size:0.9rem; line-height:1.3; }
+      /* Sandbox banner */
+      .sandbox-banner { background:#fff3cd; color:#856404; border:1px solid #ffeeba; padding:10px; border-radius:6px; margin-bottom:12px; }
 
-      .front-article .lede:first-letter { float:left; font-size:3.2rem; line-height:0.72; padding-right:8px; padding-left:2px; font-weight:700; color:#06323a; }
+      @media (max-width: 575.98px) {
+        .merch-card img { height:180px; }
+      }
 
-      .share-row { display:flex; gap:8px; align-items:center; margin-top:12px; }
-      .share-btn { display:inline-flex; align-items:center; gap:8px; padding:8px 10px; border-radius:6px; border:1px solid rgba(6,50,58,0.08); background:#f3fafb; color:#06323a; font-weight:600; text-decoration:none; cursor:pointer; font-size:0.92rem; }
+      /* ---------- CAMBIOS SOLICITADOS (mínimos) ---------- */
+      /* Hacer visibles inputs y textarea en el formulario (fondo y color de texto) */
+      form.volunter-form .form-control,
+      .volunter-form .form-control {
+        background: #f3f7fa;           /* fondo claro contrastante */
+        color: #07292e;                /* texto oscuro legible */
+        border: 1px solid #d7e6ea;     /* borde suave */
+        box-shadow: none;
+      }
+      /* Placeholder más suave pero legible */
+      form.volunter-form .form-control::placeholder,
+      .volunter-form .form-control::placeholder {
+        color: #7a8b90;
+        opacity: 1;
+      }
+      /* En foco, resaltar ligeramente */
+      form.volunter-form .form-control:focus,
+      .volunter-form .form-control:focus {
+        background: #ffffff;
+        outline: none;
+        border-color: #0a6b78;
+        box-shadow: 0 0 0 4px rgba(10,107,120,0.06);
+        color: #07292e;
+      }
 
-      @media (max-width: 1100px) { .news-front { grid-template-columns: 1fr 320px; } .front-media { min-height:360px; } }
-      @media (max-width: 900px) { .news-front { grid-template-columns: 1fr; } .side-column { order:2; } .front-article { order:1; } }
-      @media (max-width: 575px) { .front-media { min-height:240px; } .side-thumb{ flex:0 0 72px; height:72px; } .front-title { font-size:1.45rem; } }
-
-      /* Mantener compatibilidad con estilos anteriores (clases usadas en JS) */
-      .blog-entry { display:block; }
+      /* Bloque QR PLIN */
+      .plin-qr { text-align:center; margin-bottom:12px; }
+      .plin-qr img { max-width:220px; width:100%; height:auto; border-radius:8px; border:1px solid #e6eef0; padding:8px; background:#fff; display:inline-block; }
+      .plin-qr p { margin:8px 0 0; font-size:0.95rem; color:#23414a; }
 
     </style>
   </head>
+
   <body>
+    <!-- NAV -->
+    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="index.html">
+          <img src="images/logo.png" alt="IcTiosCusco logo" />
+          <span>IcTiosCusco</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
+                aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="oi oi-menu"></span> Menu
+        </button>
 
-  <!-- NAVBAR (sin cambios) -->
-  <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar" role="navigation" aria-label="Menú principal">
-    <div class="container">
-      <a class="navbar-brand d-flex align-items-center" href="index.html">
-        <img src="images/logo.png" alt="IcTiosCusco logo">
-        <span>IcTiosCusco</span>
-      </a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="oi oi-menu"></span> Menu
-      </button>
-
-      <div class="collapse navbar-collapse" id="ftco-nav">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item"><a href="index.html" class="nav-link">Inicio</a></li>
-          <li class="nav-item"><a href="about.html" class="nav-link">Nosotros</a></li>
-          <li class="nav-item"><a href="causes.html" class="nav-link">Proyectos</a></li>
-          <li class="nav-item"><a href="donate.html" class="nav-link">Donación</a></li>
-          <li class="nav-item active"><a href="blog.html" class="nav-link">Noticias</a></li>
-          <li class="nav-item"><a href="gallery.html" class="nav-link">Galería</a></li>
-          <li class="nav-item"><a href="event.html" class="nav-link">Miembros</a></li>
-          <li class="nav-item"><a href="recursos.html" class="nav-link">Recursos</a></li>
-          <li class="nav-item"><a href="contact.html" class="nav-link">Contacto</a></li>
-        </ul>
+        <div class="collapse navbar-collapse" id="ftco-nav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a href="index.html" class="nav-link">Inicio</a></li>
+            <li class="nav-item"><a href="about.html" class="nav-link">Nosotros</a></li>
+            <li class="nav-item"><a href="causes.html" class="nav-link">Proyectos</a></li>
+            <li class="nav-item active"><a href="donate.html" class="nav-link">Donación</a></li>
+            <li class="nav-item"><a href="blog.html" class="nav-link">Noticias</a></li>
+            <li class="nav-item"><a href="gallery.html" class="nav-link">Galería</a></li>
+            <li class="nav-item"><a href="event.html" class="nav-link">Miembros</a></li>
+            <li class="nav-item"><a href="recursos.html" class="nav-link">Recursos</a></li>
+            <li class="nav-item"><a href="contact.html" class="nav-link">Contacto</a></li>
+          </ul>
+        </div>
       </div>
-    </div>
-  </nav>
+    </nav>
+    <!-- END NAV -->
 
-  <!-- HERO (igual formato grande que gallery) -->
-  <div class="hero-wrap" role="img" aria-label="Noticias IcTiosCusco">
-    <div class="overlay"></div>
-    <div class="hero-content container">
-      <div class="row justify-content-center">
-        <div class="col-md-10 text-center">
-          <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Inicio</a></span> <span>Noticias</span></p>
-          <h1>Noticias</h1>
-          <p>Resultados, comunicados y actividades del equipo IcTiosCusco.</p>
+    <!-- HERO -->
+    <div class="hero-wrap" style="background-image: url('images/donate_hero.jpg');" data-stellar-background-ratio="0.5">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row no-gutters slider-text align-items-center justify-content-center">
+          <div class="col-md-8 text-center">
+            <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Inicio</a></span> <span>Donación</span></p>
+            <h1 class="mb-3">Apoya nuestro trabajo</h1>
+            <p class="mb-4">Tu aporte mantiene muestreos, análisis genéticos y talleres con comunidades. Gracias.</p>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- BLOQUE: ESTRUCTURA TIPO PORTADA (SOLO CON TUS NOTICIAS) -->
-  <section class="ftco-section">
-    <div class="container news-wrap">
+    <!-- CONTENT -->
+    <section class="ftco-section">
+      <div class="container">
+        <div class="row">
 
-      <div class="news-front" role="list">
+          <!-- Left: Donación directa + merch -->
+          <div class="col-lg-8">
+            <!-- Donación rápida -->
+            <div class="donate-panel" id="donate-panel">
+              <h3>Donar ahora</h3>
 
-        <!-- Artículo principal: Congreso Bolivia (contenido tal cual estaba en tu HTML original) -->
-        <article class="front-article" role="listitem" aria-label="Noticia principal: Congreso Bolivia" data-url="">
-          <div class="front-media" style="background-image:url('images/noticia_bolivia.jpg');" aria-hidden="true">
-            <div class="front-overlay" aria-hidden="true"></div>
-          </div>
+              <div id="sandbox-note" class="sandbox-banner" style="display:none;">
+                Modo sandbox activo — los pagos son de prueba. No se moverá dinero real.
+              </div>
 
-          <div class="front-content">
-            <div class="masthead">PORTADA — Ciencias &amp; Congresos</div>
-            <div class="news-date" style="color:#345; font-weight:600; margin-top:6px;">27 de noviembre de 2025 — Sala TAMBAQUI, La Paz</div>
-            <h2 class="front-title">IcTiosCusco participará en el III Congreso Boliviano de Ictiología y curso precongreso</h2>
-            <div class="byline">Por IcTiosCusco — Programa y horarios disponibles (PDF)</div>
+              <p>Elige un monto rápido o ingresa el monto que desees. Donación segura vía PayPal. También puedes transferir directamente vía bancaria.</p>
 
-            <p class="lede">Además del curso precongreso "Introducción al análisis filogenético y filogeográfico" (22, 24 y 25 de noviembre), el equipo presentará ponencias orales y participará en sesiones técnicas. Instructores del curso: Dr. Marco A. Méndez Torres y MSc. Viviana Araya Enero (Universidad de Chile).</p>
-
-            <div style="margin-top:12px;">
-              <a class="program-link" href="https://drive.google.com/file/d/1VGunO5nnJ-WTI3Ru20orvKLlwd9HIV8Y/view?fbclid=IwY2xjawOFmq5leHRuA2FlbQIxMABicmlkETFydUNJR05ZcTlQYkU4b0xrc3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MghjYWxsc2l0ZQEyAAEeWFqNacswg5eRqfYw2ocW_ir5cuR3hrAyaOzbtUQYhEjKdOv2EofUpMQq3QA_aem_iA0fsuiopXJ74buAZsJ1lA" target="_blank" rel="noopener">Ver programa y horarios (PDF)</a>
-            </div>
-
-            <div style="margin-top:18px;">
-              <div class="schedule" style="border-radius:6px;">
-                <strong>Horario de intervenciones</strong>
-                <small style="display:block; margin-top:6px;">Jueves, 27 de noviembre de 2025 — Sala TAMBAQUI</small>
-
-                <div style="margin-top:10px; font-size:0.96rem; color:#21363a;">
-                  <div><strong>15:30</strong> — Getsemaní Pérez — <em>Caracterización de poblaciones de <strong>Trichomycterus</strong> sp. (Ancahuasi, Cachimayo, Ccorca, Enaco, Languilayo, Pillao Matao, Huasao).</em></div>
-
-                  <div style="margin-top:8px;"><strong>17:15</strong> — Dr. Marco A. Méndez — <em>Ponencia magistral C4: "Integrando perspectivas para estudiar la divergencia de las especies del Altiplano".</em></div>
-
-                  <div style="margin-top:8px;"><strong>17:30</strong> — Jack Malon Rodríguez — <em>Variabilidad morfológica en poblaciones del género <strong>Orestias</strong> en lagunas altoandinas del Cusco.</em></div>
+              <div class="donate-quick">
+                <div class="donate-amounts" role="group" aria-label="Montos rápidos">
+                  <button class="btn btn-outline-primary" data-amount="10">$ 10</button>
+                  <button class="btn btn-outline-primary" data-amount="25">$ 25</button>
+                  <button class="btn btn-outline-primary" data-amount="50">$ 50</button>
+                  <button class="btn btn-outline-primary" data-amount="100">$ 100</button>
                 </div>
+
+                <div style="display:flex; gap:10px; align-items:center; margin-bottom:10px;">
+                  <label for="custom-amount" class="sr-only">Monto personalizado</label>
+                  <input id="custom-amount" type="number" min="1" step="1" class="form-control" placeholder="Otro monto (USD)" style="max-width:200px">
+                  <button id="donate-paypal" class="btn btn-primary">Donar con PayPal</button>
+                </div>
+
+                <small class="muted-small">Nota: se abrirá PayPal para completar el pago. Reemplaza el email de negocio en el código si aún no lo has hecho.</small>
+              </div>
+
+              <hr>
+
+              <!-- Bank transfer -->
+              <h5>Transferencia bancaria</h5>
+              <div class="bank-box" role="region" aria-label="Datos bancarios">
+                <!-- REEMPLAZA con tus datos bancarios reales -->
+                <strong>Banco:</strong> Banco de Ejemplo (REEMPLAZAR)<br>
+                <strong>Titular:</strong> IcTiosCusco (REEMPLAZAR)<br>
+                <strong>Cuenta:</strong> 123-456-789 (REEMPLAZAR)<br>
+                <strong>IBAN/Referencia:</strong> 00123456789012345678 (REEMPLAZAR)<br>
+                <small class="muted-small">Envía el comprobante a <a href="mailto:ictioscusco@gmail.com">ictioscusco@gmail.com</a> para validar la donación.</small>
               </div>
             </div>
 
-            <div class="share-row" aria-hidden="false">
-              <button class="share-btn" data-share="web">Compartir</button>
-              <a class="share-btn" data-share="facebook">Facebook</a>
-              <a class="share-btn" data-share="whatsapp">WhatsApp</a>
-            </div>
-          </div>
-        </article>
+            <!-- Merch / tienda -->
+            <div class="donate-panel">
+              <h3>Tienda solidaria — productos para apoyar</h3>
+              <p>Adquiere merch y recibe tu pedido. Los ingresos ayudan a financiar actividades de campo y educación.</p>
 
-        <!-- Columna lateral: las otras 3 noticias que ya estaban en tu HTML original -->
-        <aside class="side-column" aria-label="Noticias destacadas">
+              <div class="merch-grid" id="merch-grid">
+                <!-- CARD 1: Polo -->
+                <div class="merch-card">
+                  <img src="images/merch_polo.jpg" alt="Polo IcTiosCusco">
+                  <div class="body">
+                    <div>
+                      <h4>Polo IcTiosCusco</h4>
+                      <p>Camiseta de algodón con logo — Tallas S/M/L/XL.</p>
+                      <strong>$ 16</strong>
+                    </div>
+                    <div style="display:flex; gap:8px; align-items:center; margin-top:6px;">
+                      <label style="margin:0;">Cant</label>
+                      <input type="number" class="form-control merch-qty" data-id="polo" value="1" min="1" style="width:80px;">
+                      <button class="btn btn-outline-primary btn-sm add-to-cart" data-id="polo" data-name="Polo IcTiosCusco" data-price="16">Agregar</button>
+                    </div>
+                  </div>
+                </div>
 
-          <div class="side-card" role="listitem" aria-label="EXPOBIO 2025: Segundo lugar">
-            <div class="side-thumb" style="background-image:url('images/noticia_expobio.jpg');" aria-hidden="true"></div>
-            <div class="side-info">
-              <div class="date">30 de octubre de 2025</div>
-              <div class="title">IcTiosCusco: segundo lugar en ponencia oral — EXPOBIO 2025</div>
-              <div class="brief">En la V Convención Anual de Estudiantes de Biología del Cusco (EXPOBIO 2025) obtuvimos el segundo lugar en la categoría de ponencia oral — Zoología. La exposición estuvo a cargo de Getsemaní Lucía Pérez Chirau con el trabajo: "Caracterización de las poblaciones de <strong>Trichomycterus</strong> sp. procedentes de diferentes localidades andinas mediante análisis morfométricos lineales y geométricos."</div>
-            </div>
-          </div>
+                <!-- CARD 2: Tomatodo -->
+                <div class="merch-card">
+                  <img src="images/merch_tomatodo.jpg" alt="Tomatodo IcTiosCusco">
+                  <div class="body">
+                    <div>
+                      <h4>Tomatodo (Botella)</h4>
+                      <p>Botella térmica con logo — 500 ml.</p>
+                      <strong>$ 11</strong>
+                    </div>
+                    <div style="display:flex; gap:8px; align-items:center; margin-top:6px;">
+                      <label style="margin:0;">Cant</label>
+                      <input type="number" class="form-control merch-qty" data-id="botella" value="1" min="1" style="width:80px;">
+                      <button class="btn btn-outline-primary btn-sm add-to-cart" data-id="botella" data-name="Tomatodo IcTiosCusco" data-price="11">Agregar</button>
+                    </div>
+                  </div>
+                </div>
 
-          <div class="side-card" role="listitem" aria-label="MONFU 2025">
-            <div class="side-thumb" style="background-image:url('images/noticia_monfu.jpg');" aria-hidden="true"></div>
-            <div class="side-info">
-              <div class="date">24 de octubre de 2025</div>
-              <div class="title">Participación de IcTiosCusco en MONFU 2025 — "Las Montañas, Nuestro Futuro"</div>
-              <div class="brief">El equipo participó en el VIII Simposio Internacional MONFU 2025 (INAIGEM, Cusco). La ponencia estuvo a cargo de Nayely Polanco, con el apoyo de Getsemaní Chirau, sobre la variación morfológica de especies del género <em>Orestias</em>. Autores: Jack Malon Rodríguez, Alex Ttito, Nayely Polanco y Rolando Chaparrea.</div>
-            </div>
-          </div>
-
-          <div class="side-card" role="listitem" aria-label="Ornitologia: apoyo">
-            <div class="side-thumb" style="background-image:url('images/noticia_ornitologia.jpg');" aria-hidden="true"></div>
-            <div class="side-info">
-              <div class="date">Próximamente</div>
-              <div class="title">IcTiosCusco: apoyo activo en el XV Congreso Peruano de Ornitología</div>
-              <div class="brief">IcTiosCusco será apoyo activo en la organización del XV Congreso Peruano de Ornitología, que se realizará en Madre de Dios. La coordinación y nexo institucional está a cargo de nuestro miembro Rolando Chaparrea Cárdenas. Informaremos fechas definitivas y programa en nuestras redes y sitio web.</div>
-            </div>
-          </div>
-
-        </aside>
-
-      </div> <!-- .news-front -->
-
-    </div>
-  </section>
-
-  <!-- FOOTER (igual que antes) -->
-  <footer class="ftco-footer ftco-section img">
-    <div class="overlay"></div>
-    <div class="container">
-      <div class="row mb-5">
-        <div class="col-md-3">
-          <div class="ftco-footer-widget mb-4">
-            <h2 class="ftco-heading-2">Sobre IcTiosCusco</h2>
-            <p>Grupo de investigación dedicado a la conservación y estudio de peces andinos (Orestias) en la región de Cusco.</p>
-            <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
-              <li class="ftco-animate"><a href="https://www.facebook.com/ConGeniusRockie" target="_blank" rel="noopener noreferrer" aria-label="Facebook IcTiosCusco"><span class="icon-facebook"></span></a></li>
-              <li class="ftco-animate"><a href="https://www.instagram.com/ictioscusco" target="_blank" rel="noopener noreferrer" aria-label="Instagram IcTiosCusco"><span class="icon-instagram"></span></a></li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="col-md-4">
-          <div class="ftco-footer-widget mb-4">
-            <h2 class="ftco-heading-2">Publicaciones recientes</h2>
-            <div class="block-21 mb-4 d-flex">
-              <a class="blog-img mr-4" style="background-image: url(images/noticia_monfu.jpg);"></a>
-              <div class="text">
-                <h3 class="heading">Participación en MONFU 2025</h3>
-                <div class="meta">
-                  <div><a href="#"><span class="icon-calendar"></span> Oct 24, 2025</a></div>
-                  <div><a href="#"><span class="icon-person"></span> IcTiosCusco</a></div>
+                <!-- CARD 3: Foto encuadrada -->
+                <div class="merch-card">
+                  <img src="images/merch_foto.jpg" alt="Foto encuadrada IcTiosCusco">
+                  <div class="body">
+                    <div>
+                      <h4>Fotografía encuadrada</h4>
+                      <p>Impresión 20x30 cm enmarcada — edición limitada.</p>
+                      <strong>$ 32</strong>
+                    </div>
+                    <div style="display:flex; gap:8px; align-items:center; margin-top:6px;">
+                      <label style="margin:0;">Cant</label>
+                      <input type="number" class="form-control merch-qty" data-id="foto" value="1" min="1" style="width:80px;">
+                      <button class="btn btn-outline-primary btn-sm add-to-cart" data-id="foto" data-name="Foto encuadrada IcTiosCusco" data-price="32">Agregar</button>
+                    </div>
+                  </div>
                 </div>
               </div>
+
+              <!-- Carrito -->
+              <div style="margin-top:16px;">
+                <div class="cart" id="cart">
+                  <h5>Carrito</h5>
+                  <div id="cart-rows">
+                    <p class="muted-small">No hay artículos en el carrito.</p>
+                  </div>
+                  <div class="cart-total" id="cart-total">Total: $ 0</div>
+
+                  <div style="display:flex; gap:8px; margin-top:12px;">
+                    <button id="checkout-paypal" class="btn btn-primary">Pagar con PayPal</button>
+                    <button id="order-mail" class="btn btn-outline-primary">Enviar pedido por correo</button>
+                  </div>
+
+                  <small class="muted-small d-block mt-2">Al pagar por PayPal se abrirá una ventana nueva. Si no usas PayPal, usa "Enviar pedido por correo" para coordinar pago y envío.</small>
+                </div>
+              </div>
+
             </div>
           </div>
-        </div>
 
-        <div class="col-md-2">
-          <div class="ftco-footer-widget mb-4 ml-md-4">
-            <h2 class="ftco-heading-2">Enlaces</h2>
-            <ul class="list-unstyled">
-              <li><a href="index.html" class="py-2 d-block">Inicio</a></li>
-              <li><a href="about.html" class="py-2 d-block">Quiénes somos</a></li>
-              <li><a href="donate.html" class="py-2 d-block">Donación</a></li>
-              <li><a href="causes.html" class="py-2 d-block">Proyectos</a></li>
-              <li><a href="event.html" class="py-2 d-block">Miembros</a></li>
-              <li><a href="blog.html" class="py-2 d-block">Noticias</a></li>
-            </ul>
-          </div>
-        </div>
+          <!-- Right column: info y formulario de contacto -->
+          <div class="col-lg-4">
+            <div class="donate-panel">
+              <h4>¿Necesitas factura o coordinar donación grande?</h4>
+              <p>Escríbenos y coordinamos recibos, facturación o convenios institucionales.</p>
 
-        <div class="col-md-3">
-          <div class="ftco-footer-widget mb-4">
-            <h2 class="ftco-heading-2">¿Tienes preguntas?</h2>
-            <div class="block-23 mb-3">
+              <!-- BLOQUE QR PLIN (añadido según solicitaste) -->
+              <div class="plin-qr" aria-hidden="false">
+                <img src="images/qr_plin.png" alt="QR PLIN — Escanea para pagar" />
+                <p>Escanea para pagar por PLIN</p>
+              </div>
+
+              <!-- Contact / pedido fallback (envía a Formspree) -->
+              <form id="donation-contact-form" class="volunter-form">
+                <div class="form-group">
+                  <input name="name" type="text" class="form-control" placeholder="Tu nombre" required>
+                </div>
+                <div class="form-group">
+                  <input name="email" type="email" class="form-control" placeholder="Tu correo" required>
+                </div>
+                <div class="form-group">
+                  <input name="subject" type="text" class="form-control" placeholder="Asunto (p. ej. Donación / Pedido)">
+                </div>
+                <div class="form-group">
+                  <textarea name="message" cols="30" rows="5" class="form-control" placeholder="Escribe tu consulta o indica pedido/importe" required></textarea>
+                </div>
+
+                <div class="form-group">
+                  <button type="submit" class="btn btn-primary py-2 px-4">Enviar consulta</button>
+                </div>
+
+                <div id="don-form-response" aria-live="polite" style="display:none; margin-top:8px;"></div>
+              </form>
+
+              <hr>
+
+              <h5>Contacto rápido</h5>
+              <p><strong>WhatsApp:</strong> <a href="https://wa.me/51969392189" target="_blank" rel="noopener">+51 969 392 189</a></p>
+              <p><strong>Email:</strong> <a href="mailto:ictioscusco@gmail.com">ictioscusco@gmail.com</a></p>
+            </div>
+
+            <div class="donate-panel" style="margin-top:18px;">
+              <h5>¿Por qué donar?</h5>
               <ul>
-                <li><span class="icon icon-map-marker"></span><span class="text">Cusco, Perú</span></li>
-                <li><a href="tel:+51969392189"><span class="icon icon-phone"></span><span class="text">+51 969 392 189</span></a></li>
-                <li><a href="mailto:ictioscusco@gmail.com"><span class="icon icon-envelope"></span><span class="text">ictioscusco@gmail.com</span></a></li>
+                <li>Financiar muestreos de campo y redes de monitoreo.</li>
+                <li>Soportar análisis genéticos y conservación de hábitat.</li>
+                <li>Programas educativos con escuelas locales.</li>
               </ul>
             </div>
           </div>
         </div>
       </div>
+    </section>
 
-      <div class="row"><div class="col-md-12 text-center"><p>Copyright &copy;<script>document.write(new Date().getFullYear());</script> IcTiosCusco. Todos los derechos reservados.</p></div></div>
+    <!-- FOOTER (igual al index, con FB e IG) -->
+    <footer class="ftco-footer ftco-section img">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row mb-5">
+          <div class="col-md-3">
+            <div class="ftco-footer-widget mb-4">
+              <h2 class="ftco-heading-2">Sobre IcTiosCusco</h2>
+              <p>Grupo de investigación dedicado a la conservación y estudio de peces andinos (Orestias) en la región de Cusco.</p>
+              <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
+                <li class="ftco-animate">
+                  <a href="https://www.facebook.com/ConGeniusRockie" target="_blank" rel="noopener" aria-label="Facebook">
+                    <span class="icon-facebook"></span>
+                  </a>
+                </li>
+                <li class="ftco-animate">
+                  <a href="https://www.instagram.com/ictioscusco?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener" aria-label="Instagram">
+                    <span class="icon-instagram"></span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="ftco-footer-widget mb-4">
+              <h2 class="ftco-heading-2">Publicaciones recientes</h2>
+              <div class="block-21 mb-4 d-flex">
+                <a class="blog-img mr-4" style="background-image: url(images/noticia_1.jpg);"></a>
+                <div class="text">
+                  <h3 class="heading"><a href="#">Resultados preliminares de Huaypo</a></h3>
+                  <div class="meta">
+                    <div><a href="#"><span class="icon-calendar"></span> Sept 10, 2024</a></div>
+                    <div><a href="#"><span class="icon-person"></span> IcTiosCusco</a></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-2">
+            <div class="ftco-footer-widget mb-4 ml-md-4">
+              <h2 class="ftco-heading-2">Enlaces</h2>
+              <ul class="list-unstyled">
+                <li><a href="index.html" class="py-2 d-block">Inicio</a></li>
+                <li><a href="about.html" class="py-2 d-block">Quiénes somos</a></li>
+                <li><a href="donate.html" class="py-2 d-block">Donación</a></li>
+                <li><a href="causes.html" class="py-2 d-block">Proyectos</a></li>
+                <li><a href="event.html" class="py-2 d-block">Miembros</a></li>
+                <li><a href="blog.html" class="py-2 d-block">Noticias</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <div class="ftco-footer-widget mb-4">
+              <h2 class="ftco-heading-2">¿Tienes preguntas?</h2>
+              <div class="block-23 mb-3">
+                <ul>
+                  <li><span class="icon icon-map-marker"></span><span class="text">Cusco, Perú</span></li>
+                  <li><a href="tel:+51969392189"><span class="icon icon-phone"></span><span class="text">+51 969 392 189</span></a></li>
+                  <li><a href="mailto:ictioscusco@gmail.com"><span class="icon icon-envelope"></span><span class="text">ictioscusco@gmail.com</span></a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="row">
+          <div class="col-md-12 text-center">
+            <p>Copyright &copy;<script>document.write(new Date().getFullYear());</script> IcTiosCusco. Todos los derechos reservados.</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- loader -->
+    <div id="ftco-loader" class="show fullscreen">
+      <svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg>
     </div>
-  </footer>
 
-  <!-- loader -->
-  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+    <!-- SCRIPTS -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery-migrate-3.0.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.easing.1.3.js"></script>
+    <script src="js/jquery.waypoints.min.js"></script>
+    <script src="js/jquery.stellar.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/jquery.magnific-popup.min.js"></script>
+    <script src="js/aos.js"></script>
+    <script src="js/jquery.animateNumber.min.js"></script>
+    <script src="js/bootstrap-datepicker.js"></script>
+    <script src="js/jquery.timepicker.min.js"></script>
+    <script src="js/scrollax.min.js"></script>
+    <script src="js/google-map.js"></script>
+    <script src="js/main.js"></script>
 
-  <!-- SCRIPTS -->
-  <script src="js/jquery.min.js"></script>
-  <script src="js/jquery-migrate-3.0.1.min.js"></script>
-  <script src="js/popper.min.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <script src="js/jquery.easing.1.3.js"></script>
-  <script src="js/jquery.waypoints.min.js"></script>
-  <script src="js/jquery.stellar.min.js"></script>
-  <script src="js/owl.carousel.min.js"></script>
-  <script src="js/jquery.magnific-popup.min.js"></script>
-  <script src="js/aos.js"></script>
-  <script src="js/jquery.animateNumber.min.js"></script>
-  <script src="js/bootstrap-datepicker.js"></script>
-  <script src="js/jquery.timepicker.min.js"></script>
-  <script src="js/scrollax.min.js"></script>
-  <script src="js/google-map.js"></script>
-  <script src="js/main.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        // Navbar scrolled behavior (igual que en index)
+        var navbar = document.getElementById('ftco-navbar');
+        var navCollapse = $('#ftco-nav');
+        function checkScroll(){ if(window.scrollY>50) navbar.classList.add('scrolled'); else navbar.classList.remove('scrolled'); }
+        checkScroll();
+        window.addEventListener('scroll', checkScroll, { passive: true });
+        if (navCollapse.length) {
+          navCollapse.on('shown.bs.collapse', function () { navbar.classList.add('scrolled'); });
+          navCollapse.on('hidden.bs.collapse', function () { if (window.scrollY <= 50) navbar.classList.remove('scrolled'); });
+        }
 
-  <script>
-    // --vh fix para móviles
-    (function(){
-      function setVhVar(){ var vh = window.innerHeight * 0.01; document.documentElement.style.setProperty('--vh', vh + 'px'); }
-      window.addEventListener('resize', setVhVar); window.addEventListener('orientationchange', setVhVar); setVhVar();
-    })();
+        /* ---------------------------
+           UTIL: crear input hidden para formularios PayPal
+           --------------------------- */
+        function createHidden(name, value) {
+          const inp = document.createElement('input');
+          inp.type = 'hidden';
+          inp.name = name;
+          inp.value = value;
+          return inp;
+        }
 
-    // Navbar behaviour y botones compartir (compatibilidad con botones compactados)
-    document.addEventListener('DOMContentLoaded', function () {
-      var navbar = document.getElementById('ftco-navbar');
-      var navCollapse = $('#ftco-nav');
-      function checkScroll(){ if(window.scrollY>60) navbar.classList.add('scrolled'); else navbar.classList.remove('scrolled'); }
-      checkScroll(); window.addEventListener('scroll', checkScroll, {passive:true});
-      if(navCollapse.length){ navCollapse.on('shown.bs.collapse', function(){ navbar.classList.add('scrolled'); }); navCollapse.on('hidden.bs.collapse', function(){ if(window.scrollY<=60) navbar.classList.remove('scrolled'); }); }
+        /* ---------------------------
+           PAYPAL CONFIG (Sandbox / Live switch)
+           --------------------------- */
+        // MODO PRUEBAS: setea true para usar sandbox
+        const USE_SANDBOX = false; // <- Cambia a true para pruebas en sandbox
+        // Correo sandbox (obténlo en developer.paypal.com si pruebas)
+        const PAYPAL_SANDBOX_EMAIL = 'sb-opca146972674@business.example.com'; // ejemplo sandbox
+        // Correo live (tu cuenta real de negocio)
+        const PAYPAL_LIVE_EMAIL = 'ictioscusco@gmail.com'; // ya lo pusiste
+        // Currency: ahora en USD
+        let PAYPAL_CURRENCY = 'USD';
+        const PAYPAL_BUSINESS = USE_SANDBOX ? PAYPAL_SANDBOX_EMAIL : PAYPAL_LIVE_EMAIL;
+        const PAYPAL_ENDPOINT = USE_SANDBOX ? 'https://www.sandbox.paypal.com/cgi-bin/webscr' : 'https://www.paypal.com/cgi-bin/webscr';
 
-      document.querySelectorAll('.share-btn').forEach(function(btn){
-        btn.addEventListener('click', function(e){
-          var article = e.target.closest('article') || e.target.closest('.side-card');
-          if(!article) return;
-          var url = new URL(article.getAttribute('data-url') || window.location.href + '#', window.location.origin).href;
-          var title = article.getAttribute('data-title') || article.querySelector('.front-title')?.innerText || article.querySelector('.title')?.innerText || document.title;
-          var excerpt = article.getAttribute('data-excerpt') || article.querySelector('p')?.innerText || '';
-          var action = btn.getAttribute('data-share');
+        // Mostrar banner sandbox si está activo
+        if (USE_SANDBOX && document.getElementById('sandbox-note')) {
+          document.getElementById('sandbox-note').style.display = 'block';
+        }
 
-          if(action === 'web'){
-            if(navigator.share){
-              navigator.share({ title: title, text: excerpt, url: url }).catch(function(err){});
-            } else {
-              alert('Tu navegador no soporta el menú nativo de compartir. Usa Facebook/WhatsApp o copia el enlace.');
-            }
+        // abrir ventana nueva sin URL primero para reducir bloqueo de popup
+        function submitFormToNewWindow(form) {
+          const win = window.open('', 'paypalWindow' + Math.floor(Math.random()*100000));
+          if(!win) {
+            alert('Tu navegador bloqueó la apertura de ventanas. Permite popups para este sitio e inténtalo de nuevo.');
+            return false;
+          }
+          form.target = win.name;
+          document.body.appendChild(form);
+          form.submit();
+          form.remove();
+          return true;
+        }
+
+        // Abrir pago por donación simple (single)
+        function openPaypalSingle(amount) {
+          if (!PAYPAL_BUSINESS) {
+            alert('No está configurado el correo de PayPal. Revisa el código.');
             return;
           }
+          const form = document.createElement('form');
+          form.method = 'post';
+          form.action = PAYPAL_ENDPOINT;
+          form.style.display = 'none';
 
-          if(action === 'facebook'){
-            var fb = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
-            window.open(fb, '_blank', 'noopener');
+          // cmd _donations para botones de donación
+          form.appendChild(createHidden('cmd', '_donations'));
+          form.appendChild(createHidden('business', PAYPAL_BUSINESS));
+          form.appendChild(createHidden('item_name', 'Donación a IcTiosCusco'));
+          form.appendChild(createHidden('amount', Number(amount).toFixed(2)));
+          form.appendChild(createHidden('currency_code', PAYPAL_CURRENCY));
+          form.appendChild(createHidden('return', window.location.href));
+          form.appendChild(createHidden('cancel_return', window.location.href));
+
+          const ok = submitFormToNewWindow(form);
+          if(!ok) {
+            // fallback: abrir URL construida (menos parámetros, pero útil)
+            const url = PAYPAL_ENDPOINT + '?cmd=_donations&business=' + encodeURIComponent(PAYPAL_BUSINESS) + '&amount=' + encodeURIComponent(Number(amount).toFixed(2)) + '&currency_code=' + encodeURIComponent(PAYPAL_CURRENCY);
+            window.open(url, '_blank', 'noopener');
+          }
+        }
+
+        /* ---------------------------
+           MERCH CART (cliente)
+           --------------------------- */
+        const cart = {}; // { id: {id,name,price,qty} }
+
+        function addToCart(id, name, price, qty) {
+          qty = Number(qty) || 1;
+          if (cart[id]) cart[id].qty += qty;
+          else cart[id] = { id, name, price: Number(price), qty };
+          renderCart();
+        }
+
+        function removeFromCart(id) {
+          delete cart[id];
+          renderCart();
+        }
+
+        function renderCart() {
+          const rows = document.getElementById('cart-rows');
+          rows.innerHTML = '';
+          const keys = Object.keys(cart);
+          if (!keys.length) {
+            rows.innerHTML = '<p class="muted-small">No hay artículos en el carrito.</p>';
+            document.getElementById('cart-total').innerText = 'Total: $ 0';
             return;
           }
+          let total = 0;
+          keys.forEach(function (k) {
+            const it = cart[k];
+            total += it.price * it.qty;
+            const div = document.createElement('div');
+            div.className = 'cart-row';
+            div.innerHTML = `
+              <div>
+                <strong>${escapeHtml(it.name)}</strong><br>
+                <small>$ ${it.price.toFixed(2)} x ${it.qty}</small>
+              </div>
+              <div>
+                <button class="btn btn-sm btn-outline-danger remove-cart" data-id="${it.id}">Quitar</button>
+              </div>
+            `;
+            rows.appendChild(div);
+          });
+          document.getElementById('cart-total').innerText = 'Total: $ ' + total.toFixed(2);
 
-          if(action === 'twitter'){
-            var tw = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(title + ' - ' + excerpt) + '&url=' + encodeURIComponent(url);
-            window.open(tw, '_blank', 'noopener');
-            return;
-          }
+          // bind remove buttons
+          document.querySelectorAll('.remove-cart').forEach(function (b) {
+            b.addEventListener('click', function () {
+              const id = this.getAttribute('data-id');
+              removeFromCart(id);
+            });
+          });
+        }
 
-          if(action === 'whatsapp'){
-            var text = title + '\n' + excerpt + '\n' + url;
-            var wa = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(text);
-            window.open(wa, '_blank', 'noopener');
-            return;
-          }
+        // escape helper
+        function escapeHtml(text) {
+          return (''+text).replace(/[&<>"']/g, function (m) { return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#039;"})[m]; });
+        }
 
-          if(action === 'copy'){
-            if(navigator.clipboard && window.isSecureContext){
-              navigator.clipboard.writeText(url).then(function(){ alert('Enlace copiado al portapapeles'); });
-            } else {
-              var ta = document.createElement('textarea'); ta.value = url; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); alert('Enlace copiado al portapapeles'); }catch(e){ prompt('Copia este enlace:', url); } ta.remove();
-            }
-            return;
-          }
+        // add-to-cart handlers
+        document.querySelectorAll('.add-to-cart').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            const id = this.getAttribute('data-id');
+            const name = this.getAttribute('data-name');
+            const price = this.getAttribute('data-price');
+            const qtyInput = document.querySelector('.merch-qty[data-id="' + id + '"]');
+            const qty = qtyInput ? Number(qtyInput.value || 1) : 1;
+            addToCart(id, name, price, qty);
+          });
         });
-      });
 
-    });
-  </script>
+        /* ---------------------------
+           CHECKOUT CART -> PAYPAL
+           - abre ventana new window para evitar popup blocking
+           --------------------------- */
+        function checkoutPaypalCart(cartObj) {
+          if (!PAYPAL_BUSINESS) {
+            alert('Por favor configura PAYPAL_BUSINESS en el código para habilitar checkout.');
+            return;
+          }
+          const form = document.createElement('form');
+          form.method = 'post';
+          form.action = PAYPAL_ENDPOINT;
+          form.style.display = 'none';
+
+          form.appendChild(createHidden('cmd', '_cart'));
+          form.appendChild(createHidden('upload', '1'));
+          form.appendChild(createHidden('business', PAYPAL_BUSINESS));
+          form.appendChild(createHidden('currency_code', PAYPAL_CURRENCY));
+
+          let i = 1;
+          Object.values(cartObj).forEach(function (it) {
+            form.appendChild(createHidden('item_name_' + i, it.name));
+            form.appendChild(createHidden('amount_' + i, it.price.toFixed(2)));
+            form.appendChild(createHidden('quantity_' + i, it.qty));
+            i++;
+          });
+
+          form.appendChild(createHidden('return', window.location.href));
+          form.appendChild(createHidden('cancel_return', window.location.href));
+
+          const ok = submitFormToNewWindow(form);
+          if(!ok) {
+            alert('Tu navegador bloqueó la ventana de pago. Revisa tu bloqueador de popups o intenta pagar directamente en PayPal.');
+            document.body.appendChild(form);
+            form.submit();
+            form.remove();
+          }
+        }
+
+        // Bind quick amount buttons
+        document.querySelectorAll('.donate-amounts button').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            document.getElementById('custom-amount').value = btn.getAttribute('data-amount');
+          });
+        });
+
+        // Donate with PayPal button
+        document.getElementById('donate-paypal').addEventListener('click', function () {
+          const val = Number(document.getElementById('custom-amount').value || 0);
+          if (!val || val <= 0) { alert('Ingresa un monto válido.'); return; }
+          openPaypalSingle(val.toFixed(2));
+        });
+
+        // Checkout cart PayPal
+        document.getElementById('checkout-paypal').addEventListener('click', function () {
+          if (!Object.keys(cart).length) { alert('El carrito está vacío. Agrega productos antes de pagar.'); return; }
+          checkoutPaypalCart(cart);
+        });
+
+        /* ---------------------------
+           Order by email (Formspree) — fallback for customers without PayPal
+           --------------------------- */
+        const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xqalnaaj';
+        document.getElementById('order-mail').addEventListener('click', function () {
+          if (!Object.keys(cart).length) { alert('El carrito está vacío. Agrega productos antes de enviar pedido.'); return; }
+          const name = prompt('Nombre para el pedido (obligatorio):');
+          if (!name) return alert('Nombre requerido.');
+          const email = prompt('Correo electrónico de contacto (obligatorio):');
+          if (!email) return alert('Correo requerido.');
+          let msg = 'Pedido tienda IcTiosCusco:\n\n';
+          let total = 0;
+          Object.values(cart).forEach(function (it) {
+            msg += `${it.name} — $ ${it.price.toFixed(2)} x ${it.qty}\n`;
+            total += it.price * it.qty;
+          });
+          msg += `\nTotal aproximado: $ ${total.toFixed(2)}\n\nPor favor indicar método de pago y datos de envío.`;
+          const data = new FormData();
+          data.append('name', name);
+          data.append('email', email);
+          data.append('subject', 'Pedido tienda — ' + name);
+          data.append('message', msg);
+
+          fetch(FORMSPREE_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Accept': 'application/json' },
+            body: data
+          }).then(function (resp) {
+            if (resp.ok) {
+              alert('Pedido enviado. Te contactaremos por correo para coordinar pago/envío.');
+              Object.keys(cart).forEach(k => delete cart[k]);
+              renderCart();
+            } else {
+              alert('No se pudo enviar el pedido. Intenta luego o escríbenos a ictioscusco@gmail.com.');
+            }
+          }).catch(function () {
+            alert('Error de conexión. Intenta luego o escríbenos a ictioscusco@gmail.com.');
+          });
+        });
+
+        /* ---------------------------
+           Donation / contact form (right column)
+           --------------------------- */
+        const donateForm = document.getElementById('donation-contact-form');
+        const donateResp = document.getElementById('don-form-response');
+        if (donateForm) {
+          function showFormMessage(text, success=true) {
+            donateResp.style.display = 'block';
+            donateResp.style.color = success ? '#155724' : '#721c24';
+            donateResp.style.background = success ? 'rgba(40,167,69,0.08)' : 'rgba(220,53,69,0.06)';
+            donateResp.style.border = success ? '1px solid rgba(40,167,69,0.12)' : '1px solid rgba(220,53,69,0.12)';
+            donateResp.innerText = text;
+            if (success) setTimeout(()=> donateResp.style.display='none', 6000);
+          }
+
+          donateForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const data = new FormData(donateForm);
+            fetch(FORMSPREE_ENDPOINT, {
+              method: 'POST',
+              headers: { 'Accept': 'application/json' },
+              body: data
+            }).then(function (resp) {
+              if (resp.ok) {
+                showFormMessage('Consulta enviada. Gracias, te contactaremos pronto.', true);
+                donateForm.reset();
+              } else {
+                showFormMessage('Ocurrió un error al enviar. Intenta nuevamente.', false);
+              }
+            }).catch(function () {
+              showFormMessage('No se pudo enviar. Verifica tu conexión a Internet.', false);
+            });
+          });
+        }
+
+        // Inicializar estado del carrito visual
+        renderCart();
+
+      }); // DOMContentLoaded
+    </script>
   </body>
 </html>
