@@ -57,11 +57,12 @@
         justify-content: space-between;
       }
       .project-entry h3 { margin-top: 0; margin-bottom: 8px; font-size:1.15rem; }
-      .project-entry p { margin-bottom: 10px; color: #555; line-height:1.5; }
+      /* Texto JUSTIFICADO según tu pedido */
+      .project-entry p { margin-bottom: 10px; color: #555; line-height:1.5; text-align: justify; }
 
-      .project-meta { font-size: .95rem; color: #666; margin-bottom: 10px; }
+      .project-meta { font-size: .95rem; color: #666; margin-bottom: 10px; text-align: justify; }
 
-      /* quitar acciones: solo info (dejamos el contenedor para consistencia visual pero sin botones) */
+      /* dejar contenedor de acciones pero sin botones salvo el caso solicitado */
       .project-actions { margin-top:8px; }
 
       .btn-outline-primary {
@@ -146,7 +147,22 @@
         </div>
 
         <div class="row">
-          <!-- Proyecto A: Monitoreo de Aves asociadas a ecosistemas acuáticos -->
+          <!-- 1) Proyecto: Monitoreo poblacional de Orestias (PRIMERO) -->
+          <div class="col-md-6 col-lg-6 ftco-animate">
+            <div class="project-entry">
+              <div class="img" style="background-image: url('images/proyecto-monitoreo.jpg');"></div>
+              <div class="text">
+                <div>
+                  <h3>Monitoreo poblacional de <em>Orestias</em></h3>
+                  <p>Seguimiento de abundancia, estructura de tallas y distribución en lagunas altoandinas para detectar tendencias poblacionales. El proyecto incluye muestreos estandarizados, análisis morfométricos y evaluaciones de la composición por edad para comprender la dinámica poblacional y apoyar decisiones de conservación.</p>
+                  <div class="project-meta"><strong>Lugar:</strong> Cuenca del Urubamba — <strong>Estado:</strong> Activo</div>
+                </div>
+                <div class="project-actions"><!-- intencionalmente vacío, sin botones --> </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2) Proyecto: Monitoreo de Aves asociadas a ecosistemas acuáticos (SEGUNDO) -->
           <div class="col-md-6 col-lg-6 ftco-animate">
             <div class="project-entry">
               <div class="img" style="background-image: url('images/proyecto-aves.jpg');"></div>
@@ -156,64 +172,35 @@
                   <p>Aborda el monitoreo y la recopilación de datos de aves que interactúan y dependen directamente de los ecosistemas acuáticos. Se busca identificar su presencia, abundancia y el rol ecológico que desempeñan en estos ambientes. Para ello, se aplican diversas metodologías de muestreo que permiten construir una base de datos sólida sobre su diversidad y dinámica ecológica.</p>
                   <div class="project-meta"><strong>Responsable:</strong> Rolando Chaparrea Cardenas — <strong>Lugar:</strong> Lagunas altoandinas — <strong>Estado:</strong> Activo</div>
                 </div>
-                <div class="project-actions"></div>
+                <div class="project-actions"><!-- sin botones según tu pedido --></div>
               </div>
             </div>
           </div>
 
-          <!-- Proyecto B: Educación ambiental y comunidades -->
+          <!-- 3) Proyecto: Educación ambiental y comunidades (TERCERO) - único con botón "Coordinar taller" -->
           <div class="col-md-6 col-lg-6 ftco-animate">
             <div class="project-entry">
               <div class="img" style="background-image: url('images/proyecto-educacion.jpg');"></div>
               <div class="text">
                 <div>
                   <h3>Educación ambiental y comunidades</h3>
-                  <p>Talleres con escuelas y líderes locales sobre la importancia de las lagunas altoandinas y prácticas de conservación comunitaria. Incluye materiales educativos, capacitación de docentes y actividades prácticas en campo para jóvenes y familias.</p>
-                  <div class="project-meta"><strong>Beneficiarios:</strong> Comunidades locales — <strong>Próximo taller:</strong> mayo 2025 — <strong>Estado:</strong> En marcha</div>
+                  <p>Talleres con escuelas y líderes locales sobre la importancia de las lagunas altoandinas y prácticas de conservación comunitaria. El proyecto desarrolla materiales educativos, capacitaciones y actividades participativas para fortalecer capacidades locales en conservación y manejo sostenible de recursos acuáticos.</p>
+                  <div class="project-meta"><strong>Próximo taller:</strong> mayo 2025 — <strong>Beneficiarios:</strong> 4 comunidades</div>
                 </div>
-                <div class="project-actions"></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Proyecto C: Monitoreo poblacional de Orestias -->
-          <div class="col-md-6 col-lg-6 ftco-animate">
-            <div class="project-entry">
-              <div class="img" style="background-image: url('images/proyecto-monitoreo.jpg');"></div>
-              <div class="text">
-                <div>
-                  <h3>Monitoreo poblacional de <em>Orestias</em></h3>
-                  <p>Seguimiento de abundancia, estructura de tallas y distribución en lagunas altoandinas para detectar tendencias poblacionales, presiones antrópicas y necesidades de conservación. Muestreos estandarizados con redes, capturas y liberaciones para generar series temporales robustas.</p>
-                  <div class="project-meta"><strong>Responsable:</strong> Equipo IcTiosCusco — <strong>Lugar:</strong> Cuenca del Urubamba — <strong>Estado:</strong> Activo</div>
+                <div class="project-actions">
+                  <!-- único botón que pediste mantener -->
+                  <a href="contact.html" class="btn btn-primary btn-sm">Coordinar taller</a>
                 </div>
-                <div class="project-actions"></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Proyecto D: Investigación en Trichomycterus y especies asociadas -->
-          <div class="col-md-6 col-lg-6 ftco-animate">
-            <div class="project-entry">
-              <div class="img" style="background-image: url('images/proyecto-trichomycterus.jpg');"></div>
-              <div class="text">
-                <div>
-                  <h3>Investigación en <em>Trichomycterus</em> y especies asociadas</h3>
-                  <p>Estudios taxonómicos, ecológicos y de nicho de especies de bagres andinos (género <em>Trichomycterus</em>) y especies asociadas. Incluye muestreos, morfometría, y colaboración con laboratorios para análisis genéticos cuando es pertinente.</p>
-                  <div class="project-meta"><strong>Responsable:</strong> Equipo IcTiosCusco — <strong>Estado:</strong> Investigación en curso</div>
-                </div>
-                <div class="project-actions"></div>
               </div>
             </div>
           </div>
 
         </div> <!-- /row proyectos -->
 
-        <!-- (No hay paginación: página muestra solo estos 4 proyectos) -->
-
       </div> <!-- /container -->
     </section>
 
-    <!-- Sección voluntariado / contacto adaptada: usa Formspree + WhatsApp -->
+    <!-- Sección voluntariado / contacto adaptada: usa Formspree + WhatsApp (sin cambios relevantes) -->
     <section class="ftco-section-3 img" style="background-image: url(images/bg_3.jpg);">
       <div class="overlay"></div>
       <div class="container">
@@ -435,4 +422,5 @@
 
   </body>
 </html>
+
 
