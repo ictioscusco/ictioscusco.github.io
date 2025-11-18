@@ -61,12 +61,9 @@
 
       .project-meta { font-size: .95rem; color: #666; margin-bottom: 10px; }
 
-      .project-actions {
-        display:flex;
-        gap:8px;
-        align-items:center;
-        margin-top: 8px;
-      }
+      /* quitar acciones: solo info (dejamos el contenedor para consistencia visual pero sin botones) */
+      .project-actions { margin-top:8px; }
+
       .btn-outline-primary {
         background: transparent;
         border: 1px solid rgba(15,76,129,0.12);
@@ -149,132 +146,70 @@
         </div>
 
         <div class="row">
-          <!-- Proyecto 1: Monitoreo poblacional -->
-          <div class="col-md-6 col-lg-4 ftco-animate">
+          <!-- Proyecto A: Monitoreo de Aves asociadas a ecosistemas acuáticos -->
+          <div class="col-md-6 col-lg-6 ftco-animate">
             <div class="project-entry">
-              <a class="img" style="background-image: url('images/proyecto-monitoreo.jpg');" href="#"></a>
+              <div class="img" style="background-image: url('images/proyecto-aves.jpg');"></div>
               <div class="text">
                 <div>
-                  <h3><a href="#">Monitoreo poblacional de <em>Orestias</em></a></h3>
-                  <p>Seguimiento de abundancia, estructura de tallas y distribución en lagunas altoandinas para detectar tendencias poblacionales.</p>
-                  <div class="project-meta">Lugar: Cuenca del Urubamba — Estado: Activo</div>
+                  <h3>Monitoreo de Aves asociadas a ecosistemas acuáticos</h3>
+                  <p>Aborda el monitoreo y la recopilación de datos de aves que interactúan y dependen directamente de los ecosistemas acuáticos. Se busca identificar su presencia, abundancia y el rol ecológico que desempeñan en estos ambientes. Para ello, se aplican diversas metodologías de muestreo que permiten construir una base de datos sólida sobre su diversidad y dinámica ecológica.</p>
+                  <div class="project-meta"><strong>Responsable:</strong> Rolando Chaparrea Cardenas — <strong>Lugar:</strong> Lagunas altoandinas — <strong>Estado:</strong> Activo</div>
                 </div>
-                <div class="project-actions">
-                  <a href="causes.html#monitoreo" class="btn btn-outline-primary btn-sm">Ver detalles</a>
-                  <a href="contact.html" class="btn btn-primary btn-sm">Participar</a>
-                </div>
+                <div class="project-actions"></div>
               </div>
             </div>
           </div>
 
-          <!-- Proyecto 2: Genética y filogeografía -->
-          <div class="col-md-6 col-lg-4 ftco-animate">
+          <!-- Proyecto B: Educación ambiental y comunidades -->
+          <div class="col-md-6 col-lg-6 ftco-animate">
             <div class="project-entry">
-              <a class="img" style="background-image: url('images/proyecto-genetica.jpg');" href="#"></a>
+              <div class="img" style="background-image: url('images/proyecto-educacion.jpg');"></div>
               <div class="text">
                 <div>
-                  <h3><a href="#">Genética y filogeografía de <em>Orestias</em></a></h3>
-                  <p>Análisis de diversidad genética y conectividad entre poblaciones para identificar unidades de conservación prioritarias.</p>
-                  <div class="project-meta">Colaboradores: Univ. de Chile — Estado: Publicación 2024</div>
+                  <h3>Educación ambiental y comunidades</h3>
+                  <p>Talleres con escuelas y líderes locales sobre la importancia de las lagunas altoandinas y prácticas de conservación comunitaria. Incluye materiales educativos, capacitación de docentes y actividades prácticas en campo para jóvenes y familias.</p>
+                  <div class="project-meta"><strong>Beneficiarios:</strong> Comunidades locales — <strong>Próximo taller:</strong> mayo 2025 — <strong>Estado:</strong> En marcha</div>
                 </div>
-                <div class="project-actions">
-                  <a href="causes.html#genetica" class="btn btn-outline-primary btn-sm">Ver detalles</a>
-                  <a href="blog.html" class="btn btn-primary btn-sm">Leer publicación</a>
-                </div>
+                <div class="project-actions"></div>
               </div>
             </div>
           </div>
 
-          <!-- Proyecto 3: Educación ambiental -->
-          <div class="col-md-6 col-lg-4 ftco-animate">
+          <!-- Proyecto C: Monitoreo poblacional de Orestias -->
+          <div class="col-md-6 col-lg-6 ftco-animate">
             <div class="project-entry">
-              <a class="img" style="background-image: url('images/proyecto-educacion.jpg');" href="#"></a>
+              <div class="img" style="background-image: url('images/proyecto-monitoreo.jpg');"></div>
               <div class="text">
                 <div>
-                  <h3><a href="#">Educación ambiental y comunidades</a></h3>
-                  <p>Talleres con escuelas y líderes locales sobre la importancia de las lagunas altoandinas y prácticas de conservación comunitaria.</p>
-                  <div class="project-meta">Próximo taller: mayo 2025 — Beneficiarios: 4 comunidades</div>
+                  <h3>Monitoreo poblacional de <em>Orestias</em></h3>
+                  <p>Seguimiento de abundancia, estructura de tallas y distribución en lagunas altoandinas para detectar tendencias poblacionales, presiones antrópicas y necesidades de conservación. Muestreos estandarizados con redes, capturas y liberaciones para generar series temporales robustas.</p>
+                  <div class="project-meta"><strong>Responsable:</strong> Equipo IcTiosCusco — <strong>Lugar:</strong> Cuenca del Urubamba — <strong>Estado:</strong> Activo</div>
                 </div>
-                <div class="project-actions">
-                  <a href="causes.html#educacion" class="btn btn-outline-primary btn-sm">Ver detalles</a>
-                  <a href="contact.html" class="btn btn-primary btn-sm">Coordinar taller</a>
-                </div>
+                <div class="project-actions"></div>
               </div>
             </div>
           </div>
 
-          <!-- Proyecto 4: Restauración de hábitat (ejemplo adicional) -->
-          <div class="col-md-6 col-lg-4 ftco-animate">
+          <!-- Proyecto D: Investigación en Trichomycterus y especies asociadas -->
+          <div class="col-md-6 col-lg-6 ftco-animate">
             <div class="project-entry">
-              <a class="img" style="background-image: url('images/proyecto-restauracion.jpg');" href="#"></a>
+              <div class="img" style="background-image: url('images/proyecto-trichomycterus.jpg');"></div>
               <div class="text">
                 <div>
-                  <h3><a href="#">Restauración de hábitat y control de especies invasoras</a></h3>
-                  <p>Acciones piloto para recuperar macrófitas nativas y controlar especies introducidas que compiten con <em>Orestias</em>.</p>
-                  <div class="project-meta">Estado: Diseño de intervención</div>
+                  <h3>Investigación en <em>Trichomycterus</em> y especies asociadas</h3>
+                  <p>Estudios taxonómicos, ecológicos y de nicho de especies de bagres andinos (género <em>Trichomycterus</em>) y especies asociadas. Incluye muestreos, morfometría, y colaboración con laboratorios para análisis genéticos cuando es pertinente.</p>
+                  <div class="project-meta"><strong>Responsable:</strong> Equipo IcTiosCusco — <strong>Estado:</strong> Investigación en curso</div>
                 </div>
-                <div class="project-actions">
-                  <a href="causes.html#restauracion" class="btn btn-outline-primary btn-sm">Ver detalles</a>
-                  <a href="contact.html" class="btn btn-primary btn-sm">Apoyar</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Proyecto 5: Monitoreo ambiental -->
-          <div class="col-md-6 col-lg-4 ftco-animate">
-            <div class="project-entry">
-              <a class="img" style="background-image: url('images/proyecto-medioambiental.jpg');" href="#"></a>
-              <div class="text">
-                <div>
-                  <h3><a href="#">Monitoreo ambiental y calidad del agua</a></h3>
-                  <p>Mediciones periódicas de parámetros fisicoquímicos y su relación con la salud de poblaciones de peces.</p>
-                  <div class="project-meta">Estado: Establecido — Instrumentación: sensores en sitio</div>
-                </div>
-                <div class="project-actions">
-                  <a href="causes.html#calidad" class="btn btn-outline-primary btn-sm">Ver detalles</a>
-                  <a href="contact.html" class="btn btn-primary btn-sm">Colaborar</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Proyecto 6: Base de datos y análisis -->
-          <div class="col-md-6 col-lg-4 ftco-animate">
-            <div class="project-entry">
-              <a class="img" style="background-image: url('images/proyecto-datos.jpg');" href="#"></a>
-              <div class="text">
-                <div>
-                  <h3><a href="#">Base de datos y análisis espacial</a></h3>
-                  <p>Centralización de registros de muestreo, georreferenciación y análisis GIS para apoyar la toma de decisiones.</p>
-                  <div class="project-meta">Estado: Desarrollo — Plataforma interna</div>
-                </div>
-                <div class="project-actions">
-                  <a href="causes.html#datos" class="btn btn-outline-primary btn-sm">Ver detalles</a>
-                  <a href="contact.html" class="btn btn-primary btn-sm">Contribuir datos</a>
-                </div>
+                <div class="project-actions"></div>
               </div>
             </div>
           </div>
 
         </div> <!-- /row proyectos -->
 
-        <!-- Paginación (si la necesitas) -->
-        <div class="row mt-5">
-          <div class="col text-center">
-            <div class="block-27">
-              <ul>
-                <li><a href="#">&lt;</a></li>
-                <li class="active"><span>1</span></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
-                <li><a href="#">&gt;</a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
+        <!-- (No hay paginación: página muestra solo estos 4 proyectos) -->
+
       </div> <!-- /container -->
     </section>
 
@@ -500,3 +435,4 @@
 
   </body>
 </html>
+
