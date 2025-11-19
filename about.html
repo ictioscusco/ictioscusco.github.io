@@ -3,100 +3,146 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>IcTiosCusco — Quiénes somos</title>
-    <meta name="description" content="IcTiosCusco: investigación, conservación y monitoreo en la región de Cusco.">
+    <title>IcTiosCusco — Conservación y monitoreo de Orestias</title>
+    <meta name="description" content="IcTiosCusco: investigación, conservación y monitoreo del género Orestias en la región de Cusco. Proyectos, publicaciones y contacto.">
 
+    <!-- ===========================
+         FAVICONS (AÑADE LOS ARCHIVOS EN images/)
+         =========================== -->
+    <!-- ICO fallback / principal -->
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <!-- PNG sizes -->
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+    <!-- iOS -->
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+    <!-- Optional: webmanifest if lo generas -->
+    <link rel="manifest" href="site.webmanifest">
+    <!-- Theme color (barra en Android / navegadores compatibles) -->
+    <meta name="theme-color" content="#ffffff">
+
+    <!-- Fuentes -->
     <link href="https://fonts.googleapis.com/css?family=Dosis:200,300,400,500,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Overpass:300,400,400i,600,700" rel="stylesheet">
 
+    <!-- Estilos del template -->
     <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="css/animate.css">
+    
     <link rel="stylesheet" href="css/owl.carousel.min.css">
     <link rel="stylesheet" href="css/owl.theme.default.min.css">
     <link rel="stylesheet" href="css/magnific-popup.css">
+
     <link rel="stylesheet" href="css/aos.css">
+
     <link rel="stylesheet" href="css/ionicons.min.css">
+
     <link rel="stylesheet" href="css/bootstrap-datepicker.css">
     <link rel="stylesheet" href="css/jquery.timepicker.css">
+
     <link rel="stylesheet" href="css/flaticon.css">
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
 
+    <!-- Estilos personalizados para sobrescribir el estilo del template -->
     <style>
-      /* Mantener look coherente con index */
+      /* Aseguramos que este bloque se aplique después de style.css */
       .navbar-brand.d-flex { display: inline-flex; align-items: center; }
       .navbar-brand img { height: 56px; width: auto; margin-right: 12px; }
-      .navbar-brand span { font-family: 'Overpass', 'Dosis', sans-serif !important; font-weight: 600; font-size: 1.05rem; color: #fff; }
+      .navbar-brand span { font-family: 'Overpass', 'Dosis', sans-serif !important; font-weight: 600; font-size: 1.05rem; color: #fff; line-height: 1; letter-spacing: 0.2px; }
 
-      /* Botón blanco coherente */
+      /* Botón Conócenos: blanco sólido (sobrescribe estilos del template) */
       .btn.btn-white {
         background: #ffffff !important;
         color: #333333 !important;
         border: none !important;
         box-shadow: 0 2px 6px rgba(0,0,0,0.08);
       }
-
-      /* Navbar scroll behaviour */
-      #ftco-navbar { background-color: transparent; transition: background-color 0.25s ease; }
-      #ftco-navbar.scrolled { background-color: rgba(255,255,255,0.98) !important; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-      #ftco-navbar .nav-link, #ftco-navbar .navbar-brand span { color: #ffffff !important; transition: color 0.25s ease; }
-      #ftco-navbar.scrolled .nav-link, #ftco-navbar.scrolled .navbar-brand span { color: #222222 !important; }
-      #ftco-nav.collapse.show .nav-link { color: #222222 !important; }
-
-      /* Contenedor del video: centrado y con tamaño máximo */
-      .video-container {
-        display: flex;
-        justify-content: center;
-        margin-top: 18px;
-        margin-bottom: 28px;
-      }
-      .video-box {
-        width: 100%;
-        max-width: 720px; /* ancho máximo del recuadro */
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 8px 24px rgba(16,24,40,0.08);
-        background: #000;
+      .btn.btn-white:hover,
+      .btn.btn-white:focus {
+        background: #f2f2f2 !important;
+        color: #222 !important;
+        text-decoration: none;
       }
 
-      /* Foto del grupo y descripción */
-      .group-block {
+      /* Iconos como archivos externos (img) */
+      .service-icon {
+        width: 56px;
+        height: 56px;
+        display: block;
+        object-fit: contain;
+      }
+
+      /* Espaciado del contenedor del icono para que quede consistente */
+      .media.block-6 .icon {
+        flex: 0 0 56px;
+        margin-right: 18px;
         display: flex;
-        gap: 24px;
         align-items: flex-start;
-        margin-top: 28px;
-        margin-bottom: 36px;
-      }
-      .group-photo {
-        width: 320px;
-        max-width: 40%;
-        border-radius: 8px;
-        object-fit: cover;
-        box-shadow: 0 8px 20px rgba(16,24,40,0.06);
-        border: 2px solid #f3f3f3;
-      }
-      .group-text {
-        flex: 1 1 auto;
-        color: #333;
-        line-height: 1.6;
-        font-size: 1rem;
+        justify-content: center;
       }
 
-      /* Texto principal */
-      .lead-desc { font-size: 1.05rem; color: #333; line-height: 1.6; }
-
-      @media (max-width: 991.98px) {
-        .group-block { flex-direction: column; align-items: center; text-align: center; }
-        .group-photo { max-width: 90%; width: 420px; }
-        .group-text { width: 100%; }
-      }
-
+      /* Ajustes opcionales para responsividad: reducir logo e iconos en pantallas pequeñas */
       @media (max-width: 575.98px) {
         .navbar-brand img { height: 44px; margin-right: 10px; }
         .navbar-brand span { font-size: 0.95rem; }
-        .video-box { max-width: 100%; }
+        .service-icon { width: 44px; height: 44px; }
+        .media.block-6 .icon { flex: 0 0 44px; margin-right: 12px; }
+      }
+
+      /* --- Forzar colores iniciales y la transición para que la marca cambie con el scroll --- */
+      #ftco-navbar {
+        background-color: transparent;
+        transition: background-color 0.25s ease;
+      }
+      #ftco-navbar.scrolled {
+        background-color: rgba(255,255,255,0.98) !important; /* fondo claro al bajar */
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      }
+
+      /* Inicial: enlaces y marca en blanco (sobre hero image) */
+      #ftco-navbar .nav-link,
+      #ftco-navbar .navbar-brand span {
+        color: #ffffff !important;
+        transition: color 0.25s ease;
+      }
+
+      /* Al scrollear o cuando se fuerza la clase scrolled: color oscuro para legibilidad */
+      #ftco-navbar.scrolled .nav-link,
+      #ftco-navbar.scrolled .navbar-brand span {
+        color: #222222 !important;
+      }
+
+      /* Aseguramos contraste en el toggler y collapse (móvil) */
+      #ftco-navbar .navbar-toggler { color: #ffffff !important; border-color: rgba(255,255,255,0.18) !important; }
+      #ftco-navbar.scrolled .navbar-toggler { color: #222222 !important; border-color: rgba(0,0,0,0.12) !important; }
+
+      /* Cuando el collapse (menú móvil) está abierto, forzamos links oscuros para legibilidad sobre fondo claro */
+      #ftco-nav.collapse.show .nav-link { color: #222222 !important; }
+
+      /* Selección dentro del navbar (opcional) */
+      #ftco-navbar ::selection { background: rgba(0,0,0,0.12); color: #ffffff; }
+
+      /* Estilos para el mensaje de respuesta del formulario */
+      #form-response {
+        display: none;
+        margin-top: 12px;
+        font-weight: 500;
+        border-radius: 6px;
+        padding: 10px 12px;
+      }
+
+      /* Ajustes visuales para el botón de WhatsApp (si quieres usar btn-success existente) */
+      .btn-whatsapp {
+        background-color: #25D366;
+        border: none;
+        color: #fff;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
       }
     </style>
+
   </head>
   <body>
 
@@ -112,8 +158,8 @@
 
       <div class="collapse navbar-collapse" id="ftco-nav">
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item"><a href="index.html" class="nav-link">Inicio</a></li>
-          <li class="nav-item active"><a href="about.html" class="nav-link">Nosotros</a></li>
+          <li class="nav-item active"><a href="index.html" class="nav-link">Inicio</a></li>
+          <li class="nav-item"><a href="about.html" class="nav-link">Nosotros</a></li>
           <li class="nav-item"><a href="causes.html" class="nav-link">Proyectos</a></li>
           <li class="nav-item"><a href="donate.html" class="nav-link">Donación</a></li>
           <li class="nav-item"><a href="blog.html" class="nav-link">Noticias</a></li>
@@ -125,164 +171,270 @@
       </div>
     </div>
   </nav>
-  <!-- END nav -->
+    <!-- END nav -->
 
-  <!-- Hero sencillo (NUEVA IMAGEN: about_hero.jpg) -->
-  <div class="hero-wrap" style="background-image: url('images/about_hero.jpg');" data-stellar-background-ratio="0.5" role="img" aria-label="Portada Quiénes somos — IcTiosCusco">
-    <div class="overlay"></div>
-    <div class="container">
-      <div class="row no-gutters slider-text align-items-center justify-content-center">
-        <div class="col-md-8 text-center">
-          <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Inicio</a></span> <span>Quiénes somos</span></p>
-          <h1 class="mb-4">Quiénes somos</h1>
-          <p class="mb-4">Grupo de investigación dedicado a la conservación y estudio del género <em>Orestias</em> y sus ecosistemas altoandinos.</p>
+    <div class="hero-wrap" style="background-image: url('images/laguna_ictioscusco.jpg');" data-stellar-background-ratio="0.5">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row no-gutters slider-text align-items-center justify-content-center" data-scrollax-parent="true">
+          <div class="col-md-8 ftco-animate text-center" data-scrollax=" properties: { translateY: '70%' }">
+            <h1 class="mb-4" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">Conservando Orestias y ecosistemas altoandinos</h1>
+            <p class="mb-5" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">Investigación, monitoreo y educación en la cuenca del Urubamba — Cusco.</p>
+
+            <p data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
+              <!-- Botón Conócenos cambiado a blanco sólido -->
+              <a href="about.html" class="btn btn-white px-4 py-3"><span class="mr-2"></span>Conócenos</a>
+              <a href="causes.html" class="btn btn-primary px-4 py-3 ml-2">Ver proyectos</a>
+            </p>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Contenido: descripción, foto del grupo y video -->
-  <section class="ftco-section">
-    <div class="container">
-
-      <div class="row justify-content-center mb-4">
-        <div class="col-md-10">
-          <p class="lead-desc">
-            IcTiosCusco es una organización juvenil interdisciplinaria dedicada a la investigación, el monitoreo ecológico y la educación ambiental en los ecosistemas acuáticos del Cusco. Trabajamos en lagunas, ríos y microcuencas altoandinas desarrollando estudios poblacionales, análisis morfométricos y genéticos, evaluación de la calidad del agua. Nuestro objetivo es generar conocimiento científico que contribuya a la conservación de la biodiversidad acuática, fortaleciendo la colaboración con instituciones académicas, comunidades educativas y autoridades ambientales.
-            Creemos firmemente que no podemos proteger aquello que no conocemos, por lo que promovemos la divulgación científica, actividades educativas y espacios de aprendizaje que acerquen a estudiantes, docentes y ciudadanía a la biodiversidad acuática andina. A través del conocimiento buscamos fortalecer una cultura de conservación y cuidado responsable de nuestros ecosistemas.
-          </p>
-        </div>
-      </div>
-
-      <!-- Bloque: foto del grupo + descripción ampliada -->
-      <div class="row justify-content-center">
-        <div class="col-md-10">
-          <div class="group-block" aria-labelledby="group-title">
-            <img src="images/group_photo.jpg" alt="Foto del equipo IcTiosCusco" class="group-photo">
-            <div class="group-text">
-              <h3 id="group-title">Nuestro equipo</h3>
-              <p>
-                Contamos con investigadores y colaboradores nacionales e internacionales especializados en biología, genética, hidrobiología y educación ambiental. Realizamos muestreos estandarizados en lagunas, ríos y otros cuerpos de agua para apoyar la toma de decisiones de conservación.
-              </p>
-              <p>
-                Si quieres colaborar o coordinar actividades con nosotros, escríbenos a <a href="mailto:ictioscusco@gmail.com">ictioscusco@gmail.com</a> o usa la sección de contacto.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Video embebido (tu video ya está integrado si lo deseas) -->
-      <div class="row justify-content-center mt-3">
-        <div class="col-md-10 video-container">
-          <div class="video-box" role="region" aria-label="Video IcTiosCusco">
-            <div style="position:relative;padding-top:56.25%;"> 
-              <iframe
-                src="https://www.youtube.com/embed/11Rc5EgMzEg"
-                title="Video IcTiosCusco"
-                style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen
-                loading="lazy"></iframe>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Texto debajo del video -->
-      <div class="row justify-content-center mt-4">
-        <div class="col-md-8 text-center">
-          <small>Este video es una presentación breve de nuestras actividades de campo y objetivos.</small>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- Footer (coherente con index): FB e IG -->
-  <footer class="ftco-footer ftco-section img">
-    <div class="overlay"></div>
-    <div class="container">
-      <div class="row mb-5">
-        <div class="col-md-3">
-          <div class="ftco-footer-widget mb-4">
-            <h2 class="ftco-heading-2">Sobre IcTiosCusco</h2>
-            <p>Grupo de investigación dedicado a la conservación y estudio de peces andinos (Orestias) en la región de Cusco.</p>
-            <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
-              <li class="ftco-animate">
-                <a href="https://www.facebook.com/ConGeniusRockie" target="_blank" rel="noopener" aria-label="Facebook">
-                  <span class="icon-facebook"></span>
-                </a>
-              </li>
-              <li class="ftco-animate">
-                <a href="https://www.instagram.com/ictioscusco?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener" aria-label="Instagram">
-                  <span class="icon-instagram"></span>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="col-md-4">
-          <div class="ftco-footer-widget mb-4">
-            <h2 class="ftco-heading-2">Publicaciones recientes</h2>
-            <div class="block-21 mb-4 d-flex">
-              <a class="blog-img mr-4" style="background-image: url(images/noticia_1.jpg);"></a>
+    <section class="ftco-counter ftco-intro" id="section-counter">
+      <div class="container">
+        <div class="row no-gutters">
+          <div class="col-md-5 d-flex justify-content-center counter-wrap ftco-animate">
+            <div class="block-18 color-1 align-items-stretch">
               <div class="text">
-                <h3 class="heading"><a href="#">Resultados preliminares de Huaypo</a></h3>
-                <div class="meta">
-                  <div><a href="#"><span class="icon-calendar"></span> Sept 10, 2024</a></div>
-                  <div><a href="#"><span class="icon-person"></span> IcTiosCusco</a></div>
-                </div>
+                <span>N° de especies de peces validas</span>
+                <strong class="number" data-number="37140">0</strong>
+                <span>La próxima especie está ahí afuera… ¿la encontramos juntos?</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md d-flex justify-content-center counter-wrap ftco-animate">
+            <div class="block-18 color-2 align-items-stretch">
+              <div class="text">
+                <h3 class="mb-4">Apoya investigación</h3>
+                <p>Contribuye a conservar especies endémicas y hacer conciencia ciudadana.</p>
+                <p><a href="donate.html" class="btn btn-white px-3 py-2 mt-2">Donar ahora</a></p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md d-flex justify-content-center counter-wrap ftco-animate">
+            <div class="block-18 color-3 align-items-stretch">
+              <div class="text">
+                <h3 class="mb-4">Únete al equipo</h3>
+                <p>Participa en muestreos, talleres o análisis de datos.</p>
+                <p><a href="#contactanos" class="btn btn-white px-3 py-2 mt-2">Contáctanos</a></p>
               </div>
             </div>
           </div>
         </div>
+      </div>
+    </section>
 
-        <div class="col-md-2">
-          <div class="ftco-footer-widget mb-4 ml-md-4">
-            <h2 class="ftco-heading-2">Enlaces</h2>
-            <ul class="list-unstyled">
-              <li><a href="index.html" class="py-2 d-block">Inicio</a></li>
-              <li><a href="about.html" class="py-2 d-block">Quiénes somos</a></li>
-              <li><a href="donate.html" class="py-2 d-block">Donación</a></li>
-              <li><a href="causes.html" class="py-2 d-block">Proyectos</a></li>
-              <li><a href="event.html" class="py-2 d-block">Miembros</a></li>
-              <li><a href="blog.html" class="py-2 d-block">Noticias</a></li>
-            </ul>
+    <!-- ========== Services bloque eliminado según solicitud ========== -->
+
+    <!-- ========== Sección Proyectos actualizada: sustituye el carousel antiguo ==========
+         Usé el contenido del código que me enviaste adaptándolo para esta sección. ========== -->
+    <section class="ftco-section">
+      <div class="container">
+        <div class="row justify-content-center mb-5 pb-3">
+          <div class="col-md-7 heading-section ftco-animate text-center">
+            <h2 class="mb-4">Proyectos</h2>
+            <p>Líneas activas de trabajo en la región y sus objetivos.</p>
           </div>
         </div>
 
-        <div class="col-md-3">
-          <div class="ftco-footer-widget mb-4">
-            <h2 class="ftco-heading-2">¿Tienes preguntas?</h2>
-            <div class="block-23 mb-3">
-              <ul>
-                <li><span class="icon icon-map-marker"></span><span class="text">Cusco, Perú</span></li>
-                <li><a href="tel:+51969392189"><span class="icon icon-phone"></span><span class="text">+51 969 392 189</span></a></li>
-                <li><a href="mailto:ictioscusco@gmail.com"><span class="icon icon-envelope"></span><span class="text">ictioscusco@gmail.com</span></a></li>
-              </ul>
+        <div class="row justify-content-center">
+          <div class="col-md-10">
+            <p class="lead-desc">
+              IcTiosCusco desarrolla proyectos enfocados en monitoreo poblacional estandarizado, estudios morfométricos y genéticos, evaluación de la calidad del agua y actividades de conservación participativa con comunidades locales. Aquí presentamos las líneas más relevantes y las próximas acciones planificadas.
+            </p>
+
+            <!-- Bloque de proyecto ejemplar (puedes duplicar/editar según necesites) -->
+            <div class="project-block mt-4">
+              <h3>Monitoreo de poblaciones de <em>Orestias</em> en la cuenca</h3>
+              <p>Protocolo estandarizado de muestreo para estimar abundancia, estructura de tallas y tendencias temporales en lagunas seleccionadas.</p>
+              <p><strong>Estado:</strong> Activo — próximos muestreos en febrero 2026.</p>
+            </div>
+
+            <div class="project-block mt-4">
+              <h3>Genética y conectividad poblacional</h3>
+              <p>Análisis de diversidad genética y filogeografía para identificar unidades de conservación y entender procesos históricos de aislamiento.</p>
+              <p><strong>Colaboradores:</strong> Univ. asociadas y laboratorios locales.</p>
+            </div>
+
+            <div class="project-block mt-4">
+              <h3>Educación ambiental y talleres</h3>
+              <p>Talleres con escuelas y líderes comunitarios para fortalecer capacidades locales en monitoreo y manejo sostenible de recursos acuáticos.</p>
+              <p><strong>Próximo taller:</strong> mayo 2025</p>
+            </div>
+
+            <!-- Video o material multimedia (opcional) -->
+            <div class="row justify-content-center mt-4">
+              <div class="col-md-10 video-container">
+                <div class="video-box" role="region" aria-label="Video IcTiosCusco">
+                  <div style="position:relative;padding-top:56.25%;"> 
+                    <iframe
+                      src="https://www.youtube.com/embed/11Rc5EgMzEg"
+                      title="Video IcTiosCusco"
+                      style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;"
+                      frameborder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowfullscreen
+                      loading="lazy"></iframe>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== Sección "Últimas publicaciones" eliminada según solicitud ========== -->
+
+    <section id="contactanos" class="ftco-section-3 img" style="background-image: url(images/bg_3.jpg);">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row d-md-flex">
+          <div class="col-md-6 d-flex ftco-animate">
+            <div class="img img-2 align-self-stretch" style="background-image: url(images/bg_4.jpg);"></div>
+          </div>
+          <div class="col-md-6 volunteer pl-md-5 ftco-animate">
+            <h3 class="mb-3">Contáctanos</h3>
+            <p class="text-white" style="color:#ffffff;">
+              Para consultas, propuestas de colaboración y otras solicitudes profesionales. Envíanos un mensaje detallando tu interés y nos pondremos en contacto contigo a la brevedad.
+            </p>
+
+            <form id="contact-form" class="volunter-form">
+              <div class="form-group">
+                <input name="name" type="text" class="form-control" placeholder="Tu nombre" required>
+              </div>
+              <div class="form-group">
+                <input name="email" type="email" class="form-control" placeholder="Tu correo" required>
+              </div>
+              <div class="form-group">
+                <input name="subject" type="text" class="form-control" placeholder="Asunto (p. ej. Colaboración)">
+              </div>
+              <div class="form-group">
+                <textarea name="message" cols="30" rows="3" class="form-control" placeholder="Mensaje" required></textarea>
+              </div>
+              <div class="form-group">
+                <button type="submit" class="btn btn-white py-3 px-5">Enviar mensaje</button>
+              </div>
+
+              <div id="form-response" aria-live="polite"></div>
+            </form>
+
+            <!-- Botón de WhatsApp -->
+            <div style="margin-top: 18px;">
+              <a href="https://wa.me/51969392189" target="_blank" rel="noopener" class="btn btn-whatsapp px-4 py-3">
+                <span>📱</span> Contáctanos por WhatsApp
+              </a>
             </div>
           </div>
         </div>
-
       </div>
+    </section>
 
-      <div class="row">
-        <div class="col-md-12 text-center">
-          <p>
-            Copyright &copy;<script>document.write(new Date().getFullYear());</script> IcTiosCusco. Todos los derechos reservados.
-          </p>
+    <section class="ftco-gallery">
+      <div class="d-md-flex">
+        <a href="images/galeria_1.jpg" class="gallery image-popup d-flex justify-content-center align-items-center img ftco-animate" style="background-image: url(images/galeria_1.jpg);">
+          <div class="icon d-flex justify-content-center align-items-center">
+            <span class="icon-search"></span>
+          </div>
+        </a>
+        <a href="images/galeria_2.jpg" class="gallery image-popup d-flex justify-content-center align-items-center img ftco-animate" style="background-image: url(images/galeria_2.jpg);">
+          <div class="icon d-flex justify-content-center align-items-center">
+            <span class="icon-search"></span>
+          </div>
+        </a>
+        <a href="images/galeria_3.jpg" class="gallery image-popup d-flex justify-content-center align-items-center img ftco-animate" style="background-image: url(images/galeria_3.jpg);">
+          <div class="icon d-flex justify-content-center align-items-center">
+            <span class="icon-search"></span>
+          </div>
+        </a>
+        <a href="images/galeria_4.jpg" class="gallery image-popup d-flex justify-content-center align-items-center img ftco-animate" style="background-image: url(images/galeria_4.jpg);">
+          <div class="icon d-flex justify-content-center align-items-center">
+            <span class="icon-search"></span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <footer class="ftco-footer ftco-section img">
+      <div class="overlay"></div>
+      <div class="container">
+        <div class="row mb-5">
+          <div class="col-md-3">
+            <div class="ftco-footer-widget mb-4">
+              <h2 class="ftco-heading-2">Sobre IcTiosCusco</h2>
+              <p>Grupo de investigación dedicado a la conservación y estudio de peces andinos (Orestias) en la región de Cusco.</p>
+              <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
+                <li class="ftco-animate">
+                  <a href="https://www.facebook.com/ConGeniusRockie" target="_blank" rel="noopener" aria-label="Facebook">
+                    <span class="icon-facebook"></span>
+                  </a>
+                </li>
+                <li class="ftco-animate">
+                  <a href="https://www.instagram.com/ictioscusco?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener" aria-label="Instagram">
+                    <span class="icon-instagram"></span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="ftco-footer-widget mb-4">
+              <h2 class="ftco-heading-2">Publicaciones recientes</h2>
+              <div class="block-21 mb-4 d-flex">
+                <a class="blog-img mr-4" style="background-image: url(images/noticia_1.jpg);"></a>
+                <div class="text">
+                  <h3 class="heading"><a href="#">Resultados preliminares de Huaypo</a></h3>
+                  <div class="meta">
+                    <div><a href="#"><span class="icon-calendar"></span> Sept 10, 2024</a></div>
+                    <div><a href="#"><span class="icon-person"></span> IcTiosCusco</a></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-2">
+            <div class="ftco-footer-widget mb-4 ml-md-4">
+              <h2 class="ftco-heading-2">Enlaces</h2>
+              <ul class="list-unstyled">
+                <li><a href="#" class="py-2 d-block">Inicio</a></li>
+                <li><a href="#" class="py-2 d-block">Quiénes somos</a></li>
+                <li><a href="#" class="py-2 d-block">Donación</a></li>
+                <li><a href="#" class="py-2 d-block">Proyectos</a></li>
+                <li><a href="#" class="py-2 d-block">Miembros</a></li>
+                <li><a href="#" class="py-2 d-block">Noticias</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <div class="ftco-footer-widget mb-4">
+              <h2 class="ftco-heading-2">¿Tienes preguntas?</h2>
+              <div class="block-23 mb-3">
+                <ul>
+                  <li><span class="icon icon-map-marker"></span><span class="text">Cusco, Perú</span></li>
+                  <li><a href="tel:+51969392189"><span class="icon icon-phone"></span><span class="text">+51 969 392 189</span></a></li>
+                  <li><a href="mailto:ictioscusco@gmail.com"><span class="icon icon-envelope"></span><span class="text">ictioscusco@gmail.com</span></a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 text-center">
+            <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+  Copyright &copy;<script>document.write(new Date().getFullYear());</script> IcTiosCusco. Todos los derechos reservados.</a>
+  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+          </div>
         </div>
       </div>
-    </div>
-  </footer>
+    </footer>
 
   <!-- loader -->
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
 
-  <!-- Scripts -->
   <script src="js/jquery.min.js"></script>
   <script src="js/jquery-migrate-3.0.1.min.js"></script>
   <script src="js/popper.min.js"></script>
@@ -297,37 +449,88 @@
   <script src="js/bootstrap-datepicker.js"></script>
   <script src="js/jquery.timepicker.min.js"></script>
   <script src="js/scrollax.min.js"></script>
+  <!-- Maps: añade tu API key restringida en producción; evita subir claves sin restricciones al repositorio -->
+  <!-- <script src="https://maps.googleapis.com/maps/api/js?key=TU_API_KEY&sensor=false"></script> -->
   <script src="js/google-map.js"></script>
   <script src="js/main.js"></script>
 
+  <!-- Script personalizado: manejo de formulario (fetch a Formspree) y comportamiento navbar -->
   <script>
-    // Navbar behavior (igual que en index)
-    document.addEventListener('DOMContentLoaded', function () {
-      var navbar = document.getElementById('ftco-navbar');
-      var navCollapse = $('#ftco-nav');
+  document.addEventListener('DOMContentLoaded', function () {
+    // --- FORMULARIO: envio a Formspree sin redirección ---
+    const form = document.getElementById('contact-form');
+    const responseDiv = document.getElementById('form-response');
+    const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xqalnaaj';
 
-      function checkScroll() {
-        if (window.scrollY > 50) {
-          navbar.classList.add('scrolled');
-        } else {
+    function showMessage(text, success = true) {
+      responseDiv.style.display = 'block';
+      responseDiv.style.color = success ? '#155724' : '#721c24';
+      responseDiv.style.background = success ? 'rgba(40,167,69,0.08)' : 'rgba(220,53,69,0.06)';
+      responseDiv.style.border = success ? '1px solid rgba(40,167,69,0.12)' : '1px solid rgba(220,53,69,0.12)';
+      responseDiv.innerText = text;
+      // desaparecer después si es éxito
+      if (success) {
+        setTimeout(function(){ responseDiv.style.display = 'none'; }, 6000);
+      }
+    }
+
+    if (form) {
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const data = new FormData(form);
+
+        fetch(FORMSPREE_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json'
+          },
+          body: data
+        }).then(function (resp) {
+          if (resp.ok) {
+            showMessage('Su mensaje fue enviado. Gracias por contactarnos.', true);
+            form.reset();
+          } else {
+            resp.json().then(function (data) {
+              let msg = (data && data.error) ? data.error : 'Ocurrió un error. Intenta nuevamente.';
+              showMessage(msg, false);
+            }).catch(function () {
+              showMessage('Ocurrió un error. Intenta nuevamente.', false);
+            });
+          }
+        }).catch(function () {
+          showMessage('No se pudo enviar. Verifica tu conexión a Internet.', false);
+        });
+      });
+    }
+
+    // --- NAVBAR: alternar clase .scrolled según scroll y cuando se abre el menú en móvil ---
+    var navbar = document.getElementById('ftco-navbar');
+    var navCollapse = $('#ftco-nav');
+
+    function checkScroll() {
+      if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    }
+
+    // Ejecutar al cargar y al hacer scroll
+    checkScroll();
+    window.addEventListener('scroll', checkScroll, { passive: true });
+
+    // Forzar apariencia scrolled cuando el collapse está abierto (móvil)
+    if (navCollapse.length) {
+      navCollapse.on('shown.bs.collapse', function () {
+        navbar.classList.add('scrolled');
+      });
+      navCollapse.on('hidden.bs.collapse', function () {
+        if (window.scrollY <= 50) {
           navbar.classList.remove('scrolled');
         }
-      }
-
-      checkScroll();
-      window.addEventListener('scroll', checkScroll, { passive: true });
-
-      if (navCollapse.length) {
-        navCollapse.on('shown.bs.collapse', function () {
-          navbar.classList.add('scrolled');
-        });
-        navCollapse.on('hidden.bs.collapse', function () {
-          if (window.scrollY <= 50) {
-            navbar.classList.remove('scrolled');
-          }
-        });
-      }
-    });
+      });
+    }
+  });
   </script>
 
   </body>
