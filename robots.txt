@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://ictioscusco.github.io/sitemap.xml
