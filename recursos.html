@@ -24,19 +24,15 @@
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
 
-    <!-- model-viewer (para mostrar modelos 3D) -->
-    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
-
     <style>
-      /* RESET BÁSICO (evita barras blancas por margen del navegador) */
+      /* RESET BÁSICO */
       html, body { margin: 0; padding: 0; }
 
-      /* Mantener look coherente con index/contacto/miembros */
+      /* Navbar / marca coherente */
       .navbar-brand.d-flex { display: inline-flex; align-items: center; }
       .navbar-brand img { height: 56px; width: auto; margin-right: 12px; }
       .navbar-brand span { font-family: 'Overpass', 'Dosis', sans-serif !important; font-weight: 600; font-size: 1.05rem; color: #fff; }
 
-      /* Botón blanco coherente */
       .btn.btn-white {
         background: #ffffff !important;
         color: #333333 !important;
@@ -44,7 +40,6 @@
         box-shadow: 0 2px 6px rgba(0,0,0,0.08);
       }
 
-      /* Navbar: por defecto ABSOLUTA encima del hero (evita gap en móviles). */
       #ftco-navbar {
         position: absolute;
         top: 0;
@@ -54,105 +49,90 @@
         background-color: transparent;
         transition: background-color 0.25s ease, color 0.25s ease;
       }
-      /* Cuando está scrolled, lo hacemos fijo y sólido */
       #ftco-navbar.scrolled {
         position: fixed;
         background-color: rgba(255,255,255,0.98) !important;
         box-shadow: 0 2px 8px rgba(0,0,0,0.06);
       }
-
       #ftco-navbar .nav-link, #ftco-navbar .navbar-brand span { color: #ffffff !important; transition: color 0.25s ease; }
       #ftco-navbar.scrolled .nav-link, #ftco-navbar.scrolled .navbar-brand span { color: #222222 !important; }
       #ftco-nav.collapse.show .nav-link { color: #222222 !important; }
 
-      /* Soporte safe-area (notch) en iOS/Android: evita barras en top por notch */
-      @supports(padding: env(safe-area-inset-top)) {
-        #ftco-navbar { padding-top: env(safe-area-inset-top); }
-        .hero-wrap { padding-top: 0; }
-      }
-
-      /* ========== HERO ========== */
       .hero-wrap {
         position: relative;
         width: 100%;
         overflow: hidden;
-        background: transparent;
         margin: 0;
-        min-height: 100vh;
-        height: 100dvh;
+        min-height: 60vh;
         display: block;
       }
+      .hero-wrap .hero-img { display:block; width:100%; height:100%; object-fit:cover; object-position:center center; }
+      .hero-wrap .overlay { position:absolute; inset:0; background: linear-gradient(180deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.34) 60%); pointer-events:none; z-index:2; }
+      .hero-content { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:3; text-align:center; color:#fff; padding:0 15px; }
 
-      .hero-wrap .hero-img {
-        display: block;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: center center;
-        margin: 0;
-      }
+      .hero-content h1 { font-size:2.6rem; margin:0 0 8px; font-weight:500; text-shadow: 0 6px 18px rgba(0,0,0,0.18); }
+      .hero-content p { margin:0; opacity:0.95; }
 
-      .hero-wrap .overlay {
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(180deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.34) 60%);
-        pointer-events: none;
-        z-index: 2;
-      }
-      .hero-wrap .hero-content {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 100%;
-        z-index: 3;
-        text-align: center;
-        padding: 0 15px;
-        color: #fff;
-      }
-      .hero-wrap .hero-content h1 { font-size: 3.2rem; margin: 0 0 8px; font-weight: 500; }
-      .hero-wrap .hero-content p { margin: 0; opacity: 0.95; }
-
-      @media (min-width: 992px) {
-        .hero-wrap { max-height: 780px; height: auto; min-height: 420px; }
-        .hero-wrap .hero-img { max-height: 780px; height: auto; }
-      }
-      @media (max-width: 767.98px) {
-        .hero-wrap .hero-content { top: 46%; }
-        .hero-wrap .hero-content h1 { font-size: 2.2rem; }
-      }
-
-      /* Section styling like miembros (coherent look) */
       section.ftco-section.bg-light { padding: 48px 0 64px; background: #f6f7f8; }
 
-      /* Recursos grid (dos columnas for models) */
-      #recursos-grid { display:flex; gap:20px; flex-wrap:wrap; }
-      .resource-card{background:#fff;border-radius:10px;box-shadow:0 8px 22px rgba(10,25,35,0.06);overflow:hidden;display:flex;flex-direction:column;min-height:320px;width:100%}
-      @media(min-width:768px){ .resource-card{width:49%} }
-      .card-media{height:320px;display:flex;align-items:center;justify-content:center;background:#f3faf6}
-      .card-body{padding:16px}
-      .resource-title{font-size:1.1rem;font-weight:700;color:#0e2a39;margin-bottom:6px}
-      .resource-sub{color:#4b5560;margin-bottom:6px}
+      /* Card sencillo para el juego y recursos próximos */
+      .resource-hero {
+        display:flex;
+        gap:18px;
+        align-items:center;
+        justify-content:center;
+        flex-wrap:wrap;
+        margin-bottom:28px;
+      }
+      .game-card {
+        background:#fff;
+        border-radius:10px;
+        box-shadow:0 8px 22px rgba(10,25,35,0.06);
+        overflow:hidden;
+        width:100%;
+        max-width:980px;
+        display:flex;
+        gap:0;
+      }
+      .game-card .media {
+        flex:0 0 420px;
+        min-height:220px;
+        background:#efefef center/cover no-repeat;
+      }
+      .game-card .content {
+        padding:18px;
+        flex:1 1 auto;
+        display:flex;
+        flex-direction:column;
+        justify-content:space-between;
+      }
+      .game-title { font-size:1.2rem; font-weight:700; color:#0e2a39; margin-bottom:6px; }
+      .game-desc { color:#4b5560; margin-bottom:12px; text-align:justify; }
+      .game-actions { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
 
-      .resource-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
+      /* Próximamente banner */
+      .coming-soon {
+        margin-top:28px;
+        padding:22px;
+        border-radius:10px;
+        background: linear-gradient(90deg,#fff,#fafdfb);
+        box-shadow:0 8px 20px rgba(16,24,40,0.04);
+        text-align:center;
+        color:#0e2a39;
+        font-weight:600;
+      }
 
-      .file-label{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:8px;border:1px dashed #cfd8d4;background:#fbfffb;color:#127a5a;cursor:pointer}
-      .file-input{display:none}
+      .btn-whatsapp { background-color: #25D366; border: none; color: #fff; display: inline-flex; align-items: center; gap: 8px; }
 
-      #expand-3d{border-radius:10px;margin-top:18px;padding:14px;background:linear-gradient(180deg,#ffffff,#f7fdf7);box-shadow:0 8px 22px rgba(18,140,126,0.06);}
-      #expand-3d .models-row{display:flex;gap:12px}
-      @media (max-width:768px){#expand-3d .models-row{flex-direction:column}}
-
-      model-viewer{width:100%;height:100%}
-
-      /* Footer social */
-      .ftco-footer-social a { display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:50%; background:rgba(255,255,255,0.06); margin-right:6px; color:#fff; }
-
+      @media (max-width: 767.98px) {
+        .game-card { flex-direction:column; }
+        .game-card .media { flex:0 0 auto; width:100%; height:220px; min-height:180px; }
+      }
     </style>
   </head>
   <body>
 
-  <!-- NAVBAR (igual que en index) -->
+  <!-- NAVBAR -->
   <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
     <div class="container">
       <a class="navbar-brand d-flex align-items-center" href="index.html">
@@ -185,11 +165,11 @@
     <div class="overlay"></div>
 
     <div class="container hero-content">
-      <div class="row no-gutters slider-text align-items-center justify-content-center">
+      <div class="row no-gutters align-items-center justify-content-center">
         <div class="col-md-10 text-center">
           <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Inicio</a></span> <span>Recursos</span></p>
           <h1 class="mb-4">Recursos</h1>
-          <p class="mb-4">Fichas, modelos 3D y actividades para aprender sobre los peces altoandinos.</p>
+          <p class="mb-4">Materiales educativos y herramientas para conocer los peces altoandinos.</p>
         </div>
       </div>
     </div>
@@ -199,131 +179,56 @@
     <div class="container">
       <div class="row justify-content-center mb-4">
         <div class="col-md-10 text-center">
-          <h1 class="mb-3 bread" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">Recursos</h1>
-          <p class="lead mb-0">Fichas, modelos 3D y actividades para aprender sobre los peces altoandinos.</p>
+          <h1 class="mb-3 bread">Recursos</h1>
+          <p class="lead mb-0">Aquí encontrarás juegos educativos, guías y materiales para docentes y público general.</p>
         </div>
       </div>
 
-      <!-- JUEGO: subtítulo + CTA -->
+      <!-- JUEGO: tarjeta con espacio para imagen del juego -->
       <div class="row mb-4">
-        <div class="col-md-8 offset-md-2 text-center">
-          <h3 style="font-family:'Overpass','Dosis',sans-serif;font-weight:700;">Juego PAC-Fish</h3>
-          <p class="mb-3">Diviértete y aprende seleccionando especies y completando retos.</p>
-          <a class="btn btn-success btn-lg" href="pacfish.html" target="_blank" rel="noopener">Jugar PAC-Fish</a>
-        </div>
-      </div>
+        <div class="col-12 d-flex justify-content-center">
+          <div class="resource-hero">
+            <div class="game-card" role="article" aria-labelledby="pac-title">
+              <!-- Media: sustituye images/pacfish_preview.png por la imagen que quieras mostrar -->
+              <div class="media" style="background-image: url('images/pacfish_preview.png'); background-size: cover; background-position: center;" aria-hidden="true"></div>
 
-      <!-- Modelos 3D: dos tarjetas (lado a lado en desktop) -->
-      <div class="row mb-3">
-        <div class="col-12">
-          <h3 style="font-family:'Overpass','Dosis',sans-serif;font-weight:700;">Modelos 3D</h3>
-        </div>
-      </div>
+              <div class="content">
+                <div>
+                  <div id="pac-title" class="game-title">PAC-Fish — Juego educativo</div>
+                  <div class="game-desc">
+                    PAC-Fish es una experiencia interactiva diseñada para sensibilizar sobre el impacto de especies introducidas —como el pejerrey y la trucha— en humedales y lagunas altoandinas.
+                    A lo largo de los niveles recorrerás localidades reales: comenzando en el humedal Lucre–Huacarpay, pasando por la laguna de Urcos (Cusco) y culminando en el Lago Titicaca. En cada escenario encarnarás a una valiente <em>Orestia</em> cuya misión es proteger su hogar: aprenderás a tomar decisiones de manejo, recuperar hábitats y enfrentar las presiones de especies exóticas para que la población nativa sobreviva.
+                    El juego combina información científica con retos prácticos pensados para estudiantes y público general, fomentando la reflexión sobre conservación y acciones locales que ayudan a recuperar nuestros sistemas acuáticos.
+                  </div>
+                </div>
 
-      <div class="row" id="recursos-grid">
-
-        <!-- Modelo 1 -->
-        <div class="col-md-6 d-flex mb-4 ftco-animate">
-          <div class="resource-card w-100">
-            <div class="card-media">
-              <model-viewer id="mv-orestias1" src="models/orestias1.glb" alt="Orestias sp. Huaypo" camera-controls auto-rotate ar shadow-intensity="0"></model-viewer>
-            </div>
-            <div class="p-3 card-body">
-              <div class="resource-title">Orestias sp. Huaypo</div>
-              <div class="resource-sub">Orestias cf. agassii · <span class="badge-laguna">Huaypo</span></div>
-              <div class="resource-sub">Modelo 3D interactivo (GLB)</div>
-              <div class="resource-actions mt-2">
-                <button class="btn btn-outline-primary btn-sm" data-toggle="collapse" data-target="#expand-3d" aria-expanded="false" aria-controls="expand-3d">Ver modelos</button>
-                <a class="btn btn-download btn-sm" href="models/orestias1.glb" download title="Descargar modelo GLB">Descargar</a>
-                <label class="file-label" tabindex="0" title="Cargar un archivo .glb local">
-                  <input class="file-input" type="file" accept=".glb,.gltf" data-target="#mv-orestias1" style="display:none">
-                  <small>Subir 3D</small>
-                </label>
-                <button class="btn btn-outline-secondary btn-sm" data-reset="#mv-orestias1">Restaurar</button>
+                <div class="game-actions">
+                  <a class="btn btn-success" href="https://ictioscusco.github.io/pacfish.html" target="_blank" rel="noopener">Jugar PAC-Fish</a>
+                  <a class="btn btn-outline-primary" href="https://ictioscusco.github.io/pacfish.html" target="_blank" rel="noopener">Más información</a>
+                  <!-- Botón para reemplazar la imagen localmente (solo UI: el usuario debe subir/editar archivo en su sitio) -->
+                  <button class="btn btn-outline-secondary" disabled title="Para cambiar la imagen, reemplaza images/pacfish_preview.png en tu servidor">Cambiar imagen (manual)</button>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-
-        <!-- Modelo 2 -->
-        <div class="col-md-6 d-flex mb-4 ftco-animate">
-          <div class="resource-card w-100">
-            <div class="card-media">
-              <model-viewer id="mv-orestias2" src="models/orestias2.glb" alt="Orestias sp. Piuray" camera-controls auto-rotate ar shadow-intensity="0"></model-viewer>
-            </div>
-            <div class="p-3 card-body">
-              <div class="resource-title">Orestias sp. Piuray</div>
-              <div class="resource-sub">Orestias sp. · <span class="badge-laguna">Piuray</span></div>
-              <div class="resource-sub">Modelo 3D interactivo (GLB)</div>
-              <div class="resource-actions mt-2">
-                <button class="btn btn-outline-primary btn-sm" data-toggle="collapse" data-target="#expand-3d" aria-expanded="false" aria-controls="expand-3d">Ver modelos</button>
-                <a class="btn btn-download btn-sm" href="models/orestias2.glb" download title="Descargar modelo GLB">Descargar</a>
-                <label class="file-label" tabindex="0" title="Cargar un archivo .glb local">
-                  <input class="file-input" type="file" accept=".glb,.gltf" data-target="#mv-orestias2" style="display:none">
-                  <small>Subir 3D</small>
-                </label>
-                <button class="btn btn-outline-secondary btn-sm" data-reset="#mv-orestias2">Restaurar</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Área colapsable que muestra ambos modelos 3D juntos -->
-      <div id="expand-3d" class="collapse mt-3" aria-hidden="true">
-        <div class="row" style="gap:12px;">
-          <div class="col-md-6">
-            <h5 style="margin-top:0;margin-bottom:8px">Orestias sp. Huaypo</h5>
-            <model-viewer id="mv-orestias1-exp" src="models/orestias1.glb" alt="Orestias sp. Huaypo" camera-controls auto-rotate ar style="width:100%;height:320px;" shadow-intensity="0"></model-viewer>
-            <p style="margin-top:8px;color:#444">Orestias cf. agassii — Laguna Huaypo. <a href="docs/ficha_orestias_huaypo.pdf" target="_blank">Descargar ficha (PDF)</a></p>
-          </div>
-          <div class="col-md-6">
-            <h5 style="margin-top:0;margin-bottom:8px">Orestias sp. Piuray</h5>
-            <model-viewer id="mv-orestias2-exp" src="models/orestias2.glb" alt="Orestias sp. Piuray" camera-controls auto-rotate ar style="width:100%;height:320px;" shadow-intensity="0"></model-viewer>
-            <p style="margin-top:8px;color:#444">Orestias sp. — Laguna Piuray. <a href="docs/ficha_orestias_piuray.pdf" target="_blank">Descargar ficha (PDF)</a></p>
-          </div>
+          </div><!-- /.resource-hero -->
         </div>
       </div>
 
-      <!-- FICHAS: listas de descargas debajo -->
-      <div class="row mt-4">
+      <!-- Próximamente -->
+      <div class="row">
         <div class="col-12">
-          <h3 style="font-family:'Overpass','Dosis',sans-serif;font-weight:700;">Fichas</h3>
-          <ul class="list-unstyled">
-            <li><a href="docs/ficha_orestias_huaypo.pdf" target="_blank" rel="noopener">Ficha Orestias sp. Huaypo (PDF)</a></li>
-            <li><a href="docs/ficha_orestias_piuray.pdf" target="_blank" rel="noopener">Ficha Orestias sp. Piuray (PDF)</a></li>
-          </ul>
+          <div class="coming-soon" role="status" aria-live="polite">
+            Próximamente: nuevas fichas descargables, guías para docentes y actividades interactivas. Síguenos en redes para ser el primero en enterarte.
+          </div>
         </div>
       </div>
+
+      <!-- (Se elimina por ahora todo lo relacionado con modelos 3D y fichas) -->
 
     </div>
   </section>
 
-  <!-- Modal ficha (genérico, accesible) -->
-  <div class="modal fade" id="fichaModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="fichaModalTitle"></h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar"><span aria-hidden="true">&times;</span></button>
-        </div>
-        <div class="modal-body">
-          <div class="row">
-            <div class="col-md-6" id="fichaModalMedia"></div>
-            <div class="col-md-6">
-              <p id="fichaModalSci"></p>
-              <p id="fichaModalHabitat"></p>
-              <p id="fichaModalDesc"></p>
-              <p><a id="fichaModalPdf" href="#" class="btn btn-outline-primary btn-sm" target="_blank">Descargar ficha (PDF)</a></p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Footer (igual que en index.html) -->
+  <!-- Footer (texto corregido para evitar duplicados) -->
   <footer class="ftco-footer ftco-section img">
     <div class="overlay"></div>
     <div class="container">
@@ -331,32 +236,34 @@
         <div class="col-md-3">
           <div class="ftco-footer-widget mb-4">
             <h2 class="ftco-heading-2">Sobre IcTiosCusco</h2>
-            <p>Grupo de investigación dedicado Grupo de investigación dedicado a la conservación de organismos acuaticos y sus ecosistemas altoandinos.</p>
+            <p>Grupo de investigación dedicado a la conservación de organismos acuáticos y sus ecosistemas altoandinos.</p>
             <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
               <li class="ftco-animate"><a href="#" aria-label="Facebook"><span class="icon-facebook"></span></a></li>
               <li class="ftco-animate"><a href="#" aria-label="Instagram"><span class="icon-instagram"></span></a></li>
             </ul>
           </div>
         </div>
-       <div class="col-md-4">
-            <div class="ftco-footer-widget mb-4">
-              <h2 class="ftco-heading-2">Publicaciones recientes</h2>
-              <div class="block-21 mb-4 d-flex">
-                <a class="blog-img mr-4" style="background-image: url(images/packfish.png);"></a>
-                <div class="text">
-                  <h3 class="heading">
-                    <a href="https://ictioscusco.github.io/pacfish.html" target="_blank" rel="noopener">
-                      Pacfish — Juego educativo sobre especies exóticas y conservación de peces nativos
-                    </a>
-                  </h3>
-                  <div class="meta">
-                    <div><a href="#"><span class="icon-calendar"></span> Interactivo</a></div>
-                    <div><a href="#"><span class="icon-person"></span> IcTiosCusco</a></div>
-                  </div>
+
+        <div class="col-md-4">
+          <div class="ftco-footer-widget mb-4">
+            <h2 class="ftco-heading-2">Publicaciones recientes</h2>
+            <div class="block-21 mb-4 d-flex">
+              <a class="blog-img mr-4" style="background-image: url(images/packfish.png);"></a>
+              <div class="text">
+                <h3 class="heading">
+                  <a href="https://ictioscusco.github.io/pacfish.html" target="_blank" rel="noopener">
+                    Pacfish — Juego educativo sobre especies exóticas y conservación de peces nativos
+                  </a>
+                </h3>
+                <div class="meta">
+                  <div><a href="#"><span class="icon-calendar"></span> Interactivo</a></div>
+                  <div><a href="#"><span class="icon-person"></span> IcTiosCusco</a></div>
                 </div>
               </div>
             </div>
           </div>
+        </div>
+
         <div class="col-md-2">
           <div class="ftco-footer-widget mb-4 ml-md-4">
             <h2 class="ftco-heading-2">Enlaces</h2>
@@ -370,6 +277,7 @@
             </ul>
           </div>
         </div>
+
         <div class="col-md-3">
           <div class="ftco-footer-widget mb-4">
             <h2 class="ftco-heading-2">¿Tienes preguntas?</h2>
@@ -383,6 +291,7 @@
           </div>
         </div>
       </div>
+
       <div class="row">
         <div class="col-md-12 text-center">
           <p>Copyright &copy;<script>document.write(new Date().getFullYear());</script> IcTiosCusco. Todos los derechos reservados.</p>
@@ -391,7 +300,7 @@
     </div>
   </footer>
 
-  <!-- Scripts (mismos que index.html) -->
+  <!-- Scripts (mismos que index.html; no hay lógica de 3D) -->
   <script src="js/jquery.min.js"></script>
   <script src="js/jquery-migrate-3.0.1.min.js"></script>
   <script src="js/popper.min.js"></script>
@@ -409,104 +318,23 @@
   <script src="js/main.js"></script>
 
   <script>
-    // Datos sencillos para el modal (sin quiz)
-    const RESOURCE_DATA = {
-      'orestias-1': {
-        title: 'Orestias sp. Huaypo', scientific: 'Orestias cf. agassii', habitat: 'Laguna Huaypo', description: 'Ficha breve con características morfométricas, distribución y amenazas.', pdf: 'docs/ficha_orestias_huaypo.pdf', media: 'models/orestias1.glb'
-      },
-      'orestias-2': {
-        title: 'Orestias sp. Piuray', scientific: 'Orestias sp.', habitat: 'Laguna Piuray', description: 'Ficha con datos de muestreo y recomendaciones de conservación.', pdf: 'docs/ficha_orestias_piuray.pdf', media: 'models/orestias2.glb'
+    document.addEventListener('DOMContentLoaded', function () {
+      // NAVBAR behavior (igual que en el resto del sitio)
+      var navbar = document.getElementById('ftco-navbar');
+      var navCollapse = $('#ftco-nav');
+
+      function checkScroll() {
+        if (window.scrollY > 50) { navbar.classList.add('scrolled'); } else { navbar.classList.remove('scrolled'); }
       }
-    };
+      checkScroll();
+      window.addEventListener('scroll', checkScroll, { passive: true });
 
-    $(document).ready(function(){
-      // Buscador simple que filtra tarjetas por texto, tags y laguna
-      function filterResources(){
-        const q = $('#search-res').val().trim().toLowerCase();
-        const type = $('#filter-type').val();
-        $('#recursos-grid article').each(function(){
-          const $t = $(this);
-          const text = ($t.text() + ' ' + ($t.data('laguna')||'') + ' ' + ($t.attr('data-tags')||'')).toLowerCase();
-          const matchesQuery = q === '' || text.indexOf(q) !== -1;
-          const matchesType = !type || ($t.attr('data-tags')||'').indexOf(type) !== -1;
-          if(matchesQuery && matchesType){ $t.show(); } else { $t.hide(); }
-        });
+      if (navCollapse.length) {
+        navCollapse.on('shown.bs.collapse', function () { navbar.classList.add('scrolled'); });
+        navCollapse.on('hidden.bs.collapse', function () { if (window.scrollY <= 50) { navbar.classList.remove('scrolled'); } });
       }
-
-      $('#search-res').on('input', filterResources);
-      $('#filter-type').on('change', filterResources);
-      $('#clear-search').on('click', function(e){ e.preventDefault(); $('#search-res').val(''); $('#filter-type').val(''); filterResources(); });
-
-      // Modal ficha: carga dinámicamente media y texto
-      $('#fichaModal').on('show.bs.modal', function (event) {
-        const button = $(event.relatedTarget);
-        const id = button.data('id');
-        const data = RESOURCE_DATA[id];
-        if (!data) return;
-        $('#fichaModalTitle').text(data.title);
-        $('#fichaModalSci').html('<strong>Nombre científico:</strong> ' + data.scientific);
-        $('#fichaModalHabitat').html('<strong>Hábitat:</strong> ' + data.habitat);
-        $('#fichaModalDesc').text(data.description);
-        if (data.pdf) { $('#fichaModalPdf').attr('href', data.pdf).show(); } else { $('#fichaModalPdf').hide(); }
-
-        const mediaDiv = $('#fichaModalMedia');
-        mediaDiv.empty();
-        if (data.media && (data.media.endsWith('.glb') || data.media.endsWith('.gltf'))){
-          const mv = $("<model-viewer/>", {
-            src: data.media,
-            alt: data.title,
-            'camera-controls':'',
-            'auto-rotate':'',
-            style: 'width:100%; height:320px;'
-          });
-          mediaDiv.append(mv);
-        } else if (data.media){
-          mediaDiv.css({ 'background-image':'url('+data.media+')','background-size':'cover','background-position':'center','height':'320px' });
-        }
-      });
-
-      // File inputs: permitir al usuario cargar .glb locales y verlos en el model-viewer (no sube al servidor)
-      $(document).on('change', '.file-input', function(e){
-        const file = this.files[0];
-        if (!file) return;
-        const target = $(this).data('target');
-        const mv = document.querySelector(target);
-        if (!mv) return;
-        // Revocar URL anterior si existiera
-        if (mv.dataset.objectUrl) { URL.revokeObjectURL(mv.dataset.objectUrl); }
-        const objUrl = URL.createObjectURL(file);
-        mv.setAttribute('src', objUrl);
-        mv.dataset.objectUrl = objUrl;
-        // mostrar nombre de archivo temporal (accesibilidad)
-        $(this).closest('.file-label').find('small').text(file.name);
-      });
-
-      // Restaurar a src original
-      $(document).on('click','[data-reset]', function(){
-        const selector = $(this).data('reset');
-        const mv = document.querySelector(selector);
-        if (!mv) return;
-        if (mv.dataset.objectUrl) { URL.revokeObjectURL(mv.dataset.objectUrl); delete mv.dataset.objectUrl; }
-        const orig = mv.getAttribute('data-original-src') || mv.getAttribute('src') || '';
-        mv.setAttribute('src', orig);
-        // restaurar etiqueta file
-        $(selector).closest('article').find('.file-label small').text('Subir 3D');
-      });
-
-      // Guardar src original en data-original-src para permitir restaurar
-      document.querySelectorAll('model-viewer').forEach(mv => {
-        if (!mv.getAttribute('data-original-src')) mv.setAttribute('data-original-src', mv.getAttribute('src') || '');
-      });
-
-      // Cargar más (simulado): simplemente despliega mensaje por ahora
-      $('#btn-load-more').on('click', function(e){ e.preventDefault(); alert('Función "Cargar más" — aquí puedes integrar paginación o carga dinámica.'); });
-
-      // Botón ver todas
-      $('#ver-todas').on('click', function(e){ e.preventDefault(); alert('Redirigir a la página completa de fichas (si existe) o mostrar catálogo completo.'); });
-
     });
   </script>
 
   </body>
 </html>
-
