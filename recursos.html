@@ -25,7 +25,104 @@
     <link rel="stylesheet" href="css/style.css">
 
     <style>
-      /* Mínimos estilos adicionales, no tocan hero ni colores globales */
+      /* RESET BÁSICO (evita barras blancas por margen del navegador) */
+      html, body { margin: 0; padding: 0; }
+
+      /* Mantener look coherente con index/contacto/miembros */
+      .navbar-brand.d-flex { display: inline-flex; align-items: center; }
+      .navbar-brand img { height: 56px; width: auto; margin-right: 12px; }
+      .navbar-brand span { font-family: 'Overpass', 'Dosis', sans-serif !important; font-weight: 600; font-size: 1.05rem; color: #fff; }
+
+      /* Botón blanco coherente */
+      .btn.btn-white {
+        background: #ffffff !important;
+        color: #333333 !important;
+        border: none !important;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      }
+
+      /* Navbar: por defecto ABSOLUTA encima del hero (evita gap en móviles). */
+      #ftco-navbar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1050;
+        background-color: transparent;
+        transition: background-color 0.25s ease, color 0.25s ease;
+      }
+      /* Cuando está scrolled, lo hacemos fijo y sólido */
+      #ftco-navbar.scrolled {
+        position: fixed;
+        background-color: rgba(255,255,255,0.98) !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      }
+
+      #ftco-navbar .nav-link, #ftco-navbar .navbar-brand span { color: #ffffff !important; transition: color 0.25s ease; }
+      #ftco-navbar.scrolled .nav-link, #ftco-navbar.scrolled .navbar-brand span { color: #222222 !important; }
+      #ftco-nav.collapse.show .nav-link { color: #222222 !important; }
+
+      /* Soporte safe-area (notch) en iOS/Android: evita barras en top por notch */
+      @supports(padding: env(safe-area-inset-top)) {
+        #ftco-navbar { padding-top: env(safe-area-inset-top); }
+        .hero-wrap { padding-top: 0; }
+      }
+
+      /* ========== HERO ========== */
+      .hero-wrap {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+        background: transparent;
+        margin: 0;
+        min-height: 100vh;
+        height: 100dvh;
+        display: block;
+      }
+
+      .hero-wrap .hero-img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center center;
+        margin: 0;
+      }
+
+      .hero-wrap .overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.34) 60%);
+        pointer-events: none;
+        z-index: 2;
+      }
+      .hero-wrap .hero-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        z-index: 3;
+        text-align: center;
+        padding: 0 15px;
+        color: #fff;
+      }
+      .hero-wrap .hero-content h1 { font-size: 3.2rem; margin: 0 0 8px; font-weight: 500; }
+      .hero-wrap .hero-content p { margin: 0; opacity: 0.95; }
+
+      @media (min-width: 992px) {
+        .hero-wrap { max-height: 780px; height: auto; min-height: 420px; }
+        .hero-wrap .hero-img { max-height: 780px; height: auto; }
+      }
+      @media (max-width: 767.98px) {
+        .hero-wrap .hero-content { top: 46%; }
+        .hero-wrap .hero-content h1 { font-size: 2.2rem; }
+      }
+
+      /* Section styling like miembros (coherent look) */
+      section.ftco-section.bg-light { padding: 48px 0 64px; background: #f6f7f8; }
+
+      /* Estilos específicos para la tarjeta del juego */
       .game-card {
         background: #fff;
         border-radius: 10px;
@@ -33,30 +130,30 @@
         overflow: hidden;
         display: flex;
         gap: 0;
-        max-width: 980px;
+        max-width: 1100px;
         width: 100%;
-        margin: 0 auto;
+        margin: 0 auto 20px;
       }
       .game-card .media {
         flex: 0 0 420px;
-        min-height: 220px;
+        min-height: 260px;
         background-size: cover;
         background-position: center;
       }
       .game-card .content {
-        padding: 18px;
+        padding: 22px;
         flex: 1 1 auto;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
       }
-      .game-title { font-size: 1.15rem; font-weight: 700; color: #0e2a39; margin-bottom: 8px; }
-      .game-desc { color: #4b5560; line-height: 1.45; text-align: justify; margin-bottom: 12px; }
+      .game-title { font-size: 1.2rem; font-weight: 700; color: #0e2a39; margin-bottom: 10px; }
+      .game-desc { color: #333; line-height: 1.5; text-align: left; margin-bottom: 12px; }
       .game-actions { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
 
       .coming-soon {
-        margin-top: 28px;
-        padding: 18px;
+        margin-top: 18px;
+        padding: 14px;
         border-radius: 8px;
         background: linear-gradient(90deg,#fff,#fafdfb);
         box-shadow: 0 8px 20px rgba(16,24,40,0.04);
@@ -69,6 +166,20 @@
         .game-card { flex-direction: column; }
         .game-card .media { width:100%; height:220px; min-height:160px; }
       }
+
+      /* Recursos grid (si en el futuro agregas tarjetas) */
+      #recursos-grid { display:flex; gap:20px; flex-wrap:wrap; }
+      .resource-card{background:#fff;border-radius:10px;box-shadow:0 8px 22px rgba(10,25,35,0.06);overflow:hidden;display:flex;flex-direction:column;min-height:320px;width:100%}
+      @media(min-width:768px){ .resource-card{width:49%} }
+      .card-media{height:320px;display:flex;align-items:center;justify-content:center;background:#f3faf6}
+      .card-body{padding:16px}
+      .resource-title{font-size:1.1rem;font-weight:700;color:#0e2a39;margin-bottom:6px}
+      .resource-sub{color:#4b5560;margin-bottom:6px}
+      .resource-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
+
+      /* Footer social */
+      .ftco-footer-social a { display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:50%; background:rgba(255,255,255,0.06); margin-right:6px; color:#fff; }
+
     </style>
   </head>
   <body>
@@ -100,10 +211,11 @@
     </div>
   </nav>
 
-  <!-- HERO: respeté exactamente tu estructura original -->
+  <!-- HERO -->
   <div class="hero-wrap" role="img" aria-label="Laguna IcTiosCusco">
     <img class="hero-img" src="images/recursos.JPG" alt="Laguna IcTiosCusco">
     <div class="overlay"></div>
+
     <div class="container hero-content">
       <div class="row no-gutters slider-text align-items-center justify-content-center">
         <div class="col-md-10 text-center">
@@ -124,7 +236,7 @@
         </div>
       </div>
 
-      <!-- JUEGO: subtítulo + CTA (mismo lugar que tenías) -->
+      <!-- JUEGO: subtítulo + CTA -->
       <div class="row mb-4">
         <div class="col-md-8 offset-md-2 text-center">
           <h3 style="font-family:'Overpass','Dosis',sans-serif;font-weight:700;">Juego PAC-Fish</h3>
@@ -133,49 +245,44 @@
         </div>
       </div>
 
-      <!-- BLOQUE PRINCIPAL PARA EL JUEGO: espacio para imagen del juego -->
+      <!-- TARJETA DEL JUEGO con imagen de preview (respeta hero y estilos) -->
       <div class="row mb-4">
         <div class="col-12">
           <div class="game-card" role="article" aria-labelledby="pac-title">
-            <!-- Sustituye images/pacfish_preview.png por la imagen que quieras mostrar -->
+            <!-- reemplaza images/pacfish_preview.png por la imagen que quieras -->
             <div class="media" style="background-image: url('images/pacfish_preview.png');" aria-hidden="true"></div>
 
             <div class="content">
               <div>
                 <div id="pac-title" class="game-title">PAC-Fish — Juego educativo sobre especies exóticas</div>
                 <div class="game-desc">
-                  PAC-Fish te pone en la piel de una valiente <em>Orestia</em> que debe proteger su hogar frente a especies introducidas. 
-                  El juego recorre tres escenarios basados en lugares reales: el humedal **Lucre–Huacarpay**, la **laguna de Urcos** (Cusco) y, en el nivel final, el **Lago Titicaca**. 
-                  En cada nivel aprenderás cómo la introducción de pejerrey y trucha altera redes tróficas, competencias por alimento y hábitat, y deberás tomar decisiones de manejo para ayudar a que las poblaciones nativas se recuperen.
-                  PAC-Fish mezcla retos interactivos con información científica accesible, ideal para estudiantes, docentes y público interesado en conservación. ¡Una forma entretenida de aprender por qué es importante proteger nuestras lagunas y humedales!
+                  PAC-Fish es una experiencia educativa interactiva que aborda la introducción de especies exóticas —como el pejerrey y la trucha— en ambientes acuáticos altoandinos.
+                  El juego presenta tres niveles inspirados en lugares reales: el humedal <strong>Lucre–Huacarpay</strong>, la <strong>laguna de Urcos</strong> (ambos en Cusco) y, en el nivel final, el <strong>Lago Titicaca</strong>.
+                  Interpretas a una <em>Orestia</em> que debe sobrevivir y proteger su ecosistema frente a competidores e impactos introducidos; a través de decisiones de manejo y retos, aprenderás cómo estas introducciones afectan redes tróficas, hábitat y la resiliencia de las poblaciones nativas.
+                  Ideal para estudiantes, docentes y público general: combina entretenimiento con contenidos científicos para despertar interés y promover buenas prácticas de conservación.
                 </div>
               </div>
 
               <div class="game-actions">
                 <a class="btn btn-success" href="https://ictioscusco.github.io/pacfish.html" target="_blank" rel="noopener">Jugar PAC-Fish</a>
                 <a class="btn btn-outline-primary" href="https://ictioscusco.github.io/pacfish.html" target="_blank" rel="noopener">Más información</a>
-                <button class="btn btn-outline-secondary" disabled title="Para cambiar la imagen, reemplaza images/pacfish_preview.png en tu servidor">Cambiar imagen (manual)</button>
+                <span style="margin-left:auto;color:#6b7280;font-size:0.95rem;">Imagen del juego (sustituible)</span>
               </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      <!-- Próximamente: mensaje claro -->
-      <div class="row">
-        <div class="col-12">
           <div class="coming-soon" role="status" aria-live="polite">
-            Próximamente: nuevas fichas descargables, guías para docentes y actividades interactivas. Síguenos en redes para ser el primero en enterarte.
+            Próximamente: nuevas fichas descargables, guías para docentes y actividades interactivas. Síguenos en nuestras redes para ser el primero en enterarte.
           </div>
         </div>
       </div>
 
-      <!-- (Se eliminó todo lo relacionado con modelos 3D y fichas, tal como pediste) -->
+      <!-- (Se eliminaron los modelos 3D y las fichas tal como solicitaste) -->
 
     </div>
   </section>
 
-  <!-- Footer (texto corregido para evitar duplicados) -->
+  <!-- Footer (texto corregido) -->
   <footer class="ftco-footer ftco-section img">
     <div class="overlay"></div>
     <div class="container">
@@ -183,7 +290,7 @@
         <div class="col-md-3">
           <div class="ftco-footer-widget mb-4">
             <h2 class="ftco-heading-2">Sobre IcTiosCusco</h2>
-            <p>Grupo de investigación dedicado a la conservación de organismos acuáticos y sus ecosistemas altoandinos.</p>
+            <p>Grupo de investigación dedicado a la conservación y estudio de peces andinos (Orestias) en la región de Cusco.</p>
             <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
               <li class="ftco-animate"><a href="#" aria-label="Facebook"><span class="icon-facebook"></span></a></li>
               <li class="ftco-animate"><a href="#" aria-label="Instagram"><span class="icon-instagram"></span></a></li>
