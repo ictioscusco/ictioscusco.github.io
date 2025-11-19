@@ -6,54 +6,37 @@
     <title>IcTiosCusco — Conservación y monitoreo de Orestias</title>
     <meta name="description" content="IcTiosCusco: investigación, conservación y monitoreo del género Orestias en la región de Cusco. Proyectos, publicaciones y contacto.">
 
-    <!-- ===========================
-         FAVICONS (AÑADE LOS ARCHIVOS EN images/)
-         =========================== -->
-    <!-- ICO fallback / principal -->
+    <!-- FAVICONS -->
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
-    <!-- PNG sizes -->
     <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
-    <!-- iOS -->
     <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
-    <!-- Optional: webmanifest if lo generas -->
     <link rel="manifest" href="site.webmanifest">
-    <!-- Theme color (barra en Android / navegadores compatibles) -->
     <meta name="theme-color" content="#ffffff">
-    <!-- Optional: pinned tab for Safari (uses SVG) -->
-    <!-- <link rel="mask-icon" href="images/safari-pinned-tab.svg" color="#5bbad5"> -->
 
-    <!-- Fuentes -->
+    <!-- Fuentes y estilos -->
     <link href="https://fonts.googleapis.com/css?family=Dosis:200,300,400,500,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Overpass:300,400,400i,600,700" rel="stylesheet">
 
-    <!-- Estilos del template -->
     <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="css/animate.css">
-    
     <link rel="stylesheet" href="css/owl.carousel.min.css">
     <link rel="stylesheet" href="css/owl.theme.default.min.css">
     <link rel="stylesheet" href="css/magnific-popup.css">
-
     <link rel="stylesheet" href="css/aos.css">
-
     <link rel="stylesheet" href="css/ionicons.min.css">
-
     <link rel="stylesheet" href="css/bootstrap-datepicker.css">
     <link rel="stylesheet" href="css/jquery.timepicker.css">
-
     <link rel="stylesheet" href="css/flaticon.css">
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
 
-    <!-- Estilos personalizados para sobrescribir el estilo del template -->
+    <!-- Estilos personalizados -->
     <style>
-      /* Aseguramos que este bloque se aplique después de style.css */
       .navbar-brand.d-flex { display: inline-flex; align-items: center; }
       .navbar-brand img { height: 56px; width: auto; margin-right: 12px; }
       .navbar-brand span { font-family: 'Overpass', 'Dosis', sans-serif !important; font-weight: 600; font-size: 1.05rem; color: #fff; line-height: 1; letter-spacing: 0.2px; }
 
-      /* Botón Conócenos: blanco sólido (sobrescribe estilos del template) */
       .btn.btn-white {
         background: #ffffff !important;
         color: #333333 !important;
@@ -61,90 +44,25 @@
         box-shadow: 0 2px 6px rgba(0,0,0,0.08);
       }
       .btn.btn-white:hover,
-      .btn.btn-white:focus {
-        background: #f2f2f2 !important;
-        color: #222 !important;
-        text-decoration: none;
-      }
+      .btn.btn-white:focus { background: #f2f2f2 !important; color: #222 !important; text-decoration: none; }
 
-      /* Iconos como archivos externos (img) */
-      .service-icon {
-        width: 56px;
-        height: 56px;
-        display: block;
-        object-fit: contain;
-      }
+      .hero-wrap h1 { text-shadow: 0 6px 18px rgba(0,0,0,0.18); }
 
-      /* Espaciado del contenedor del icono para que quede consistente */
-      .media.block-6 .icon {
-        flex: 0 0 56px;
-        margin-right: 18px;
-        display: flex;
-        align-items: flex-start;
-        justify-content: center;
-      }
+      /* Proyecto (carrusel) estilos mínimos para que se integre */
+      .carousel-cause .cause-entry { background: #fff; border-radius: 6px; overflow: hidden; box-shadow: 0 6px 18px rgba(16,24,40,0.06); }
+      .carousel-cause .cause-entry .img { height: 220px; background-size: cover; background-position: center; display:block; }
+      .carousel-cause .cause-entry .text { padding: 16px; }
+      .carousel-cause .cause-entry h3 { margin-top: 0; font-size: 1.15rem; }
+      .carousel-cause .donation-time { font-size: 0.95rem; color: #666; }
 
-      /* Ajustes opcionales para responsividad: reducir logo e iconos en pantallas pequeñas */
+      .btn-whatsapp { background-color: #25D366; border: none; color: #fff; display: inline-flex; align-items: center; gap: 8px; }
+
       @media (max-width: 575.98px) {
         .navbar-brand img { height: 44px; margin-right: 10px; }
         .navbar-brand span { font-size: 0.95rem; }
-        .service-icon { width: 44px; height: 44px; }
-        .media.block-6 .icon { flex: 0 0 44px; margin-right: 12px; }
-      }
-
-      /* --- Forzar colores iniciales y la transición para que la marca cambie con el scroll --- */
-      #ftco-navbar {
-        background-color: transparent;
-        transition: background-color 0.25s ease;
-      }
-      #ftco-navbar.scrolled {
-        background-color: rgba(255,255,255,0.98) !important; /* fondo claro al bajar */
-        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-      }
-
-      /* Inicial: enlaces y marca en blanco (sobre hero image) */
-      #ftco-navbar .nav-link,
-      #ftco-navbar .navbar-brand span {
-        color: #ffffff !important;
-        transition: color 0.25s ease;
-      }
-
-      /* Al scrollear o cuando se fuerza la clase scrolled: color oscuro para legibilidad */
-      #ftco-navbar.scrolled .nav-link,
-      #ftco-navbar.scrolled .navbar-brand span {
-        color: #222222 !important;
-      }
-
-      /* Aseguramos contraste en el toggler y collapse (móvil) */
-      #ftco-navbar .navbar-toggler { color: #ffffff !important; border-color: rgba(255,255,255,0.18) !important; }
-      #ftco-navbar.scrolled .navbar-toggler { color: #222222 !important; border-color: rgba(0,0,0,0.12) !important; }
-
-      /* Cuando el collapse (menú móvil) está abierto, forzamos links oscuros para legibilidad sobre fondo claro */
-      #ftco-nav.collapse.show .nav-link { color: #222222 !important; }
-
-      /* Selección dentro del navbar (opcional) */
-      #ftco-navbar ::selection { background: rgba(0,0,0,0.12); color: #ffffff; }
-
-      /* Estilos para el mensaje de respuesta del formulario */
-      #form-response {
-        display: none;
-        margin-top: 12px;
-        font-weight: 500;
-        border-radius: 6px;
-        padding: 10px 12px;
-      }
-
-      /* Ajustes visuales para el botón de WhatsApp (si quieres usar btn-success existente) */
-      .btn-whatsapp {
-        background-color: #25D366;
-        border: none;
-        color: #fff;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
+        .carousel-cause .cause-entry .img { height: 150px; }
       }
     </style>
-
   </head>
   <body>
 
@@ -184,7 +102,6 @@
             <p class="mb-5" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">Investigación, monitoreo y educación en la cuenca del Urubamba — Cusco.</p>
 
             <p data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
-              <!-- Botón Conócenos cambiado a blanco sólido -->
               <a href="about.html" class="btn btn-white px-4 py-3"><span class="mr-2"></span>Conócenos</a>
               <a href="causes.html" class="btn btn-primary px-4 py-3 ml-2">Ver proyectos</a>
             </p>
@@ -227,46 +144,9 @@
       </div>
     </section>
 
-    <section class="ftco-section">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-4 d-flex align-self-stretch ftco-animate">
-            <div class="media block-6 d-flex services p-3 py-4 d-block">
-              <div class="icon d-flex mb-3">
-                <img src="images/icon-monitoreo.svg" alt="Monitoreo" class="service-icon" />
-              </div>
-              <div class="media-body pl-4">
-                <h3 class="heading">Monitoreo poblacional</h3>
-                <p>Seguimiento de abundancia, estructura de edades y distribución en lagunas altoandinas.</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4 d-flex align-self-stretch ftco-animate">
-            <div class="media block-6 d-flex services p-3 py-4 d-block">
-              <div class="icon d-flex mb-3">
-                <img src="images/icon-genetica.svg" alt="Genética" class="service-icon" />
-              </div>
-              <div class="media-body pl-4">
-                <h3 class="heading">Genética y filogeografía</h3>
-                <p>Estudios genéticos para entender la historia evolutiva y conectividad entre poblaciones.</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4 d-flex align-self-stretch ftco-animate">
-            <div class="media block-6 d-flex services p-3 py-4 d-block">
-              <div class="icon d-flex mb-3">
-                <img src="images/icon-educacion.svg" alt="Educación" class="service-icon" />
-              </div>
-              <div class="media-body pl-4">
-                <h3 class="heading">Educación ambiental</h3>
-                <p>Programas con comunidades locales y talleres para estudiantes y gestores ambientales.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <!-- Services bloque eliminado según solicitud -->
 
+    <!-- Proyectos: CARRUSEL (actualizado con tus proyectos) -->
     <section class="ftco-section bg-light">
       <div class="container-fluid">
         <div class="row justify-content-center mb-5 pb-3">
@@ -279,38 +159,54 @@
           <div class="col-md-12 ftco-animate">
             <div class="carousel-cause owl-carousel">
 
+              <!-- Proyecto 1: Monitoreo poblacional de Orestias -->
               <div class="item">
                 <div class="cause-entry">
-                  <a href="#" class="img" style="background-image: url(images/proyecto-huaypo.jpg);"></a>
+                  <a href="#" class="img" style="background-image: url(images/proyecto-monitoreo.jpg);"></a>
                   <div class="text p-3 p-md-4">
-                    <h3><a href="#">Monitoreo de aves en ecosistemas altoandinos</a></h3>
-                    <p>Evaluación de biodiversidad y abundancia de ornitofauna).</p>
-                    <span class="donation-time mb-3 d-block">Última actualización: 2 semanas</span>
-                    <span class="fund-raised d-block">Equipo: 6 investigadores</span>
+                    <h3><a href="#">Monitoreo poblacional de <em>Orestias</em></a></h3>
+                    <p>Proyecto de monitoreo poblacional en lagunas y ríos altoandinos. Muestreos estandarizados para estimar abundancia, estructura de tallas y tendencias temporales. Integra análisis morfométricos y parámetros fisicoquímicos para relacionar salud ambiental con la dinámica poblacional.</p>
+                    <span class="donation-time mb-3 d-block">Estado: Activo — Responsable: Jack Malon Rodriguez</span>
+                    <span class="fund-raised d-block">Próximo muestreo: Febrero 2026</span>
                   </div>
                 </div>
               </div>
 
+              <!-- Proyecto 2: Genética y filogeografía -->
               <div class="item">
                 <div class="cause-entry">
                   <a href="#" class="img" style="background-image: url(images/proyecto-genetica.jpg);"></a>
                   <div class="text p-3 p-md-4">
                     <h3><a href="#">Genética y filogeografía de Orestias</a></h3>
-                    <p>Análisis de diversidad genética entre poblaciones de la cuenca.</p>
-                    <span class="donation-time mb-3 d-block">Última publicación: 2024</span>
-                    <span class="fund-raised d-block">Colaboradores: Univ. de Chile</span>
+                    <p>Análisis de diversidad genética y conectividad entre poblaciones para identificar unidades de conservación y reconstruir historia poblacional. Trabajo conjunto con universidades y laboratorios asociados.</p>
+                    <span class="donation-time mb-3 d-block">Estado: Activo — Colaboradores: Univ. asociadas</span>
+                    <span class="fund-raised d-block">Última publicación: 2024</span>
                   </div>
                 </div>
               </div>
 
+              <!-- Proyecto 3: Educación ambiental -->
               <div class="item">
                 <div class="cause-entry">
                   <a href="#" class="img" style="background-image: url(images/proyecto-educacion.jpg);"></a>
                   <div class="text p-3 p-md-4">
                     <h3><a href="#">Educación ambiental y comunidades</a></h3>
-                    <p>Talleres con centros educativos locales sobre importancia de ecosistemas altoandinos.</p>
+                    <p>Talleres y materiales pedagógicos dirigidos a colegios, universidades y comunidades locales para fortalecer el conocimiento sobre la biodiversidad acuática y prácticas de conservación. Actividades participativas adaptadas a distintos niveles educativos.</p>
                     <span class="donation-time mb-3 d-block">Próximo taller: mayo 2025</span>
                     <span class="fund-raised d-block">Beneficiarios: 4 comunidades</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Proyecto 4: Investigación en Trichomycterus -->
+              <div class="item">
+                <div class="cause-entry">
+                  <a href="#" class="img" style="background-image: url(images/proyecto-trichomycterus.jpg);"></a>
+                  <div class="text p-3 p-md-4">
+                    <h3><a href="#">Investigación ecológica de <em>Trichomycterus</em></a></h3>
+                    <p>Estudios sobre diversidad morfológica, ecología de hábitat y amenazas en especies de <em>Trichomycterus</em> de cuencas altoandinas. Resultados orientados a medidas de conservación y manejo adaptativo.</p>
+                    <span class="donation-time mb-3 d-block">Estado: Activo — Recolección de datos en curso</span>
+                    <span class="fund-raised d-block">Lugar: Cuencas altoandinas</span>
                   </div>
                 </div>
               </div>
@@ -321,6 +217,7 @@
       </div>
     </section>
 
+    <!-- Galería / colaboradores siguen como en tu código original -->
     <section class="ftco-section">
       <div class="container">
         <div class="row justify-content-center mb-5 pb-3">
@@ -412,7 +309,6 @@
               <div id="form-response" aria-live="polite"></div>
             </form>
 
-            <!-- Botón de WhatsApp -->
             <div style="margin-top: 18px;">
               <a href="https://wa.me/51969392189" target="_blank" rel="noopener" class="btn btn-whatsapp px-4 py-3">
                 <span>📱</span> Contáctanos por WhatsApp
@@ -445,67 +341,6 @@
             <span class="icon-search"></span>
           </div>
         </a>
-      </div>
-    </section>
-
-    <section class="ftco-section">
-      <div class="container">
-        <div class="row justify-content-center mb-5 pb-3">
-          <div class="col-md-7 heading-section ftco-animate text-center">
-            <h2 class="mb-4">Últimas publicaciones</h2>
-            <p>Noticias, reportes y actualizaciones del proyecto.</p>
-          </div>
-        </div>
-        <div class="row d-flex">
-          <div class="col-md-4 d-flex ftco-animate">
-            <div class="blog-entry align-self-stretch">
-              <a href="blog-single.html" class="block-20" style="background-image: url('images/noticia_1.jpg');">
-              </a>
-              <div class="text p-4 d-block">
-                <div class="meta mb-3">
-                  <div><a href="#">10 Sept, 2024</a></div>
-                  <div><a href="#">Equipo IcTiosCusco</a></div>
-                  <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
-                </div>
-                <h3 class="heading mt-3"><a href="#">Resultados preliminares de Huaypo</a></h3>
-                <p>Resumen de los primeros muestreos y observaciones sobre la abundancia de Orestias.</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-4 d-flex ftco-animate">
-            <div class="blog-entry align-self-stretch">
-              <a href="blog-single.html" class="block-20" style="background-image: url('images/noticia_2.jpg');">
-              </a>
-              <div class="text p-4 d-block">
-                <div class="meta mb-3">
-                  <div><a href="#">15 Ago, 2024</a></div>
-                  <div><a href="#">Colaboradores</a></div>
-                  <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 5</a></div>
-                </div>
-                <h3 class="heading mt-3"><a href="#">Publicación sobre filogeografía</a></h3>
-                <p>Artículo aceptado que describe la variación genética entre poblaciones.</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-4 d-flex ftco-animate">
-            <div class="blog-entry align-self-stretch">
-              <a href="blog-single.html" class="block-20" style="background-image: url('images/noticia_3.jpg');">
-              </a>
-              <div class="text p-4 d-block">
-                <div class="meta mb-3">
-                  <div><a href="#">20 Jul, 2024</a></div>
-                  <div><a href="#">IcTiosCusco</a></div>
-                  <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 2</a></div>
-                </div>
-                <h3 class="heading mt-3"><a href="#">Taller comunitario en Cusco</a></h3>
-                <p>Actividad de sensibilización y capacitación realizada con escuelas locales.</p>
-              </div>
-            </div>
-          </div>
-
-        </div>
       </div>
     </section>
 
@@ -576,9 +411,9 @@
         </div>
         <div class="row">
           <div class="col-md-12 text-center">
-            <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-  Copyright &copy;<script>document.write(new Date().getFullYear());</script> IcTiosCusco. Todos los derechos reservados.</a>
-  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+            <p>
+  Copyright &copy;<script>document.write(new Date().getFullYear());</script> IcTiosCusco. Todos los derechos reservados.
+            </p>
           </div>
         </div>
       </div>
@@ -601,12 +436,9 @@
   <script src="js/bootstrap-datepicker.js"></script>
   <script src="js/jquery.timepicker.min.js"></script>
   <script src="js/scrollax.min.js"></script>
-  <!-- Maps: añade tu API key restringida en producción; evita subir claves sin restricciones al repositorio -->
-  <!-- <script src="https://maps.googleapis.com/maps/api/js?key=TU_API_KEY&sensor=false"></script> -->
   <script src="js/google-map.js"></script>
   <script src="js/main.js"></script>
 
-  <!-- Script personalizado: manejo de formulario (fetch a Formspree) y comportamiento navbar -->
   <script>
   document.addEventListener('DOMContentLoaded', function () {
     // --- FORMULARIO: envio a Formspree sin redirección ---
@@ -620,10 +452,7 @@
       responseDiv.style.background = success ? 'rgba(40,167,69,0.08)' : 'rgba(220,53,69,0.06)';
       responseDiv.style.border = success ? '1px solid rgba(40,167,69,0.12)' : '1px solid rgba(220,53,69,0.12)';
       responseDiv.innerText = text;
-      // desaparecer después si es éxito
-      if (success) {
-        setTimeout(function(){ responseDiv.style.display = 'none'; }, 6000);
-      }
+      if (success) { setTimeout(function(){ responseDiv.style.display = 'none'; }, 6000); }
     }
 
     if (form) {
@@ -633,25 +462,17 @@
 
         fetch(FORMSPREE_ENDPOINT, {
           method: 'POST',
-          headers: {
-            'Accept': 'application/json'
-          },
+          headers: { 'Accept': 'application/json' },
           body: data
         }).then(function (resp) {
-          if (resp.ok) {
-            showMessage('Su mensaje fue enviado. Gracias por contactarnos.', true);
-            form.reset();
-          } else {
+          if (resp.ok) { showMessage('Su mensaje fue enviado. Gracias por contactarnos.', true); form.reset(); }
+          else {
             resp.json().then(function (data) {
               let msg = (data && data.error) ? data.error : 'Ocurrió un error. Intenta nuevamente.';
               showMessage(msg, false);
-            }).catch(function () {
-              showMessage('Ocurrió un error. Intenta nuevamente.', false);
-            });
+            }).catch(function () { showMessage('Ocurrió un error. Intenta nuevamente.', false); });
           }
-        }).catch(function () {
-          showMessage('No se pudo enviar. Verifica tu conexión a Internet.', false);
-        });
+        }).catch(function () { showMessage('No se pudo enviar. Verifica tu conexión a Internet.', false); });
       });
     }
 
@@ -660,25 +481,27 @@
     var navCollapse = $('#ftco-nav');
 
     function checkScroll() {
-      if (window.scrollY > 50) {
-        navbar.classList.add('scrolled');
-      } else {
-        navbar.classList.remove('scrolled');
-      }
+      if (window.scrollY > 50) { navbar.classList.add('scrolled'); } else { navbar.classList.remove('scrolled'); }
     }
-
-    // Ejecutar al cargar y al hacer scroll
     checkScroll();
     window.addEventListener('scroll', checkScroll, { passive: true });
-
-    // Forzar apariencia scrolled cuando el collapse está abierto (móvil)
     if (navCollapse.length) {
-      navCollapse.on('shown.bs.collapse', function () {
-        navbar.classList.add('scrolled');
-      });
-      navCollapse.on('hidden.bs.collapse', function () {
-        if (window.scrollY <= 50) {
-          navbar.classList.remove('scrolled');
+      navCollapse.on('shown.bs.collapse', function () { navbar.classList.add('scrolled'); });
+      navCollapse.on('hidden.bs.collapse', function () { if (window.scrollY <= 50) { navbar.classList.remove('scrolled'); } });
+    }
+
+    // Inicializar owl carousel (asegúrate de que main.js no lo reconfigure diferente)
+    if (typeof jQuery !== 'undefined' && jQuery().owlCarousel) {
+      $('.carousel-cause').owlCarousel({
+        loop:true,
+        margin:30,
+        nav:true,
+        dots:true,
+        autoplay:false,
+        responsive:{
+          0:{ items:1 },
+          600:{ items:2 },
+          1000:{ items:3 }
         }
       });
     }
